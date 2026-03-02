@@ -1,9 +1,1413 @@
-<div class="home-page">
-  <h1>Welcome to {{ shop.name }}</h1>
-</div>
+{% comment %}
+  CardVault — main-home.liquid
+  Gameology-inspired homepage. Fully self-contained CSS + JS.
+  Shares the CardVault design tokens established in main-product.liquid.
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =============================================================
+   CardVault Design Tokens (shared with product page)
+   ============================================================= */
+:root {
+  --cv-bg:         #f7f6f3;
+  --cv-fg:         #1c1f36;
+  --cv-card:       #ffffff;
+  --cv-primary:    #282d52;
+  --cv-primary-fg: #f8f7f5;
+  --cv-secondary:  #eeecea;
+  --cv-muted-fg:   #76798c;
+  --cv-border:     #dedad5;
+  --cv-destructive:#c94030;
+  --cv-success:    #2e9963;
+  --cv-success-fg: #f8f7f5;
+  --cv-star:       #d4783a;
+  --cv-radius:     0.5rem;
+  --cv-shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+  --cv-shadow:     0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --cv-font-sans:  'Inter', system-ui, -apple-system, sans-serif;
+  --cv-font-head:  'Space Grotesk', system-ui, sans-serif;
+}
+
+/* =============================================================
+   Home Page Base
+   ============================================================= */
+.cvh * { box-sizing: border-box; }
+.cvh {
+  font-family: var(--cv-font-sans);
+  color: var(--cv-fg);
+  background: var(--cv-bg);
+}
+.cvh a { text-decoration: none; color: inherit; }
+.cvh img { display: block; max-width: 100%; }
+
+.cvh__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 1024px) {
+  .cvh__inner { padding-left: 2rem; padding-right: 2rem; }
+}
+
+/* =============================================================
+   Shared Button
+   ============================================================= */
+.cvh-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--cv-font-sans);
+  font-size: 0.9375rem; font-weight: 600;
+  border-radius: var(--cv-radius);
+  border: 1px solid transparent;
+  cursor: pointer; text-decoration: none;
+  padding: 0 1.5rem;
+  height: 2.875rem;
+  transition: opacity 0.15s, background 0.15s, transform 0.15s;
+  white-space: nowrap;
+  -webkit-appearance: none;
+}
+.cvh-btn:hover   { opacity: 0.88; transform: translateY(-1px); }
+.cvh-btn:active  { transform: translateY(0); }
+
+.cvh-btn--primary {
+  background: var(--cv-primary); color: var(--cv-primary-fg);
+  border-color: var(--cv-primary);
+}
+.cvh-btn--outline {
+  background: transparent;
+  border-color: var(--cv-primary); color: var(--cv-primary);
+}
+.cvh-btn--outline:hover { background: rgba(40,45,82,0.06); }
+.cvh-btn--white {
+  background: #fff; color: var(--cv-primary);
+  border-color: #fff;
+}
+.cvh-btn--ghost {
+  background: transparent; color: var(--cv-primary-fg);
+  border-color: rgba(255,255,255,0.5);
+}
+.cvh-btn--ghost:hover { background: rgba(255,255,255,0.12); }
+.cvh-btn svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+.cvh-btn--sm { height: 2.25rem; font-size: 0.8125rem; padding: 0 1rem; }
+
+/* Section headers */
+.cvh-section-hd { display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 1.75rem; }
+.cvh-section-hd--row { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.cvh-section-title {
+  font-family: var(--cv-font-head);
+  font-size: 1.75rem; font-weight: 700;
+  letter-spacing: -0.02em; line-height: 1.15;
+}
+@media (min-width: 768px) { .cvh-section-title { font-size: 2.25rem; } }
+.cvh-section-sub { font-size: 0.9375rem; color: var(--cv-muted-fg); }
+
+/* =============================================================
+   1. HERO SLIDER
+   ============================================================= */
+.cvh-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--cv-card);
+  border-bottom: 1px solid var(--cv-border);
+}
+
+.cvh-hero__track {
+  display: flex;
+  transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+}
+
+.cvh-hero__slide {
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 0;
+  padding: 3rem 1rem 2rem;
+}
+@media (min-width: 768px) {
+  .cvh-hero__slide {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 4rem 2rem;
+    min-height: 520px;
+  }
+}
+@media (min-width: 1024px) {
+  .cvh-hero__slide {
+    padding: 5rem 2rem;
+    min-height: 560px;
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+}
+
+/* Slide wrapper for full-bleed background */
+.cvh-hero__slide-wrap {
+  min-width: 100%;
+  position: relative;
+}
+.cvh-hero__slide-wrap::before {
+  content: '';
+  position: absolute; inset: 0;
+  z-index: 0;
+}
+.cvh-hero__slide-wrap--1::before { background: linear-gradient(135deg, #f0edf8 0%, #e8e4f5 100%); }
+.cvh-hero__slide-wrap--2::before { background: linear-gradient(135deg, #e8f5ed 0%, #d4eedd 100%); }
+.cvh-hero__slide-wrap--3::before { background: linear-gradient(135deg, #fdf0e8 0%, #f5e0cc 100%); }
+
+.cvh-hero__slide-wrap > .cvh-hero__slide { position: relative; z-index: 1; max-width: 80rem; margin: 0 auto; }
+
+.cvh-hero__text { display: flex; flex-direction: column; gap: 1.25rem; }
+.cvh-hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  background: rgba(40,45,82,0.08);
+  color: var(--cv-primary);
+  font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  width: fit-content;
+}
+.cvh-hero__eyebrow svg { width: 0.875rem; height: 0.875rem; }
+.cvh-hero__title {
+  font-family: var(--cv-font-head);
+  font-size: 2.5rem; font-weight: 800;
+  line-height: 1.1; letter-spacing: -0.03em;
+  color: var(--cv-fg);
+}
+@media (min-width: 768px)  { .cvh-hero__title { font-size: 3rem; } }
+@media (min-width: 1024px) { .cvh-hero__title { font-size: 3.5rem; } }
+.cvh-hero__title em { font-style: normal; color: var(--cv-primary); }
+
+.cvh-hero__desc { font-size: 1rem; line-height: 1.65; color: var(--cv-muted-fg); max-width: 32rem; }
+
+.cvh-hero__ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.cvh-hero__img-wrap {
+  display: none;
+  position: relative;
+  border-radius: calc(var(--cv-radius) * 3);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+@media (min-width: 768px) { .cvh-hero__img-wrap { display: block; } }
+.cvh-hero__img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Floating badge on hero image */
+.cvh-hero__badge {
+  position: absolute;
+  bottom: 1.25rem; left: 1.25rem;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 1.5);
+  padding: 0.75rem 1rem;
+  box-shadow: var(--cv-shadow);
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.cvh-hero__badge-icon {
+  width: 2.5rem; height: 2.5rem;
+  border-radius: var(--cv-radius);
+  background: var(--cv-primary);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cvh-hero__badge-icon svg { width: 1.25rem; height: 1.25rem; color: #fff; }
+.cvh-hero__badge-text { display: flex; flex-direction: column; }
+.cvh-hero__badge-val  { font-family: var(--cv-font-head); font-size: 1.125rem; font-weight: 700; }
+.cvh-hero__badge-label { font-size: 0.75rem; color: var(--cv-muted-fg); }
+
+/* Slider controls */
+.cvh-hero__controls {
+  position: absolute;
+  bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 0.75rem;
+  z-index: 10;
+}
+.cvh-hero__dot {
+  width: 0.5rem; height: 0.5rem;
+  border-radius: 9999px;
+  background: rgba(40,45,82,0.25);
+  border: none; cursor: pointer; padding: 0;
+  transition: background 0.2s, width 0.2s;
+}
+.cvh-hero__dot.is-active { background: var(--cv-primary); width: 1.5rem; }
+
+.cvh-hero__arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 2.5rem; height: 2.5rem;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid var(--cv-border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--cv-shadow);
+  z-index: 10;
+  color: var(--cv-fg);
+  transition: background 0.15s;
+  -webkit-appearance: none;
+}
+.cvh-hero__arrow:hover { background: #fff; }
+.cvh-hero__arrow svg { width: 1.25rem; height: 1.25rem; }
+.cvh-hero__arrow--prev { left: 1rem; }
+.cvh-hero__arrow--next { right: 1rem; }
+@media (min-width: 768px) {
+  .cvh-hero__arrow--prev { left: 1.5rem; }
+  .cvh-hero__arrow--next { right: 1.5rem; }
+}
+
+/* =============================================================
+   2. TRUST BAR
+   ============================================================= */
+.cvh-trust-bar {
+  background: var(--cv-primary);
+  color: var(--cv-primary-fg);
+  padding: 1.75rem 1rem;
+}
+.cvh-trust-bar__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  max-width: 80rem; margin: 0 auto;
+}
+@media (min-width: 768px) { .cvh-trust-bar__grid { grid-template-columns: repeat(4, 1fr); gap: 2rem; padding: 0 2rem; } }
+
+.cvh-trust-item {
+  display: flex; align-items: flex-start; gap: 0.875rem;
+}
+.cvh-trust-item__icon {
+  flex-shrink: 0;
+  width: 2.5rem; height: 2.5rem;
+  background: rgba(255,255,255,0.1);
+  border-radius: var(--cv-radius);
+  display: flex; align-items: center; justify-content: center;
+}
+.cvh-trust-item__icon svg { width: 1.25rem; height: 1.25rem; color: rgba(255,255,255,0.9); }
+.cvh-trust-item__text { display: flex; flex-direction: column; gap: 0.2rem; }
+.cvh-trust-item__title { font-size: 0.9375rem; font-weight: 700; color: rgba(255,255,255,0.95); }
+.cvh-trust-item__desc  { font-size: 0.8125rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+/* =============================================================
+   3. FAN FAVOURITES (tabbed product carousel)
+   ============================================================= */
+.cvh-featured { padding: 4rem 0; }
+
+.cvh-featured__tabs {
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.cvh-featured__tab {
+  font-family: var(--cv-font-sans);
+  font-size: 0.8125rem; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--cv-border);
+  border-radius: 9999px;
+  background: var(--cv-card);
+  color: var(--cv-muted-fg);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  -webkit-appearance: none;
+}
+.cvh-featured__tab.is-active,
+.cvh-featured__tab:hover {
+  background: var(--cv-primary); color: var(--cv-primary-fg); border-color: var(--cv-primary);
+}
+
+/* Scroll container */
+.cvh-featured__scroll-wrap { position: relative; }
+.cvh-featured__scroll {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 0.5rem;
+}
+.cvh-featured__scroll::-webkit-scrollbar { display: none; }
+
+.cvh-featured__panel { display: none; }
+.cvh-featured__panel.is-active { display: block; }
+
+/* Product card (homepage version) */
+.cvh-prod-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: calc(50vw - 1.5rem);
+  max-width: 14rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 2);
+  background: var(--cv-card);
+  padding: 0.75rem;
+  box-shadow: var(--cv-shadow-sm);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  text-decoration: none; color: inherit;
+}
+@media (min-width: 640px)  { .cvh-prod-card { width: 13rem; max-width: 13rem; } }
+@media (min-width: 1024px) { .cvh-prod-card { width: 14.5rem; max-width: 14.5rem; } }
+.cvh-prod-card:hover {
+  border-color: rgba(40,45,82,0.25);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+  transform: translateY(-2px);
+}
+.cvh-prod-card__img {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--cv-radius);
+  background: var(--cv-secondary);
+}
+.cvh-prod-card__img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.35s;
+}
+.cvh-prod-card:hover .cvh-prod-card__img img { transform: scale(1.06); }
+
+.cvh-prod-card__badges {
+  position: absolute; top: 0.5rem; left: 0.5rem;
+  display: flex; flex-direction: column; gap: 0.25rem;
+}
+.cvh-prod-badge {
+  font-size: 0.625rem; font-weight: 700;
+  padding: 0.125rem 0.4rem;
+  border-radius: calc(var(--cv-radius) - 2px);
+  display: inline-block; line-height: 1.6;
+}
+.cvh-prod-badge--sale    { background: var(--cv-success);     color: var(--cv-success-fg); }
+.cvh-prod-badge--new     { background: var(--cv-primary);     color: var(--cv-primary-fg); }
+.cvh-prod-badge--preorder { background: var(--cv-destructive); color: #fff; }
+.cvh-prod-badge--hot     { background: var(--cv-star);         color: #fff; }
+
+.cvh-prod-card__info  { display: flex; flex-direction: column; gap: 0.25rem; }
+.cvh-prod-card__type  { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--cv-muted-fg); font-weight: 600; }
+.cvh-prod-card__name  { font-size: 0.875rem; font-weight: 600; line-height: 1.35; }
+.cvh-prod-card__prices { display: flex; align-items: baseline; gap: 0.4rem; margin-top: 0.25rem; }
+.cvh-prod-card__price {
+  font-family: var(--cv-font-head); font-size: 1.0625rem; font-weight: 700;
+}
+.cvh-prod-card__was   { font-size: 0.75rem; color: var(--cv-muted-fg); text-decoration: line-through; }
+
+/* Scroll nav arrows */
+.cvh-scroll-arrow {
+  display: none;
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 2.5rem; height: 2.5rem; border-radius: 9999px;
+  background: var(--cv-card); border: 1px solid var(--cv-border);
+  box-shadow: var(--cv-shadow);
+  align-items: center; justify-content: center;
+  cursor: pointer; z-index: 5; color: var(--cv-fg);
+  transition: background 0.15s;
+  -webkit-appearance: none;
+}
+@media (min-width: 768px) { .cvh-scroll-arrow { display: flex; } }
+.cvh-scroll-arrow:hover { background: var(--cv-secondary); }
+.cvh-scroll-arrow svg   { width: 1.25rem; height: 1.25rem; }
+.cvh-scroll-arrow--prev { left: -1.25rem; }
+.cvh-scroll-arrow--next { right: -1.25rem; }
+
+/* =============================================================
+   4. MARQUEE TICKER
+   ============================================================= */
+.cvh-marquee {
+  background: var(--cv-primary);
+  padding: 0.875rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.cvh-marquee__track {
+  display: inline-flex; gap: 0;
+  animation: cvhMarquee 28s linear infinite;
+}
+.cvh-marquee__track:hover { animation-play-state: paused; }
+@keyframes cvhMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.cvh-marquee__item {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  font-family: var(--cv-font-head);
+  font-size: 0.875rem; font-weight: 600; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.9);
+  padding: 0 2rem;
+}
+.cvh-marquee__item svg  { width: 1rem; height: 1rem; color: rgba(255,255,255,0.5); }
+.cvh-marquee__sep { color: rgba(255,255,255,0.3); font-size: 1.25rem; padding: 0 0.5rem; }
+
+/* =============================================================
+   5. BROWSE BY CATEGORY
+   ============================================================= */
+.cvh-categories { padding: 4rem 0; }
+
+.cvh-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+@media (min-width: 480px) { .cvh-cat-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) { .cvh-cat-grid { grid-template-columns: repeat(6, 1fr); gap: 1rem; } }
+
+.cvh-cat-card {
+  display: flex; flex-direction: column; align-items: center; gap: 0.875rem;
+  padding: 1.25rem 0.75rem;
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 2);
+  background: var(--cv-card);
+  box-shadow: var(--cv-shadow-sm);
+  text-decoration: none; color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  text-align: center;
+}
+.cvh-cat-card:hover {
+  border-color: var(--cv-primary);
+  box-shadow: 0 4px 16px rgba(40,45,82,0.12);
+  transform: translateY(-3px);
+}
+.cvh-cat-card__icon {
+  width: 3.5rem; height: 3.5rem;
+  border-radius: calc(var(--cv-radius) * 1.5);
+  background: var(--cv-secondary);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.cvh-cat-card:hover .cvh-cat-card__icon { background: rgba(40,45,82,0.08); }
+.cvh-cat-card__icon svg { width: 1.75rem; height: 1.75rem; color: var(--cv-primary); }
+.cvh-cat-card__label {
+  font-size: 0.8125rem; font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+/* Sale category — accent style */
+.cvh-cat-card--sale { border-color: rgba(201,64,48,0.2); }
+.cvh-cat-card--sale .cvh-cat-card__icon { background: rgba(201,64,48,0.08); }
+.cvh-cat-card--sale .cvh-cat-card__icon svg { color: var(--cv-destructive); }
+.cvh-cat-card--sale .cvh-cat-card__label { color: var(--cv-destructive); }
+.cvh-cat-card--sale:hover { border-color: var(--cv-destructive); box-shadow: 0 4px 16px rgba(201,64,48,0.12); }
+
+/* =============================================================
+   6. PROMOTIONAL BANNERS (2-up)
+   ============================================================= */
+.cvh-promo { padding: 2rem 0 4rem; }
+.cvh-promo__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 768px) { .cvh-promo__grid { grid-template-columns: 1fr 1fr; gap: 1.25rem; } }
+
+.cvh-promo-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(var(--cv-radius) * 2.5);
+  min-height: 240px;
+  display: flex; align-items: flex-end;
+  padding: 2rem;
+  text-decoration: none;
+  background: var(--cv-primary);
+}
+@media (min-width: 768px) { .cvh-promo-card { min-height: 300px; } }
+
+.cvh-promo-card__bg {
+  position: absolute; inset: 0; z-index: 0;
+}
+.cvh-promo-card__bg img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.cvh-promo-card:hover .cvh-promo-card__bg img { transform: scale(1.04); }
+
+/* Gradient overlay */
+.cvh-promo-card::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, rgba(20,20,40,0.82) 0%, rgba(20,20,40,0.25) 55%, transparent 100%);
+}
+.cvh-promo-card__content { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 0.75rem; }
+.cvh-promo-card__eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+.cvh-promo-card__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.625rem; font-weight: 800;
+  color: #fff; line-height: 1.15; letter-spacing: -0.02em;
+}
+@media (min-width: 768px) { .cvh-promo-card__title { font-size: 2rem; } }
+.cvh-promo-card__cta {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  font-size: 0.875rem; font-weight: 600;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  padding-bottom: 0.125rem;
+  transition: border-color 0.15s;
+  width: fit-content;
+}
+.cvh-promo-card__cta:hover { border-color: #fff; }
+.cvh-promo-card__cta svg { width: 0.875rem; height: 0.875rem; }
+
+/* =============================================================
+   7. ABOUT SECTION
+   ============================================================= */
+.cvh-about { padding: 4rem 0; background: var(--cv-card); }
+.cvh-about__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+@media (min-width: 768px) { .cvh-about__grid { grid-template-columns: 1fr 1fr; gap: 4rem; } }
+
+.cvh-about__img {
+  border-radius: calc(var(--cv-radius) * 3);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+}
+.cvh-about__img img { width: 100%; height: 100%; object-fit: cover; }
+
+.cvh-about__text { display: flex; flex-direction: column; gap: 1.25rem; }
+.cvh-about__title {
+  font-family: var(--cv-font-head);
+  font-size: 2.25rem; font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1.1;
+}
+@media (min-width: 768px) { .cvh-about__title { font-size: 2.75rem; } }
+.cvh-about__desc { font-size: 1rem; line-height: 1.7; color: var(--cv-muted-fg); }
+.cvh-about__checklist { display: flex; flex-direction: column; gap: 0.625rem; margin-top: 0.5rem; }
+.cvh-about__check {
+  display: flex; align-items: center; gap: 0.625rem;
+  font-size: 0.9375rem; font-weight: 500;
+}
+.cvh-about__check svg { width: 1.125rem; height: 1.125rem; color: var(--cv-success); flex-shrink: 0; }
+.cvh-about__check--dim { color: var(--cv-muted-fg); }
+.cvh-about__check--dim svg { color: var(--cv-border); }
+.cvh-about__ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+
+/* =============================================================
+   8. NEW ARRIVALS STRIP
+   ============================================================= */
+.cvh-new { padding: 4rem 0; }
+
+/* =============================================================
+   9. REWARDS SECTION
+   ============================================================= */
+.cvh-rewards {
+  padding: 4rem 0;
+  background: var(--cv-primary);
+  color: var(--cv-primary-fg);
+}
+.cvh-rewards__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+@media (min-width: 768px) { .cvh-rewards__grid { grid-template-columns: 1fr 1fr; gap: 4rem; } }
+
+.cvh-rewards__text { display: flex; flex-direction: column; gap: 1.25rem; }
+.cvh-rewards__eyebrow {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  width: fit-content;
+}
+.cvh-rewards__eyebrow svg { width: 1rem; height: 1rem; color: var(--cv-star); }
+.cvh-rewards__title {
+  font-family: var(--cv-font-head);
+  font-size: 2.25rem; font-weight: 800;
+  color: #fff; letter-spacing: -0.03em; line-height: 1.1;
+}
+@media (min-width: 768px) { .cvh-rewards__title { font-size: 2.75rem; } }
+.cvh-rewards__desc { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.65); }
+.cvh-rewards__list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.25rem; }
+.cvh-rewards__item {
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 0.9375rem; font-weight: 500;
+  color: rgba(255,255,255,0.85);
+}
+.cvh-rewards__item-icon {
+  width: 2rem; height: 2rem; flex-shrink: 0;
+  border-radius: var(--cv-radius);
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+}
+.cvh-rewards__item-icon svg { width: 1rem; height: 1rem; color: rgba(255,255,255,0.8); }
+
+.cvh-rewards__img {
+  border-radius: calc(var(--cv-radius) * 3);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+.cvh-rewards__img img { width: 100%; height: 100%; object-fit: cover; }
+
+/* =============================================================
+   10. REVIEWS
+   ============================================================= */
+.cvh-reviews { padding: 4rem 0; }
+.cvh-reviews__title-wrap { text-align: center; margin-bottom: 3rem; }
+.cvh-reviews__mega {
+  font-family: var(--cv-font-head);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
+}
+.cvh-reviews__scroll {
+  display: flex; gap: 1rem;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; -ms-overflow-style: none;
+  padding-bottom: 0.5rem;
+}
+.cvh-reviews__scroll::-webkit-scrollbar { display: none; }
+.cvh-review-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: calc(100vw - 3rem); max-width: 22rem;
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 2);
+  background: var(--cv-card);
+  padding: 1.5rem;
+  box-shadow: var(--cv-shadow-sm);
+}
+@media (min-width: 768px) { .cvh-review-card { width: 22rem; } }
+.cvh-review-card__stars { display: flex; gap: 0.125rem; margin-bottom: 0.75rem; }
+.cvh-review-card__stars svg { width: 1rem; height: 1rem; fill: var(--cv-star); color: var(--cv-star); }
+.cvh-review-card__text { font-size: 0.9375rem; line-height: 1.65; color: var(--cv-muted-fg); margin-bottom: 1.25rem; }
+.cvh-review-card__author { display: flex; align-items: center; gap: 0.625rem; }
+.cvh-review-card__avatar {
+  width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+  background: rgba(40,45,82,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8125rem; font-weight: 700; color: var(--cv-primary);
+  flex-shrink: 0;
+}
+.cvh-review-card__name { font-size: 0.875rem; font-weight: 600; }
+.cvh-review-card__meta { font-size: 0.75rem; color: var(--cv-muted-fg); }
+
+/* =============================================================
+   11. NEWSLETTER
+   ============================================================= */
+.cvh-newsletter {
+  padding: 4rem 1rem;
+  background: var(--cv-secondary);
+  border-top: 1px solid var(--cv-border);
+  border-bottom: 1px solid var(--cv-border);
+}
+.cvh-newsletter__inner {
+  max-width: 38rem; margin: 0 auto; text-align: center;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.cvh-newsletter__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.875rem; font-weight: 800; letter-spacing: -0.02em;
+}
+.cvh-newsletter__sub { font-size: 0.9375rem; color: var(--cv-muted-fg); }
+.cvh-newsletter__form {
+  display: flex; gap: 0.625rem; flex-wrap: wrap; justify-content: center;
+}
+.cvh-newsletter__input {
+  flex: 1; min-width: 0;
+  height: 2.875rem;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  padding: 0 1rem;
+  font-family: var(--cv-font-sans);
+  font-size: 0.9375rem;
+  background: var(--cv-card);
+  color: var(--cv-fg);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.cvh-newsletter__input:focus { border-color: var(--cv-primary); }
+.cvh-newsletter__input::placeholder { color: var(--cv-muted-fg); }
+.cvh-newsletter__disclaimer { font-size: 0.8125rem; color: var(--cv-muted-fg); }
+</style>
+
+{%- comment -%} ====================================================
+    HOME PAGE SECTIONS
+    ==================================================== {%- endcomment -%}
+
+<div class="cvh">
+
+  {%- comment -%} ── 1. HERO SLIDER ── {%- endcomment -%}
+  <section class="cvh-hero" aria-label="Featured promotions" id="cvh-hero">
+    <div class="cvh-hero__track" id="cvh-hero-track">
+
+      {%- comment -%} Slide 1 – New Arrivals {%- endcomment -%}
+      <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--1">
+        <div class="cvh-hero__slide cvh-inner">
+          <div class="cvh-hero__text">
+            <span class="cvh-hero__eyebrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              New Season Drops
+            </span>
+            <h1 class="cvh-hero__title">
+              Premium TCG<br><em>Sealed Products</em>
+            </h1>
+            <p class="cvh-hero__desc">Factory sealed booster boxes, Elite Trainer Boxes &amp; more. 100% authentic, sourced directly from authorized distributors.</p>
+            <div class="cvh-hero__ctas">
+              <a href="/collections/all" class="cvh-btn cvh-btn--primary">Shop All Products</a>
+              <a href="/collections/new-arrivals" class="cvh-btn cvh-btn--outline">New Arrivals</a>
+            </div>
+          </div>
+          <div class="cvh-hero__img-wrap">
+            <img src="https://placehold.co/600x600/e8e4f5/282d52?text=Booster+Box" alt="Featured sealed booster box" width="600" height="600" loading="eager">
+            <div class="cvh-hero__badge">
+              <div class="cvh-hero__badge-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="cvh-hero__badge-text">
+                <span class="cvh-hero__badge-val">100% Authentic</span>
+                <span class="cvh-hero__badge-label">Verified sealed product</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Slide 2 – Sale {%- endcomment -%}
+      <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--2">
+        <div class="cvh-hero__slide cvh-inner">
+          <div class="cvh-hero__text">
+            <span class="cvh-hero__eyebrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              Limited Time Deals
+            </span>
+            <h1 class="cvh-hero__title">
+              Up to <em>25% Off</em><br>Elite Trainer Boxes
+            </h1>
+            <p class="cvh-hero__desc">Stock up on your favourite ETBs while supplies last. Free insured shipping on all orders over $100.</p>
+            <div class="cvh-hero__ctas">
+              <a href="/collections/sale" class="cvh-btn cvh-btn--primary">Shop the Sale</a>
+              <a href="/collections/elite-trainer-boxes" class="cvh-btn cvh-btn--outline">View ETBs</a>
+            </div>
+          </div>
+          <div class="cvh-hero__img-wrap">
+            <img src="https://placehold.co/600x600/d4eedd/2e9963?text=Elite+Trainer+Box" alt="Elite Trainer Box sale" width="600" height="600" loading="lazy">
+            <div class="cvh-hero__badge">
+              <div class="cvh-hero__badge-icon" style="background:var(--cv-success)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </div>
+              <div class="cvh-hero__badge-text">
+                <span class="cvh-hero__badge-val">Save up to 25%</span>
+                <span class="cvh-hero__badge-label">On selected ETBs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Slide 3 – Pre-orders {%- endcomment -%}
+      <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--3">
+        <div class="cvh-hero__slide cvh-inner">
+          <div class="cvh-hero__text">
+            <span class="cvh-hero__eyebrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Coming Soon
+            </span>
+            <h1 class="cvh-hero__title">
+              Pre-Order<br><em>Scarlet &amp; Violet</em>
+            </h1>
+            <p class="cvh-hero__desc">Lock in your allocation before they sell out. We ship on release day — guaranteed first to your door.</p>
+            <div class="cvh-hero__ctas">
+              <a href="/collections/pre-orders" class="cvh-btn cvh-btn--primary">Pre-Order Now</a>
+              <a href="#" class="cvh-btn cvh-btn--outline">Learn More</a>
+            </div>
+          </div>
+          <div class="cvh-hero__img-wrap">
+            <img src="https://placehold.co/600x600/f5e0cc/c94030?text=Pre-Order+Now" alt="Pre-order Scarlet and Violet" width="600" height="600" loading="lazy">
+            <div class="cvh-hero__badge">
+              <div class="cvh-hero__badge-icon" style="background:var(--cv-destructive)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="cvh-hero__badge-text">
+                <span class="cvh-hero__badge-val">Ships on Release Day</span>
+                <span class="cvh-hero__badge-label">Guaranteed first</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /track -->
+
+    <button class="cvh-hero__arrow cvh-hero__arrow--prev" id="cvh-hero-prev" aria-label="Previous slide" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="cvh-hero__arrow cvh-hero__arrow--next" id="cvh-hero-next" aria-label="Next slide" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <div class="cvh-hero__controls" role="tablist" aria-label="Slide navigation">
+      <button class="cvh-hero__dot is-active" data-slide="0" role="tab" aria-label="Slide 1" aria-selected="true" type="button"></button>
+      <button class="cvh-hero__dot" data-slide="1" role="tab" aria-label="Slide 2" aria-selected="false" type="button"></button>
+      <button class="cvh-hero__dot" data-slide="2" role="tab" aria-label="Slide 3" aria-selected="false" type="button"></button>
+    </div>
+  </section>
+
+  {%- comment -%} ── 2. TRUST BAR ── {%- endcomment -%}
+  <div class="cvh-trust-bar" role="region" aria-label="Store guarantees">
+    <div class="cvh-trust-bar__grid">
+      <div class="cvh-trust-item">
+        <div class="cvh-trust-item__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <div class="cvh-trust-item__text">
+          <span class="cvh-trust-item__title">Buy Now, Pay Later</span>
+          <span class="cvh-trust-item__desc">Afterpay &amp; Zip available at checkout</span>
+        </div>
+      </div>
+      <div class="cvh-trust-item">
+        <div class="cvh-trust-item__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="cvh-trust-item__text">
+          <span class="cvh-trust-item__title">Best Price Guarantee</span>
+          <span class="cvh-trust-item__desc">We match any verified lower price</span>
+        </div>
+      </div>
+      <div class="cvh-trust-item">
+        <div class="cvh-trust-item__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="cvh-trust-item__text">
+          <span class="cvh-trust-item__title">Trusted by Players</span>
+          <span class="cvh-trust-item__desc">500k+ happy customers, 5-star rated</span>
+        </div>
+      </div>
+      <div class="cvh-trust-item">
+        <div class="cvh-trust-item__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div class="cvh-trust-item__text">
+          <span class="cvh-trust-item__title">Free Insured Shipping</span>
+          <span class="cvh-trust-item__desc">On all orders over $100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── 3. FAN FAVOURITES ── {%- endcomment -%}
+  <section class="cvh-featured" aria-label="Featured products">
+    <div class="cvh__inner">
+      <div class="cvh-section-hd cvh-section-hd--row">
+        <div>
+          <h2 class="cvh-section-title">Fan Favourites</h2>
+          <p class="cvh-section-sub">Whether you&rsquo;re building your collection or buying your first box — these are going fast.</p>
+        </div>
+        <a href="/collections/all" class="cvh-btn cvh-btn--outline cvh-btn--sm" style="flex-shrink:0">View All</a>
+      </div>
+
+      {%- comment -%} Tab nav {%- endcomment -%}
+      <div class="cvh-featured__tabs" role="tablist" aria-label="Product filter">
+        <button class="cvh-featured__tab is-active" data-panel="preorders" role="tab" aria-selected="true" aria-controls="cvh-panel-preorders" type="button">Pre-Orders</button>
+        <button class="cvh-featured__tab" data-panel="new" role="tab" aria-selected="false" aria-controls="cvh-panel-new" type="button">New Arrivals</button>
+        <button class="cvh-featured__tab" data-panel="bestsellers" role="tab" aria-selected="false" aria-controls="cvh-panel-bestsellers" type="button">Best Sellers</button>
+      </div>
+
+      {%- comment -%} Pre-Orders Panel {%- endcomment -%}
+      <div class="cvh-featured__panel is-active" id="cvh-panel-preorders" role="tabpanel">
+        <div class="cvh-featured__scroll-wrap">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="cvh-panel-preorders" aria-label="Scroll left" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="cvh-featured__scroll" id="cvh-scroll-preorders">
+            {%- comment -%} Placeholder product cards — replace with collection loop {%- endcomment -%}
+            {%- assign preorder_products = "Scarlet & Violet — Prismatic Evolutions|Booster Box|$144.99||preorder,Journey Together Booster Box|Booster Box|$139.99||preorder,Surging Sparks ETB|Elite Trainer Box|$54.99|$59.99|preorder,Twilight Masquerade Case|Sealed Case (6 Boxes)|$824.99|$879.99|preorder,Temporal Forces ETB|Elite Trainer Box|$49.99||preorder,Obsidian Flames Bundle|3-Box Bundle|$419.99|$449.99|preorder" | split: "," -%}
+            {%- for item in preorder_products -%}
+              {%- assign p = item | split: "|" -%}
+              <a href="/collections/pre-orders" class="cvh-prod-card">
+                <div class="cvh-prod-card__img">
+                  <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p[0] | url_encode | truncate: 20, '' }}" alt="{{ p[0] }}" width="280" height="280" loading="lazy">
+                  <div class="cvh-prod-card__badges">
+                    <span class="cvh-prod-badge cvh-prod-badge--preorder">Pre-Order</span>
+                    {%- if p[3] != blank -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+                  </div>
+                </div>
+                <div class="cvh-prod-card__info">
+                  <span class="cvh-prod-card__type">{{ p[1] }}</span>
+                  <span class="cvh-prod-card__name">{{ p[0] }}</span>
+                  <div class="cvh-prod-card__prices">
+                    <span class="cvh-prod-card__price">{{ p[2] }}</span>
+                    {%- if p[3] != blank -%}<span class="cvh-prod-card__was">{{ p[3] }}</span>{%- endif -%}
+                  </div>
+                </div>
+              </a>
+            {%- endfor -%}
+          </div>
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="cvh-panel-preorders" aria-label="Scroll right" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      {%- comment -%} New Arrivals Panel {%- endcomment -%}
+      <div class="cvh-featured__panel" id="cvh-panel-new" role="tabpanel">
+        <div class="cvh-featured__scroll-wrap">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="cvh-panel-new" aria-label="Scroll left" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="cvh-featured__scroll" id="cvh-scroll-new">
+            {%- assign new_products = "Stellar Crown Booster Box|Booster Box|$144.99||new,Paradox Rift ETB|Elite Trainer Box|$54.99||new,151 Booster Box (Japanese)|Booster Box|$89.99||new,Paldea Evolved Case|Sealed Case|$799.99|$849.99|new,Crown Zenith ETB|Elite Trainer Box|$59.99|$64.99|new,Lost Origin Booster Box|Booster Box|$134.99||new" | split: "," -%}
+            {%- for item in new_products -%}
+              {%- assign p = item | split: "|" -%}
+              <a href="/collections/new-arrivals" class="cvh-prod-card">
+                <div class="cvh-prod-card__img">
+                  <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p[0] | url_encode | truncate: 20, '' }}" alt="{{ p[0] }}" width="280" height="280" loading="lazy">
+                  <div class="cvh-prod-card__badges">
+                    <span class="cvh-prod-badge cvh-prod-badge--new">New</span>
+                    {%- if p[3] != blank -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+                  </div>
+                </div>
+                <div class="cvh-prod-card__info">
+                  <span class="cvh-prod-card__type">{{ p[1] }}</span>
+                  <span class="cvh-prod-card__name">{{ p[0] }}</span>
+                  <div class="cvh-prod-card__prices">
+                    <span class="cvh-prod-card__price">{{ p[2] }}</span>
+                    {%- if p[3] != blank -%}<span class="cvh-prod-card__was">{{ p[3] }}</span>{%- endif -%}
+                  </div>
+                </div>
+              </a>
+            {%- endfor -%}
+          </div>
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="cvh-panel-new" aria-label="Scroll right" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      {%- comment -%} Best Sellers Panel {%- endcomment -%}
+      <div class="cvh-featured__panel" id="cvh-panel-bestsellers" role="tabpanel">
+        <div class="cvh-featured__scroll-wrap">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="cvh-panel-bestsellers" aria-label="Scroll left" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="cvh-featured__scroll" id="cvh-scroll-bestsellers">
+            {%- assign best_products = "Obsidian Flames Booster Box|Booster Box|$144.99|$159.99|hot,Paldea Evolved ETB|Elite Trainer Box|$44.99|$49.99|hot,Infinite Forbidden Booster Box|Booster Box|$79.99|$89.99|hot,Pokemon GO ETB|Elite Trainer Box|$64.99||hot,Brilliant Stars Case|Sealed Case|$749.99||hot,Charizard UPC|Ultra Premium Collection|$129.99||hot" | split: "," -%}
+            {%- for item in best_products -%}
+              {%- assign p = item | split: "|" -%}
+              <a href="/collections/best-sellers" class="cvh-prod-card">
+                <div class="cvh-prod-card__img">
+                  <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p[0] | url_encode | truncate: 20, '' }}" alt="{{ p[0] }}" width="280" height="280" loading="lazy">
+                  <div class="cvh-prod-card__badges">
+                    <span class="cvh-prod-badge cvh-prod-badge--hot">🔥 Hot</span>
+                    {%- if p[3] != blank -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+                  </div>
+                </div>
+                <div class="cvh-prod-card__info">
+                  <span class="cvh-prod-card__type">{{ p[1] }}</span>
+                  <span class="cvh-prod-card__name">{{ p[0] }}</span>
+                  <div class="cvh-prod-card__prices">
+                    <span class="cvh-prod-card__price">{{ p[2] }}</span>
+                    {%- if p[3] != blank -%}<span class="cvh-prod-card__was">{{ p[3] }}</span>{%- endif -%}
+                  </div>
+                </div>
+              </a>
+            {%- endfor -%}
+          </div>
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="cvh-panel-bestsellers" aria-label="Scroll right" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  {%- comment -%} ── 4. MARQUEE ── {%- endcomment -%}
+  <div class="cvh-marquee" aria-hidden="true">
+    <div class="cvh-marquee__track" id="cvh-marquee">
+      {%- assign marquee_items = "Free insured shipping on orders over $100,100% authentic sealed product,Afterpay & Zip available,14-day returns on sealed items,Same-day dispatch on weekdays,500k+ happy customers,Best price guarantee,Factory sealed — always,Free insured shipping on orders over $100,100% authentic sealed product,Afterpay & Zip available,14-day returns on sealed items,Same-day dispatch on weekdays,500k+ happy customers,Best price guarantee,Factory sealed — always" | split: "," -%}
+      {%- for item in marquee_items -%}
+        <span class="cvh-marquee__item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          {{ item }}
+        </span>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- comment -%} ── 5. BROWSE BY CATEGORY ── {%- endcomment -%}
+  <section class="cvh-categories" aria-label="Browse by category">
+    <div class="cvh__inner">
+      <div class="cvh-section-hd cvh-section-hd--row">
+        <div>
+          <h2 class="cvh-section-title">Browse by Category</h2>
+          <p class="cvh-section-sub">Booster boxes, ETBs, cases, singles &amp; more — sorted to make your next pick easy.</p>
+        </div>
+        <a href="/collections/all" class="cvh-btn cvh-btn--outline cvh-btn--sm" style="flex-shrink:0">Shop All</a>
+      </div>
+
+      <div class="cvh-cat-grid">
+        <a href="/collections/sale" class="cvh-cat-card cvh-cat-card--sale" aria-label="Shop Sale">
+          <div class="cvh-cat-card__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <span class="cvh-cat-card__label">Sale</span>
+        </a>
+        <a href="/collections/booster-boxes" class="cvh-cat-card" aria-label="Shop Booster Boxes">
+          <div class="cvh-cat-card__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>
+          </div>
+          <span class="cvh-cat-card__label">Booster Boxes</span>
+        </a>
+        <a href="/collections/elite-trainer-boxes" class="cvh-cat-card" aria-label="Shop Elite Trainer Boxes">
+          <div class="cvh-cat-card__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <span class="cvh-cat-card__label">Elite Trainer Boxes</span>
+        </a>
+        <a href="/collections/cases" class="cvh-cat-card" aria-label="Shop Sealed Cases">
+          <div class="cvh-cat-card__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+          </div>
+          <span class="cvh-cat-card__label">Cases</span>
+        </a>
+        <a href="/collections/bundles-tins" class="cvh-cat-card" aria-label="Shop Bundles and Tins">
+          <div class="cvh-cat-card__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          </div>
+          <span class="cvh-cat-card__label">Bundles &amp; Tins</span>
+        </a>
+        <a href="/collections/new-arrivals" class="cvh-cat-card" aria-label="Shop New Arrivals">
+          <div class="cvh-cat-card__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <span class="cvh-cat-card__label">New Arrivals</span>
+        </a>
+      </div>
+
+      {%- comment -%} Brand row {%- endcomment -%}
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-top:0.75rem;">
+        {%- assign brands = "Pokemon|/collections/pokemon,Yu-Gi-Oh!|/collections/yugioh,Magic: The Gathering|/collections/magic,One Piece TCG|/collections/one-piece,Dragon Ball Super|/collections/dbs,Lorcana|/collections/lorcana" | split: "," -%}
+        {%- for brand in brands -%}
+          {%- assign b = brand | split: "|" -%}
+          <a href="{{ b[1] }}" class="cvh-cat-card" style="flex-direction:row;justify-content:flex-start;padding:1rem 1.25rem;border-radius:var(--cv-radius);gap:0.75rem;" aria-label="Shop {{ b[0] }}">
+            <div class="cvh-cat-card__icon" style="width:2.25rem;height:2.25rem;flex-shrink:0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <span class="cvh-cat-card__label" style="font-size:0.9375rem">{{ b[0] }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1rem;height:1rem;margin-left:auto;color:var(--cv-muted-fg)"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── 6. PROMOTIONAL BANNERS ── {%- endcomment -%}
+  <section class="cvh-promo" aria-label="Promotions">
+    <div class="cvh__inner">
+      <div class="cvh-promo__grid">
+        <a href="/collections/booster-boxes" class="cvh-promo-card">
+          <div class="cvh-promo-card__bg">
+            <img src="https://placehold.co/700x420/282d52/f8f7f5?text=Booster+Boxes" alt="Shop Booster Boxes" width="700" height="420" loading="lazy">
+          </div>
+          <div class="cvh-promo-card__content">
+            <span class="cvh-promo-card__eyebrow">Shop Now</span>
+            <h3 class="cvh-promo-card__title">Booster Boxes<br>from $39.99</h3>
+            <span class="cvh-promo-card__cta">
+              Shop Collection
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
+        </a>
+        <a href="/collections/elite-trainer-boxes" class="cvh-promo-card">
+          <div class="cvh-promo-card__bg">
+            <img src="https://placehold.co/700x420/1c3a2e/d4eedd?text=Elite+Trainer+Boxes" alt="Shop Elite Trainer Boxes" width="700" height="420" loading="lazy">
+          </div>
+          <div class="cvh-promo-card__content">
+            <span class="cvh-promo-card__eyebrow">Most Popular</span>
+            <h3 class="cvh-promo-card__title">Elite Trainer<br>Boxes from $44.99</h3>
+            <span class="cvh-promo-card__cta">
+              Shop ETBs
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── 7. ABOUT SECTION ── {%- endcomment -%}
+  <section class="cvh-about" aria-label="About CardVault">
+    <div class="cvh__inner">
+      <div class="cvh-about__grid">
+        <div class="cvh-about__img">
+          <img src="https://placehold.co/700x525/eeecea/76798c?text=CardVault+Store" alt="CardVault store and team" width="700" height="525" loading="lazy">
+        </div>
+        <div class="cvh-about__text">
+          <h2 class="cvh-about__title">About CardVault</h2>
+          <p class="cvh-about__desc">
+            We&rsquo;re passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all &mdash; and ship it fast with full insurance.
+          </p>
+          <div class="cvh-about__checklist">
+            <div class="cvh-about__check">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Insured &amp; protected packaging
+            </div>
+            <div class="cvh-about__check">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              100% authentic, authorized distributor sourced
+            </div>
+            <div class="cvh-about__check">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Same-day dispatch on weekday orders
+            </div>
+            <div class="cvh-about__check cvh-about__check--dim">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              14-day returns on sealed &amp; unopened products
+            </div>
+          </div>
+          <div class="cvh-about__ctas">
+            <a href="/pages/about" class="cvh-btn cvh-btn--primary">Our Story</a>
+            <a href="/pages/contact" class="cvh-btn cvh-btn--outline">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── 8. REWARDS SECTION ── {%- endcomment -%}
+  <section class="cvh-rewards" aria-label="Rewards program">
+    <div class="cvh__inner">
+      <div class="cvh-rewards__grid">
+        <div class="cvh-rewards__text">
+          <span class="cvh-rewards__eyebrow">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            CardVault Rewards
+          </span>
+          <h2 class="cvh-rewards__title">Level Up Every<br>Time You Shop</h2>
+          <p class="cvh-rewards__desc">Every dollar you spend earns Vault Coins redeemable for discounts, early access, and exclusive member perks.</p>
+          <div class="cvh-rewards__list">
+            <div class="cvh-rewards__item">
+              <div class="cvh-rewards__item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              1 Vault Coin for every $1 spent
+            </div>
+            <div class="cvh-rewards__item">
+              <div class="cvh-rewards__item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+              </div>
+              Redeem coins for discounts &amp; gifts
+            </div>
+            <div class="cvh-rewards__item">
+              <div class="cvh-rewards__item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              Early access for loyal members
+            </div>
+          </div>
+          <div style="margin-top:1rem">
+            <a href="/pages/rewards" class="cvh-btn cvh-btn--white">Join Rewards — It&rsquo;s Free</a>
+          </div>
+        </div>
+        <div class="cvh-rewards__img">
+          <img src="https://placehold.co/700x525/1c2440/6472a8?text=Vault+Rewards" alt="CardVault rewards program" width="700" height="525" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── 9. REVIEWS ── {%- endcomment -%}
+  <section class="cvh-reviews" aria-label="Customer reviews">
+    <div class="cvh__inner">
+      <div class="cvh-reviews__title-wrap">
+        <h2 class="cvh-reviews__mega">Loved by Thousands<br>of Players</h2>
+      </div>
+      <div class="cvh-reviews__scroll" role="list">
+        {%- assign reviews = "Amazing service! My booster boxes arrived double-boxed and in perfect condition. Factory seals intact. Will definitely be a repeat customer.|Alex M.|Pokemon Collector|5,Fastest shipping I've experienced. Ordered Monday morning and it arrived Tuesday. The price was unbeatable too — best in the market.|Sarah K.|Yu-Gi-Oh Player|5,Got my Obsidian Flames case and every single box was sealed perfectly. The packaging was incredible. 10/10 experience.|David R.|MTG Enthusiast|5,The pre-order experience was smooth. They kept me updated and my box arrived exactly on release day. Top tier store.|James T.|TCG Investor|5,Incredible range — found products here I couldn't source anywhere else. Customer service was also super helpful when I had a question.|Emma L.|Card Collector|5" | split: "," -%}
+        {%- for review in reviews -%}
+          {%- assign rv = review | split: "|" -%}
+          <div class="cvh-review-card" role="listitem">
+            <div class="cvh-review-card__stars" aria-label="{{ rv[4] }} out of 5 stars">
+              {%- for i in (1..5) -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              {%- endfor -%}
+            </div>
+            <p class="cvh-review-card__text">&ldquo;{{ rv[0] }}&rdquo;</p>
+            <div class="cvh-review-card__author">
+              <div class="cvh-review-card__avatar" aria-hidden="true">{{ rv[1] | slice: 0 }}</div>
+              <div>
+                <div class="cvh-review-card__name">{{ rv[1] }}</div>
+                <div class="cvh-review-card__meta">{{ rv[2] }}</div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── 10. NEWSLETTER ── {%- endcomment -%}
+  <section class="cvh-newsletter" aria-label="Newsletter signup">
+    <div class="cvh-newsletter__inner">
+      <div>
+        <h2 class="cvh-newsletter__title">Stay in the Loop</h2>
+        <p class="cvh-newsletter__sub">New drops, restocks, and exclusive deals delivered straight to your inbox.</p>
+      </div>
+      {% form 'customer', id: 'cvh-newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="cvh-newsletter__form">
+          <input
+            class="cvh-newsletter__input"
+            type="email"
+            name="contact[email]"
+            id="cvh-email"
+            placeholder="your@email.com"
+            required
+            autocomplete="email"
+            aria-label="Email address"
+          >
+          <button type="submit" class="cvh-btn cvh-btn--primary">Subscribe</button>
+        </div>
+      {% endform %}
+      <p class="cvh-newsletter__disclaimer">No spam, ever. Unsubscribe anytime.</p>
+    </div>
+  </section>
+
+</div><!-- /cvh -->
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Hero Slider ── */
+  var track   = document.getElementById('cvh-hero-track');
+  var slides  = track ? Array.prototype.slice.call(track.children) : [];
+  var dots    = Array.prototype.slice.call(document.querySelectorAll('.cvh-hero__dot'));
+  var prevBtn = document.getElementById('cvh-hero-prev');
+  var nextBtn = document.getElementById('cvh-hero-next');
+  var total   = slides.length;
+  var current = 0;
+  var autoplay;
+
+  function goTo(idx) {
+    current = (idx + total) % total;
+    if (track) track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach(function (d, i) {
+      d.classList.toggle('is-active', i === current);
+      d.setAttribute('aria-selected', String(i === current));
+    });
+  }
+
+  function startAutoplay() {
+    autoplay = setInterval(function () { goTo(current + 1); }, 5000);
+  }
+  function stopAutoplay()  { clearInterval(autoplay); }
+
+  if (prevBtn) prevBtn.addEventListener('click', function () { stopAutoplay(); goTo(current - 1); startAutoplay(); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { stopAutoplay(); goTo(current + 1); startAutoplay(); });
+
+  dots.forEach(function (dot) {
+    dot.addEventListener('click', function () {
+      stopAutoplay();
+      goTo(parseInt(this.dataset.slide, 10));
+      startAutoplay();
+    });
+  });
+
+  /* Touch swipe on hero */
+  if (track) {
+    var heroSwipeX = 0;
+    track.addEventListener('touchstart', function (e) { heroSwipeX = e.changedTouches[0].screenX; }, { passive: true });
+    track.addEventListener('touchend',   function (e) {
+      var diff = heroSwipeX - e.changedTouches[0].screenX;
+      if (Math.abs(diff) > 50) { stopAutoplay(); goTo(diff > 0 ? current + 1 : current - 1); startAutoplay(); }
+    }, { passive: true });
+  }
+
+  startAutoplay();
+
+  /* ── Featured Product Tabs ── */
+  var featTabs   = Array.prototype.slice.call(document.querySelectorAll('.cvh-featured__tab'));
+  var featPanels = Array.prototype.slice.call(document.querySelectorAll('.cvh-featured__panel'));
+
+  featTabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      featTabs.forEach(function (t)   { t.classList.remove('is-active'); t.setAttribute('aria-selected', 'false'); });
+      featPanels.forEach(function (p) { p.classList.remove('is-active'); });
+      this.classList.add('is-active');
+      this.setAttribute('aria-selected', 'true');
+      var panel = document.getElementById('cvh-panel-' + this.dataset.panel);
+      if (panel) panel.classList.add('is-active');
+    });
+  });
+
+  /* ── Scroll Arrows ── */
+  var scrollArrows = Array.prototype.slice.call(document.querySelectorAll('.cvh-scroll-arrow'));
+  scrollArrows.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var panel  = document.getElementById('cvh-panel-' + this.dataset.target);
+      if (!panel) return;
+      var scroll = panel.querySelector('.cvh-featured__scroll');
+      if (!scroll) return;
+      var dir    = this.classList.contains('cvh-scroll-arrow--next') ? 1 : -1;
+      var amount = scroll.offsetWidth * 0.75;
+      scroll.scrollBy({ left: dir * amount, behavior: 'smooth' });
+    });
+  });
+
+  /* ── Newsletter form ── */
+  var nlForm = document.getElementById('cvh-newsletter-form');
+  if (nlForm) {
+    nlForm.addEventListener('submit', function (e) {
+      var btn = nlForm.querySelector('[type="submit"]');
+      if (btn) {
+        setTimeout(function () { btn.textContent = 'Subscribed!'; btn.disabled = true; }, 100);
+      }
+    });
+  }
+
+}());
+</script>
+
 {% schema %}
 {
   "name": "Home",
-  "settings": []
+  "tag": "section",
+  "class": "section-main-home",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Homepage Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_bar",
+      "label": "Show trust bar",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_marquee",
+      "label": "Show scrolling ticker",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rewards",
+      "label": "Show rewards section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter section",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "hero_autoplay_ms",
+      "label": "Hero slide interval (ms)",
+      "default": 5000
+    }
+  ],
+  "presets": [
+    {
+      "name": "Home"
+    }
+  ]
 }
 {% endschema %}
