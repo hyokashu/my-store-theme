@@ -1,0 +1,14 @@
+<header class="site-header">
+  <a href="{{ routes.root_url }}" class="site-header__logo">{{ shop.name }}</a>
+  <nav class="site-nav">
+    {% for link in linklists.main-menu.links %}
+      <a href="{{ link.url }}">{{ link.title }}</a>
+    {% endfor %}
+  </nav>
+</header>
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}
