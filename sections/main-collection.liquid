@@ -1,0 +1,12 @@
+<div class="collection-page">
+  <h1>{{ collection.title }}</h1>
+  {% for product in collection.products %}
+    <a href="{{ product.url }}">{{ product.title }}</a>
+  {% endfor %}
+</div>
+{% schema %}
+{
+  "name": "Collection",
+  "settings": []
+}
+{% endschema %}
