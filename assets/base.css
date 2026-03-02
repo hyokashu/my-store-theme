@@ -1,0 +1,6 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: sans-serif; color: #333; }
+.site-header { display: flex; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid #eee; }
+.site-nav a { margin-left: 1rem; text-decoration: none; color: inherit; }
+main { padding: 2rem; }
+.site-footer { text-align: center; padding: 2rem; border-top: 1px solid #eee; }
