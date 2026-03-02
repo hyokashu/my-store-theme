@@ -1,0 +1,12 @@
+<div class="cart-page">
+  <h1>Your Cart</h1>
+  {% for item in cart.items %}
+    <p>{{ item.title }} x{{ item.quantity }}</p>
+  {% endfor %}
+</div>
+{% schema %}
+{
+  "name": "Cart",
+  "settings": []
+}
+{% endschema %}
