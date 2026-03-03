@@ -24,6 +24,9 @@
   endif
   assign rating_value = product.metafields.reviews.rating.value | default: 4.9
   assign rating_count = product.metafields.reviews.rating_count | default: 84
+
+  assign pack_count = product.metafields.custom.pack_count | default: 24
+  assign cards_per_pack = product.metafields.custom.cards_per_pack | default: 6
 -%}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -513,7 +516,7 @@ input.cv-qty__input {
   font-size: 0.75rem; font-weight: 700; color: var(--cv-primary);
   flex-shrink: 0;
 }
-.cv-reviewer__name    { font-size: 0.875rem; font-weight: 600; }
+.cv-reviewer__name   { font-size: 0.875rem; font-weight: 600; }
 .cv-badge--verified   {
   background: rgba(46,153,99,0.1); color: var(--cv-success);
   border-radius: calc(var(--cv-radius) - 2px);
@@ -748,10 +751,7 @@ input.cv-qty__input {
           {%- endfor -%}
         {%- endif -%}
       </div>
-    </div><!-- /cv-gallery -->
-
-
-    {%- comment -%} ─── Product Info ─── {%- endcomment -%}
+    </div>{%- comment -%} ─── Product Info ─── {%- endcomment -%}
     <div class="cv-info">
 
       {%- comment -%} Breadcrumb {%- endcomment -%}
@@ -794,8 +794,6 @@ input.cv-qty__input {
       <div class="cv-title-block">
         <h1 class="cv-title">{{ product.title }}</h1>
         <p class="cv-subtitle">
-          {%- assign pack_count     = product.metafields.custom.pack_count | default: '24' -%}
-          {%- assign cards_per_pack = product.metafields.custom.cards_per_pack | default: '6' -%}
           {{ pack_count }} Booster Packs &middot; {{ cards_per_pack }} Cards Per Pack &middot; Factory Sealed
         </p>
 
@@ -944,17 +942,14 @@ input.cv-qty__input {
       </div>
       {%- endif -%}
 
-    </div><!-- /cv-info -->
-  </div><!-- /cv-hero -->
-
-  <hr class="cv-sep">
+    </div></div><hr class="cv-sep">
 
   {%- comment -%} ── Product Tabs ── {%- endcomment -%}
   <section aria-label="Product details" id="cv-tabs-section">
     <div class="cv-tabs__nav" role="tablist" aria-label="Product information">
       <button class="cv-tabs__trigger is-active" role="tab" aria-selected="true"  aria-controls="cv-tab-description" id="cv-btn-description" data-tab="description" type="button">{{ section.settings.tab_description_label | default: 'Description' }}</button>
-      <button class="cv-tabs__trigger"            role="tab" aria-selected="false" aria-controls="cv-tab-contents"    id="cv-btn-contents"    data-tab="contents"    type="button">{{ section.settings.tab_contents_label | default: 'Box Contents' }}</button>
-      <button class="cv-tabs__trigger"            role="tab" aria-selected="false" aria-controls="cv-tab-reviews"     id="cv-btn-reviews"     data-tab="reviews"     type="button">{{ section.settings.tab_reviews_label | default: 'Reviews' }} ({{ rating_count }})</button>
+      <button class="cv-tabs__trigger"           role="tab" aria-selected="false" aria-controls="cv-tab-contents"    id="cv-btn-contents"    data-tab="contents"    type="button">{{ section.settings.tab_contents_label | default: 'Box Contents' }}</button>
+      <button class="cv-tabs__trigger"           role="tab" aria-selected="false" aria-controls="cv-tab-reviews"     id="cv-btn-reviews"     data-tab="reviews"     type="button">{{ section.settings.tab_reviews_label | default: 'Reviews' }} ({{ rating_count }})</button>
     </div>
 
     {%- comment -%} Description tab {%- endcomment -%}
@@ -1014,7 +1009,7 @@ input.cv-qty__input {
               <div class="cv-content-item__main">
                 <div class="cv-content-item__row">
                   <span class="cv-content-item__label">Total Cards</span>
-                  <span class="cv-content-item__value">144 cards</span>
+                  <span class="cv-content-item__value">{{ pack_count | times: cards_per_pack }} cards</span>
                 </div>
                 <span class="cv-content-item__desc">Across all packs in the sealed box</span>
               </div>
@@ -1037,11 +1032,11 @@ input.cv-qty__input {
           <div class="cv-meta-grid">
             <div class="cv-meta-card">
               <span class="cv-meta-card__label">Release Date</span>
-              <span class="cv-meta-card__value">{{ product.metafields.custom.release_date | default: 'Aug 2023' }}</span>
+              <span class="cv-meta-card__value">{{ product.metafields.custom.release_date | default: '—' }}</span>
             </div>
             <div class="cv-meta-card">
               <span class="cv-meta-card__label">Set Size</span>
-              <span class="cv-meta-card__value">{{ product.metafields.custom.set_size | default: '126 + 1 Cards' }}</span>
+              <span class="cv-meta-card__value">{{ product.metafields.custom.set_size | default: '—' }}</span>
             </div>
           </div>
         </div>
@@ -1147,9 +1142,7 @@ input.cv-qty__input {
 
       </div>
     </div>
-  </section><!-- /tabs -->
-
-  <hr class="cv-sep">
+  </section><hr class="cv-sep">
 
   {%- comment -%} ── Similar Products ── {%- endcomment -%}
   <section class="cv-similar" aria-label="Similar products">
@@ -1226,9 +1219,7 @@ input.cv-qty__input {
     </div>
   </div>
 
-</section><!-- /cv-wrap -->
-
-{%- comment -%} ── Sticky Mobile Cart Bar ── {%- endcomment -%}
+</section>{%- comment -%} ── Sticky Mobile Cart Bar ── {%- endcomment -%}
 <div class="cv-sticky-cart" id="cv-sticky-cart" role="region" aria-label="Quick add to cart">
   <div class="cv-sticky-cart__inner">
     <div class="cv-sticky-cart__prices">
