@@ -1,0 +1,208 @@
+{% comment %}
+  Supply District — sections/product-recommendations.liquid
+  "Customers Also Bought" powered by Shopify's product recommendations API.
+  Matches 2-tone cream/slate aesthetic.
+  Add to templates/product.json alongside main-product to activate.
+{% endcomment %}
+
+{%- if section.settings.show_section -%}
+<section class="cv-recs" id="cv-product-recs" aria-label="Product recommendations"
+         data-product-id="{{ product.id }}"
+         data-section-id="{{ section.id }}"
+         style="display:none">
+  <div class="cv-recs__inner">
+    <div class="cv-recs__header">
+      <h2 class="cv-recs__title">{{ section.settings.title | default: 'Customers Also Bought' }}</h2>
+      <a href="/collections/all" class="cv-recs__all">Browse all</a>
+    </div>
+    <div class="cv-recs__grid" id="cv-recs-grid" role="list" aria-label="{{ section.settings.title | default: 'Customers Also Bought' }}"></div>
+  </div>
+</section>
+{%- endif -%}
+
+<style>
+/* ── Product Recommendations ─────────────────────────────── */
+.cv-recs {
+  background: var(--cv-bg, #f7f6f3);
+  padding: 3rem 1rem;
+  border-top: 1px solid var(--cv-border, #dedad5);
+}
+.cv-recs__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.cv-recs__header {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cv-recs__title {
+  font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-size: 1.25rem; font-weight: 700; color: var(--cv-fg, #1c1f36);
+}
+@media (min-width: 768px) { .cv-recs__title { font-size: 1.5rem; } }
+.cv-recs__all {
+  font-size: 0.875rem; font-weight: 500;
+  color: var(--cv-primary, #282d52); text-decoration: none;
+  transition: opacity 0.15s;
+}
+.cv-recs__all:hover { opacity: 0.7; }
+
+.cv-recs__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 640px)  { .cv-recs__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1024px) { .cv-recs__grid { grid-template-columns: repeat(4, 1fr); gap: 1.25rem; } }
+
+/* Product card (mirrors main-product style) */
+.cv-rec-card {
+  display: flex; flex-direction: column; gap: 0.75rem;
+  padding: 0.875rem;
+  border: 1px solid var(--cv-border, #dedad5);
+  border-radius: 1rem;
+  background: var(--cv-card, #ffffff);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  text-decoration: none; color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cv-rec-card:hover {
+  border-color: rgba(40,45,82,0.25);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.cv-rec-card__img-wrap {
+  position: relative; aspect-ratio: 1/1;
+  overflow: hidden; border-radius: 0.5rem;
+  background: var(--cv-secondary, #eeecea);
+}
+.cv-rec-card__img-wrap img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.3s;
+}
+.cv-rec-card:hover .cv-rec-card__img-wrap img { transform: scale(1.05); }
+.cv-rec-card__sale {
+  position: absolute; top: 0.5rem; left: 0.5rem;
+  background: var(--cv-success, #2e9963); color: #fff;
+  font-size: 0.625rem; font-weight: 700;
+  padding: 0.125rem 0.375rem; border-radius: 4px;
+}
+.cv-rec-card__info    { display: flex; flex-direction: column; gap: 0.25rem; }
+.cv-rec-card__name    { font-size: 0.875rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cv-rec-card__type    { font-size: 0.75rem; color: var(--cv-muted-fg, #76798c); }
+.cv-rec-card__prices  { display: flex; align-items: baseline; gap: 0.5rem; margin-top: 0.25rem; }
+.cv-rec-card__price   {
+  font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-size: 1rem; font-weight: 700;
+}
+.cv-rec-card__compare { font-size: 0.75rem; color: var(--cv-muted-fg, #76798c); text-decoration: line-through; }
+
+/* Skeleton loading */
+.cv-rec-skeleton {
+  border-radius: 1rem; background: var(--cv-card, #fff);
+  border: 1px solid var(--cv-border, #dedad5); padding: 0.875rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
+  animation: cv-rec-pulse 1.5s ease-in-out infinite;
+}
+.cv-rec-skeleton__img  { aspect-ratio:1/1; background:var(--cv-secondary,#eeecea); border-radius:0.5rem; }
+.cv-rec-skeleton__line { height: 0.75rem; border-radius: 9999px; background: var(--cv-secondary, #eeecea); }
+.cv-rec-skeleton__line--short { width: 55%; }
+@keyframes cv-rec-pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  var section = document.getElementById('cv-product-recs');
+  if (!section) return;
+
+  var productId = section.dataset.productId;
+  var sectionId = section.dataset.sectionId;
+  if (!productId) return;
+
+  var grid  = document.getElementById('cv-recs-grid');
+  var limit = 4;
+
+  /* Show skeletons immediately */
+  for (var i = 0; i < limit; i++) {
+    var sk = document.createElement('div');
+    sk.className = 'cv-rec-skeleton';
+    sk.innerHTML = '<div class="cv-rec-skeleton__img"></div>'
+      + '<div class="cv-rec-skeleton__line"></div>'
+      + '<div class="cv-rec-skeleton__line cv-rec-skeleton__line--short"></div>';
+    grid.appendChild(sk);
+  }
+  section.style.display = '';
+
+  /* Fetch from Shopify Product Recommendations API */
+  fetch('/recommendations/products.json?product_id=' + productId + '&limit=' + limit + '&intent=related')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      grid.innerHTML = '';
+      var products = data.products || [];
+
+      if (products.length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+
+      products.forEach(function (p) {
+        var v       = p.variants && p.variants[0];
+        var price   = v ? (v.price / 100).toFixed(2) : null;
+        var compare = (v && v.compare_at_price && v.compare_at_price > v.price)
+          ? (v.compare_at_price / 100).toFixed(2) : null;
+        var imgUrl  = (p.images && p.images[0] && p.images[0].src)
+          ? p.images[0].src
+          : 'https://placehold.co/400x400/eeecea/76798c?text=Product';
+
+        var card        = document.createElement('a');
+        card.href       = '/products/' + p.handle;
+        card.className  = 'cv-rec-card';
+        card.setAttribute('role', 'listitem');
+        card.innerHTML  =
+          '<div class="cv-rec-card__img-wrap">'
+          + '<img src="' + imgUrl + '" alt="' + (p.title||'').replace(/"/g,'&quot;') + '" width="400" height="400" loading="lazy">'
+          + (compare ? '<span class="cv-rec-card__sale">Sale</span>' : '')
+          + '</div>'
+          + '<div class="cv-rec-card__info">'
+          + '<span class="cv-rec-card__name">' + (p.title||'') + '</span>'
+          + (p.product_type ? '<span class="cv-rec-card__type">' + p.product_type + '</span>' : '')
+          + '<div class="cv-rec-card__prices">'
+          + (price ? '<span class="cv-rec-card__price">$' + price + '</span>' : '')
+          + (compare ? '<span class="cv-rec-card__compare">$' + compare + '</span>' : '')
+          + '</div></div>';
+
+        grid.appendChild(card);
+      });
+    })
+    .catch(function () {
+      section.style.display = 'none';
+    });
+
+}());
+</script>
+
+{% schema %}
+{
+  "name": "Product Recommendations",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show recommendations section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Customers Also Bought"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Recommendations"
+    }
+  ]
+}
+{% endschema %}

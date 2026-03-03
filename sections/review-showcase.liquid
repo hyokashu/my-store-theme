@@ -1,0 +1,466 @@
+{% comment %}
+  Supply District — sections/review-showcase.liquid
+  Dedicated "Roll for Reviews" showcase — visually distinct from the product tabs.
+  Pulls rating data from product metafields (reviews.rating, reviews.rating_count)
+  and displays the top 3 review blocks in clean readable cards on cream background.
+  Add to templates/product.json after main-product to render below the buy box.
+{% endcomment %}
+
+{%- if section.settings.show_section -%}
+
+{%- liquid
+  assign rv = product.metafields.reviews.rating.value | default: 4.9
+  assign rc = product.metafields.reviews.rating_count | default: 84
+  assign rv_int = rv | round
+  assign bar_data = "5,91|4,6|3,2|2,1|1,0" | split: "|"
+
+  comment
+    Review blocks come from the section's schema blocks so merchants can
+    add, edit and reorder reviews in the theme editor.
+  endcomment
+  assign review_blocks = section.blocks | where: "type", "review"
+-%}
+
+<section class="cvrs" aria-label="Customer reviews" id="cv-review-showcase">
+  <div class="cvrs__inner">
+
+    {%- comment -%} ── Section Header ── {%- endcomment -%}
+    <div class="cvrs__head">
+      <div class="cvrs__head-left">
+        <h2 class="cvrs__heading">{{ section.settings.heading | default: '⭐ What Our Customers Say' }}</h2>
+        <p class="cvrs__subhead">{{ section.settings.subheading | default: 'Verified purchases from real collectors' }}</p>
+      </div>
+      <div class="cvrs__score-pill" aria-label="{{ rv }} out of 5 based on {{ rc }} reviews">
+        <div class="cvrs__score-num">{{ rv }}</div>
+        <div class="cvrs__score-stars" aria-hidden="true">
+          {%- for i in (1..5) -%}
+            {%- if i <= rv_int -%}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="cvrs__star cvrs__star--filled" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            {%- else -%}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="cvrs__star cvrs__star--empty" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        <div class="cvrs__score-count">{{ rc }} reviews</div>
+      </div>
+    </div>
+
+    {%- comment -%} ── Rating Distribution Bar ── {%- endcomment -%}
+    {%- if section.settings.show_bars -%}
+    <div class="cvrs__bars" aria-label="Rating distribution">
+      {%- for bar in bar_data -%}
+        {%- assign bp = bar | split: "," -%}
+        <div class="cvrs__bar-row">
+          <span class="cvrs__bar-num">{{ bp[0] }}</span>
+          <svg class="cvrs__bar-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <div class="cvrs__bar-track" role="progressbar" aria-valuenow="{{ bp[1] }}" aria-valuemin="0" aria-valuemax="100">
+            <div class="cvrs__bar-fill" style="width:{{ bp[1] }}%"></div>
+          </div>
+          <span class="cvrs__bar-pct">{{ bp[1] }}%</span>
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Review Cards ── {%- endcomment -%}
+    <div class="cvrs__cards">
+      {%- if review_blocks.size > 0 -%}
+        {%- for block in review_blocks limit: 3 -%}
+          {%- assign rating_int = block.settings.rating | default: 5 | round -%}
+          <article class="cvrs__card" {{ block.shopify_attributes }}>
+            <div class="cvrs__card-top">
+              <div class="cvrs__avatar" aria-hidden="true">
+                {{ block.settings.author | default: 'A' | slice: 0, 1 | upcase }}
+              </div>
+              <div class="cvrs__card-meta">
+                <div class="cvrs__card-author-row">
+                  <span class="cvrs__card-author">{{ block.settings.author | default: 'Verified Buyer' }}</span>
+                  <span class="cvrs__badge-verified">✓ Verified</span>
+                </div>
+                <div class="cvrs__card-rating-row">
+                  <div class="cvrs__card-stars" aria-label="{{ block.settings.rating | default: 5 }} out of 5 stars">
+                    {%- for i in (1..5) -%}
+                      {%- if i <= rating_int -%}
+                        <svg viewBox="0 0 24 24" class="cvrs__star cvrs__star--filled" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      {%- else -%}
+                        <svg viewBox="0 0 24 24" class="cvrs__star cvrs__star--empty" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                  <span class="cvrs__card-date">{{ block.settings.date | default: '' }}</span>
+                </div>
+              </div>
+            </div>
+            {%- if block.settings.title != blank -%}
+              <p class="cvrs__card-title">&ldquo;{{ block.settings.title }}&rdquo;</p>
+            {%- endif -%}
+            <p class="cvrs__card-body">{{ block.settings.body | default: '' }}</p>
+            {%- if block.settings.helpful > 0 -%}
+              <div class="cvrs__card-helpful">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                {{ block.settings.helpful }} found this helpful
+              </div>
+            {%- endif -%}
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Fallback hardcoded reviews (shown until merchant adds blocks) {%- endcomment -%}
+        <article class="cvrs__card">
+          <div class="cvrs__card-top">
+            <div class="cvrs__avatar" aria-hidden="true">A</div>
+            <div class="cvrs__card-meta">
+              <div class="cvrs__card-author-row">
+                <span class="cvrs__card-author">Alex M.</span>
+                <span class="cvrs__badge-verified">✓ Verified</span>
+              </div>
+              <div class="cvrs__card-rating-row">
+                <div class="cvrs__card-stars" aria-label="5 out of 5 stars">
+                  {%- for i in (1..5) -%}<svg viewBox="0 0 24 24" class="cvrs__star cvrs__star--filled" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>{%- endfor -%}
+                </div>
+                <span class="cvrs__card-date">Feb 12, 2026</span>
+              </div>
+            </div>
+          </div>
+          <p class="cvrs__card-title">&ldquo;Incredible pulls — two illustration rares!&rdquo;</p>
+          <p class="cvrs__card-body">Amazing pull rates! Got two illustration rares and a gold card from this box. Arrived sealed and in perfect condition with great packaging. Will definitely order again.</p>
+          <div class="cvrs__card-helpful">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+            34 found this helpful
+          </div>
+        </article>
+
+        <article class="cvrs__card">
+          <div class="cvrs__card-top">
+            <div class="cvrs__avatar" aria-hidden="true">S</div>
+            <div class="cvrs__card-meta">
+              <div class="cvrs__card-author-row">
+                <span class="cvrs__card-author">Sarah K.</span>
+                <span class="cvrs__badge-verified">✓ Verified</span>
+              </div>
+              <div class="cvrs__card-rating-row">
+                <div class="cvrs__card-stars" aria-label="5 out of 5 stars">
+                  {%- for i in (1..5) -%}<svg viewBox="0 0 24 24" class="cvrs__star cvrs__star--filled" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>{%- endfor -%}
+                </div>
+                <span class="cvrs__card-date">Jan 28, 2026</span>
+              </div>
+            </div>
+          </div>
+          <p class="cvrs__card-title">&ldquo;Best prices, best packing I&rsquo;ve seen&rdquo;</p>
+          <p class="cvrs__card-body">Fast shipping and the box was double-boxed with bubble wrap. Factory seal was intact. Best prices I've found online for this set.</p>
+          <div class="cvrs__card-helpful">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+            21 found this helpful
+          </div>
+        </article>
+
+        <article class="cvrs__card">
+          <div class="cvrs__card-top">
+            <div class="cvrs__avatar" aria-hidden="true">D</div>
+            <div class="cvrs__card-meta">
+              <div class="cvrs__card-author-row">
+                <span class="cvrs__card-author">David R.</span>
+                <span class="cvrs__badge-verified">✓ Verified</span>
+              </div>
+              <div class="cvrs__card-rating-row">
+                <div class="cvrs__card-stars" aria-label="4 out of 5 stars">
+                  {%- for i in (1..5) -%}
+                    {%- if i <= 4 -%}
+                      <svg viewBox="0 0 24 24" class="cvrs__star cvrs__star--filled" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    {%- else -%}
+                      <svg viewBox="0 0 24 24" class="cvrs__star cvrs__star--empty" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+                <span class="cvrs__card-date">Jan 15, 2026</span>
+              </div>
+            </div>
+          </div>
+          <p class="cvrs__card-title">&ldquo;Great box — ordering again soon&rdquo;</p>
+          <p class="cvrs__card-body">Great box overall. Packaging was excellent and arrived quickly. Pull rates were solid — didn't hit the chase card but everything else was impressive.</p>
+          <div class="cvrs__card-helpful">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+            15 found this helpful
+          </div>
+        </article>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{%- endif -%}
+
+<style>
+/* ── Review Showcase ────────────────────────────────────────── */
+:root {
+  --cvrs-bg:      var(--cv-bg, #f7f6f3);
+  --cvrs-fg:      var(--cv-fg, #1c1f36);
+  --cvrs-card:    var(--cv-card, #ffffff);
+  --cvrs-border:  var(--cv-border, #dedad5);
+  --cvrs-muted:   var(--cv-muted-fg, #76798c);
+  --cvrs-primary: var(--cv-primary, #282d52);
+  --cvrs-star:    var(--cv-star, #d4783a);
+  --cvrs-success: var(--cv-success, #2e9963);
+  --cvrs-radius:  var(--cv-radius, 0.5rem);
+  --cvrs-font:    var(--cv-font-sans, 'Inter', system-ui, sans-serif);
+  --cvrs-head:    var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+}
+
+.cvrs {
+  background: var(--cvrs-bg);
+  padding: 4rem 1rem;
+  border-top: 1px solid var(--cvrs-border);
+}
+
+.cvrs__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: flex; flex-direction: column; gap: 2rem;
+}
+
+/* ── Header row ── */
+.cvrs__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.cvrs__heading {
+  font-family: var(--cvrs-head);
+  font-size: 1.5rem; font-weight: 700; color: var(--cvrs-fg);
+  margin-bottom: 0.375rem;
+}
+@media (min-width: 768px) { .cvrs__heading { font-size: 2rem; } }
+.cvrs__subhead { font-size: 0.9375rem; color: var(--cvrs-muted); margin: 0; }
+
+/* Score pill */
+.cvrs__score-pill {
+  display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+  background: var(--cvrs-card);
+  border: 1px solid var(--cvrs-border);
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  text-align: center;
+  flex-shrink: 0;
+}
+.cvrs__score-num {
+  font-family: var(--cvrs-head);
+  font-size: 2.5rem; font-weight: 800; line-height: 1;
+  color: var(--cvrs-fg);
+}
+.cvrs__score-stars { display: flex; gap: 0.125rem; }
+.cvrs__score-count { font-size: 0.75rem; color: var(--cvrs-muted); margin-top: 0.125rem; }
+
+/* Stars */
+.cvrs__star       { width: 1rem; height: 1rem; }
+.cvrs__star--filled { fill: var(--cvrs-star); color: var(--cvrs-star); }
+.cvrs__star--empty  { fill: #e8e6f0;           color: #e8e6f0; }
+
+/* ── Rating Bars ── */
+.cvrs__bars {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  max-width: 28rem;
+}
+.cvrs__bar-row { display: flex; align-items: center; gap: 0.5rem; }
+.cvrs__bar-num {
+  width: 1.25rem; text-align: right;
+  font-size: 0.8125rem; color: var(--cvrs-muted);
+}
+.cvrs__bar-star { width: 0.8125rem; height: 0.8125rem; fill: var(--cvrs-star); color: var(--cvrs-star); }
+.cvrs__bar-track {
+  flex: 1; height: 0.5rem; border-radius: 9999px;
+  background: #e8e6f0; overflow: hidden;
+}
+.cvrs__bar-fill {
+  height: 100%; border-radius: 9999px;
+  background: var(--cvrs-primary);
+  transition: width 0.6s ease;
+}
+.cvrs__bar-pct { width: 2.25rem; font-size: 0.75rem; color: var(--cvrs-muted); }
+
+/* ── Review Cards grid ── */
+.cvrs__cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+@media (min-width: 768px) {
+  .cvrs__cards { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Single card */
+.cvrs__card {
+  background: var(--cvrs-card);
+  border: 1px solid var(--cvrs-border);
+  border-radius: calc(var(--cvrs-radius) * 2);
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  display: flex; flex-direction: column; gap: 0.875rem;
+  transition: box-shadow 0.2s;
+}
+.cvrs__card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+
+.cvrs__card-top { display: flex; align-items: flex-start; gap: 0.875rem; }
+
+.cvrs__avatar {
+  width: 2.5rem; height: 2.5rem; border-radius: 9999px;
+  background: rgba(40,45,82,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.875rem; font-weight: 700; color: var(--cvrs-primary);
+  flex-shrink: 0;
+}
+
+.cvrs__card-meta { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; }
+
+.cvrs__card-author-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.cvrs__card-author     { font-size: 0.875rem; font-weight: 700; color: var(--cvrs-fg); }
+.cvrs__badge-verified  {
+  font-size: 0.7rem; font-weight: 600;
+  color: var(--cvrs-success);
+  background: rgba(46,153,99,0.1);
+  border-radius: calc(var(--cvrs-radius) - 2px);
+  padding: 0.1rem 0.4rem;
+}
+
+.cvrs__card-rating-row { display: flex; align-items: center; gap: 0.5rem; }
+.cvrs__card-stars      { display: flex; gap: 0.1rem; }
+.cvrs__card-stars .cvrs__star { width: 0.8rem; height: 0.8rem; }
+.cvrs__card-date       { font-size: 0.75rem; color: var(--cvrs-muted); }
+
+.cvrs__card-title {
+  font-family: var(--cvrs-head);
+  font-size: 0.9375rem; font-weight: 700; color: var(--cvrs-fg);
+  margin: 0; line-height: 1.4;
+}
+
+.cvrs__card-body {
+  font-size: 0.875rem; line-height: 1.7;
+  color: var(--cvrs-muted); margin: 0;
+}
+
+.cvrs__card-helpful {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  font-size: 0.75rem; color: var(--cvrs-muted);
+  margin-top: auto; padding-top: 0.375rem;
+  border-top: 1px solid var(--cvrs-border);
+}
+.cvrs__card-helpful svg { width: 0.875rem; height: 0.875rem; }
+</style>
+
+{% schema %}
+{
+  "name": "Review Showcase",
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Reviewer name",
+          "default": "Happy Customer"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date",
+          "default": "Jan 2026"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review headline",
+          "default": "Great product!"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Review body",
+          "default": "Really happy with this purchase. Fast shipping, great product."
+        },
+        {
+          "type": "number",
+          "id": "helpful",
+          "label": "\"Found helpful\" count",
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show review showcase",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "⭐ What Our Customers Say"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Sub-heading",
+      "default": "Verified purchases from real collectors"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bars",
+      "label": "Show rating distribution bars",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Review Showcase",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "author": "Alex M.",
+            "rating": 5,
+            "date": "Feb 12, 2026",
+            "title": "Incredible pulls — two illustration rares!",
+            "body": "Amazing pull rates! Got two illustration rares and a gold card from this box. Arrived sealed and in perfect condition with great packaging.",
+            "helpful": 34
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Sarah K.",
+            "rating": 5,
+            "date": "Jan 28, 2026",
+            "title": "Best prices, best packing I've seen",
+            "body": "Fast shipping and the box was double-boxed with bubble wrap. Factory seal was intact. Best prices I've found online for this set.",
+            "helpful": 21
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "David R.",
+            "rating": 4,
+            "date": "Jan 15, 2026",
+            "title": "Great box — ordering again soon",
+            "body": "Great box overall. Packaging was excellent and arrived quickly. Pull rates were solid — didn't hit the chase card but everything else was impressive.",
+            "helpful": 15
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

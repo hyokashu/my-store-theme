@@ -1,0 +1,209 @@
+{% comment %}
+  Supply District — sections/recently-viewed.liquid
+  Renders a "Recently Viewed" product carousel at the bottom of any page.
+  Uses localStorage to persist visited product handles, then fetches
+  product data via the Shopify Ajax Products API (/products/{handle}.js).
+  Matches the 2-tone cream/slate aesthetic.
+{% endcomment %}
+
+{%- if section.settings.show_section -%}
+<section class="cv-rv" id="cv-recently-viewed" aria-label="Recently viewed products" style="display:none">
+  <div class="cv-rv__inner">
+    <div class="cv-rv__header">
+      <h2 class="cv-rv__title">{{ section.settings.title | default: 'Recently Viewed' }}</h2>
+    </div>
+    <div class="cv-rv__grid" id="cv-rv-grid" role="list" aria-label="Recently viewed products"></div>
+  </div>
+</section>
+{%- endif -%}
+
+<style>
+/* ── Recently Viewed ─────────────────────────────────────── */
+.cv-rv {
+  background: var(--cv-bg, #f7f6f3);
+  padding: 3rem 1rem 3.5rem;
+  border-top: 1px solid var(--cv-border, #dedad5);
+}
+.cv-rv__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.cv-rv__header {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cv-rv__title {
+  font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-size: 1.25rem; font-weight: 700; color: var(--cv-fg, #1c1f36);
+}
+@media (min-width: 768px) { .cv-rv__title { font-size: 1.5rem; } }
+
+/* Scrollable row on mobile, grid on desktop */
+.cv-rv__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 640px)  { .cv-rv__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1024px) { .cv-rv__grid { grid-template-columns: repeat(5, 1fr); gap: 1.25rem; } }
+
+/* Reuse existing cv-product-card styles (defined in main-product.liquid) */
+.cv-rv-card {
+  display: flex; flex-direction: column; gap: 0.625rem;
+  padding: 0.875rem;
+  border: 1px solid var(--cv-border, #dedad5);
+  border-radius: 1rem;
+  background: var(--cv-card, #ffffff);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  text-decoration: none; color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cv-rv-card:hover {
+  border-color: rgba(40,45,82,0.25);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.cv-rv-card__img {
+  aspect-ratio: 1/1; width: 100%;
+  object-fit: cover; display: block;
+  border-radius: 0.5rem;
+  background: var(--cv-secondary, #eeecea);
+}
+.cv-rv-card__name {
+  font-size: 0.8125rem; font-weight: 600; color: var(--cv-fg, #1c1f36);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cv-rv-card__price {
+  font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-size: 0.9375rem; font-weight: 700; color: var(--cv-fg, #1c1f36);
+}
+
+/* Skeleton placeholder cards */
+.cv-rv-skeleton {
+  border-radius: 1rem;
+  background: var(--cv-card, #fff);
+  border: 1px solid var(--cv-border, #dedad5);
+  padding: 0.875rem;
+  display: flex; flex-direction: column; gap: 0.625rem;
+  animation: cv-rv-pulse 1.5s ease-in-out infinite;
+}
+.cv-rv-skeleton__img  { aspect-ratio:1/1; background:var(--cv-secondary,#eeecea); border-radius:0.5rem; }
+.cv-rv-skeleton__line { height:0.75rem; border-radius:9999px; background:var(--cv-secondary,#eeecea); }
+.cv-rv-skeleton__line--short { width: 60%; }
+@keyframes cv-rv-pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  var STORAGE_KEY  = 'sd_recently_viewed';
+  var MAX_PRODUCTS = 10;  /* max stored */
+  var MAX_DISPLAY  = 5;   /* max shown */
+  var CURRENT_HANDLE = {{ product.handle | json }};
+
+  /* ── 1. Record current product (if we're on a product page) ── */
+  if (CURRENT_HANDLE) {
+    try {
+      var stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      /* Remove existing entry and prepend */
+      stored = stored.filter(function (h) { return h !== CURRENT_HANDLE; });
+      stored.unshift(CURRENT_HANDLE);
+      stored = stored.slice(0, MAX_PRODUCTS);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+    } catch (e) {}
+  }
+
+  /* ── 2. Render recently viewed (excluding current product) ── */
+  var section = document.getElementById('cv-recently-viewed');
+  var grid    = document.getElementById('cv-rv-grid');
+  if (!section || !grid) return;
+
+  var handles;
+  try {
+    handles = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  } catch (e) { handles = []; }
+
+  /* Exclude current product from the list */
+  handles = handles.filter(function (h) { return h !== CURRENT_HANDLE; }).slice(0, MAX_DISPLAY);
+
+  if (handles.length === 0) return; /* Nothing to show */
+
+  /* Show section and render skeletons while loading */
+  section.style.display = '';
+  handles.forEach(function () {
+    var sk = document.createElement('div');
+    sk.className = 'cv-rv-skeleton';
+    sk.innerHTML = '<div class="cv-rv-skeleton__img"></div>'
+      + '<div class="cv-rv-skeleton__line"></div>'
+      + '<div class="cv-rv-skeleton__line cv-rv-skeleton__line--short"></div>';
+    grid.appendChild(sk);
+  });
+
+  /* ── 3. Fetch each product via Ajax API ── */
+  var loaded = 0;
+  var skeletons = grid.querySelectorAll('.cv-rv-skeleton');
+
+  handles.forEach(function (handle, i) {
+    fetch('/products/' + handle + '.js')
+      .then(function (r) { return r.json(); })
+      .then(function (p) {
+        var price    = p.variants[0] && p.variants[0].price
+          ? (p.variants[0].price / 100).toFixed(2)
+          : null;
+        var imgSrc   = (p.images && p.images[0]) ? p.images[0] : 'https://placehold.co/400x400/eeecea/76798c?text=Product';
+        var card     = document.createElement('a');
+        card.href    = '/products/' + p.handle;
+        card.className = 'cv-rv-card';
+        card.setAttribute('role', 'listitem');
+        card.innerHTML = '<img src="' + imgSrc + '" alt="' + (p.title || '').replace(/"/g,'&quot;') + '" class="cv-rv-card__img" width="400" height="400" loading="lazy">'
+          + '<span class="cv-rv-card__name">' + (p.title || '') + '</span>'
+          + (price ? '<span class="cv-rv-card__price">$' + price + '</span>' : '');
+
+        /* Replace skeleton with real card */
+        if (skeletons[i]) {
+          grid.replaceChild(card, skeletons[i]);
+        } else {
+          grid.appendChild(card);
+        }
+      })
+      .catch(function () {
+        /* On error remove the skeleton placeholder */
+        if (skeletons[i]) grid.removeChild(skeletons[i]);
+      })
+      .finally(function () {
+        loaded++;
+        /* If all failed, hide section */
+        if (loaded === handles.length && grid.querySelectorAll('.cv-rv-card').length === 0) {
+          section.style.display = 'none';
+        }
+      });
+  });
+
+}());
+</script>
+
+{% schema %}
+{
+  "name": "Recently Viewed",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show recently viewed section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Recently Viewed"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recently Viewed"
+    }
+  ]
+}
+{% endschema %}

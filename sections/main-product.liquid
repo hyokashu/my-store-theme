@@ -55,6 +55,11 @@
   --cv-shadow:      0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
   --cv-font-sans:   'Inter', system-ui, -apple-system, sans-serif;
   --cv-font-head:   'Space Grotesk', system-ui, sans-serif;
+
+  /* ── Von Restorff accent: ONLY used on Add to Cart / Buy Now / Checkout ── */
+  --color-cta-primary:    #2e9963;   /* bold green — matches Authentic badge, high contrast on cream + slate */
+  --color-cta-primary-fg: #ffffff;
+  --color-cta-primary-hover: #25834f;
 }
 
 /* =============================================================
@@ -321,12 +326,56 @@ input.cv-qty__input {
 .cv-btn svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
 
 .cv-btn--primary {
-  background: var(--cv-primary); color: var(--cv-primary-fg);
-  flex: 1; border-color: var(--cv-primary);
+  background: var(--color-cta-primary); color: var(--color-cta-primary-fg);
+  flex: 1; border-color: var(--color-cta-primary);
+  box-shadow: 0 2px 8px rgba(46,153,99,0.30);
 }
-.cv-btn--primary:hover  { opacity: 0.9; }
-.cv-btn--primary:active { opacity: 0.8; }
-.cv-btn--primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.cv-btn--primary:hover  { background: var(--color-cta-primary-hover); border-color: var(--color-cta-primary-hover); }
+.cv-btn--primary:active { opacity: 0.85; }
+.cv-btn--primary:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+
+/* Buy Now inherits CTA colour */
+.cv-btn--outline-primary {
+  width: 100%;
+  background: transparent;
+  border-color: var(--color-cta-primary);
+  color: var(--color-cta-primary);
+}
+.cv-btn--outline-primary:hover {
+  background: rgba(46,153,99,0.06);
+  border-color: var(--color-cta-primary-hover);
+  color: var(--color-cta-primary-hover);
+}
+
+/* ── Dispatch Countdown ── */
+.cv-dispatch-timer {
+  display: flex; align-items: center; gap: 0.375rem;
+  font-size: 0.8125rem; font-weight: 500;
+  color: var(--cv-muted-fg);
+  padding: 0.5rem 0.75rem;
+  background: rgba(46,153,99,0.06);
+  border: 1px solid rgba(46,153,99,0.18);
+  border-radius: var(--cv-radius);
+  line-height: 1.4;
+}
+.cv-dispatch-timer strong { color: var(--cv-fg); font-weight: 700; }
+.cv-dispatch-timer--expired { color: var(--cv-muted-fg); background: rgba(0,0,0,0.03); border-color: var(--cv-border); }
+
+/* ── Payment Badges ── */
+.cv-payment-badges {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.cv-payment-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 1.625rem; padding: 0 0.5rem;
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) - 2px);
+  background: var(--cv-card);
+  box-shadow: var(--cv-shadow-sm);
+  opacity: 0.8;
+}
+.cv-payment-badge svg { display: block; }
 
 .cv-btn--icon {
   width: 3rem; flex-shrink: 0; padding: 0;
@@ -342,13 +391,7 @@ input.cv-qty__input {
 }
 .cv-btn--icon.is-wishlisted svg { fill: var(--cv-destructive); }
 
-.cv-btn--outline-primary {
-  width: 100%;
-  background: transparent;
-  border-color: var(--cv-primary);
-  color: var(--cv-primary);
-}
-.cv-btn--outline-primary:hover { background: rgba(40,45,82,0.05); }
+/* cv-btn--outline-primary now defined in the CTA section above */
 
 .cv-btn-row { display: flex; gap: 0.75rem; }
 
@@ -754,18 +797,8 @@ input.cv-qty__input {
     </div>{%- comment -%} ─── Product Info ─── {%- endcomment -%}
     <div class="cv-info">
 
-      {%- comment -%} Breadcrumb {%- endcomment -%}
-      <nav aria-label="Breadcrumb">
-        <ol class="cv-breadcrumb">
-          <li><a href="/">Home</a></li>
-          <li class="cv-breadcrumb__sep" aria-hidden="true">/</li>
-          {%- if product.collections.first -%}
-            <li><a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a></li>
-            <li class="cv-breadcrumb__sep" aria-hidden="true">/</li>
-          {%- endif -%}
-          <li class="cv-breadcrumb__current" aria-current="page">{{ product.title }}</li>
-        </ol>
-      </nav>
+      {%- comment -%} Breadcrumb — schema.org JSON-LD compliant via snippet {%- endcomment -%}
+      {%- render 'breadcrumbs' -%}
 
       {%- comment -%} Badges {%- endcomment -%}
       <div class="cv-badges">
@@ -894,6 +927,12 @@ input.cv-qty__input {
           </div>
         </div>
 
+        {%- comment -%} ── Dispatch Countdown Timer ── {%- endcomment -%}
+        <div class="cv-dispatch-timer" id="cv-dispatch-timer" aria-live="polite" aria-atomic="true">
+          <span>⏳</span>
+          <span id="cv-dispatch-text">Calculating dispatch time&hellip;</span>
+        </div>
+
         <div class="cv-btn-row">
           <button type="submit" name="add" class="cv-btn cv-btn--primary" id="cv-add-to-cart">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
@@ -908,6 +947,54 @@ input.cv-qty__input {
         </div>
 
         <a href="/cart" class="cv-btn cv-btn--outline-primary" id="cv-buy-now">Buy Now</a>
+
+        {%- comment -%} ── Payment Trust Badges ── {%- endcomment -%}
+        <div class="cv-payment-badges" aria-label="Accepted payment methods">
+          {%- for type in shop.enabled_payment_types -%}
+            {%- assign type_lower = type.name | downcase -%}
+            <span class="cv-payment-badge" aria-label="{{ type.name }}" title="{{ type.name }}">
+              {%- case type_lower -%}
+                {%- when 'visa' -%}
+                  {%- comment -%} Visa SVG {%- endcomment -%}
+                  <svg width="38" height="14" viewBox="0 0 38 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M14.002 1L10.92 13H7.94L11.022 1H14.002ZM26.82 8.878L28.454 4.502L29.39 8.878H26.82ZM30.14 13H32.9L30.478 1H27.904C27.31 1 26.806 1.342 26.578 1.862L22.26 13H25.384L25.996 11.198H29.776L30.14 13ZM22.4 9.07C22.414 6.026 18.2 5.856 18.228 4.5C18.236 4.096 18.62 3.666 19.46 3.556C19.878 3.5 21.032 3.458 22.328 4.054L22.85 1.594C22.15 1.334 21.246 1.082 20.12 1.082C17.188 1.082 15.106 2.626 15.09 4.836C15.072 6.464 16.54 7.37 17.644 7.916C18.778 8.476 19.166 8.838 19.162 9.342C19.154 10.11 18.24 10.45 17.39 10.464C15.938 10.488 15.096 10.07 14.42 9.754L13.88 12.294C14.558 12.606 15.812 12.878 17.112 12.89C20.236 12.89 22.388 11.36 22.4 9.07ZM9.834 1L5.12 13H1.98L-0.334 3.128C-0.478 2.57 -0.602 2.36 -1.066 2.1C-1.832 1.678 -3.082 1.282 -4.178 1.04L-4.1 1H-1.12C-0.456 1 0.132 1.468 0.282 2.198L1.698 9.408L4.712 1H9.834Z" fill="#1A1F71" transform="translate(5,0.5)"/>
+                  </svg>
+                {%- when 'mastercard' -%}
+                  <svg width="32" height="20" viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="12" cy="10" r="8" fill="#EB001B"/>
+                    <circle cx="20" cy="10" r="8" fill="#F79E1B"/>
+                    <path d="M16 4.5a8 8 0 0 1 0 11A8 8 0 0 1 16 4.5z" fill="#FF5F00"/>
+                  </svg>
+                {%- when 'paypal' -%}
+                  <svg width="50" height="14" viewBox="0 0 50 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M8.22 1C6.16 1 4.42 2.31 4.09 4.15L2 12.4H4.57L5.07 10.22H7.89C10.21 10.22 12.22 8.82 12.81 6.83L12.82 6.8C13.39 4.87 12.12 3.22 10.09 3.01L10.04 3.01C9.44 2.97 8.83 2.97 8.22 3L8.22 1ZM8.52 3.5C9.06 3.47 9.61 3.47 10.11 3.5C11.37 3.64 12.12 4.75 11.72 6.04C11.3 7.4 9.84 8.44 8.36 8.44H5.61L6.48 5.14C6.73 4.14 7.59 3.5 8.52 3.5Z" fill="#003087"/>
+                    <path d="M17.67 1C15.61 1 13.87 2.31 13.54 4.15L11.45 12.4H14.02L14.52 10.22H17.34C19.66 10.22 21.67 8.82 22.26 6.83L22.27 6.8C22.84 4.87 21.57 3.22 19.54 3.01L19.49 3.01C18.89 2.97 18.28 2.97 17.67 3L17.67 1ZM17.97 3.5C18.51 3.47 19.06 3.47 19.56 3.5C20.82 3.64 21.57 4.75 21.17 6.04C20.75 7.4 19.29 8.44 17.81 8.44H15.06L15.93 5.14C16.18 4.14 17.04 3.5 17.97 3.5Z" fill="#009CDE"/>
+                    <path d="M23.91 3.5L23 12.4H25.45L26.67 6.65C26.98 5.25 28.08 4.23 29.37 4.23C29.66 4.23 29.93 4.27 30.17 4.35L30.56 2.12C30.25 2.01 29.91 1.96 29.54 1.96C28.12 1.96 26.9 2.82 26.38 4.12L26.38 3.5H23.91Z" fill="#003087"/>
+                  </svg>
+                {%- when 'afterpay' -%}
+                  <svg width="48" height="14" viewBox="0 0 48 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="48" height="14" rx="3" fill="#B2FCE4"/>
+                    <text x="5" y="10.5" font-family="Arial, sans-serif" font-size="7" font-weight="bold" fill="#000">afterpay</text>
+                  </svg>
+                {%- when 'zip' -%}
+                  <svg width="28" height="14" viewBox="0 0 28 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="28" height="14" rx="3" fill="#AA8FFF"/>
+                    <text x="6" y="10.5" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#fff">zip</text>
+                  </svg>
+                {%- when 'apple_pay' -%}
+                  <svg width="36" height="14" viewBox="0 0 36 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <text x="2" y="11" font-family="'SF Pro', system-ui, sans-serif" font-size="10" fill="#000" font-weight="600">Pay</text>
+                  </svg>
+                {%- when 'google_pay' -%}
+                  <svg width="44" height="14" viewBox="0 0 44 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <text x="1" y="11" font-family="'Product Sans', Roboto, sans-serif" font-size="9" fill="#000">Google Pay</text>
+                  </svg>
+                {%- else -%}
+                  <span style="font-size:0.625rem;font-weight:600;color:var(--cv-muted-fg);padding:0 0.125rem">{{ type.name }}</span>
+              {%- endcase -%}
+            </span>
+          {%- endfor -%}
+        </div>
 
       {% endform %}
 
@@ -1230,7 +1317,7 @@ input.cv-qty__input {
     </div>
     <button
       class="cv-btn cv-btn--primary"
-      style="flex:1;height:2.75rem;font-size:0.9375rem;"
+      style="flex:1;height:2.75rem;font-size:0.9375rem;background:var(--color-cta-primary);border-color:var(--color-cta-primary);color:var(--color-cta-primary-fg);"
       type="button"
       id="cv-sticky-atc"
     >
@@ -1409,6 +1496,46 @@ input.cv-qty__input {
       window.location.href = '/cart/' + vid + ':' + qty;
     });
   }
+
+  /* ── Dispatch Countdown Timer ── */
+  (function () {
+    var timerEl = document.getElementById('cv-dispatch-timer');
+    var textEl  = document.getElementById('cv-dispatch-text');
+    if (!timerEl || !textEl) return;
+
+    var CUTOFF_HOUR   = 14;   /* 2:00 PM */
+    var CUTOFF_MINUTE = 0;
+
+    function update() {
+      var now     = new Date();
+      var cutoff  = new Date(now);
+      cutoff.setHours(CUTOFF_HOUR, CUTOFF_MINUTE, 0, 0);
+
+      /* If cutoff has already passed today, point to tomorrow */
+      if (now >= cutoff) {
+        cutoff.setDate(cutoff.getDate() + 1);
+      }
+
+      var diffMs  = cutoff - now;
+      var diffSec = Math.floor(diffMs / 1000);
+      var hrs     = Math.floor(diffSec / 3600);
+      var mins    = Math.floor((diffSec % 3600) / 60);
+
+      if (hrs <= 0 && mins <= 0) {
+        timerEl.classList.add('cv-dispatch-timer--expired');
+        textEl.innerHTML = 'Order now — dispatches <strong>next business day</strong>';
+      } else {
+        timerEl.classList.remove('cv-dispatch-timer--expired');
+        var parts = [];
+        if (hrs > 0)  parts.push('<strong>' + hrs  + ' hr'  + (hrs  !== 1 ? 's' : '') + '</strong>');
+        if (mins > 0) parts.push('<strong>' + mins + ' min' + (mins !== 1 ? 's' : '') + '</strong>');
+        textEl.innerHTML = 'Order within ' + parts.join(' ') + ' for same-day dispatch';
+      }
+    }
+
+    update();
+    setInterval(update, 30000); /* refresh every 30 s */
+  }());
 
   /* ── Hide sticky cart when hero is visible ── */
   var stickyCart = document.getElementById('cv-sticky-cart');
