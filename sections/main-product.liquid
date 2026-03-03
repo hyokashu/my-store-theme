@@ -915,36 +915,34 @@ input.cv-qty__input {
 
       <hr class="cv-sep" style="margin:0">
 
-      {%- comment -%} Trust signals {%- endcomment -%}
+      {%- comment -%} Trust signals — powered by trust_item blocks {%- endcomment -%}
+      {%- assign trust_blocks = section.blocks | where: "type", "trust_item" -%}
+      {%- if section.settings.show_trust_signals and trust_blocks.size > 0 -%}
       <div class="cv-trust">
-        <div class="cv-trust-item">
-          <div class="cv-trust-item__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        {%- for block in trust_blocks -%}
+          <div class="cv-trust-item" {{ block.shopify_attributes }}>
+            <div class="cv-trust-item__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                {%- case block.settings.icon -%}
+                  {%- when 'shield' -%}<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  {%- when 'truck' -%}<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+                  {%- when 'refresh' -%}<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.68"/>
+                  {%- when 'check' -%}<polyline points="20 6 9 17 4 12"/>
+                  {%- when 'star' -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  {%- when 'package' -%}<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                  {%- when 'credit-card' -%}<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+                  {%- else -%}<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                {%- endcase -%}
+              </svg>
+            </div>
+            <div>
+              <span class="cv-trust-item__title">{{ block.settings.title }}</span>
+              <span class="cv-trust-item__desc">{{ block.settings.description }}</span>
+            </div>
           </div>
-          <div>
-            <span class="cv-trust-item__title">100% Authentic</span>
-            <span class="cv-trust-item__desc">Verified sealed product</span>
-          </div>
-        </div>
-        <div class="cv-trust-item">
-          <div class="cv-trust-item__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-          </div>
-          <div>
-            <span class="cv-trust-item__title">Free Shipping</span>
-            <span class="cv-trust-item__desc">On orders over $100</span>
-          </div>
-        </div>
-        <div class="cv-trust-item">
-          <div class="cv-trust-item__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.68"/></svg>
-          </div>
-          <div>
-            <span class="cv-trust-item__title">14-Day Returns</span>
-            <span class="cv-trust-item__desc">Sealed &amp; unopened only</span>
-          </div>
-        </div>
+        {%- endfor -%}
       </div>
+      {%- endif -%}
 
     </div><!-- /cv-info -->
   </div><!-- /cv-hero -->
@@ -954,9 +952,9 @@ input.cv-qty__input {
   {%- comment -%} ── Product Tabs ── {%- endcomment -%}
   <section aria-label="Product details" id="cv-tabs-section">
     <div class="cv-tabs__nav" role="tablist" aria-label="Product information">
-      <button class="cv-tabs__trigger is-active" role="tab" aria-selected="true"  aria-controls="cv-tab-description" id="cv-btn-description" data-tab="description" type="button">Description</button>
-      <button class="cv-tabs__trigger"            role="tab" aria-selected="false" aria-controls="cv-tab-contents"    id="cv-btn-contents"    data-tab="contents"    type="button">Box Contents</button>
-      <button class="cv-tabs__trigger"            role="tab" aria-selected="false" aria-controls="cv-tab-reviews"     id="cv-btn-reviews"     data-tab="reviews"     type="button">Reviews ({{ rating_count }})</button>
+      <button class="cv-tabs__trigger is-active" role="tab" aria-selected="true"  aria-controls="cv-tab-description" id="cv-btn-description" data-tab="description" type="button">{{ section.settings.tab_description_label | default: 'Description' }}</button>
+      <button class="cv-tabs__trigger"            role="tab" aria-selected="false" aria-controls="cv-tab-contents"    id="cv-btn-contents"    data-tab="contents"    type="button">{{ section.settings.tab_contents_label | default: 'Box Contents' }}</button>
+      <button class="cv-tabs__trigger"            role="tab" aria-selected="false" aria-controls="cv-tab-reviews"     id="cv-btn-reviews"     data-tab="reviews"     type="button">{{ section.settings.tab_reviews_label | default: 'Reviews' }} ({{ rating_count }})</button>
     </div>
 
     {%- comment -%} Description tab {%- endcomment -%}
@@ -1439,10 +1437,45 @@ input.cv-qty__input {
   "name": "Product",
   "tag": "section",
   "class": "section-main-product",
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust Signal",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shield",      "label": "Shield / Authentic" },
+            { "value": "truck",       "label": "Truck / Shipping" },
+            { "value": "refresh",     "label": "Returns / Refresh" },
+            { "value": "check",       "label": "Checkmark" },
+            { "value": "star",        "label": "Star" },
+            { "value": "package",     "label": "Package" },
+            { "value": "credit-card", "label": "Credit Card" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "100% Authentic"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Verified sealed product"
+        }
+      ]
+    }
+  ],
   "settings": [
     {
       "type": "header",
-      "content": "Product Page Settings"
+      "content": "Display Options"
     },
     {
       "type": "checkbox",
@@ -1453,7 +1486,7 @@ input.cv-qty__input {
     {
       "type": "checkbox",
       "id": "show_trust_signals",
-      "label": "Show trust signal badges",
+      "label": "Show trust signals",
       "default": true
     },
     {
@@ -1469,6 +1502,32 @@ input.cv-qty__input {
       "default": true
     },
     {
+      "type": "header",
+      "content": "Tab Labels"
+    },
+    {
+      "type": "text",
+      "id": "tab_description_label",
+      "label": "Tab 1 label",
+      "default": "Description"
+    },
+    {
+      "type": "text",
+      "id": "tab_contents_label",
+      "label": "Tab 2 label",
+      "default": "Box Contents"
+    },
+    {
+      "type": "text",
+      "id": "tab_reviews_label",
+      "label": "Tab 3 label",
+      "default": "Reviews"
+    },
+    {
+      "type": "header",
+      "content": "Social Proof"
+    },
+    {
       "type": "number",
       "id": "viewers_count",
       "label": "\"People viewing\" count",
@@ -1477,7 +1536,33 @@ input.cv-qty__input {
   ],
   "presets": [
     {
-      "name": "Product"
+      "name": "Product",
+      "blocks": [
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shield",
+            "title": "100% Authentic",
+            "description": "Verified sealed product"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "truck",
+            "title": "Free Shipping",
+            "description": "On orders over $100"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "refresh",
+            "title": "14-Day Returns",
+            "description": "Sealed & unopened only"
+          }
+        }
+      ]
     }
   ]
 }

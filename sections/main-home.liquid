@@ -2,7 +2,25 @@
   CardVault — main-home.liquid
   Gameology-inspired homepage. Fully self-contained CSS + JS.
   Shares the CardVault design tokens established in main-product.liquid.
+  ALL content is editable via Shopify's "Customize" theme editor.
+  CSS is 100% unchanged — only data bindings have been updated.
 {% endcomment %}
+
+{%- liquid
+  assign hero_slides   = section.blocks | where: "type", "hero_slide"
+  assign trust_items   = section.blocks | where: "type", "trust_item"
+  assign marquee_items = section.blocks | where: "type", "marquee_item"
+  assign cat_cards     = section.blocks | where: "type", "category_card"
+  assign brand_links   = section.blocks | where: "type", "brand_link"
+  assign promo_banners = section.blocks | where: "type", "promo_banner"
+  assign about_checks  = section.blocks | where: "type", "about_check"
+  assign reward_items  = section.blocks | where: "type", "reward_item"
+  assign reviews       = section.blocks | where: "type", "review"
+
+  assign tab1_col = collections[section.settings.tab1_collection]
+  assign tab2_col = collections[section.settings.tab2_collection]
+  assign tab3_col = collections[section.settings.tab3_collection]
+-%}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -734,101 +752,77 @@
   <section class="cvh-hero" aria-label="Featured promotions" id="cvh-hero">
     <div class="cvh-hero__track" id="cvh-hero-track">
 
-      {%- comment -%} Slide 1 – New Arrivals {%- endcomment -%}
-      <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--1">
-        <div class="cvh-hero__slide cvh-inner">
-          <div class="cvh-hero__text">
-            <span class="cvh-hero__eyebrow">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              New Season Drops
-            </span>
-            <h1 class="cvh-hero__title">
-              Premium TCG<br><em>Sealed Products</em>
-            </h1>
-            <p class="cvh-hero__desc">Factory sealed booster boxes, Elite Trainer Boxes &amp; more. 100% authentic, sourced directly from authorized distributors.</p>
-            <div class="cvh-hero__ctas">
-              <a href="/collections/all" class="cvh-btn cvh-btn--primary">Shop All Products</a>
-              <a href="/collections/new-arrivals" class="cvh-btn cvh-btn--outline">New Arrivals</a>
+      {%- for block in hero_slides -%}
+        {%- assign slide_scheme = block.settings.color_scheme | default: '1' -%}
+        <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--{{ slide_scheme }}" {{ block.shopify_attributes }}>
+          <div class="cvh-hero__slide cvh-inner">
+            <div class="cvh-hero__text">
+              <span class="cvh-hero__eyebrow">
+                {%- case block.settings.eyebrow_icon -%}
+                  {%- when 'tag' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  {%- when 'clock' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {%- when 'zap' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                  {%- else -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {%- endcase -%}
+                {{ block.settings.eyebrow }}
+              </span>
+              <h1 class="cvh-hero__title">
+                {{ block.settings.title_line1 }}{%- if block.settings.title_em != blank -%}<br><em>{{ block.settings.title_em }}</em>{%- endif -%}
+              </h1>
+              <p class="cvh-hero__desc">{{ block.settings.description }}</p>
+              <div class="cvh-hero__ctas">
+                {%- if block.settings.cta1_label != blank -%}
+                  <a href="{{ block.settings.cta1_url | default: '/collections/all' }}" class="cvh-btn cvh-btn--primary">{{ block.settings.cta1_label }}</a>
+                {%- endif -%}
+                {%- if block.settings.cta2_label != blank -%}
+                  <a href="{{ block.settings.cta2_url | default: '#' }}" class="cvh-btn cvh-btn--outline">{{ block.settings.cta2_label }}</a>
+                {%- endif -%}
+              </div>
             </div>
-          </div>
-          <div class="cvh-hero__img-wrap">
-            <img src="https://placehold.co/600x600/e8e4f5/282d52?text=Booster+Box" alt="Featured sealed booster box" width="600" height="600" loading="eager">
-            <div class="cvh-hero__badge">
-              <div class="cvh-hero__badge-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              </div>
-              <div class="cvh-hero__badge-text">
-                <span class="cvh-hero__badge-val">100% Authentic</span>
-                <span class="cvh-hero__badge-label">Verified sealed product</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {%- comment -%} Slide 2 – Sale {%- endcomment -%}
-      <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--2">
-        <div class="cvh-hero__slide cvh-inner">
-          <div class="cvh-hero__text">
-            <span class="cvh-hero__eyebrow">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-              Limited Time Deals
-            </span>
-            <h1 class="cvh-hero__title">
-              Up to <em>25% Off</em><br>Elite Trainer Boxes
-            </h1>
-            <p class="cvh-hero__desc">Stock up on your favourite ETBs while supplies last. Free insured shipping on all orders over $100.</p>
-            <div class="cvh-hero__ctas">
-              <a href="/collections/sale" class="cvh-btn cvh-btn--primary">Shop the Sale</a>
-              <a href="/collections/elite-trainer-boxes" class="cvh-btn cvh-btn--outline">View ETBs</a>
-            </div>
-          </div>
-          <div class="cvh-hero__img-wrap">
-            <img src="https://placehold.co/600x600/d4eedd/2e9963?text=Elite+Trainer+Box" alt="Elite Trainer Box sale" width="600" height="600" loading="lazy">
-            <div class="cvh-hero__badge">
-              <div class="cvh-hero__badge-icon" style="background:var(--cv-success)">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-              </div>
-              <div class="cvh-hero__badge-text">
-                <span class="cvh-hero__badge-val">Save up to 25%</span>
-                <span class="cvh-hero__badge-label">On selected ETBs</span>
-              </div>
+            <div class="cvh-hero__img-wrap">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.image.alt | escape | default: block.settings.title_line1 }}" width="600" height="600" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+              {%- else -%}
+                <img src="https://placehold.co/600x600/e8e4f5/282d52?text={{ block.settings.title_line1 | url_encode }}" alt="{{ block.settings.title_line1 }}" width="600" height="600" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+              {%- endif -%}
+              {%- if block.settings.badge_value != blank -%}
+                <div class="cvh-hero__badge">
+                  <div class="cvh-hero__badge-icon">
+                    {%- case block.settings.badge_icon -%}
+                      {%- when 'tag' -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                      {%- when 'clock' -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      {%- else -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    {%- endcase -%}
+                  </div>
+                  <div class="cvh-hero__badge-text">
+                    <span class="cvh-hero__badge-val">{{ block.settings.badge_value }}</span>
+                    <span class="cvh-hero__badge-label">{{ block.settings.badge_label }}</span>
+                  </div>
+                </div>
+              {%- endif -%}
             </div>
           </div>
         </div>
-      </div>
-
-      {%- comment -%} Slide 3 – Pre-orders {%- endcomment -%}
-      <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--3">
-        <div class="cvh-hero__slide cvh-inner">
-          <div class="cvh-hero__text">
-            <span class="cvh-hero__eyebrow">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Coming Soon
-            </span>
-            <h1 class="cvh-hero__title">
-              Pre-Order<br><em>Scarlet &amp; Violet</em>
-            </h1>
-            <p class="cvh-hero__desc">Lock in your allocation before they sell out. We ship on release day — guaranteed first to your door.</p>
-            <div class="cvh-hero__ctas">
-              <a href="/collections/pre-orders" class="cvh-btn cvh-btn--primary">Pre-Order Now</a>
-              <a href="#" class="cvh-btn cvh-btn--outline">Learn More</a>
-            </div>
-          </div>
-          <div class="cvh-hero__img-wrap">
-            <img src="https://placehold.co/600x600/f5e0cc/c94030?text=Pre-Order+Now" alt="Pre-order Scarlet and Violet" width="600" height="600" loading="lazy">
-            <div class="cvh-hero__badge">
-              <div class="cvh-hero__badge-icon" style="background:var(--cv-destructive)">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              </div>
-              <div class="cvh-hero__badge-text">
-                <span class="cvh-hero__badge-val">Ships on Release Day</span>
-                <span class="cvh-hero__badge-label">Guaranteed first</span>
+      {%- else -%}
+        {%- if request.design_mode -%}
+          <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--1">
+            <div class="cvh-hero__slide cvh-inner">
+              <div class="cvh-hero__text">
+                <span class="cvh-hero__eyebrow">Add Hero Slides in the theme editor</span>
+                <h1 class="cvh-hero__title">Your Hero Headline</h1>
+                <p class="cvh-hero__desc">Add "Hero Slide" blocks in the Customize panel to populate this section.</p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        {%- endif -%}
+      {%- endfor -%}
 
     </div><!-- /track -->
 
@@ -840,173 +834,198 @@
     </button>
 
     <div class="cvh-hero__controls" role="tablist" aria-label="Slide navigation">
-      <button class="cvh-hero__dot is-active" data-slide="0" role="tab" aria-label="Slide 1" aria-selected="true" type="button"></button>
-      <button class="cvh-hero__dot" data-slide="1" role="tab" aria-label="Slide 2" aria-selected="false" type="button"></button>
-      <button class="cvh-hero__dot" data-slide="2" role="tab" aria-label="Slide 3" aria-selected="false" type="button"></button>
+      {%- for block in hero_slides -%}
+        <button class="cvh-hero__dot{% if forloop.first %} is-active{% endif %}"
+          data-slide="{{ forloop.index0 }}"
+          role="tab"
+          aria-label="Slide {{ forloop.index }}"
+          aria-selected="{{ forloop.first }}"
+          type="button"></button>
+      {%- endfor -%}
     </div>
   </section>
 
   {%- comment -%} ── 2. TRUST BAR ── {%- endcomment -%}
+  {%- if section.settings.show_trust_bar and trust_items.size > 0 -%}
   <div class="cvh-trust-bar" role="region" aria-label="Store guarantees">
     <div class="cvh-trust-bar__grid">
-      <div class="cvh-trust-item">
-        <div class="cvh-trust-item__icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      {%- for block in trust_items -%}
+        <div class="cvh-trust-item" {{ block.shopify_attributes }}>
+          <div class="cvh-trust-item__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              {%- case block.settings.icon -%}
+                {%- when 'credit-card' -%}<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+                {%- when 'dollar' -%}<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                {%- when 'shield' -%}<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                {%- when 'truck' -%}<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+                {%- when 'gift' -%}<path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                {%- when 'users' -%}<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                {%- when 'package' -%}<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              {%- endcase -%}
+            </svg>
+          </div>
+          <div class="cvh-trust-item__text">
+            <span class="cvh-trust-item__title">{{ block.settings.title }}</span>
+            <span class="cvh-trust-item__desc">{{ block.settings.description }}</span>
+          </div>
         </div>
-        <div class="cvh-trust-item__text">
-          <span class="cvh-trust-item__title">Buy Now, Pay Later</span>
-          <span class="cvh-trust-item__desc">Afterpay &amp; Zip available at checkout</span>
-        </div>
-      </div>
-      <div class="cvh-trust-item">
-        <div class="cvh-trust-item__icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <div class="cvh-trust-item__text">
-          <span class="cvh-trust-item__title">Best Price Guarantee</span>
-          <span class="cvh-trust-item__desc">We match any verified lower price</span>
-        </div>
-      </div>
-      <div class="cvh-trust-item">
-        <div class="cvh-trust-item__icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div class="cvh-trust-item__text">
-          <span class="cvh-trust-item__title">Trusted by Players</span>
-          <span class="cvh-trust-item__desc">500k+ happy customers, 5-star rated</span>
-        </div>
-      </div>
-      <div class="cvh-trust-item">
-        <div class="cvh-trust-item__icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        </div>
-        <div class="cvh-trust-item__text">
-          <span class="cvh-trust-item__title">Free Insured Shipping</span>
-          <span class="cvh-trust-item__desc">On all orders over $100</span>
-        </div>
-      </div>
+      {%- endfor -%}
     </div>
   </div>
+  {%- endif -%}
 
   {%- comment -%} ── 3. FAN FAVOURITES ── {%- endcomment -%}
   <section class="cvh-featured" aria-label="Featured products">
     <div class="cvh__inner">
       <div class="cvh-section-hd cvh-section-hd--row">
         <div>
-          <h2 class="cvh-section-title">Fan Favourites</h2>
-          <p class="cvh-section-sub">Whether you&rsquo;re building your collection or buying your first box — these are going fast.</p>
+          <h2 class="cvh-section-title">{{ section.settings.featured_title | default: 'Fan Favourites' }}</h2>
+          <p class="cvh-section-sub">{{ section.settings.featured_subtitle | default: 'Whether you&rsquo;re building your collection or buying your first box — these are going fast.' }}</p>
         </div>
         <a href="/collections/all" class="cvh-btn cvh-btn--outline cvh-btn--sm" style="flex-shrink:0">View All</a>
       </div>
 
-      {%- comment -%} Tab nav {%- endcomment -%}
+      {%- assign tab1_label = section.settings.tab1_label | default: 'Pre-Orders' -%}
+      {%- assign tab2_label = section.settings.tab2_label | default: 'New Arrivals' -%}
+      {%- assign tab3_label = section.settings.tab3_label | default: 'Best Sellers' -%}
+      {%- assign tab1_id = tab1_label | handle -%}
+      {%- assign tab2_id = tab2_label | handle -%}
+      {%- assign tab3_id = tab3_label | handle -%}
+
       <div class="cvh-featured__tabs" role="tablist" aria-label="Product filter">
-        <button class="cvh-featured__tab is-active" data-panel="preorders" role="tab" aria-selected="true" aria-controls="cvh-panel-preorders" type="button">Pre-Orders</button>
-        <button class="cvh-featured__tab" data-panel="new" role="tab" aria-selected="false" aria-controls="cvh-panel-new" type="button">New Arrivals</button>
-        <button class="cvh-featured__tab" data-panel="bestsellers" role="tab" aria-selected="false" aria-controls="cvh-panel-bestsellers" type="button">Best Sellers</button>
+        <button class="cvh-featured__tab is-active" data-panel="{{ tab1_id }}" role="tab" aria-selected="true" aria-controls="cvh-panel-{{ tab1_id }}" type="button">{{ tab1_label }}</button>
+        <button class="cvh-featured__tab" data-panel="{{ tab2_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab2_id }}" type="button">{{ tab2_label }}</button>
+        <button class="cvh-featured__tab" data-panel="{{ tab3_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab3_id }}" type="button">{{ tab3_label }}</button>
       </div>
 
-      {%- comment -%} Pre-Orders Panel {%- endcomment -%}
-      <div class="cvh-featured__panel is-active" id="cvh-panel-preorders" role="tabpanel">
+      {%- comment -%} Tab 1 Panel {%- endcomment -%}
+      <div class="cvh-featured__panel is-active" id="cvh-panel-{{ tab1_id }}" role="tabpanel">
         <div class="cvh-featured__scroll-wrap">
-          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="cvh-panel-preorders" aria-label="Scroll left" type="button">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="{{ tab1_id }}" aria-label="Scroll left" type="button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <div class="cvh-featured__scroll" id="cvh-scroll-preorders">
-            {%- comment -%} Placeholder product cards — replace with collection loop {%- endcomment -%}
-            {%- assign preorder_products = "Scarlet & Violet — Prismatic Evolutions|Booster Box|$144.99||preorder,Journey Together Booster Box|Booster Box|$139.99||preorder,Surging Sparks ETB|Elite Trainer Box|$54.99|$59.99|preorder,Twilight Masquerade Case|Sealed Case (6 Boxes)|$824.99|$879.99|preorder,Temporal Forces ETB|Elite Trainer Box|$49.99||preorder,Obsidian Flames Bundle|3-Box Bundle|$419.99|$449.99|preorder" | split: "," -%}
-            {%- for item in preorder_products -%}
-              {%- assign p = item | split: "|" -%}
-              <a href="/collections/pre-orders" class="cvh-prod-card">
-                <div class="cvh-prod-card__img">
-                  <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p[0] | url_encode | truncate: 20, '' }}" alt="{{ p[0] }}" width="280" height="280" loading="lazy">
-                  <div class="cvh-prod-card__badges">
-                    <span class="cvh-prod-badge cvh-prod-badge--preorder">Pre-Order</span>
-                    {%- if p[3] != blank -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+          <div class="cvh-featured__scroll" id="cvh-scroll-{{ tab1_id }}">
+            {%- if tab1_col != blank -%}
+              {%- for p in tab1_col.products limit: 8 -%}
+                {%- assign pv = p.selected_or_first_available_variant -%}
+                {%- assign p_sale = false -%}
+                {%- if pv.compare_at_price > pv.price -%}{%- assign p_sale = true -%}{%- endif -%}
+                <a href="{{ p.url }}" class="cvh-prod-card">
+                  <div class="cvh-prod-card__img">
+                    {%- if p.featured_image -%}
+                      <img src="{{ p.featured_image | image_url: width: 280 }}" alt="{{ p.featured_image.alt | escape }}" width="280" height="280" loading="lazy">
+                    {%- else -%}
+                      <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p.title | url_encode | truncate: 20, '' }}" alt="{{ p.title }}" width="280" height="280" loading="lazy">
+                    {%- endif -%}
+                    <div class="cvh-prod-card__badges">
+                      <span class="cvh-prod-badge cvh-prod-badge--preorder">Pre-Order</span>
+                      {%- if p_sale -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+                    </div>
                   </div>
-                </div>
-                <div class="cvh-prod-card__info">
-                  <span class="cvh-prod-card__type">{{ p[1] }}</span>
-                  <span class="cvh-prod-card__name">{{ p[0] }}</span>
-                  <div class="cvh-prod-card__prices">
-                    <span class="cvh-prod-card__price">{{ p[2] }}</span>
-                    {%- if p[3] != blank -%}<span class="cvh-prod-card__was">{{ p[3] }}</span>{%- endif -%}
+                  <div class="cvh-prod-card__info">
+                    <span class="cvh-prod-card__type">{{ p.type }}</span>
+                    <span class="cvh-prod-card__name">{{ p.title }}</span>
+                    <div class="cvh-prod-card__prices">
+                      <span class="cvh-prod-card__price">{{ pv.price | money }}</span>
+                      {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
+                    </div>
                   </div>
-                </div>
-              </a>
-            {%- endfor -%}
+                </a>
+              {%- endfor -%}
+            {%- elsif request.design_mode -%}
+              <p style="color:var(--cv-muted-fg);padding:2rem 0;font-size:0.9rem;">Select a collection for <strong>{{ tab1_label }}</strong> in the theme editor sidebar.</p>
+            {%- endif -%}
           </div>
-          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="cvh-panel-preorders" aria-label="Scroll right" type="button">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="{{ tab1_id }}" aria-label="Scroll right" type="button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
       </div>
 
-      {%- comment -%} New Arrivals Panel {%- endcomment -%}
-      <div class="cvh-featured__panel" id="cvh-panel-new" role="tabpanel">
+      {%- comment -%} Tab 2 Panel {%- endcomment -%}
+      <div class="cvh-featured__panel" id="cvh-panel-{{ tab2_id }}" role="tabpanel">
         <div class="cvh-featured__scroll-wrap">
-          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="cvh-panel-new" aria-label="Scroll left" type="button">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="{{ tab2_id }}" aria-label="Scroll left" type="button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <div class="cvh-featured__scroll" id="cvh-scroll-new">
-            {%- assign new_products = "Stellar Crown Booster Box|Booster Box|$144.99||new,Paradox Rift ETB|Elite Trainer Box|$54.99||new,151 Booster Box (Japanese)|Booster Box|$89.99||new,Paldea Evolved Case|Sealed Case|$799.99|$849.99|new,Crown Zenith ETB|Elite Trainer Box|$59.99|$64.99|new,Lost Origin Booster Box|Booster Box|$134.99||new" | split: "," -%}
-            {%- for item in new_products -%}
-              {%- assign p = item | split: "|" -%}
-              <a href="/collections/new-arrivals" class="cvh-prod-card">
-                <div class="cvh-prod-card__img">
-                  <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p[0] | url_encode | truncate: 20, '' }}" alt="{{ p[0] }}" width="280" height="280" loading="lazy">
-                  <div class="cvh-prod-card__badges">
-                    <span class="cvh-prod-badge cvh-prod-badge--new">New</span>
-                    {%- if p[3] != blank -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+          <div class="cvh-featured__scroll" id="cvh-scroll-{{ tab2_id }}">
+            {%- if tab2_col != blank -%}
+              {%- for p in tab2_col.products limit: 8 -%}
+                {%- assign pv = p.selected_or_first_available_variant -%}
+                {%- assign p_sale = false -%}
+                {%- if pv.compare_at_price > pv.price -%}{%- assign p_sale = true -%}{%- endif -%}
+                <a href="{{ p.url }}" class="cvh-prod-card">
+                  <div class="cvh-prod-card__img">
+                    {%- if p.featured_image -%}
+                      <img src="{{ p.featured_image | image_url: width: 280 }}" alt="{{ p.featured_image.alt | escape }}" width="280" height="280" loading="lazy">
+                    {%- else -%}
+                      <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p.title | url_encode | truncate: 20, '' }}" alt="{{ p.title }}" width="280" height="280" loading="lazy">
+                    {%- endif -%}
+                    <div class="cvh-prod-card__badges">
+                      <span class="cvh-prod-badge cvh-prod-badge--new">New</span>
+                      {%- if p_sale -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+                    </div>
                   </div>
-                </div>
-                <div class="cvh-prod-card__info">
-                  <span class="cvh-prod-card__type">{{ p[1] }}</span>
-                  <span class="cvh-prod-card__name">{{ p[0] }}</span>
-                  <div class="cvh-prod-card__prices">
-                    <span class="cvh-prod-card__price">{{ p[2] }}</span>
-                    {%- if p[3] != blank -%}<span class="cvh-prod-card__was">{{ p[3] }}</span>{%- endif -%}
+                  <div class="cvh-prod-card__info">
+                    <span class="cvh-prod-card__type">{{ p.type }}</span>
+                    <span class="cvh-prod-card__name">{{ p.title }}</span>
+                    <div class="cvh-prod-card__prices">
+                      <span class="cvh-prod-card__price">{{ pv.price | money }}</span>
+                      {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
+                    </div>
                   </div>
-                </div>
-              </a>
-            {%- endfor -%}
+                </a>
+              {%- endfor -%}
+            {%- elsif request.design_mode -%}
+              <p style="color:var(--cv-muted-fg);padding:2rem 0;font-size:0.9rem;">Select a collection for <strong>{{ tab2_label }}</strong> in the theme editor sidebar.</p>
+            {%- endif -%}
           </div>
-          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="cvh-panel-new" aria-label="Scroll right" type="button">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="{{ tab2_id }}" aria-label="Scroll right" type="button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
       </div>
 
-      {%- comment -%} Best Sellers Panel {%- endcomment -%}
-      <div class="cvh-featured__panel" id="cvh-panel-bestsellers" role="tabpanel">
+      {%- comment -%} Tab 3 Panel {%- endcomment -%}
+      <div class="cvh-featured__panel" id="cvh-panel-{{ tab3_id }}" role="tabpanel">
         <div class="cvh-featured__scroll-wrap">
-          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="cvh-panel-bestsellers" aria-label="Scroll left" type="button">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="{{ tab3_id }}" aria-label="Scroll left" type="button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <div class="cvh-featured__scroll" id="cvh-scroll-bestsellers">
-            {%- assign best_products = "Obsidian Flames Booster Box|Booster Box|$144.99|$159.99|hot,Paldea Evolved ETB|Elite Trainer Box|$44.99|$49.99|hot,Infinite Forbidden Booster Box|Booster Box|$79.99|$89.99|hot,Pokemon GO ETB|Elite Trainer Box|$64.99||hot,Brilliant Stars Case|Sealed Case|$749.99||hot,Charizard UPC|Ultra Premium Collection|$129.99||hot" | split: "," -%}
-            {%- for item in best_products -%}
-              {%- assign p = item | split: "|" -%}
-              <a href="/collections/best-sellers" class="cvh-prod-card">
-                <div class="cvh-prod-card__img">
-                  <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p[0] | url_encode | truncate: 20, '' }}" alt="{{ p[0] }}" width="280" height="280" loading="lazy">
-                  <div class="cvh-prod-card__badges">
-                    <span class="cvh-prod-badge cvh-prod-badge--hot">🔥 Hot</span>
-                    {%- if p[3] != blank -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+          <div class="cvh-featured__scroll" id="cvh-scroll-{{ tab3_id }}">
+            {%- if tab3_col != blank -%}
+              {%- for p in tab3_col.products limit: 8 -%}
+                {%- assign pv = p.selected_or_first_available_variant -%}
+                {%- assign p_sale = false -%}
+                {%- if pv.compare_at_price > pv.price -%}{%- assign p_sale = true -%}{%- endif -%}
+                <a href="{{ p.url }}" class="cvh-prod-card">
+                  <div class="cvh-prod-card__img">
+                    {%- if p.featured_image -%}
+                      <img src="{{ p.featured_image | image_url: width: 280 }}" alt="{{ p.featured_image.alt | escape }}" width="280" height="280" loading="lazy">
+                    {%- else -%}
+                      <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p.title | url_encode | truncate: 20, '' }}" alt="{{ p.title }}" width="280" height="280" loading="lazy">
+                    {%- endif -%}
+                    <div class="cvh-prod-card__badges">
+                      <span class="cvh-prod-badge cvh-prod-badge--hot">🔥 Hot</span>
+                      {%- if p_sale -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+                    </div>
                   </div>
-                </div>
-                <div class="cvh-prod-card__info">
-                  <span class="cvh-prod-card__type">{{ p[1] }}</span>
-                  <span class="cvh-prod-card__name">{{ p[0] }}</span>
-                  <div class="cvh-prod-card__prices">
-                    <span class="cvh-prod-card__price">{{ p[2] }}</span>
-                    {%- if p[3] != blank -%}<span class="cvh-prod-card__was">{{ p[3] }}</span>{%- endif -%}
+                  <div class="cvh-prod-card__info">
+                    <span class="cvh-prod-card__type">{{ p.type }}</span>
+                    <span class="cvh-prod-card__name">{{ p.title }}</span>
+                    <div class="cvh-prod-card__prices">
+                      <span class="cvh-prod-card__price">{{ pv.price | money }}</span>
+                      {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
+                    </div>
                   </div>
-                </div>
-              </a>
-            {%- endfor -%}
+                </a>
+              {%- endfor -%}
+            {%- elsif request.design_mode -%}
+              <p style="color:var(--cv-muted-fg);padding:2rem 0;font-size:0.9rem;">Select a collection for <strong>{{ tab3_label }}</strong> in the theme editor sidebar.</p>
+            {%- endif -%}
           </div>
-          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="cvh-panel-bestsellers" aria-label="Scroll right" type="button">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="{{ tab3_id }}" aria-label="Scroll right" type="button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
@@ -1016,222 +1035,233 @@
   </section>
 
   {%- comment -%} ── 4. MARQUEE ── {%- endcomment -%}
+  {%- if section.settings.show_marquee and marquee_items.size > 0 -%}
   <div class="cvh-marquee" aria-hidden="true">
     <div class="cvh-marquee__track" id="cvh-marquee">
-      {%- assign marquee_items = "Free insured shipping on orders over $100,100% authentic sealed product,Afterpay & Zip available,14-day returns on sealed items,Same-day dispatch on weekdays,500k+ happy customers,Best price guarantee,Factory sealed — always,Free insured shipping on orders over $100,100% authentic sealed product,Afterpay & Zip available,14-day returns on sealed items,Same-day dispatch on weekdays,500k+ happy customers,Best price guarantee,Factory sealed — always" | split: "," -%}
-      {%- for item in marquee_items -%}
-        <span class="cvh-marquee__item">
+      {%- comment -%} First pass (real blocks for editor) {%- endcomment -%}
+      {%- for block in marquee_items -%}
+        <span class="cvh-marquee__item" {{ block.shopify_attributes }}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          {{ item }}
+          {{ block.settings.text }}
+        </span>
+      {%- endfor -%}
+      {%- comment -%} Duplicate pass for seamless infinite loop {%- endcomment -%}
+      {%- for block in marquee_items -%}
+        <span class="cvh-marquee__item" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          {{ block.settings.text }}
         </span>
       {%- endfor -%}
     </div>
   </div>
+  {%- endif -%}
 
   {%- comment -%} ── 5. BROWSE BY CATEGORY ── {%- endcomment -%}
+  {%- if cat_cards.size > 0 or brand_links.size > 0 -%}
   <section class="cvh-categories" aria-label="Browse by category">
     <div class="cvh__inner">
       <div class="cvh-section-hd cvh-section-hd--row">
         <div>
-          <h2 class="cvh-section-title">Browse by Category</h2>
-          <p class="cvh-section-sub">Booster boxes, ETBs, cases, singles &amp; more — sorted to make your next pick easy.</p>
+          <h2 class="cvh-section-title">{{ section.settings.cat_title | default: 'Browse by Category' }}</h2>
+          <p class="cvh-section-sub">{{ section.settings.cat_subtitle | default: 'Booster boxes, ETBs, cases, singles &amp; more — sorted to make your next pick easy.' }}</p>
         </div>
         <a href="/collections/all" class="cvh-btn cvh-btn--outline cvh-btn--sm" style="flex-shrink:0">Shop All</a>
       </div>
 
+      {%- if cat_cards.size > 0 -%}
       <div class="cvh-cat-grid">
-        <a href="/collections/sale" class="cvh-cat-card cvh-cat-card--sale" aria-label="Shop Sale">
-          <div class="cvh-cat-card__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          </div>
-          <span class="cvh-cat-card__label">Sale</span>
-        </a>
-        <a href="/collections/booster-boxes" class="cvh-cat-card" aria-label="Shop Booster Boxes">
-          <div class="cvh-cat-card__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>
-          </div>
-          <span class="cvh-cat-card__label">Booster Boxes</span>
-        </a>
-        <a href="/collections/elite-trainer-boxes" class="cvh-cat-card" aria-label="Shop Elite Trainer Boxes">
-          <div class="cvh-cat-card__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          </div>
-          <span class="cvh-cat-card__label">Elite Trainer Boxes</span>
-        </a>
-        <a href="/collections/cases" class="cvh-cat-card" aria-label="Shop Sealed Cases">
-          <div class="cvh-cat-card__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-          </div>
-          <span class="cvh-cat-card__label">Cases</span>
-        </a>
-        <a href="/collections/bundles-tins" class="cvh-cat-card" aria-label="Shop Bundles and Tins">
-          <div class="cvh-cat-card__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          </div>
-          <span class="cvh-cat-card__label">Bundles &amp; Tins</span>
-        </a>
-        <a href="/collections/new-arrivals" class="cvh-cat-card" aria-label="Shop New Arrivals">
-          <div class="cvh-cat-card__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <span class="cvh-cat-card__label">New Arrivals</span>
-        </a>
+        {%- for block in cat_cards -%}
+          <a href="{{ block.settings.url | default: '/collections/all' }}"
+             class="cvh-cat-card{% if block.settings.is_sale %} cvh-cat-card--sale{% endif %}"
+             aria-label="Shop {{ block.settings.label }}"
+             {{ block.shopify_attributes }}>
+            <div class="cvh-cat-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                {%- case block.settings.icon -%}
+                  {%- when 'box' -%}<polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                  {%- when 'package' -%}<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                  {%- when 'briefcase' -%}<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                  {%- when 'layers' -%}<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+                  {%- when 'tag' -%}<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
+                  {%- when 'star' -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  {%- when 'shopping-bag' -%}<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                  {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                {%- endcase -%}
+              </svg>
+            </div>
+            <span class="cvh-cat-card__label">{{ block.settings.label }}</span>
+          </a>
+        {%- endfor -%}
       </div>
+      {%- endif -%}
 
-      {%- comment -%} Brand row {%- endcomment -%}
+      {%- comment -%} Brand links row {%- endcomment -%}
+      {%- if brand_links.size > 0 -%}
       <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-top:0.75rem;">
-        {%- assign brands = "Pokemon|/collections/pokemon,Yu-Gi-Oh!|/collections/yugioh,Magic: The Gathering|/collections/magic,One Piece TCG|/collections/one-piece,Dragon Ball Super|/collections/dbs,Lorcana|/collections/lorcana" | split: "," -%}
-        {%- for brand in brands -%}
-          {%- assign b = brand | split: "|" -%}
-          <a href="{{ b[1] }}" class="cvh-cat-card" style="flex-direction:row;justify-content:flex-start;padding:1rem 1.25rem;border-radius:var(--cv-radius);gap:0.75rem;" aria-label="Shop {{ b[0] }}">
+        {%- for block in brand_links -%}
+          <a href="{{ block.settings.url | default: '/collections/all' }}"
+             class="cvh-cat-card"
+             style="flex-direction:row;justify-content:flex-start;padding:1rem 1.25rem;border-radius:var(--cv-radius);gap:0.75rem;"
+             aria-label="Shop {{ block.settings.label }}"
+             {{ block.shopify_attributes }}>
             <div class="cvh-cat-card__icon" style="width:2.25rem;height:2.25rem;flex-shrink:0">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
             </div>
-            <span class="cvh-cat-card__label" style="font-size:0.9375rem">{{ b[0] }}</span>
+            <span class="cvh-cat-card__label" style="font-size:0.9375rem">{{ block.settings.label }}</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1rem;height:1rem;margin-left:auto;color:var(--cv-muted-fg)"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+
+    </div>
+  </section>
+  {%- endif -%}
+
+  {%- comment -%} ── 6. PROMOTIONAL BANNERS ── {%- endcomment -%}
+  {%- if promo_banners.size > 0 -%}
+  <section class="cvh-promo" aria-label="Promotions">
+    <div class="cvh__inner">
+      <div class="cvh-promo__grid">
+        {%- for block in promo_banners -%}
+          <a href="{{ block.settings.cta_url | default: '/collections/all' }}" class="cvh-promo-card" {{ block.shopify_attributes }}>
+            <div class="cvh-promo-card__bg">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 700 }}" alt="{{ block.settings.image.alt | escape | default: block.settings.title }}" width="700" height="420" loading="lazy">
+              {%- else -%}
+                <img src="https://placehold.co/700x420/282d52/f8f7f5?text={{ block.settings.title | url_encode }}" alt="{{ block.settings.title }}" width="700" height="420" loading="lazy">
+              {%- endif -%}
+            </div>
+            <div class="cvh-promo-card__content">
+              {%- if block.settings.eyebrow != blank -%}
+                <span class="cvh-promo-card__eyebrow">{{ block.settings.eyebrow }}</span>
+              {%- endif -%}
+              <h3 class="cvh-promo-card__title">{{ block.settings.title }}</h3>
+              {%- if block.settings.cta_label != blank -%}
+                <span class="cvh-promo-card__cta">
+                  {{ block.settings.cta_label }}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </span>
+              {%- endif -%}
+            </div>
           </a>
         {%- endfor -%}
       </div>
     </div>
   </section>
-
-  {%- comment -%} ── 6. PROMOTIONAL BANNERS ── {%- endcomment -%}
-  <section class="cvh-promo" aria-label="Promotions">
-    <div class="cvh__inner">
-      <div class="cvh-promo__grid">
-        <a href="/collections/booster-boxes" class="cvh-promo-card">
-          <div class="cvh-promo-card__bg">
-            <img src="https://placehold.co/700x420/282d52/f8f7f5?text=Booster+Boxes" alt="Shop Booster Boxes" width="700" height="420" loading="lazy">
-          </div>
-          <div class="cvh-promo-card__content">
-            <span class="cvh-promo-card__eyebrow">Shop Now</span>
-            <h3 class="cvh-promo-card__title">Booster Boxes<br>from $39.99</h3>
-            <span class="cvh-promo-card__cta">
-              Shop Collection
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </span>
-          </div>
-        </a>
-        <a href="/collections/elite-trainer-boxes" class="cvh-promo-card">
-          <div class="cvh-promo-card__bg">
-            <img src="https://placehold.co/700x420/1c3a2e/d4eedd?text=Elite+Trainer+Boxes" alt="Shop Elite Trainer Boxes" width="700" height="420" loading="lazy">
-          </div>
-          <div class="cvh-promo-card__content">
-            <span class="cvh-promo-card__eyebrow">Most Popular</span>
-            <h3 class="cvh-promo-card__title">Elite Trainer<br>Boxes from $44.99</h3>
-            <span class="cvh-promo-card__cta">
-              Shop ETBs
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </span>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
+  {%- endif -%}
 
   {%- comment -%} ── 7. ABOUT SECTION ── {%- endcomment -%}
-  <section class="cvh-about" aria-label="About CardVault">
+  {%- if section.settings.show_about -%}
+  <section class="cvh-about" aria-label="About {{ shop.name }}">
     <div class="cvh__inner">
       <div class="cvh-about__grid">
         <div class="cvh-about__img">
-          <img src="https://placehold.co/700x525/eeecea/76798c?text=CardVault+Store" alt="CardVault store and team" width="700" height="525" loading="lazy">
+          {%- if section.settings.about_image != blank -%}
+            <img src="{{ section.settings.about_image | image_url: width: 700 }}" alt="{{ section.settings.about_image.alt | escape | default: section.settings.about_title }}" width="700" height="525" loading="lazy">
+          {%- else -%}
+            <img src="https://placehold.co/700x525/eeecea/76798c?text={{ shop.name | url_encode }}" alt="{{ shop.name }} store" width="700" height="525" loading="lazy">
+          {%- endif -%}
         </div>
         <div class="cvh-about__text">
-          <h2 class="cvh-about__title">About CardVault</h2>
-          <p class="cvh-about__desc">
-            We&rsquo;re passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all &mdash; and ship it fast with full insurance.
-          </p>
+          <h2 class="cvh-about__title">{{ section.settings.about_title | default: 'About Us' }}</h2>
+          <p class="cvh-about__desc">{{ section.settings.about_desc }}</p>
+          {%- if about_checks.size > 0 -%}
           <div class="cvh-about__checklist">
-            <div class="cvh-about__check">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Insured &amp; protected packaging
-            </div>
-            <div class="cvh-about__check">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              100% authentic, authorized distributor sourced
-            </div>
-            <div class="cvh-about__check">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Same-day dispatch on weekday orders
-            </div>
-            <div class="cvh-about__check cvh-about__check--dim">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              14-day returns on sealed &amp; unopened products
-            </div>
+            {%- for block in about_checks -%}
+              <div class="cvh-about__check{% if block.settings.dimmed %} cvh-about__check--dim{% endif %}" {{ block.shopify_attributes }}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                {{ block.settings.text }}
+              </div>
+            {%- endfor -%}
           </div>
+          {%- endif -%}
           <div class="cvh-about__ctas">
-            <a href="/pages/about" class="cvh-btn cvh-btn--primary">Our Story</a>
-            <a href="/pages/contact" class="cvh-btn cvh-btn--outline">Contact Us</a>
+            {%- if section.settings.about_cta1_label != blank -%}
+              <a href="{{ section.settings.about_cta1_url | default: '/pages/about' }}" class="cvh-btn cvh-btn--primary">{{ section.settings.about_cta1_label }}</a>
+            {%- endif -%}
+            {%- if section.settings.about_cta2_label != blank -%}
+              <a href="{{ section.settings.about_cta2_url | default: '/pages/contact' }}" class="cvh-btn cvh-btn--outline">{{ section.settings.about_cta2_label }}</a>
+            {%- endif -%}
           </div>
         </div>
       </div>
     </div>
   </section>
+  {%- endif -%}
 
   {%- comment -%} ── 8. REWARDS SECTION ── {%- endcomment -%}
+  {%- if section.settings.show_rewards -%}
   <section class="cvh-rewards" aria-label="Rewards program">
     <div class="cvh__inner">
       <div class="cvh-rewards__grid">
         <div class="cvh-rewards__text">
-          <span class="cvh-rewards__eyebrow">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            CardVault Rewards
-          </span>
-          <h2 class="cvh-rewards__title">Level Up Every<br>Time You Shop</h2>
-          <p class="cvh-rewards__desc">Every dollar you spend earns Vault Coins redeemable for discounts, early access, and exclusive member perks.</p>
+          {%- if section.settings.rewards_eyebrow != blank -%}
+            <span class="cvh-rewards__eyebrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {{ section.settings.rewards_eyebrow }}
+            </span>
+          {%- endif -%}
+          <h2 class="cvh-rewards__title">{{ section.settings.rewards_title | default: 'Level Up Every Time You Shop' }}</h2>
+          <p class="cvh-rewards__desc">{{ section.settings.rewards_desc }}</p>
+          {%- if reward_items.size > 0 -%}
           <div class="cvh-rewards__list">
-            <div class="cvh-rewards__item">
-              <div class="cvh-rewards__item-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            {%- for block in reward_items -%}
+              <div class="cvh-rewards__item" {{ block.shopify_attributes }}>
+                <div class="cvh-rewards__item-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    {%- case block.settings.icon -%}
+                      {%- when 'dollar' -%}<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                      {%- when 'gift' -%}<path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                      {%- when 'users' -%}<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                      {%- when 'star' -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      {%- when 'zap' -%}<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                      {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    {%- endcase -%}
+                  </svg>
+                </div>
+                {{ block.settings.text }}
               </div>
-              1 Vault Coin for every $1 spent
-            </div>
-            <div class="cvh-rewards__item">
-              <div class="cvh-rewards__item-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-              </div>
-              Redeem coins for discounts &amp; gifts
-            </div>
-            <div class="cvh-rewards__item">
-              <div class="cvh-rewards__item-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              </div>
-              Early access for loyal members
-            </div>
+            {%- endfor -%}
           </div>
+          {%- endif -%}
           <div style="margin-top:1rem">
-            <a href="/pages/rewards" class="cvh-btn cvh-btn--white">Join Rewards — It&rsquo;s Free</a>
+            <a href="{{ section.settings.rewards_cta_url | default: '/pages/rewards' }}" class="cvh-btn cvh-btn--white">{{ section.settings.rewards_cta_label | default: "Join Rewards — It's Free" }}</a>
           </div>
         </div>
         <div class="cvh-rewards__img">
-          <img src="https://placehold.co/700x525/1c2440/6472a8?text=Vault+Rewards" alt="CardVault rewards program" width="700" height="525" loading="lazy">
+          {%- if section.settings.rewards_image != blank -%}
+            <img src="{{ section.settings.rewards_image | image_url: width: 700 }}" alt="{{ section.settings.rewards_image.alt | escape | default: 'Rewards program' }}" width="700" height="525" loading="lazy">
+          {%- else -%}
+            <img src="https://placehold.co/700x525/1c2440/6472a8?text=Vault+Rewards" alt="Rewards program" width="700" height="525" loading="lazy">
+          {%- endif -%}
         </div>
       </div>
     </div>
   </section>
+  {%- endif -%}
 
   {%- comment -%} ── 9. REVIEWS ── {%- endcomment -%}
+  {%- if reviews.size > 0 -%}
   <section class="cvh-reviews" aria-label="Customer reviews">
     <div class="cvh__inner">
       <div class="cvh-reviews__title-wrap">
-        <h2 class="cvh-reviews__mega">Loved by Thousands<br>of Players</h2>
+        <h2 class="cvh-reviews__mega">{{ section.settings.reviews_title | default: 'Loved by Thousands of Players' }}</h2>
       </div>
       <div class="cvh-reviews__scroll" role="list">
-        {%- assign reviews = "Amazing service! My booster boxes arrived double-boxed and in perfect condition. Factory seals intact. Will definitely be a repeat customer.|Alex M.|Pokemon Collector|5,Fastest shipping I've experienced. Ordered Monday morning and it arrived Tuesday. The price was unbeatable too — best in the market.|Sarah K.|Yu-Gi-Oh Player|5,Got my Obsidian Flames case and every single box was sealed perfectly. The packaging was incredible. 10/10 experience.|David R.|MTG Enthusiast|5,The pre-order experience was smooth. They kept me updated and my box arrived exactly on release day. Top tier store.|James T.|TCG Investor|5,Incredible range — found products here I couldn't source anywhere else. Customer service was also super helpful when I had a question.|Emma L.|Card Collector|5" | split: "," -%}
-        {%- for review in reviews -%}
-          {%- assign rv = review | split: "|" -%}
-          <div class="cvh-review-card" role="listitem">
-            <div class="cvh-review-card__stars" aria-label="{{ rv[4] }} out of 5 stars">
+        {%- for block in reviews -%}
+          <div class="cvh-review-card" role="listitem" {{ block.shopify_attributes }}>
+            <div class="cvh-review-card__stars" aria-label="5 out of 5 stars">
               {%- for i in (1..5) -%}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--cv-star)"/></svg>
               {%- endfor -%}
             </div>
-            <p class="cvh-review-card__text">&ldquo;{{ rv[0] }}&rdquo;</p>
+            <p class="cvh-review-card__text">&ldquo;{{ block.settings.text }}&rdquo;</p>
             <div class="cvh-review-card__author">
-              <div class="cvh-review-card__avatar" aria-hidden="true">{{ rv[1] | slice: 0 }}</div>
+              <div class="cvh-review-card__avatar" aria-hidden="true">{{ block.settings.author_name | slice: 0 }}</div>
               <div>
-                <div class="cvh-review-card__name">{{ rv[1] }}</div>
-                <div class="cvh-review-card__meta">{{ rv[2] }}</div>
+                <div class="cvh-review-card__name">{{ block.settings.author_name }}</div>
+                <div class="cvh-review-card__meta">{{ block.settings.author_role }}</div>
               </div>
             </div>
           </div>
@@ -1239,13 +1269,15 @@
       </div>
     </div>
   </section>
+  {%- endif -%}
 
   {%- comment -%} ── 10. NEWSLETTER ── {%- endcomment -%}
+  {%- if section.settings.show_newsletter -%}
   <section class="cvh-newsletter" aria-label="Newsletter signup">
     <div class="cvh-newsletter__inner">
       <div>
-        <h2 class="cvh-newsletter__title">Stay in the Loop</h2>
-        <p class="cvh-newsletter__sub">New drops, restocks, and exclusive deals delivered straight to your inbox.</p>
+        <h2 class="cvh-newsletter__title">{{ section.settings.nl_title | default: 'Stay in the Loop' }}</h2>
+        <p class="cvh-newsletter__sub">{{ section.settings.nl_subtitle | default: 'New drops, restocks, and exclusive deals delivered straight to your inbox.' }}</p>
       </div>
       {% form 'customer', id: 'cvh-newsletter-form' %}
         <input type="hidden" name="contact[tags]" value="newsletter">
@@ -1263,9 +1295,10 @@
           <button type="submit" class="cvh-btn cvh-btn--primary">Subscribe</button>
         </div>
       {% endform %}
-      <p class="cvh-newsletter__disclaimer">No spam, ever. Unsubscribe anytime.</p>
+      <p class="cvh-newsletter__disclaimer">{{ section.settings.nl_disclaimer | default: 'No spam, ever. Unsubscribe anytime.' }}</p>
     </div>
   </section>
+  {%- endif -%}
 
 </div><!-- /cvh -->
 
@@ -1282,6 +1315,7 @@
   var total   = slides.length;
   var current = 0;
   var autoplay;
+  var interval = {{ section.settings.hero_autoplay_ms | default: 5000 }};
 
   function goTo(idx) {
     current = (idx + total) % total;
@@ -1293,7 +1327,7 @@
   }
 
   function startAutoplay() {
-    autoplay = setInterval(function () { goTo(current + 1); }, 5000);
+    autoplay = setInterval(function () { goTo(current + 1); }, interval);
   }
   function stopAutoplay()  { clearInterval(autoplay); }
 
@@ -1318,7 +1352,7 @@
     }, { passive: true });
   }
 
-  startAutoplay();
+  if (total > 1) startAutoplay();
 
   /* ── Featured Product Tabs ── */
   var featTabs   = Array.prototype.slice.call(document.querySelectorAll('.cvh-featured__tab'));
@@ -1339,12 +1373,13 @@
   var scrollArrows = Array.prototype.slice.call(document.querySelectorAll('.cvh-scroll-arrow'));
   scrollArrows.forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var panel  = document.getElementById('cvh-panel-' + this.dataset.target);
+      var panelId = 'cvh-panel-' + this.dataset.target;
+      var panel   = document.getElementById(panelId);
       if (!panel) return;
-      var scroll = panel.querySelector('.cvh-featured__scroll');
+      var scroll  = panel.querySelector('.cvh-featured__scroll');
       if (!scroll) return;
-      var dir    = this.classList.contains('cvh-scroll-arrow--next') ? 1 : -1;
-      var amount = scroll.offsetWidth * 0.75;
+      var dir     = this.classList.contains('cvh-scroll-arrow--next') ? 1 : -1;
+      var amount  = scroll.offsetWidth * 0.75;
       scroll.scrollBy({ left: dir * amount, behavior: 'smooth' });
     });
   });
@@ -1352,7 +1387,7 @@
   /* ── Newsletter form ── */
   var nlForm = document.getElementById('cvh-newsletter-form');
   if (nlForm) {
-    nlForm.addEventListener('submit', function (e) {
+    nlForm.addEventListener('submit', function () {
       var btn = nlForm.querySelector('[type="submit"]');
       if (btn) {
         setTimeout(function () { btn.textContent = 'Subscribed!'; btn.disabled = true; }, 100);
@@ -1368,45 +1403,234 @@
   "name": "Home",
   "tag": "section",
   "class": "section-main-home",
-  "settings": [
+  "blocks": [
     {
-      "type": "header",
-      "content": "Homepage Settings"
+      "type": "hero_slide",
+      "name": "Hero Slide",
+      "settings": [
+        { "type": "header", "content": "Slide Content" },
+        { "type": "select", "id": "eyebrow_icon", "label": "Eyebrow icon", "options": [
+            { "value": "star",  "label": "Star" },
+            { "value": "tag",   "label": "Tag" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "zap",   "label": "Zap / Lightning" }
+          ], "default": "star" },
+        { "type": "text",     "id": "eyebrow",    "label": "Eyebrow text",         "default": "New Season Drops" },
+        { "type": "text",     "id": "title_line1","label": "Title (line 1)",        "default": "Premium TCG" },
+        { "type": "text",     "id": "title_em",   "label": "Title accent (highlighted)", "default": "Sealed Products" },
+        { "type": "textarea", "id": "description","label": "Description",          "default": "Factory sealed booster boxes, Elite Trainer Boxes & more. 100% authentic." },
+        { "type": "header",   "content": "Buttons" },
+        { "type": "text", "id": "cta1_label", "label": "Button 1 label", "default": "Shop All Products" },
+        { "type": "url",  "id": "cta1_url",   "label": "Button 1 URL" },
+        { "type": "text", "id": "cta2_label", "label": "Button 2 label", "default": "New Arrivals" },
+        { "type": "url",  "id": "cta2_url",   "label": "Button 2 URL" },
+        { "type": "header", "content": "Image & Badge" },
+        { "type": "image_picker", "id": "image", "label": "Slide image" },
+        { "type": "text", "id": "badge_value", "label": "Badge value",  "default": "100% Authentic" },
+        { "type": "text", "id": "badge_label", "label": "Badge label",  "default": "Verified sealed product" },
+        { "type": "select", "id": "badge_icon", "label": "Badge icon", "options": [
+            { "value": "shield", "label": "Shield" },
+            { "value": "tag",    "label": "Tag" },
+            { "value": "clock",  "label": "Clock" }
+          ], "default": "shield" },
+        { "type": "header", "content": "Style" },
+        { "type": "select", "id": "color_scheme", "label": "Background colour", "options": [
+            { "value": "1", "label": "Purple (default)" },
+            { "value": "2", "label": "Green" },
+            { "value": "3", "label": "Orange" }
+          ], "default": "1" }
+      ]
     },
     {
-      "type": "checkbox",
-      "id": "show_trust_bar",
-      "label": "Show trust bar",
-      "default": true
+      "type": "trust_item",
+      "name": "Trust Bar Item",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [
+            { "value": "credit-card", "label": "Credit Card" },
+            { "value": "dollar",      "label": "Dollar / Price" },
+            { "value": "shield",      "label": "Shield" },
+            { "value": "truck",       "label": "Truck / Shipping" },
+            { "value": "gift",        "label": "Gift" },
+            { "value": "users",       "label": "People / Community" },
+            { "value": "package",     "label": "Package" },
+            { "value": "star",        "label": "Star" }
+          ], "default": "shield" },
+        { "type": "text", "id": "title",       "label": "Title",       "default": "Free Shipping" },
+        { "type": "text", "id": "description", "label": "Description", "default": "On all orders over $100" }
+      ]
     },
     {
-      "type": "checkbox",
-      "id": "show_marquee",
-      "label": "Show scrolling ticker",
-      "default": true
+      "type": "marquee_item",
+      "name": "Ticker Item",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Free insured shipping on orders over $100" }
+      ]
     },
     {
-      "type": "checkbox",
-      "id": "show_rewards",
-      "label": "Show rewards section",
-      "default": true
+      "type": "category_card",
+      "name": "Category Card",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label",       "default": "Booster Boxes" },
+        { "type": "url",  "id": "url",   "label": "Link URL" },
+        { "type": "select", "id": "icon", "label": "Icon", "options": [
+            { "value": "star",         "label": "Star" },
+            { "value": "package",      "label": "Package / Box" },
+            { "value": "box",          "label": "Archive Box" },
+            { "value": "briefcase",    "label": "Briefcase / ETB" },
+            { "value": "layers",       "label": "Layers / Cases" },
+            { "value": "tag",          "label": "Tag / Deals" },
+            { "value": "shopping-bag", "label": "Shopping Bag" }
+          ], "default": "package" },
+        { "type": "checkbox", "id": "is_sale", "label": "Use sale (red) style", "default": false }
+      ]
     },
     {
-      "type": "checkbox",
-      "id": "show_newsletter",
-      "label": "Show newsletter section",
-      "default": true
+      "type": "brand_link",
+      "name": "Brand Link (row)",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Brand name", "default": "Pokemon" },
+        { "type": "url",  "id": "url",   "label": "Collection URL" }
+      ]
     },
     {
-      "type": "number",
-      "id": "hero_autoplay_ms",
-      "label": "Hero slide interval (ms)",
-      "default": 5000
+      "type": "promo_banner",
+      "name": "Promo Banner",
+      "settings": [
+        { "type": "image_picker", "id": "image",    "label": "Background image" },
+        { "type": "text",         "id": "eyebrow",  "label": "Eyebrow",    "default": "Shop Now" },
+        { "type": "text",         "id": "title",    "label": "Title",      "default": "Booster Boxes from $39.99" },
+        { "type": "text",         "id": "cta_label","label": "CTA label",  "default": "Shop Collection" },
+        { "type": "url",          "id": "cta_url",  "label": "CTA URL" }
+      ]
+    },
+    {
+      "type": "about_check",
+      "name": "About Checklist Item",
+      "settings": [
+        { "type": "text",     "id": "text",   "label": "Text",         "default": "100% authentic products" },
+        { "type": "checkbox", "id": "dimmed", "label": "Dimmed style", "default": false }
+      ]
+    },
+    {
+      "type": "reward_item",
+      "name": "Rewards List Item",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [
+            { "value": "dollar", "label": "Dollar / Earn" },
+            { "value": "gift",   "label": "Gift / Redeem" },
+            { "value": "users",  "label": "People / Access" },
+            { "value": "star",   "label": "Star" },
+            { "value": "zap",    "label": "Zap / Fast" }
+          ], "default": "dollar" },
+        { "type": "text", "id": "text", "label": "Text", "default": "1 Vault Coin for every $1 spent" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Customer Review",
+      "settings": [
+        { "type": "textarea", "id": "text",        "label": "Review text",    "default": "Amazing service! My order arrived in perfect condition." },
+        { "type": "text",     "id": "author_name", "label": "Author name",    "default": "Alex M." },
+        { "type": "text",     "id": "author_role", "label": "Author role",    "default": "Pokemon Collector" }
+      ]
     }
+  ],
+  "settings": [
+    { "type": "header", "content": "Hero Slider" },
+    { "type": "number", "id": "hero_autoplay_ms", "label": "Slide interval (ms)", "default": 5000 },
+
+    { "type": "header", "content": "Fan Favourites" },
+    { "type": "text",       "id": "featured_title",    "label": "Section title",    "default": "Fan Favourites" },
+    { "type": "text",       "id": "featured_subtitle", "label": "Section subtitle", "default": "Whether you're building your collection or buying your first box — these are going fast." },
+    { "type": "text",       "id": "tab1_label",        "label": "Tab 1 label",      "default": "Pre-Orders" },
+    { "type": "collection", "id": "tab1_collection",   "label": "Tab 1 collection" },
+    { "type": "text",       "id": "tab2_label",        "label": "Tab 2 label",      "default": "New Arrivals" },
+    { "type": "collection", "id": "tab2_collection",   "label": "Tab 2 collection" },
+    { "type": "text",       "id": "tab3_label",        "label": "Tab 3 label",      "default": "Best Sellers" },
+    { "type": "collection", "id": "tab3_collection",   "label": "Tab 3 collection" },
+
+    { "type": "header", "content": "Browse by Category" },
+    { "type": "text", "id": "cat_title",    "label": "Section title",    "default": "Browse by Category" },
+    { "type": "text", "id": "cat_subtitle", "label": "Section subtitle", "default": "Booster boxes, ETBs, cases, singles & more." },
+
+    { "type": "header", "content": "About Section" },
+    { "type": "checkbox",     "id": "show_about",      "label": "Show about section", "default": true },
+    { "type": "image_picker", "id": "about_image",     "label": "About image" },
+    { "type": "text",         "id": "about_title",     "label": "Title",              "default": "About CardVault" },
+    { "type": "textarea",     "id": "about_desc",      "label": "Description",        "default": "We're passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all — and ship it fast with full insurance." },
+    { "type": "text",         "id": "about_cta1_label","label": "Button 1 label",     "default": "Our Story" },
+    { "type": "url",          "id": "about_cta1_url",  "label": "Button 1 URL" },
+    { "type": "text",         "id": "about_cta2_label","label": "Button 2 label",     "default": "Contact Us" },
+    { "type": "url",          "id": "about_cta2_url",  "label": "Button 2 URL" },
+
+    { "type": "header", "content": "Rewards Section" },
+    { "type": "checkbox",     "id": "show_rewards",      "label": "Show rewards section", "default": true },
+    { "type": "image_picker", "id": "rewards_image",     "label": "Rewards image" },
+    { "type": "text",         "id": "rewards_eyebrow",   "label": "Eyebrow text",    "default": "CardVault Rewards" },
+    { "type": "text",         "id": "rewards_title",     "label": "Title",           "default": "Level Up Every Time You Shop" },
+    { "type": "textarea",     "id": "rewards_desc",      "label": "Description",     "default": "Every dollar you spend earns Vault Coins redeemable for discounts, early access, and exclusive member perks." },
+    { "type": "text",         "id": "rewards_cta_label", "label": "Button label",    "default": "Join Rewards — It's Free" },
+    { "type": "url",          "id": "rewards_cta_url",   "label": "Button URL" },
+
+    { "type": "header", "content": "Reviews" },
+    { "type": "text", "id": "reviews_title", "label": "Section heading", "default": "Loved by Thousands of Players" },
+
+    { "type": "header", "content": "Newsletter" },
+    { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter",   "default": true },
+    { "type": "text",     "id": "nl_title",        "label": "Title",             "default": "Stay in the Loop" },
+    { "type": "text",     "id": "nl_subtitle",     "label": "Subtitle",          "default": "New drops, restocks, and exclusive deals delivered straight to your inbox." },
+    { "type": "text",     "id": "nl_disclaimer",   "label": "Disclaimer text",   "default": "No spam, ever. Unsubscribe anytime." },
+
+    { "type": "header", "content": "Display Options" },
+    { "type": "checkbox", "id": "show_trust_bar", "label": "Show trust bar",      "default": true },
+    { "type": "checkbox", "id": "show_marquee",   "label": "Show scrolling ticker","default": true }
   ],
   "presets": [
     {
-      "name": "Home"
+      "name": "Home",
+      "blocks": [
+        { "type": "hero_slide", "settings": { "eyebrow": "New Season Drops", "eyebrow_icon": "star", "title_line1": "Premium TCG", "title_em": "Sealed Products", "description": "Factory sealed booster boxes, Elite Trainer Boxes & more. 100% authentic, sourced directly from authorized distributors.", "cta1_label": "Shop All Products", "cta2_label": "New Arrivals", "badge_value": "100% Authentic", "badge_label": "Verified sealed product", "badge_icon": "shield", "color_scheme": "1" } },
+        { "type": "hero_slide", "settings": { "eyebrow": "Limited Time Deals", "eyebrow_icon": "tag", "title_line1": "Up to 25% Off", "title_em": "Elite Trainer Boxes", "description": "Stock up on your favourite ETBs while supplies last. Free insured shipping on all orders over $100.", "cta1_label": "Shop the Sale", "cta2_label": "View ETBs", "badge_value": "Save up to 25%", "badge_label": "On selected ETBs", "badge_icon": "tag", "color_scheme": "2" } },
+        { "type": "hero_slide", "settings": { "eyebrow": "Coming Soon", "eyebrow_icon": "clock", "title_line1": "Pre-Order", "title_em": "Scarlet & Violet", "description": "Lock in your allocation before they sell out. We ship on release day — guaranteed first to your door.", "cta1_label": "Pre-Order Now", "cta2_label": "Learn More", "badge_value": "Ships on Release Day", "badge_label": "Guaranteed first", "badge_icon": "clock", "color_scheme": "3" } },
+        { "type": "trust_item", "settings": { "icon": "credit-card", "title": "Buy Now, Pay Later", "description": "Afterpay & Zip available at checkout" } },
+        { "type": "trust_item", "settings": { "icon": "dollar", "title": "Best Price Guarantee", "description": "We match any verified lower price" } },
+        { "type": "trust_item", "settings": { "icon": "shield", "title": "Trusted by Players", "description": "500k+ happy customers, 5-star rated" } },
+        { "type": "trust_item", "settings": { "icon": "truck", "title": "Free Insured Shipping", "description": "On all orders over $100" } },
+        { "type": "marquee_item", "settings": { "text": "Free insured shipping on orders over $100" } },
+        { "type": "marquee_item", "settings": { "text": "100% authentic sealed product" } },
+        { "type": "marquee_item", "settings": { "text": "Afterpay & Zip available" } },
+        { "type": "marquee_item", "settings": { "text": "14-day returns on sealed items" } },
+        { "type": "marquee_item", "settings": { "text": "Same-day dispatch on weekdays" } },
+        { "type": "marquee_item", "settings": { "text": "500k+ happy customers" } },
+        { "type": "marquee_item", "settings": { "text": "Best price guarantee" } },
+        { "type": "marquee_item", "settings": { "text": "Factory sealed — always" } },
+        { "type": "category_card", "settings": { "label": "Sale", "icon": "shopping-bag", "is_sale": true } },
+        { "type": "category_card", "settings": { "label": "Booster Boxes", "icon": "package", "is_sale": false } },
+        { "type": "category_card", "settings": { "label": "Elite Trainer Boxes", "icon": "briefcase", "is_sale": false } },
+        { "type": "category_card", "settings": { "label": "Cases", "icon": "layers", "is_sale": false } },
+        { "type": "category_card", "settings": { "label": "Bundles & Tins", "icon": "tag", "is_sale": false } },
+        { "type": "category_card", "settings": { "label": "New Arrivals", "icon": "star", "is_sale": false } },
+        { "type": "brand_link", "settings": { "label": "Pokemon" } },
+        { "type": "brand_link", "settings": { "label": "Yu-Gi-Oh!" } },
+        { "type": "brand_link", "settings": { "label": "Magic: The Gathering" } },
+        { "type": "brand_link", "settings": { "label": "One Piece TCG" } },
+        { "type": "brand_link", "settings": { "label": "Dragon Ball Super" } },
+        { "type": "brand_link", "settings": { "label": "Lorcana" } },
+        { "type": "promo_banner", "settings": { "eyebrow": "Shop Now", "title": "Booster Boxes from $39.99", "cta_label": "Shop Collection" } },
+        { "type": "promo_banner", "settings": { "eyebrow": "Most Popular", "title": "Elite Trainer Boxes from $44.99", "cta_label": "Shop ETBs" } },
+        { "type": "about_check", "settings": { "text": "Insured & protected packaging", "dimmed": false } },
+        { "type": "about_check", "settings": { "text": "100% authentic, authorized distributor sourced", "dimmed": false } },
+        { "type": "about_check", "settings": { "text": "Same-day dispatch on weekday orders", "dimmed": false } },
+        { "type": "about_check", "settings": { "text": "14-day returns on sealed & unopened products", "dimmed": true } },
+        { "type": "reward_item", "settings": { "icon": "dollar", "text": "1 Vault Coin for every $1 spent" } },
+        { "type": "reward_item", "settings": { "icon": "gift",   "text": "Redeem coins for discounts & gifts" } },
+        { "type": "reward_item", "settings": { "icon": "users",  "text": "Early access for loyal members" } },
+        { "type": "review", "settings": { "text": "Amazing service! My booster boxes arrived double-boxed and in perfect condition. Factory seals intact. Will definitely be a repeat customer.", "author_name": "Alex M.", "author_role": "Pokemon Collector" } },
+        { "type": "review", "settings": { "text": "Fastest shipping I've experienced. Ordered Monday morning and it arrived Tuesday. The price was unbeatable too — best in the market.", "author_name": "Sarah K.", "author_role": "Yu-Gi-Oh Player" } },
+        { "type": "review", "settings": { "text": "Got my Obsidian Flames case and every single box was sealed perfectly. The packaging was incredible. 10/10 experience.", "author_name": "David R.", "author_role": "MTG Enthusiast" } },
+        { "type": "review", "settings": { "text": "The pre-order experience was smooth. They kept me updated and my box arrived exactly on release day. Top tier store.", "author_name": "James T.", "author_role": "TCG Investor" } },
+        { "type": "review", "settings": { "text": "Incredible range — found products here I couldn't source anywhere else. Customer service was also super helpful when I had a question.", "author_name": "Emma L.", "author_role": "Card Collector" } }
+      ]
     }
   ]
 }
