@@ -1,9 +1,52 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-home",
-      "settings": {}
+      "settings": {
+        "hero_autoplay_ms": 5000,
+        "featured_title": "Fan Favourites",
+        "featured_subtitle": "Whether you're building your collection or buying your first box — these are going fast.",
+        "tab1_label": "Pre-Orders",
+        "tab1_collection": "hero-spotlight",
+        "tab2_label": "New Arrivals",
+        "tab2_collection": "",
+        "tab3_label": "Best Sellers",
+        "tab3_collection": "",
+        "cat_title": "Browse by Category",
+        "cat_subtitle": "Booster boxes, ETBs, cases, singles & more.",
+        "show_about": true,
+        "about_title": "About CardVault",
+        "about_desc": "We're passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all — and ship it fast with full insurance.",
+        "about_cta1_label": "Our Story",
+        "about_cta1_url": "",
+        "about_cta2_label": "Contact Us",
+        "about_cta2_url": "",
+        "show_rewards": true,
+        "rewards_eyebrow": "CardVault Rewards",
+        "rewards_title": "Level Up Every Time You Shop",
+        "rewards_desc": "Every dollar you spend earns Vault Coins redeemable for discounts, early access, and exclusive member perks.",
+        "rewards_cta_label": "Join Rewards — It's Free",
+        "rewards_cta_url": "",
+        "reviews_title": "Loved by Thousands of Players",
+        "show_newsletter": true,
+        "nl_title": "Stay in the Loop",
+        "nl_subtitle": "New drops, restocks, and exclusive deals delivered straight to your inbox.",
+        "nl_disclaimer": "No spam, ever. Unsubscribe anytime.",
+        "show_trust_bar": true,
+        "show_marquee": true
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
