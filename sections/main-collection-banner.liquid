@@ -1,0 +1,50 @@
+{% comment %}
+  Supply District — sections/main-collection-banner.liquid
+  Collection page banner: breadcrumbs · left-aligned H1 · description · product count.
+  Cream background, slate/purple typography. Minimal and elegant.
+  Can be used as a standalone section in a collection.json template.
+{% endcomment %}
+
+{{ 'sd-collection.css' | asset_url | stylesheet_tag }}
+
+<div class="sdcb-banner">
+  <div class="sdcb-banner__inner">
+
+    {%- render 'breadcrumbs' -%}
+
+    <h1 class="sdcb-banner__title">
+      {{ collection.title | escape }}
+    </h1>
+
+    {%- if collection.description != blank -%}
+      <div class="sdcb-banner__desc">
+        {{ collection.description }}
+      </div>
+    {%- endif -%}
+
+    <div class="sdcb-banner__meta">
+      {%- if collection.products_count == 0 -%}
+        <span class="sdcb-banner__count">No products</span>
+      {%- elsif collection.products_count == 1 -%}
+        <span class="sdcb-banner__count">1 product</span>
+      {%- else -%}
+        <span class="sdcb-banner__count">{{ collection.products_count }} products</span>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "tag": "div",
+  "class": "sd-collection-banner",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Collection Banner"
+    }
+  ]
+}
+{% endschema %}
