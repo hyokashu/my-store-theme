@@ -795,7 +795,7 @@ input.cv-qty__input {
         <h1 class="cv-title">{{ product.title }}</h1>
         <p class="cv-subtitle">
           {%- assign pack_count     = product.metafields.custom.pack_count | default: '36' -%}
-          {%- assign cards_per_pack = product.metafields.custom.cards_per_pack | default: '10' -%}
+          {%- assign cards_per_pack = product.metafields.custom.cards_per_pack | default: '6' -%}
           {{ pack_count }} Booster Packs &middot; {{ cards_per_pack }} Cards Per Pack &middot; Factory Sealed
         </p>
 
