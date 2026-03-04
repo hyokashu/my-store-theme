@@ -6,6 +6,7 @@
 
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
+  assign available        = current_variant.available
   assign product_images   = product.images
   assign compare_price    = current_variant.compare_at_price
   assign sale_price       = current_variant.price
@@ -220,6 +221,7 @@
 .cv-badge--sealed   { background: rgba(40,45,82,0.07);   color: var(--cv-primary);     border-color: rgba(40,45,82,0.18); }
 .cv-badge--auth     { background: rgba(46,153,99,0.08);  color: var(--cv-success);     border-color: rgba(46,153,99,0.2); }
 .cv-badge--stock    { background: rgba(201,64,48,0.08);  color: var(--cv-destructive); border-color: rgba(201,64,48,0.2); }
+.cv-badge--oos      { background: rgba(0,0,0,0.06);      color: var(--cv-muted-fg);    border-color: rgba(0,0,0,0.15); }
 
 /* Title block */
 .cv-title-block { display: flex; flex-direction: column; gap: 1rem; }
@@ -242,10 +244,10 @@
 .cv-rating__count  { font-size: 0.875rem; color: var(--cv-muted-fg); }
 .cv-rating__dot    { color: var(--cv-border); }
 .cv-rating__viewers {
-  display: none; align-items: center; gap: 0.25rem;
+  align-items: center; gap: 0.25rem;
   font-size: 0.875rem; color: var(--cv-muted-fg);
 }
-@media (min-width: 640px) { .cv-rating__viewers { display: flex; } }
+@media (max-width: 639px) { .cv-rating__viewers { display: none !important; } }
 .cv-rating__viewers svg { width: 0.875rem; height: 0.875rem; }
 
 /* Pricing */
@@ -570,6 +572,15 @@ input.cv-qty__input {
   margin-top: 0.75rem; padding-left: 2.5rem;
   font-size: 0.875rem; line-height: 1.7; color: var(--cv-muted-fg);
 }
+.cv-review-card__img-wrap {
+  margin-top: 0.75rem; padding-left: 2.5rem;
+}
+.cv-review-card__img {
+  max-width: 100px; height: 100px; object-fit: cover;
+  border-radius: var(--cv-radius);
+  border: 1px solid var(--cv-border);
+  display: block;
+}
 .cv-review-card__helpful {
   margin-top: 0.75rem; padding-left: 2.5rem;
   display: inline-flex; align-items: center; gap: 0.375rem;
@@ -639,7 +650,6 @@ input.cv-qty__input {
   box-shadow: var(--cv-shadow-sm);
 }
 
-/* THE OPTION 1 FIX: Flex: 1 forces the info box to stretch, margin-top: auto pushes the price down */
 .cv-product-card__info    { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; }
 .cv-product-card__name    { font-size: 0.875rem; font-weight: 600; line-height: 1.4; }
 .cv-product-card__type    { font-size: 0.75rem; color: var(--cv-muted-fg); }
@@ -658,6 +668,7 @@ input.cv-qty__input {
   background: var(--cv-card);
   padding: 1.25rem;
   box-shadow: var(--cv-shadow-sm);
+  display: none; /* Hidden by default until JS populates it */
 }
 .cv-recent-sales__title {
   font-family: var(--cv-font-head);
@@ -798,7 +809,6 @@ input.cv-qty__input {
     </div>{%- comment -%} ─── Product Info ─── {%- endcomment -%}
     <div class="cv-info">
 
-      {%- comment -%} Breadcrumb — schema.org JSON-LD compliant via snippet {%- endcomment -%}
       {%- render 'breadcrumbs' -%}
 
       {%- comment -%} Badges {%- endcomment -%}
@@ -811,15 +821,24 @@ input.cv-qty__input {
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           Authentic
         </span>
-        {%- if low_stock -%}
+        
+        {%- comment -%} 1. Intelligent Stock Badge {%- endcomment -%}
+        {%- if available == false -%}
+          <span class="cv-badge cv-badge--oos">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Out of Stock
+          </span>
+        {%- elsif low_stock -%}
           <span class="cv-badge cv-badge--stock">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             Only {{ stock_qty }} left
           </span>
         {%- else -%}
+          {%- comment -%} Pseudo-random stock generation based on product ID to bypass caching while remaining consistent {%- endcomment -%}
+          {%- assign pseudo_random = product.id | modulo: 4 | plus: 2 -%}
           <span class="cv-badge cv-badge--stock">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Only 3 left
+            Only {{ pseudo_random }} left
           </span>
         {%- endif -%}
       </div>
@@ -847,9 +866,11 @@ input.cv-qty__input {
           <span class="cv-rating__score">{{ rating_value }}</span>
           <span class="cv-rating__count">({{ rating_count }} reviews)</span>
           <span class="cv-rating__dot" aria-hidden="true">&middot;</span>
-          <span class="cv-rating__viewers">
+          
+          {%- comment -%} 2. Intelligent Live Viewers Wrapper {%- endcomment -%}
+          <span class="cv-rating__viewers" id="cv-live-viewers" style="display: none;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            {{ section.settings.viewers_count | default: 18 }} people viewing
+            <span id="cv-viewers-count">0</span>&nbsp;people viewing
           </span>
         </div>
       </div>
@@ -935,9 +956,9 @@ input.cv-qty__input {
         </div>
 
         <div class="cv-btn-row">
-          <button type="submit" name="add" class="cv-btn cv-btn--primary" id="cv-add-to-cart">
+          <button type="submit" name="add" class="cv-btn cv-btn--primary" id="cv-add-to-cart" {% unless available %}disabled{% endunless %}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-            <span id="cv-atc-label">Add to Cart</span>
+            <span id="cv-atc-label">{% if available %}Add to Cart{% else %}Out of Stock{% endif %}</span>
           </button>
           <button type="button" class="cv-btn cv-btn--icon" id="cv-wishlist-btn" aria-label="Add to wishlist" aria-pressed="false">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -947,23 +968,19 @@ input.cv-qty__input {
           </button>
         </div>
 
-        <a href="/cart" class="cv-btn cv-btn--outline-primary" id="cv-buy-now">Buy Now</a>
+        {%- if available -%}
+          <a href="/cart" class="cv-btn cv-btn--outline-primary" id="cv-buy-now">Buy Now</a>
+        {%- endif -%}
 
-        {%- comment -%}
-          Payment Trust Badges — hardcoded so they always render regardless of
-          whether shop.enabled_payment_types is populated in the current env.
-          Uses clean pill badges with brand colours and short text labels.
-        {%- endcomment -%}
+        {%- comment -%} 4. Cleaned up Payment Badges (Visa, MC, PayPal, Shop) {%- endcomment -%}
         <div class="cv-payment-badges" aria-label="Accepted payment methods">
 
-          {{- '' -}} {%- comment -%} Visa {%- endcomment -%}
           <span class="cv-payment-badge" title="Visa">
             <svg xmlns="http://www.w3.org/2000/svg" width="38" height="12" viewBox="0 0 38 12" aria-hidden="true">
               <text x="0" y="10" font-family="Arial,sans-serif" font-size="10" font-weight="900" fill="#1A1F71" letter-spacing="-0.5">VISA</text>
             </svg>
           </span>
 
-          {{- '' -}} {%- comment -%} Mastercard {%- endcomment -%}
           <span class="cv-payment-badge" title="Mastercard" style="padding:0 0.375rem">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 30 18" aria-hidden="true">
               <circle cx="11" cy="9" r="8" fill="#EB001B"/>
@@ -972,7 +989,6 @@ input.cv-qty__input {
             </svg>
           </span>
 
-          {{- '' -}} {%- comment -%} PayPal {%- endcomment -%}
           <span class="cv-payment-badge" title="PayPal">
             <svg xmlns="http://www.w3.org/2000/svg" width="46" height="12" viewBox="0 0 46 12" aria-hidden="true">
               <text x="0" y="9.5" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#003087">Pay</text>
@@ -980,36 +996,9 @@ input.cv-qty__input {
             </svg>
           </span>
 
-          {{- '' -}} {%- comment -%} Afterpay {%- endcomment -%}
-          <span class="cv-payment-badge" title="Afterpay" style="background:#B2FCE4;border-color:#7de8c8">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="12" viewBox="0 0 48 12" aria-hidden="true">
-              <text x="1" y="9.5" font-family="Arial,sans-serif" font-size="7.5" font-weight="700" fill="#000">afterpay</text>
-            </svg>
-          </span>
-
-          {{- '' -}} {%- comment -%} Zip {%- endcomment -%}
-          <span class="cv-payment-badge" title="Zip" style="background:#AA8FFF;border-color:#9370f0">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="12" viewBox="0 0 22 12" aria-hidden="true">
-              <text x="1" y="9.5" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#fff">zip</text>
-            </svg>
-          </span>
-
-          {{- '' -}} {%- comment -%} Apple Pay {%- endcomment -%}
-          <span class="cv-payment-badge" title="Apple Pay">
-            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="12" viewBox="0 0 42 12" aria-hidden="true">
-              <text x="0" y="9.5" font-family="-apple-system,BlinkMacSystemFont,'SF Pro',sans-serif" font-size="8" font-weight="600" fill="#000"> Pay</text>
-            </svg>
-          </span>
-
-          {{- '' -}} {%- comment -%} Google Pay {%- endcomment -%}
-          <span class="cv-payment-badge" title="Google Pay">
-            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="12" viewBox="0 0 56 12" aria-hidden="true">
-              <text x="0" y="9.5" font-family="'Product Sans',Roboto,Arial,sans-serif" font-size="8" fill="#4285F4" font-weight="500">G</text>
-              <text x="8" y="9.5" font-family="'Product Sans',Roboto,Arial,sans-serif" font-size="8" fill="#EA4335" font-weight="500">o</text>
-              <text x="14" y="9.5" font-family="'Product Sans',Roboto,Arial,sans-serif" font-size="8" fill="#FBBC04" font-weight="500">o</text>
-              <text x="20" y="9.5" font-family="'Product Sans',Roboto,Arial,sans-serif" font-size="8" fill="#4285F4" font-weight="500">g</text>
-              <text x="26" y="9.5" font-family="'Product Sans',Roboto,Arial,sans-serif" font-size="8" fill="#34A853" font-weight="500">le</text>
-              <text x="34" y="9.5" font-family="'Product Sans',Roboto,Arial,sans-serif" font-size="8" fill="#5F6368" font-weight="500"> Pay</text>
+          <span class="cv-payment-badge" title="Shop Pay" style="background:#5A31F4;border-color:#5A31F4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="12" viewBox="0 0 36 12" aria-hidden="true">
+              <text x="2" y="9.5" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9" font-weight="700" fill="#fff">Shop</text>
             </svg>
           </span>
 
@@ -1149,7 +1138,7 @@ input.cv-qty__input {
       </div>
     </div>
 
-    {%- comment -%} Reviews tab {%- endcomment -%}
+    {%- comment -%} 3. Dynamic Theme Blocks Reviews tab {%- endcomment -%}
     <div class="cv-tabs__panel" id="cv-tab-reviews" role="tabpanel" aria-labelledby="cv-btn-reviews">
       <div class="cv-reviews">
 
@@ -1177,74 +1166,46 @@ input.cv-qty__input {
           </div>
         </div>
 
-        <div class="cv-review-card">
-          <div class="cv-reviewer">
-            <div class="cv-reviewer__top">
-              <div class="cv-reviewer__avatar" aria-hidden="true">A</div>
-              <span class="cv-reviewer__name">Alex M.</span>
-              <span class="cv-badge--verified">Verified Purchase</span>
-            </div>
-            <div class="cv-reviewer__meta">
-              <div class="cv-stars" aria-label="5 out of 5">
-                {%- for i in (1..5) -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>{%- endfor -%}
+        {%- assign review_blocks = section.blocks | where: "type", "review" -%}
+        {%- if review_blocks.size > 0 -%}
+          {%- for block in review_blocks -%}
+            <div class="cv-review-card" {{ block.shopify_attributes }}>
+              <div class="cv-reviewer">
+                <div class="cv-reviewer__top">
+                  <div class="cv-reviewer__avatar" aria-hidden="true">{{ block.settings.initial }}</div>
+                  <span class="cv-reviewer__name">{{ block.settings.author }}</span>
+                  <span class="cv-badge--verified">Verified Purchase</span>
+                </div>
+                <div class="cv-reviewer__meta">
+                  <div class="cv-stars" aria-label="{{ block.settings.rating }} out of 5">
+                    {%- for i in (1..5) -%}
+                      {%- if i <= block.settings.rating -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      {%- else -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem;fill:var(--cv-secondary);color:var(--cv-secondary)" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                  <span class="cv-reviewer__date">{{ block.settings.date }}</span>
+                </div>
               </div>
-              <span class="cv-reviewer__date">Feb 12, 2026</span>
-            </div>
-          </div>
-          <p class="cv-review-card__body">Amazing pull rates! Got two illustration rares and a gold card from this box. Arrived sealed and in perfect condition with great packaging.</p>
-          <button class="cv-review-card__helpful" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-            Helpful (34)
-          </button>
-        </div>
+              <p class="cv-review-card__body">{{ block.settings.text }}</p>
 
-        <div class="cv-review-card">
-          <div class="cv-reviewer">
-            <div class="cv-reviewer__top">
-              <div class="cv-reviewer__avatar" aria-hidden="true">S</div>
-              <span class="cv-reviewer__name">Sarah K.</span>
-              <span class="cv-badge--verified">Verified Purchase</span>
-            </div>
-            <div class="cv-reviewer__meta">
-              <div class="cv-stars" aria-label="5 out of 5">
-                {%- for i in (1..5) -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>{%- endfor -%}
-              </div>
-              <span class="cv-reviewer__date">Jan 28, 2026</span>
-            </div>
-          </div>
-          <p class="cv-review-card__body">Fast shipping and the box was double-boxed with bubble wrap. Factory seal was intact. Best prices I&rsquo;ve found online for this set.</p>
-          <button class="cv-review-card__helpful" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-            Helpful (21)
-          </button>
-        </div>
+              {%- if block.settings.image != blank -%}
+                <div class="cv-review-card__img-wrap">
+                  <img src="{{ block.settings.image | image_url: width: 300 }}" class="cv-review-card__img" alt="Review photo" loading="lazy">
+                </div>
+              {%- endif -%}
 
-        <div class="cv-review-card">
-          <div class="cv-reviewer">
-            <div class="cv-reviewer__top">
-              <div class="cv-reviewer__avatar" aria-hidden="true">D</div>
-              <span class="cv-reviewer__name">David R.</span>
-              <span class="cv-badge--verified">Verified Purchase</span>
+              <button class="cv-review-card__helpful" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                Helpful ({{ block.settings.helpful_count }})
+              </button>
             </div>
-            <div class="cv-reviewer__meta">
-              <div class="cv-stars" aria-label="4 out of 5">
-                {%- for i in (1..5) -%}
-                  {%- if i <= 4 -%}
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  {%- else -%}
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem;fill:var(--cv-secondary);color:var(--cv-secondary)" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  {%- endif -%}
-                {%- endfor -%}
-              </div>
-              <span class="cv-reviewer__date">Jan 15, 2026</span>
-            </div>
-          </div>
-          <p class="cv-review-card__body">Great box overall. Pull rates were decent though I didn&rsquo;t hit the big chase card. Packaging was excellent and arrived quickly. Will definitely order again.</p>
-          <button class="cv-review-card__helpful" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-            Helpful (15)
-          </button>
-        </div>
+          {%- endfor -%}
+        {%- else -%}
+          <p style="font-size: 0.875rem; color: var(--cv-muted-fg);">There are no reviews for this product yet.</p>
+        {%- endif -%}
 
       </div>
     </div>
@@ -1315,28 +1276,30 @@ input.cv-qty__input {
     </div>
   </section>
 
-  {%- comment -%} ── Recent Sales Ticker ── {%- endcomment -%}
-  <div class="cv-recent-sales">
+  {%- comment -%} 5. Intelligent Recent Sales Ticker {%- endcomment -%}
+  <div class="cv-recent-sales" id="cv-recent-sales-container">
     <p class="cv-recent-sales__title">Recent Sales</p>
-    <div class="cv-recent-sales__list">
-      <div class="cv-sale-item">
-        <div class="cv-sale-item__info"><span class="cv-sale-item__name">Obsidian Flames Booster Box</span><span class="cv-sale-item__time">12 minutes ago</span></div>
-        <span class="cv-sale-item__price">$144.99</span>
+    <div class="cv-recent-sales__list" id="cv-recent-sales-list">
       </div>
-      <div class="cv-sale-item">
-        <div class="cv-sale-item__info"><span class="cv-sale-item__name">Paldea Evolved ETB</span><span class="cv-sale-item__time">34 minutes ago</span></div>
-        <span class="cv-sale-item__price">$44.99</span>
-      </div>
-      <div class="cv-sale-item">
-        <div class="cv-sale-item__info"><span class="cv-sale-item__name">151 Booster Box (Japanese)</span><span class="cv-sale-item__time">1 hour ago</span></div>
-        <span class="cv-sale-item__price">$89.99</span>
-      </div>
-      <div class="cv-sale-item">
-        <div class="cv-sale-item__info"><span class="cv-sale-item__name">Obsidian Flames Case (6 Boxes)</span><span class="cv-sale-item__time">2 hours ago</span></div>
-        <span class="cv-sale-item__price">$824.99</span>
-      </div>
-    </div>
   </div>
+
+  <script type="application/json" id="cv-recent-products-data">
+    [
+      {%- assign sale_items_count = 0 -%}
+      {%- if related_collection -%}
+        {%- for p in related_collection.products limit: 15 -%}
+          {%- if p.available and p.id != product.id -%}
+            {%- if sale_items_count > 0 -%},{%- endif -%}
+            {
+              "title": {{ p.title | json }},
+              "price": "{{ p.price | money }}"
+            }
+            {%- assign sale_items_count = sale_items_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    ]
+  </script>
 
 </section>{%- comment -%} ── Sticky Mobile Cart Bar ── {%- endcomment -%}
 <div class="cv-sticky-cart" id="cv-sticky-cart" role="region" aria-label="Quick add to cart">
@@ -1352,9 +1315,10 @@ input.cv-qty__input {
       style="flex:1;height:2.75rem;font-size:0.9375rem;background:var(--color-cta-primary);border-color:var(--color-cta-primary);color:var(--color-cta-primary-fg);"
       type="button"
       id="cv-sticky-atc"
+      {% unless available %}disabled{% endunless %}
     >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1rem;height:1rem"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      Add to Cart
+      {% if available %}Add to Cart{% else %}Out of Stock{% endif %}
     </button>
   </div>
 </div>
@@ -1362,6 +1326,48 @@ input.cv-qty__input {
 <script>
 (function () {
   'use strict';
+
+  /* ── 2. Random Live Viewers ── */
+  var viewersEl = document.getElementById('cv-live-viewers');
+  var viewersCount = document.getElementById('cv-viewers-count');
+  if (viewersEl && viewersCount) {
+    var viewers = Math.floor(Math.random() * 21); // 0 to 20
+    if (viewers > 0) {
+      viewersCount.textContent = viewers;
+      viewersEl.style.display = 'inline-flex'; 
+    } else {
+      viewersEl.style.display = 'none';
+    }
+  }
+
+  /* ── 5. Dynamic Recent Sales ── */
+  var recentDataEl = document.getElementById('cv-recent-products-data');
+  if (recentDataEl) {
+    try {
+      var products = JSON.parse(recentDataEl.textContent);
+      if (products.length > 0) {
+        products.sort(function() { return 0.5 - Math.random(); });
+        var listEl = document.getElementById('cv-recent-sales-list');
+        var container = document.getElementById('cv-recent-sales-container');
+        container.style.display = 'block';
+
+        var count = Math.min(3, products.length);
+        var times = ['12 minutes ago', '28 minutes ago', '1 hour ago', '3 hours ago', '5 hours ago'];
+        times.sort(function() { return 0.5 - Math.random(); });
+
+        for (var i = 0; i < count; i++) {
+          var html = '<div class="cv-sale-item">' +
+                       '<div class="cv-sale-item__info">' +
+                         '<span class="cv-sale-item__name">' + products[i].title + '</span>' +
+                         '<span class="cv-sale-item__time">' + times[i] + '</span>' +
+                       '</div>' +
+                       '<span class="cv-sale-item__price">' + products[i].price + '</span>' +
+                     '</div>';
+          listEl.insertAdjacentHTML('beforeend', html);
+        }
+      }
+    } catch(e) {}
+  }
 
   /* ── Gallery ── */
   var gallery  = document.getElementById('cv-gallery');
@@ -1620,6 +1626,56 @@ input.cv-qty__input {
           "default": "Verified sealed product"
         }
       ]
+    },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "Alex M."
+        },
+        {
+          "type": "text",
+          "id": "initial",
+          "label": "Avatar Initial",
+          "default": "A"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Star Rating",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date String",
+          "default": "Feb 12, 2026"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Review Body",
+          "default": "Amazing pull rates! Arrived sealed and in perfect condition with great packaging."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Review Image (Optional)"
+        },
+        {
+          "type": "number",
+          "id": "helpful_count",
+          "label": "Helpful Votes",
+          "default": 34
+        }
+      ]
     }
   ],
   "settings": [
@@ -1672,16 +1728,6 @@ input.cv-qty__input {
       "id": "tab_reviews_label",
       "label": "Tab 3 label",
       "default": "Reviews"
-    },
-    {
-      "type": "header",
-      "content": "Social Proof"
-    },
-    {
-      "type": "number",
-      "id": "viewers_count",
-      "label": "\"People viewing\" count",
-      "default": 18
     }
   ],
   "presets": [
@@ -1710,6 +1756,28 @@ input.cv-qty__input {
             "icon": "refresh",
             "title": "14-Day Returns",
             "description": "Sealed & unopened only"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Alex M.",
+            "initial": "A",
+            "rating": 5,
+            "date": "Feb 12, 2026",
+            "text": "Amazing pull rates! Got two illustration rares and a gold card from this box. Arrived sealed and in perfect condition with great packaging.",
+            "helpful_count": 34
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Sarah K.",
+            "initial": "S",
+            "rating": 5,
+            "date": "Jan 28, 2026",
+            "text": "Fast shipping and the box was double-boxed with bubble wrap. Factory seal was intact. Best prices I’ve found online for this set.",
+            "helpful_count": 21
           }
         }
       ]
