@@ -1,0 +1,550 @@
+{% comment %}
+  Supply District — sections/main-search.liquid
+  Premium search results page. Matches the collection page design exactly:
+  • Cream/slate 2-tone aesthetic
+  • 4-col desktop / 3-col tablet / 2-col mobile grid
+  • sd-product-card.liquid for each product result
+  • Non-product results (pages, articles) skipped from the grid
+  • Empty state with friendly copy + CTA back to collections
+  • NO duplicate search form — relies on the global header search bar
+{% endcomment %}
+
+{{ 'sd-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'sd-collection.js' | asset_url }}" defer></script>
+
+<style>
+/* ── Search page specific styles ── */
+.sdsr {
+  background: var(--cv-bg, #f7f6f3);
+  font-family: var(--cv-font-sans, 'Inter', system-ui, sans-serif);
+  min-height: 60vh;
+}
+
+/* ── Header band ── */
+.sdsr__header {
+  border-bottom: 1px solid var(--cv-border, #dedad5);
+  padding: 2rem 1rem 1.5rem;
+  background: var(--cv-bg, #f7f6f3);
+}
+
+.sdsr__header-inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.sdsr__title {
+  font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+  color: var(--cv-primary, #282d52);
+  letter-spacing: -0.025em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.sdsr__term {
+  color: var(--cv-primary, #282d52);
+  /* italic adds distinction without a colour change */
+  font-style: italic;
+}
+
+.sdsr__count {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--cv-muted-fg, #76798c);
+  background: var(--cv-secondary, #eeecea);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Grid wrapper ── */
+.sdsr__body {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+/* Non-product results (articles / pages) — subtle list below grid */
+.sdsr__other-results {
+  margin-top: 3rem;
+  border-top: 1px solid var(--cv-border, #dedad5);
+  padding-top: 1.5rem;
+}
+
+.sdsr__other-heading {
+  font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cv-muted-fg, #76798c);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 0.875rem;
+}
+
+.sdsr__other-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sdsr__other-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--cv-primary, #282d52);
+  text-decoration: none;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--cv-radius, 0.5rem);
+  transition: background 0.12s;
+}
+
+.sdsr__other-link:hover {
+  background: var(--cv-secondary, #eeecea);
+}
+
+.sdsr__other-type {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--cv-muted-fg, #76798c);
+  background: var(--cv-secondary, #eeecea);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* ── Empty state ── */
+.sdsr__empty {
+  text-align: center;
+  padding: 5rem 1rem 4rem;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.sdsr__empty-icon {
+  color: var(--cv-border, #dedad5);
+  margin-bottom: 1.25rem;
+}
+
+.sdsr__empty-title {
+  font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--cv-primary, #282d52);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.sdsr__empty-sub {
+  font-size: 0.95rem;
+  color: var(--cv-muted-fg, #76798c);
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+.sdsr__empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.sdsr__empty-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sdsr__empty-btn--primary {
+  background: var(--cv-primary, #282d52);
+  color: var(--cv-primary-fg, #f8f7f5);
+}
+
+.sdsr__empty-btn--primary:hover {
+  background: #1c1f36;
+  opacity: 0.88;
+}
+
+.sdsr__empty-btn--ghost {
+  background: transparent;
+  color: var(--cv-primary, #282d52);
+  border: 1.5px solid var(--cv-border, #dedad5);
+}
+
+.sdsr__empty-btn--ghost:hover {
+  border-color: var(--cv-primary, #282d52);
+}
+
+/* ── Suggestions after empty ── */
+.sdsr__suggestions {
+  margin-top: 2.5rem;
+  text-align: left;
+  background: var(--cv-card, #ffffff);
+  border: 1px solid var(--cv-border, #dedad5);
+  border-radius: calc(var(--cv-radius, 0.5rem) * 1.5);
+  padding: 1.25rem;
+}
+
+.sdsr__suggestions-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--cv-muted-fg, #76798c);
+  margin: 0 0 0.75rem;
+}
+
+.sdsr__suggestions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.sdsr__suggestion-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--cv-primary, #282d52);
+  background: var(--cv-secondary, #eeecea);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.12s;
+}
+
+.sdsr__suggestion-link:hover {
+  background: var(--cv-border, #dedad5);
+}
+</style>
+
+{%- liquid
+  assign terms         = search.terms
+  assign results_count = search.results_count
+  assign products_per_page = section.settings.products_per_page | default: 24
+
+  comment
+    Separate products from other result types (articles, pages)
+    so we can render the product grid first, then a subtle list below.
+  endcomment
+-%}
+
+<div class="sdsr">
+
+  {%- comment -%} ════════ HEADER ════════ {%- endcomment -%}
+  <div class="sdsr__header">
+    <div class="sdsr__header-inner">
+
+      {%- if search.performed and terms != blank -%}
+        <h1 class="sdsr__title">
+          Search results for <span class="sdsr__term">"{{ terms | escape }}"</span>
+        </h1>
+        {%- if results_count > 0 -%}
+          <span class="sdsr__count">
+            {{ results_count }} result{%- if results_count != 1 -%}s{%- endif -%}
+          </span>
+        {%- endif -%}
+      {%- elsif search.performed -%}
+        <h1 class="sdsr__title">Search</h1>
+      {%- else -%}
+        <h1 class="sdsr__title">What are you looking for?</h1>
+      {%- endif -%}
+
+    </div>
+  </div>
+
+  <div class="sdsr__body">
+
+    {%- if search.performed -%}
+
+      {%- if results_count > 0 -%}
+
+        {%- paginate search.results by products_per_page -%}
+
+          {%- comment -%} ════════ PRODUCT GRID ════════ {%- endcomment -%}
+          {%- liquid
+            assign has_products = false
+            for item in search.results
+              if item.object_type == 'product'
+                assign has_products = true
+                break
+              endif
+            endfor
+          -%}
+
+          {%- if has_products -%}
+            <div class="sdcpg__grid">
+              {%- for item in search.results -%}
+                {%- if item.object_type == 'product' -%}
+                  {%- render 'sd-product-card', product: item -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} ════════ NON-PRODUCT RESULTS (articles / pages) ════════ {%- endcomment -%}
+          {%- liquid
+            assign other_results = search.results | where: 'object_type', 'article'
+            assign page_results  = search.results | where: 'object_type', 'page'
+          -%}
+
+          {%- if other_results.size > 0 or page_results.size > 0 -%}
+            <div class="sdsr__other-results">
+              <p class="sdsr__other-heading">Other results</p>
+              <ul class="sdsr__other-list">
+                {%- for item in search.results -%}
+                  {%- unless item.object_type == 'product' -%}
+                    <li>
+                      <a href="{{ item.url }}" class="sdsr__other-link">
+                        <span class="sdsr__other-type">{{ item.object_type | capitalize }}</span>
+                        {{ item.title | escape }}
+                        <svg style="margin-left:auto;flex-shrink:0;opacity:0.4" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                      </a>
+                    </li>
+                  {%- endunless -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} ════════ PAGINATION ════════ {%- endcomment -%}
+          {%- if paginate.pages > 1 -%}
+            <nav class="sdcpg__pagination" aria-label="Search results pages">
+
+              {%- if paginate.previous -%}
+                <a href="{{ paginate.previous.url }}" class="sdcpg__page-link" aria-label="Previous page">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m15 18-6-6 6-6"/>
+                  </svg>
+                </a>
+              {%- endif -%}
+
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="sdcpg__page-link">{{ part.title }}</a>
+                {%- elsif part.title == paginate.current_page -%}
+                  <span class="sdcpg__page-current" aria-current="page">{{ part.title }}</span>
+                {%- else -%}
+                  <span class="sdcpg__page-dots">{{ part.title }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- if paginate.next -%}
+                <a href="{{ paginate.next.url }}" class="sdcpg__page-link" aria-label="Next page">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </a>
+              {%- endif -%}
+
+            </nav>
+          {%- endif -%}
+
+        {%- endpaginate -%}
+
+      {%- else -%}
+
+        {%- comment -%} ════════ EMPTY STATE ════════ {%- endcomment -%}
+        <div class="sdsr__empty">
+
+          <div class="sdsr__empty-icon" aria-hidden="true">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.25"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              <line x1="8" y1="11" x2="14" y2="11"/>
+            </svg>
+          </div>
+
+          <h2 class="sdsr__empty-title">
+            No results for&nbsp;"{{ terms | escape }}"
+          </h2>
+          <p class="sdsr__empty-sub">
+            We couldn't find any exact matches for that search.
+            Try checking your spelling, using fewer keywords, or browsing below.
+          </p>
+
+          <div class="sdsr__empty-actions">
+            <a href="{{ routes.all_products_collection_url }}" class="sdsr__empty-btn sdsr__empty-btn--primary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              Browse All Products
+            </a>
+            <a href="{{ routes.collections_url }}" class="sdsr__empty-btn sdsr__empty-btn--ghost">
+              View Collections
+            </a>
+          </div>
+
+          {%- comment -%} ── Quick-browse suggestions ── {%- endcomment -%}
+          {%- if section.settings.suggestion_1_label != blank or section.settings.suggestion_2_label != blank -%}
+            <div class="sdsr__suggestions">
+              <p class="sdsr__suggestions-title">Try browsing</p>
+              <ul class="sdsr__suggestions-list">
+                {%- if section.settings.suggestion_1_label != blank -%}
+                  <li>
+                    <a href="{{ section.settings.suggestion_1_url | default: '#' }}" class="sdsr__suggestion-link">
+                      {{ section.settings.suggestion_1_label | escape }}
+                    </a>
+                  </li>
+                {%- endif -%}
+                {%- if section.settings.suggestion_2_label != blank -%}
+                  <li>
+                    <a href="{{ section.settings.suggestion_2_url | default: '#' }}" class="sdsr__suggestion-link">
+                      {{ section.settings.suggestion_2_label | escape }}
+                    </a>
+                  </li>
+                {%- endif -%}
+                {%- if section.settings.suggestion_3_label != blank -%}
+                  <li>
+                    <a href="{{ section.settings.suggestion_3_url | default: '#' }}" class="sdsr__suggestion-link">
+                      {{ section.settings.suggestion_3_label | escape }}
+                    </a>
+                  </li>
+                {%- endif -%}
+                {%- if section.settings.suggestion_4_label != blank -%}
+                  <li>
+                    <a href="{{ section.settings.suggestion_4_url | default: '#' }}" class="sdsr__suggestion-link">
+                      {{ section.settings.suggestion_4_label | escape }}
+                    </a>
+                  </li>
+                {%- endif -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+        </div>
+        {%- comment -%} /.sdsr__empty {%- endcomment -%}
+
+      {%- endif -%}
+
+    {%- else -%}
+
+      {%- comment -%} ── search.performed == false: no query yet ── {%- endcomment -%}
+      <div class="sdsr__empty">
+        <div class="sdsr__empty-icon" aria-hidden="true">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.25"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+        <h2 class="sdsr__empty-title">Start searching</h2>
+        <p class="sdsr__empty-sub">Use the search bar above to find products.</p>
+        <div class="sdsr__empty-actions">
+          <a href="{{ routes.collections_url }}" class="sdsr__empty-btn sdsr__empty-btn--primary">Browse Collections</a>
+        </div>
+      </div>
+
+    {%- endif -%}
+
+  </div>{%- comment -%} /.sdsr__body {%- endcomment -%}
+</div>{%- comment -%} /.sdsr {%- endcomment -%}
+
+{% schema %}
+{
+  "name": "Search Results",
+  "tag": "div",
+  "class": "sd-search-page",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Results per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Empty-state suggestions"
+    },
+    {
+      "type": "paragraph",
+      "content": "Quick-browse links shown when a search returns zero results."
+    },
+    {
+      "type": "text",
+      "id": "suggestion_1_label",
+      "label": "Suggestion 1 — label",
+      "default": "Pokémon"
+    },
+    {
+      "type": "url",
+      "id": "suggestion_1_url",
+      "label": "Suggestion 1 — URL"
+    },
+    {
+      "type": "text",
+      "id": "suggestion_2_label",
+      "label": "Suggestion 2 — label",
+      "default": "One Piece"
+    },
+    {
+      "type": "url",
+      "id": "suggestion_2_url",
+      "label": "Suggestion 2 — URL"
+    },
+    {
+      "type": "text",
+      "id": "suggestion_3_label",
+      "label": "Suggestion 3 — label",
+      "default": ""
+    },
+    {
+      "type": "url",
+      "id": "suggestion_3_url",
+      "label": "Suggestion 3 — URL"
+    },
+    {
+      "type": "text",
+      "id": "suggestion_4_label",
+      "label": "Suggestion 4 — label",
+      "default": ""
+    },
+    {
+      "type": "url",
+      "id": "suggestion_4_url",
+      "label": "Suggestion 4 — URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Search Results"
+    }
+  ]
+}
+{% endschema %}
