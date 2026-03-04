@@ -391,8 +391,6 @@ input.cv-qty__input {
 }
 .cv-btn--icon.is-wishlisted svg { fill: var(--cv-destructive); }
 
-/* cv-btn--outline-primary now defined in the CTA section above */
-
 .cv-btn-row { display: flex; gap: 0.75rem; }
 
 /* Trust signals */
@@ -1323,7 +1321,7 @@ input.cv-qty__input {
               </div>
               <div class="cv-product-card__info">
                 <h3 class="cv-product-card__name">{{ rec.title }}</h3>
-                <p class="cv-product-card__type">{{ rec.type }}</p>
+                <p class="cv-product-card__type">{{ rec.type | default: '&nbsp;' }}</p>
                 <div class="cv-product-card__prices">
                   <span class="cv-product-card__price">{{ rec_var.price | money }}</span>
                   {%- if rec_sale -%}<span class="cv-product-card__compare">{{ rec_var.compare_at_price | money }}</span>{%- endif -%}
