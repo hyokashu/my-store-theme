@@ -1,0 +1,336 @@
+{% comment %}
+  Supply District — sections/trust-anchors.liquid
+  ─────────────────────────────────────────────────
+  Horizontal trust bar with up to 6 icon+label+description blocks.
+  · 4-col desktop · 2-col tablet · 1-col mobile
+  · SVG icons rendered inline via Liquid case/when (no external files)
+  · Von Restorff: NO green — all icons use --cv-primary indigo
+  · Block type: "anchor" with icon (select), label, description
+  · 4 preset blocks: 100% Authentic, Mint Condition, Fast Dispatch, Secure Checkout
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ── Design Tokens ── */
+  .hta-bar {
+    --cv-bg:       #f7f6f3;
+    --cv-fg:       #1c1f36;
+    --cv-primary:  #282d52;
+    --cv-card:     #ffffff;
+    --cv-secondary:#eeecea;
+    --cv-muted-fg: #76798c;
+    --cv-border:   #dedad5;
+    --cv-radius:   0.5rem;
+    --cv-font-sans:'Inter', sans-serif;
+    --cv-font-head:'Space Grotesk', sans-serif;
+  }
+
+  /* ── Section shell ── */
+  .hta-bar {
+    background: var(--cv-card);
+    border-top:    1px solid var(--cv-border);
+    border-bottom: 1px solid var(--cv-border);
+    padding: 2.25rem 1.5rem;
+  }
+
+  /* ── Inner container ── */
+  .hta-bar__inner {
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+
+  /* ── Grid ── */
+  .hta-bar__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ── Single anchor item ── */
+  .hta-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  /* ── Icon wrapper ── */
+  .hta-item__icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cv-secondary);
+    border-radius: var(--cv-radius);
+    color: var(--cv-primary);
+  }
+
+  /* ── Text ── */
+  .hta-item__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-top: 0.1rem;
+  }
+
+  .hta-item__label {
+    font-family: var(--cv-font-head);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--cv-fg);
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .hta-item__desc {
+    font-family: var(--cv-font-sans);
+    font-size: 0.8125rem;
+    color: var(--cv-muted-fg);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ── Dividers between items (desktop only) ── */
+  .hta-item + .hta-item {
+    border-left: 1px solid var(--cv-border);
+    padding-left: 2rem;
+    margin-left: -1rem;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1023px) {
+    .hta-bar__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .hta-item + .hta-item {
+      border-left: none;
+      padding-left: 0;
+      margin-left: 0;
+    }
+    /* Re-add dividers only for items 3 and 4 (second row right col) */
+    .hta-item:nth-child(2n) {
+      border-left: 1px solid var(--cv-border);
+      padding-left: 2rem;
+      margin-left: -1rem;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .hta-bar__grid {
+      grid-template-columns: 1fr;
+    }
+    .hta-item + .hta-item,
+    .hta-item:nth-child(2n) {
+      border-left: none;
+      padding-left: 0;
+      margin-left: 0;
+      border-top: 1px solid var(--cv-border);
+      padding-top: 1.25rem;
+    }
+    .hta-bar {
+      padding: 1.75rem 1.25rem;
+    }
+  }
+</style>
+
+{%- if section.blocks.size > 0 -%}
+  <div class="hta-bar" id="hta-{{ section.id }}">
+    <div class="hta-bar__inner">
+      <ul class="hta-bar__grid" role="list">
+
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'anchor' -%}
+            {%- liquid
+              assign icon_id = block.settings.icon | default: 'shield'
+              assign label   = block.settings.label
+              assign desc    = block.settings.description
+            -%}
+            <li class="hta-item" {{ block.shopify_attributes }}>
+              <div class="hta-item__icon" aria-hidden="true">
+                {%- comment -%} ── SVG icon case/when ── {%- endcomment -%}
+                {%- case icon_id -%}
+
+                  {%- when 'shield' -%}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+
+                  {%- when 'sparkle' -%}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.287 1.288L3 12l5.8 1.9a2 2 0 0 1 1.288 1.287L12 21l1.9-5.8a2 2 0 0 1 1.287-1.288L21 12l-5.8-1.9a2 2 0 0 1-1.288-1.287z"/>
+                    </svg>
+
+                  {%- when 'bolt' -%}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+
+                  {%- when 'lock' -%}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+
+                  {%- when 'truck' -%}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/>
+                      <rect x="9" y="11" width="14" height="10" rx="1"/>
+                      <circle cx="12" cy="21" r="1"/>
+                      <circle cx="20" cy="21" r="1"/>
+                    </svg>
+
+                  {%- when 'tag' -%}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                      <line x1="7" y1="7" x2="7.01" y2="7"/>
+                    </svg>
+
+                  {%- when 'check' -%}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+
+                  {%- when 'package' -%}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/>
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                      <line x1="12" y1="22.08" x2="12" y2="12"/>
+                    </svg>
+
+                  {%- else -%}
+                    {%- comment -%} Fallback: generic star/asterisk ── {%- endcomment -%}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"/>
+                      <line x1="12" y1="8" x2="12" y2="16"/>
+                      <line x1="8" y1="12" x2="16" y2="12"/>
+                    </svg>
+
+                {%- endcase -%}
+              </div>
+
+              <div class="hta-item__text">
+                {%- if label != blank -%}
+                  <p class="hta-item__label">{{ label | escape }}</p>
+                {%- endif -%}
+                {%- if desc != blank -%}
+                  <p class="hta-item__desc">{{ desc | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Trust Anchors",
+  "tag": "div",
+  "class": "sd-trust-anchors",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "anchor",
+      "name": "Trust Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shield",  "label": "Shield (Authentic)" },
+            { "value": "sparkle", "label": "Sparkle (Mint Condition)" },
+            { "value": "bolt",    "label": "Bolt (Fast Dispatch)" },
+            { "value": "lock",    "label": "Lock (Secure Checkout)" },
+            { "value": "truck",   "label": "Truck (Delivery)" },
+            { "value": "tag",     "label": "Tag (Best Price)" },
+            { "value": "check",   "label": "Check (Verified)" },
+            { "value": "package", "label": "Package (Sealed)" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "100% Authentic"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Genuine products direct from authorised distributors"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Anchors",
+      "blocks": [
+        {
+          "type": "anchor",
+          "settings": {
+            "icon": "shield",
+            "label": "100% Authentic",
+            "description": "Genuine products from authorised Australian distributors"
+          }
+        },
+        {
+          "type": "anchor",
+          "settings": {
+            "icon": "sparkle",
+            "label": "Mint Condition",
+            "description": "Factory sealed and carefully stored — never damaged"
+          }
+        },
+        {
+          "type": "anchor",
+          "settings": {
+            "icon": "bolt",
+            "label": "Fast Dispatch",
+            "description": "Orders dispatched same or next business day from Melbourne"
+          }
+        },
+        {
+          "type": "anchor",
+          "settings": {
+            "icon": "lock",
+            "label": "Secure Checkout",
+            "description": "256-bit SSL encryption and trusted payment providers"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

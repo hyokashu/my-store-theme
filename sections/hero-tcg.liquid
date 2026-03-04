@@ -1,0 +1,434 @@
+{% comment %}
+  Supply District — sections/hero-tcg.liquid
+  ──────────────────────────────────────────
+  Full-width hero banner for the homepage.
+  · Background: Shopify image_picker with CSS object-fit cover
+  · Gradient overlay: directional (left-aligned) or uniform (center-aligned)
+  · Overlay opacity: controlled by section setting (30–90%)
+  · Text alignment: left or center (schema setting)
+  · Two CTA buttons: primary (green) + secondary (cream outline)
+  · Von Restorff: green ONLY on the primary CTA button
+  · Schema: bg_image, min_height, text_alignment, overlay_opacity,
+             eyebrow, heading, subtext, btn_primary_text, btn_primary_url,
+             btn_secondary_text, btn_secondary_url
+{% endcomment %}
+
+{%- liquid
+  assign text_align  = section.settings.text_alignment | default: 'left'
+  assign min_h       = section.settings.min_height | default: 82
+  assign opacity_raw = section.settings.overlay_opacity | default: 65
+  assign opacity     = opacity_raw | divided_by: 100.0
+  assign eyebrow     = section.settings.eyebrow
+  assign heading     = section.settings.heading
+  assign subtext     = section.settings.subtext
+  assign btn1_text   = section.settings.btn_primary_text
+  assign btn1_url    = section.settings.btn_primary_url
+  assign btn2_text   = section.settings.btn_secondary_text
+  assign btn2_url    = section.settings.btn_secondary_url
+  assign bg_image    = section.settings.bg_image
+-%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ── Design Tokens ── */
+  .htcg-hero {
+    --cv-bg:                #f7f6f3;
+    --cv-fg:                #1c1f36;
+    --cv-primary:           #282d52;
+    --cv-card:              #ffffff;
+    --cv-secondary:         #eeecea;
+    --cv-muted-fg:          #76798c;
+    --cv-border:            #dedad5;
+    --cv-radius:            0.5rem;
+    --color-cta-primary:    #2e9963;
+    --color-cta-primary-hv: #25834f;
+    --cv-font-sans:         'Inter', sans-serif;
+    --cv-font-head:         'Space Grotesk', sans-serif;
+  }
+
+  /* ── Section wrapper ── */
+  .htcg-hero {
+    position: relative;
+    width: 100%;
+    min-height: {{ min_h }}vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-color: var(--cv-primary); /* fallback if no image */
+  }
+
+  /* ── Background image ── */
+  .htcg-hero__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+  }
+
+  /* ── Gradient overlay ── */
+  .htcg-hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  {%- if text_align == 'left' -%}
+    /* Left-aligned: directional gradient, heavy on left */
+    .htcg-hero__overlay {
+      background: linear-gradient(
+        105deg,
+        rgba(28, 31, 54, {{ opacity }}) 0%,
+        rgba(28, 31, 54, {{ opacity | times: 0.85 }}) 45%,
+        rgba(28, 31, 54, {{ opacity | times: 0.3 }}) 100%
+      );
+    }
+  {%- else -%}
+    /* Center-aligned: uniform overlay */
+    .htcg-hero__overlay {
+      background: rgba(28, 31, 54, {{ opacity }});
+    }
+  {%- endif -%}
+
+  /* ── Inner content ── */
+  .htcg-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    {%- if text_align == 'center' -%}
+    align-items: center;
+    text-align: center;
+    {%- else -%}
+    align-items: flex-start;
+    text-align: left;
+    {%- endif -%}
+  }
+
+  /* ── Eyebrow ── */
+  .htcg-hero__eyebrow {
+    font-family: var(--cv-font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+  }
+
+  /* ── Heading ── */
+  .htcg-hero__heading {
+    font-family: var(--cv-font-head);
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: #ffffff;
+    margin: 0;
+    {%- if text_align == 'left' -%}
+    max-width: 36rem;
+    {%- else -%}
+    max-width: 44rem;
+    {%- endif -%}
+  }
+
+  /* ── Subtext ── */
+  .htcg-hero__subtext {
+    font-family: var(--cv-font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.82);
+    margin: 0;
+    {%- if text_align == 'left' -%}
+    max-width: 30rem;
+    {%- else -%}
+    max-width: 36rem;
+    {%- endif -%}
+  }
+
+  /* ── CTA group ── */
+  .htcg-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    {%- if text_align == 'center' -%}
+    justify-content: center;
+    {%- endif -%}
+  }
+
+  /* ── Primary CTA — GREEN (Von Restorff) ── */
+  .htcg-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: var(--color-cta-primary);
+    color: #ffffff;
+    font-family: var(--cv-font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    border-radius: var(--cv-radius);
+    border: 2px solid transparent;
+    transition: background 0.18s ease, transform 0.12s ease;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .htcg-btn-primary:hover {
+    background: var(--color-cta-primary-hv);
+    transform: translateY(-1px);
+  }
+
+  /* ── Secondary CTA — cream outline ── */
+  .htcg-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: transparent;
+    color: #ffffff;
+    font-family: var(--cv-font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    border-radius: var(--cv-radius);
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.12s ease;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .htcg-btn-secondary:hover {
+    border-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+  }
+
+  /* ── Arrow icon on primary btn ── */
+  .htcg-btn-primary svg,
+  .htcg-btn-secondary svg {
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+  }
+  .htcg-btn-primary:hover svg,
+  .htcg-btn-secondary:hover svg {
+    transform: translateX(3px);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .htcg-hero__inner {
+      padding: 4rem 1.25rem;
+    }
+    .htcg-hero__actions {
+      flex-direction: column;
+      align-items: {%- if text_align == 'center' -%}center{%- else -%}flex-start{%- endif -%};
+    }
+    .htcg-btn-primary,
+    .htcg-btn-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+
+<div class="htcg-hero" id="htcg-{{ section.id }}">
+
+  {%- comment -%} ── Background image ── {%- endcomment -%}
+  {%- if bg_image != blank -%}
+    <img
+      class="htcg-hero__bg"
+      src="{{ bg_image | image_url: width: 2000 }}"
+      srcset="
+        {{ bg_image | image_url: width: 768  }} 768w,
+        {{ bg_image | image_url: width: 1280 }} 1280w,
+        {{ bg_image | image_url: width: 1920 }} 1920w,
+        {{ bg_image | image_url: width: 2560 }} 2560w
+      "
+      sizes="100vw"
+      alt="{{ bg_image.alt | escape | default: section.settings.heading | escape }}"
+      loading="eager"
+      fetchpriority="high"
+    >
+  {%- else -%}
+    {%- comment -%} Placeholder gradient when no image is set ── {%- endcomment -%}
+    <div class="htcg-hero__bg" style="background: linear-gradient(135deg, #1c1f36 0%, #282d52 60%, #2e9963 100%);"></div>
+  {%- endif -%}
+
+  {%- comment -%} ── Overlay ── {%- endcomment -%}
+  <div class="htcg-hero__overlay" aria-hidden="true"></div>
+
+  {%- comment -%} ── Content ── {%- endcomment -%}
+  <div class="htcg-hero__inner">
+
+    {%- if eyebrow != blank -%}
+      <p class="htcg-hero__eyebrow">{{ eyebrow | escape }}</p>
+    {%- endif -%}
+
+    {%- if heading != blank -%}
+      <h2 class="htcg-hero__heading">{{ heading | newline_to_br }}</h2>
+    {%- endif -%}
+
+    {%- if subtext != blank -%}
+      <p class="htcg-hero__subtext">{{ subtext | escape }}</p>
+    {%- endif -%}
+
+    {%- if btn1_text != blank or btn2_text != blank -%}
+      <div class="htcg-hero__actions">
+
+        {%- if btn1_text != blank -%}
+          <a
+            href="{{ btn1_url | default: '#' }}"
+            class="htcg-btn-primary"
+          >
+            {{ btn1_text | escape }}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+        {%- if btn2_text != blank -%}
+          <a
+            href="{{ btn2_url | default: '#' }}"
+            class="htcg-btn-secondary"
+          >
+            {{ btn2_text | escape }}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "tag": "div",
+  "class": "sd-hero-tcg",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Section height",
+      "info": "As a percentage of viewport height",
+      "min": 50,
+      "max": 100,
+      "step": 2,
+      "unit": "vh",
+      "default": 82
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay darkness",
+      "min": 30,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 65
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Supply District"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Premium Sealed TCG Products. Sourced Directly. Delivered Safely."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Factory-sealed booster boxes, elite trainer boxes, and collector sets. Authenticated and dispatched from Melbourne."
+    },
+    {
+      "type": "header",
+      "content": "Primary CTA"
+    },
+    {
+      "type": "text",
+      "id": "btn_primary_text",
+      "label": "Button label",
+      "default": "Shop Pre-Orders"
+    },
+    {
+      "type": "url",
+      "id": "btn_primary_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Secondary CTA"
+    },
+    {
+      "type": "text",
+      "id": "btn_secondary_text",
+      "label": "Button label",
+      "default": "Browse All Sealed Boxes"
+    },
+    {
+      "type": "url",
+      "id": "btn_secondary_url",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner"
+    }
+  ]
+}
+{% endschema %}
