@@ -83,6 +83,11 @@
 /* =============================================================
    Cart Items Column
    ============================================================= */
+.sdc-items-col {
+  display: flex;
+  flex-direction: column;
+}
+
 .sdc-items {
   display: flex;
   flex-direction: column;
@@ -208,10 +213,10 @@
 .sdc-item__actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-top: auto;
   padding-top: 0.625rem;
-  gap: 0.75rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
@@ -242,18 +247,22 @@ input.cv-qty__input {
   padding: 0.625rem 0;
 }
 
-/* ── Remove link ── */
+/* ── Remove link (Updated to Trash Icon next to Qty) ── */
 .sdc-item__remove {
-  display: inline-flex; align-items: center; gap: 0.3rem;
-  font-size: 0.78rem; font-weight: 500;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem;
   color: var(--cv-muted-fg);
   background: none; border: none; cursor: pointer;
-  padding: 0.25rem 0;
-  transition: color 0.15s;
+  border-radius: var(--cv-radius);
+  transition: color 0.15s, background 0.15s;
   text-decoration: none;
 }
-.sdc-item__remove:hover { color: var(--cv-destructive); }
-.sdc-item__remove svg   { width: 0.9rem; height: 0.9rem; }
+.sdc-item__remove:hover { 
+  color: var(--cv-destructive); 
+  background: rgba(201,64,48,0.08); 
+}
+.sdc-item__remove svg   { width: 1.1rem; height: 1.1rem; }
+.sdc-item__remove span  { display: none; }
 
 /* Line-item total (right-aligned on wider screens) */
 .sdc-item__line-total {
@@ -264,6 +273,59 @@ input.cv-qty__input {
   margin-left: auto;
   white-space: nowrap;
 }
+
+/* =============================================================
+   In-Cart Upsell
+   ============================================================= */
+.sdc-upsell {
+  margin-top: 3rem;
+  border-top: 1px solid var(--cv-border);
+  padding-top: 1.5rem;
+}
+.sdc-upsell__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--cv-primary);
+  margin-bottom: 1rem;
+}
+.sdc-upsell__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .sdc-upsell__grid { grid-template-columns: repeat(3, 1fr); }
+}
+.sdc-upsell-card {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-card);
+  box-shadow: var(--cv-shadow-sm);
+}
+.sdc-upsell-card__img-wrap {
+  aspect-ratio: 1/1;
+  border-radius: calc(var(--cv-radius) - 2px);
+  overflow: hidden;
+  background: var(--cv-secondary);
+}
+.sdc-upsell-card__img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.sdc-upsell-card__title {
+  font-size: 0.8125rem; font-weight: 600; line-height: 1.3;
+  color: var(--cv-fg); text-decoration: none;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.sdc-upsell-card__price { font-family: var(--cv-font-head); font-size: 0.875rem; font-weight: 700; }
+.sdc-upsell-card__btn {
+  width: 100%; margin-top: auto; padding: 0.5rem;
+  font-size: 0.75rem; font-weight: 600;
+  background: var(--cv-secondary); color: var(--cv-fg);
+  border: 1px solid var(--cv-border); border-radius: var(--cv-radius);
+  cursor: pointer; transition: background 0.15s;
+}
+.sdc-upsell-card__btn:hover { background: var(--cv-border); }
 
 /* =============================================================
    Order Summary Column
@@ -277,7 +339,6 @@ input.cv-qty__input {
 }
 @media (min-width: 1024px) {
   .sdc-summary { position: sticky; top: 1.5rem; }
-  /* offset for sticky header */
   body.sd-sticky-active .sdc-summary { top: calc(var(--sd-header-height, 64px) + 1rem); }
 }
 
@@ -345,13 +406,19 @@ input.cv-qty__input {
   color: var(--color-cta-primary);
 }
 
-/* Microcopy */
+/* Microcopy & Trust */
 .sdc-summary__micro {
   font-size: 0.78rem;
   color: var(--cv-muted-fg);
   text-align: center;
   margin: 0.5rem 0 0;
   line-height: 1.5;
+}
+.sdc-summary__trust {
+  display: flex; align-items: center; justify-content: center; gap: 0.375rem;
+  font-size: 0.75rem; font-weight: 500;
+  color: var(--cv-muted-fg);
+  margin-top: 0.75rem;
 }
 
 /* ── Checkout button — exact match to product page ATC ── */
@@ -378,7 +445,7 @@ input.cv-qty__input {
 .sdc-checkout-btn:active { opacity: 0.85; }
 .sdc-checkout-btn svg    { width: 1.125rem; height: 1.125rem; flex-shrink: 0; }
 
-/* ── Payment badges — exact match to main-product.liquid ── */
+/* ── Clean Payment Badges ── */
 .cv-payment-badges {
   display: flex; flex-wrap: wrap; align-items: center;
   justify-content: center;
@@ -397,13 +464,19 @@ input.cv-qty__input {
 .cv-payment-badge svg { display: block; }
 
 /* =============================================================
-   Free Shipping Progress Bar
+   Free Shipping Progress Bar (Enhanced)
    ============================================================= */
 .sdc-shipping-bar {
   background: var(--cv-secondary);
   border-radius: var(--cv-radius);
   padding: 0.75rem 0.875rem;
   margin-bottom: 1rem;
+  transition: background 0.3s, border-color 0.3s;
+  border: 1px solid transparent;
+}
+.sdc-shipping-bar.is-unlocked {
+  background: rgba(46,153,99,0.07);
+  border-color: rgba(46,153,99,0.18);
 }
 .sdc-shipping-bar__text {
   font-size: 0.8125rem;
@@ -412,6 +485,11 @@ input.cv-qty__input {
   margin-bottom: 0.5rem;
   line-height: 1.4;
 }
+.sdc-shipping-bar.is-unlocked .sdc-shipping-bar__text {
+  color: var(--color-cta-primary);
+  font-weight: 600;
+  margin-bottom: 0;
+}
 .sdc-shipping-bar__text strong { color: var(--color-cta-primary); }
 .sdc-shipping-bar__track {
   height: 5px;
@@ -419,14 +497,15 @@ input.cv-qty__input {
   border-radius: 999px;
   overflow: hidden;
 }
+.sdc-shipping-bar.is-unlocked .sdc-shipping-bar__track {
+  display: none;
+}
 .sdc-shipping-bar__fill {
   height: 100%;
   background: var(--color-cta-primary);
   border-radius: 999px;
   transition: width 0.4s ease;
-  /* width set inline by Liquid */
 }
-.sdc-shipping-bar__text--done { color: var(--color-cta-primary); font-weight: 600; }
 
 /* =============================================================
    Buttons — Continue Shopping
@@ -498,9 +577,6 @@ input.cv-qty__input {
 }
 .sdc-error.is-visible { display: block; }
 
-/* =============================================================
-   Coupon / Note toggle (optional, collapsed by default)
-   ============================================================= */
 .sdc-note-toggle {
   font-size: 0.8125rem;
   font-weight: 500;
@@ -551,8 +627,10 @@ input.cv-qty__input {
   endfor
 
   assign ship_pct = subtotal | times: 100 | divided_by: free_ship_threshold
-  if ship_pct > 100
+  assign is_unlocked = false
+  if ship_pct >= 100
     assign ship_pct = 100
+    assign is_unlocked = true
   endif
   assign ship_remaining = free_ship_threshold | minus: subtotal
 -%}
@@ -577,123 +655,148 @@ input.cv-qty__input {
         {%- comment -%} ════════════════════════════════
             LEFT — Cart items list
         ════════════════════════════════ {%- endcomment -%}
-        <div class="sdc-items" id="sdc-items-list">
-          <p class="sdc-col-label">Products</p>
+        <div class="sdc-items-col">
+          <div class="sdc-items" id="sdc-items-list">
+            <p class="sdc-col-label">Products</p>
 
-          {%- for item in cart.items -%}
-            {%- liquid
-              assign item_on_sale  = false
-              assign item_compare  = item.variant.compare_at_price
-              if item_compare > item.price
-                assign item_on_sale = true
-              endif
-            -%}
+            {%- for item in cart.items -%}
+              {%- liquid
+                assign item_on_sale  = false
+                assign item_compare  = item.variant.compare_at_price
+                if item_compare > item.price
+                  assign item_on_sale = true
+                endif
+              -%}
 
-            <div
-              class="sdc-item"
-              id="sdc-item-{{ item.key | replace: ':', '-' }}"
-              data-item-key="{{ item.key }}"
-              data-variant-id="{{ item.variant_id }}"
-            >
+              <div
+                class="sdc-item"
+                id="sdc-item-{{ item.key | replace: ':', '-' }}"
+                data-item-key="{{ item.key }}"
+                data-variant-id="{{ item.variant_id }}"
+              >
 
-              {%- comment -%} ── Product image ── {%- endcomment -%}
-              <div class="sdc-item__img-wrap">
-                {%- if item.image != blank -%}
-                  <img
-                    src="{{ item.image | image_url: width: 200 }}"
-                    srcset="{{ item.image | image_url: width: 120 }} 120w, {{ item.image | image_url: width: 200 }} 200w"
-                    sizes="(max-width: 639px) 80px, 96px"
-                    alt="{{ item.image.alt | default: item.title | escape }}"
-                    class="sdc-item__img"
-                    loading="lazy"
-                    width="200" height="200"
-                  >
-                {%- else -%}
-                  <div class="sdc-item__img--placeholder" aria-hidden="true">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                  </div>
-                {%- endif -%}
-              </div>
-
-              {%- comment -%} ── Item details ── {%- endcomment -%}
-              <div class="sdc-item__body">
-
-                {%- if item.vendor != blank -%}
-                  <span class="sdc-item__vendor">{{ item.vendor | escape }}</span>
-                {%- endif -%}
-
-                <a href="{{ item.url }}" class="sdc-item__title">{{ item.product.title | escape }}</a>
-
-                {%- unless item.variant.title == 'Default Title' -%}
-                  <span class="sdc-item__variant">{{ item.variant.title | escape }}</span>
-                {%- endunless -%}
-
-                <div class="sdc-item__price-row">
-                  <span class="sdc-item__price">{{ item.final_price | money }}</span>
-                  {%- if item_on_sale -%}
-                    <span class="sdc-item__compare">{{ item_compare | money }}</span>
+                {%- comment -%} ── Product image ── {%- endcomment -%}
+                <div class="sdc-item__img-wrap">
+                  {%- if item.image != blank -%}
+                    <img
+                      src="{{ item.image | image_url: width: 200 }}"
+                      srcset="{{ item.image | image_url: width: 120 }} 120w, {{ item.image | image_url: width: 200 }} 200w"
+                      sizes="(max-width: 639px) 80px, 96px"
+                      alt="{{ item.image.alt | default: item.title | escape }}"
+                      class="sdc-item__img"
+                      loading="lazy"
+                      width="200" height="200"
+                    >
+                  {%- else -%}
+                    <div class="sdc-item__img--placeholder" aria-hidden="true">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
                   {%- endif -%}
                 </div>
 
-                {%- comment -%} ── Actions: qty stepper + remove ── {%- endcomment -%}
-                <div class="sdc-item__actions">
+                {%- comment -%} ── Item details ── {%- endcomment -%}
+                <div class="sdc-item__body">
 
-                  {%- comment -%} Quantity stepper — identical to main-product.liquid {%- endcomment -%}
-                  <div class="cv-qty" role="group" aria-label="Quantity for {{ item.title | escape }}">
-                    <button
-                      type="button"
-                      class="cv-qty__btn sdc-qty-minus"
-                      aria-label="Decrease quantity"
-                      data-item-key="{{ item.key }}"
-                      {%- if item.quantity <= 1 %} disabled{%- endif -%}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
-                    <input
-                      type="number"
-                      class="cv-qty__input sdc-qty-input"
-                      name="updates[]"
-                      value="{{ item.quantity }}"
-                      min="0"
-                      aria-label="Quantity"
-                      data-item-key="{{ item.key }}"
-                      data-item-id="{{ item.variant_id }}"
-                    >
-                    <button
-                      type="button"
-                      class="cv-qty__btn sdc-qty-plus"
-                      aria-label="Increase quantity"
-                      data-item-key="{{ item.key }}"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    </button>
+                  {%- if item.vendor != blank -%}
+                    <span class="sdc-item__vendor">{{ item.vendor | escape }}</span>
+                  {%- endif -%}
+
+                  <a href="{{ item.url }}" class="sdc-item__title">{{ item.product.title | escape }}</a>
+
+                  {%- unless item.variant.title == 'Default Title' -%}
+                    <span class="sdc-item__variant">{{ item.variant.title | escape }}</span>
+                  {%- endunless -%}
+
+                  <div class="sdc-item__price-row">
+                    <span class="sdc-item__price">{{ item.final_price | money }}</span>
+                    {%- if item_on_sale -%}
+                      <span class="sdc-item__compare">{{ item_compare | money }}</span>
+                    {%- endif -%}
                   </div>
 
-                  {%- comment -%} Line total {%- endcomment -%}
-                  <span
-                    class="sdc-item__line-total"
-                    id="sdc-line-{{ item.key | replace: ':', '-' }}"
-                  >
-                    {{ item.final_line_price | money }}
-                  </span>
+                  {%- comment -%} ── Actions: qty stepper + remove ── {%- endcomment -%}
+                  <div class="sdc-item__actions">
 
-                  {%- comment -%} Remove {%- endcomment -%}
-                  <button
-                    type="button"
-                    class="sdc-item__remove sdc-remove-btn"
-                    aria-label="Remove {{ item.title | escape }} from cart"
-                    data-item-key="{{ item.key }}"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Remove
-                  </button>
+                    {%- comment -%} Quantity stepper {%- endcomment -%}
+                    <div class="cv-qty" role="group" aria-label="Quantity for {{ item.title | escape }}">
+                      <button
+                        type="button"
+                        class="cv-qty__btn sdc-qty-minus"
+                        aria-label="Decrease quantity"
+                        data-item-key="{{ item.key }}"
+                        {%- if item.quantity <= 1 %} disabled{%- endif -%}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                      </button>
+                      <input
+                        type="number"
+                        class="cv-qty__input sdc-qty-input"
+                        name="updates[]"
+                        value="{{ item.quantity }}"
+                        min="0"
+                        aria-label="Quantity"
+                        data-item-key="{{ item.key }}"
+                        data-item-id="{{ item.variant_id }}"
+                      >
+                      <button
+                        type="button"
+                        class="cv-qty__btn sdc-qty-plus"
+                        aria-label="Increase quantity"
+                        data-item-key="{{ item.key }}"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                      </button>
+                    </div>
 
-                </div>{%- comment -%} /.sdc-item__actions {%- endcomment -%}
-              </div>{%- comment -%} /.sdc-item__body {%- endcomment -%}
-            </div>{%- comment -%} /.sdc-item {%- endcomment -%}
+                    {%- comment -%} Grouped Remove Icon {%- endcomment -%}
+                    <button
+                      type="button"
+                      class="sdc-item__remove sdc-remove-btn"
+                      aria-label="Remove {{ item.title | escape }} from cart"
+                      title="Remove Item"
+                      data-item-key="{{ item.key }}"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                      <span>Remove</span>
+                    </button>
 
-          {%- endfor -%}
-        </div>{%- comment -%} /.sdc-items {%- endcomment -%}
+                    {%- comment -%} Line total {%- endcomment -%}
+                    <span
+                      class="sdc-item__line-total"
+                      id="sdc-line-{{ item.key | replace: ':', '-' }}"
+                    >
+                      {{ item.final_line_price | money }}
+                    </span>
+
+                  </div>{%- comment -%} /.sdc-item__actions {%- endcomment -%}
+                </div>{%- comment -%} /.sdc-item__body {%- endcomment -%}
+              </div>{%- comment -%} /.sdc-item {%- endcomment -%}
+
+            {%- endfor -%}
+          </div>{%- comment -%} /.sdc-items {%- endcomment -%}
+
+          {%- comment -%} ── In-Cart Upsell ── {%- endcomment -%}
+          {%- if section.settings.upsell_collection != blank and section.settings.upsell_collection.products_count > 0 -%}
+            <div class="sdc-upsell">
+              <h3 class="sdc-upsell__title">Frequently Bought Together</h3>
+              <div class="sdc-upsell__grid">
+                {%- for product in section.settings.upsell_collection.products limit: 3 -%}
+                  {%- if product.available -%}
+                    <div class="sdc-upsell-card">
+                      <a href="{{ product.url }}" class="sdc-upsell-card__img-wrap">
+                        <img src="{{ product.featured_image | image_url: width: 200 }}" alt="{{ product.title | escape }}" loading="lazy" width="200" height="200">
+                      </a>
+                      <a href="{{ product.url }}" class="sdc-upsell-card__title">{{ product.title }}</a>
+                      <span class="sdc-upsell-card__price">{{ product.price | money }}</span>
+                      <button type="button" class="sdc-upsell-card__btn sdc-upsell-btn" data-variant-id="{{ product.selected_or_first_available_variant.id }}">Quick Add</button>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+        </div>{%- comment -%} /.sdc-items-col {%- endcomment -%}
 
         {%- comment -%} ════════════════════════════════
             RIGHT — Order Summary
@@ -702,18 +805,16 @@ input.cv-qty__input {
 
           <h2 class="sdc-summary__title">Order Summary</h2>
 
-          {%- comment -%} ── Free shipping progress bar ── {%- endcomment -%}
+          {%- comment -%} ── Free shipping progress bar (Enhanced) ── {%- endcomment -%}
           {%- if section.settings.show_free_ship -%}
-            <div class="sdc-shipping-bar" id="sdc-ship-bar">
-              {%- if subtotal >= free_ship_threshold -%}
-                <p class="sdc-shipping-bar__text sdc-shipping-bar__text--done">
+            <div class="sdc-shipping-bar {% if is_unlocked %}is-unlocked{% endif %}" id="sdc-ship-bar">
+              <p class="sdc-shipping-bar__text" id="sdc-ship-text">
+                {%- if is_unlocked -%}
                   🎉 You've unlocked <strong>free shipping!</strong>
-                </p>
-              {%- else -%}
-                <p class="sdc-shipping-bar__text" id="sdc-ship-text">
+                {%- else -%}
                   Add <strong>{{ ship_remaining | money }}</strong> more for free shipping
-                </p>
-              {%- endif -%}
+                {%- endif -%}
+              </p>
               <div class="sdc-shipping-bar__track">
                 <div
                   class="sdc-shipping-bar__fill"
@@ -776,7 +877,7 @@ input.cv-qty__input {
 
           <p class="sdc-summary__micro">Taxes and shipping calculated at checkout</p>
 
-          {%- comment -%} ── Payment badges — exact copy from main-product.liquid ── {%- endcomment -%}
+          {%- comment -%} ── Clean Payment badges ── {%- endcomment -%}
           <div class="cv-payment-badges" aria-label="Accepted payment methods">
 
             <span class="cv-payment-badge" title="Visa">
@@ -800,25 +901,19 @@ input.cv-qty__input {
               </svg>
             </span>
 
-            <span class="cv-payment-badge" title="Afterpay" style="background:#B2FCE4;border-color:#7de8c8">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="12" viewBox="0 0 48 12" aria-hidden="true">
-                <text x="1" y="9.5" font-family="Arial,sans-serif" font-size="7.5" font-weight="700" fill="#000">afterpay</text>
+            <span class="cv-payment-badge" title="Shop Pay" style="background:#5A31F4;border-color:#5A31F4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="12" viewBox="0 0 36 12" aria-hidden="true">
+                <text x="2" y="9.5" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9" font-weight="700" fill="#fff">Shop</text>
               </svg>
             </span>
 
-            <span class="cv-payment-badge" title="Zip" style="background:#AA8FFF;border-color:#9370f0">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="12" viewBox="0 0 22 12" aria-hidden="true">
-                <text x="1" y="9.5" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#fff">zip</text>
-              </svg>
-            </span>
+          </div>
 
-            <span class="cv-payment-badge" title="Apple Pay">
-              <svg xmlns="http://www.w3.org/2000/svg" width="42" height="12" viewBox="0 0 42 12" aria-hidden="true">
-                <text x="0" y="9.5" font-family="-apple-system,BlinkMacSystemFont,'SF Pro',sans-serif" font-size="8" font-weight="600" fill="#000"> Pay</text>
-              </svg>
-            </span>
-
-          </div>{%- comment -%} /.cv-payment-badges {%- endcomment -%}
+          {%- comment -%} ── Trust text ── {%- endcomment -%}
+          <p class="sdc-summary__trust">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            100% Authentic & Factory Sealed
+          </p>
 
         </aside>{%- comment -%} /.sdc-summary {%- endcomment -%}
 
@@ -921,20 +1016,23 @@ input.cv-qty__input {
         var subtotalEl = $('sdc-subtotal');
         if (subtotalEl) subtotalEl.textContent = money(cart.items_subtotal_price);
 
-        /* ── 2. Update free-ship bar ── */
+        /* ── 2. Update free-ship bar (Enhanced Logic) ── */
         var pct  = Math.min(Math.round(cart.items_subtotal_price / FREE_SHIP_THRESHOLD * 100), 100);
         var fill = $('sdc-ship-fill');
         var txt  = $('sdc-ship-text');
+        var bar  = $('sdc-ship-bar');
+        
         if (fill) {
           fill.style.width = pct + '%';
           fill.setAttribute('aria-valuenow', pct);
         }
-        if (txt) {
+        if (txt && bar) {
           var rem = FREE_SHIP_THRESHOLD - cart.items_subtotal_price;
           if (rem <= 0) {
+            bar.classList.add('is-unlocked');
             txt.innerHTML = '🎉 You\'ve unlocked <strong>free shipping!</strong>';
-            txt.className = 'sdc-shipping-bar__text sdc-shipping-bar__text--done';
           } else {
+            bar.classList.remove('is-unlocked');
             txt.innerHTML = 'Add <strong>' + money(rem) + '</strong> more for free shipping';
           }
         }
@@ -995,42 +1093,71 @@ input.cv-qty__input {
 
   /* ── Event delegation on the items list ── */
   var list = $('sdc-items-list');
-  if (!list) return;
+  if (list) {
+    list.addEventListener('click', function (e) {
+      var btn = e.target.closest('.sdc-qty-minus, .sdc-qty-plus, .sdc-remove-btn');
+      if (!btn) return;
 
-  list.addEventListener('click', function (e) {
-    var btn = e.target.closest('.sdc-qty-minus, .sdc-qty-plus, .sdc-remove-btn');
-    if (!btn) return;
+      var key = btn.dataset.itemKey;
+      if (!key) return;
 
-    var key = btn.dataset.itemKey;
-    if (!key) return;
+      var row   = $('sdc-item-' + key.replace(/:/g, '-'));
+      var input = row ? row.querySelector('.sdc-qty-input') : null;
+      var qty   = input ? parseInt(input.value, 10) : 1;
 
-    var row   = $('sdc-item-' + key.replace(/:/g, '-'));
-    var input = row ? row.querySelector('.sdc-qty-input') : null;
-    var qty   = input ? parseInt(input.value, 10) : 1;
+      if (btn.classList.contains('sdc-qty-minus')) {
+        var newQty = Math.max(0, qty - 1);
+        if (input) input.value = newQty;
+        updateCart(key, newQty);
 
-    if (btn.classList.contains('sdc-qty-minus')) {
-      var newQty = Math.max(0, qty - 1);
-      if (input) input.value = newQty;
-      updateCart(key, newQty);
+      } else if (btn.classList.contains('sdc-qty-plus')) {
+        var newQty = qty + 1;
+        if (input) input.value = newQty;
+        updateCart(key, newQty);
 
-    } else if (btn.classList.contains('sdc-qty-plus')) {
-      var newQty = qty + 1;
-      if (input) input.value = newQty;
-      updateCart(key, newQty);
+      } else if (btn.classList.contains('sdc-remove-btn')) {
+        updateCart(key, 0);
+      }
+    });
 
-    } else if (btn.classList.contains('sdc-remove-btn')) {
-      updateCart(key, 0);
-    }
-  });
+    /* ── Direct input change (debounced) ── */
+    list.addEventListener('change', function (e) {
+      var input = e.target.closest('.sdc-qty-input');
+      if (!input) return;
+      var key    = input.dataset.itemKey;
+      var newQty = Math.max(0, parseInt(input.value, 10) || 0);
+      input.value = newQty;
+      debounce(key, function () { updateCart(key, newQty); });
+    });
+  }
 
-  /* ── Direct input change (debounced) ── */
-  list.addEventListener('change', function (e) {
-    var input = e.target.closest('.sdc-qty-input');
-    if (!input) return;
-    var key    = input.dataset.itemKey;
-    var newQty = Math.max(0, parseInt(input.value, 10) || 0);
-    input.value = newQty;
-    debounce(key, function () { updateCart(key, newQty); });
+  /* ── Upsell Quick Add ── */
+  document.querySelectorAll('.sdc-upsell-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var variantId = this.dataset.variantId;
+      var originalText = this.textContent;
+      
+      this.disabled = true;
+      this.textContent = 'Adding...';
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function() {
+        location.reload(); // Refresh to show new cart state immediately
+      })
+      .catch(function() {
+        btn.textContent = 'Error';
+        setTimeout(function() {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }, 2000);
+      });
+    });
   });
 
 })();
@@ -1058,6 +1185,16 @@ input.cv-qty__input {
       "label": "Free shipping threshold (cents)",
       "info": "Enter the amount in cents — e.g. 15000 = $150.00",
       "default": 15000
+    },
+    {
+      "type": "header",
+      "content": "In-Cart Upsell"
+    },
+    {
+      "type": "collection",
+      "id": "upsell_collection",
+      "label": "Upsell Collection",
+      "info": "Select a collection (like accessories or single packs) to display below the cart items."
     }
   ],
   "presets": [
