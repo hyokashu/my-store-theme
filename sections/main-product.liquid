@@ -1340,45 +1340,76 @@ input.cv-qty__input {
     }
   }
 
- /* ── 5. Dynamic Recent Sales ── */
+/* ── 5. Dynamic Recent Sales (with Session Storage) ── */
   var recentDataEl = document.getElementById('cv-recent-products-data');
   if (recentDataEl) {
     try {
       var products = JSON.parse(recentDataEl.textContent);
       if (products.length > 0) {
-        // Randomly shuffle the pool of products
-        products.sort(function() { return 0.5 - Math.random(); });
         var listEl = document.getElementById('cv-recent-sales-list');
         var container = document.getElementById('cv-recent-sales-container');
-        container.style.display = 'block';
-
-        var count = Math.min(4, products.length);
         
-        // Start the top item somewhere between 2 and 15 minutes ago
-        var timeOffsetMins = Math.floor(Math.random() * 14) + 2; 
+        var storedData = sessionStorage.getItem('cv_recent_sales');
+        var salesData = null;
+        var now = Date.now();
 
-        for (var i = 0; i < count; i++) {
-          // Format the time correctly (switch to hours if it goes over 60 mins)
+        // 1. Check if we already have a generated list for this user session
+        if (storedData) {
+          try {
+            salesData = JSON.parse(storedData);
+          } catch(e) {}
+        }
+
+        // 2. If no list exists, generate one and save it to the browser
+        if (!salesData || !salesData.sales || salesData.sales.length === 0) {
+          products.sort(function() { return 0.5 - Math.random(); });
+          var count = Math.min(4, products.length);
+          var timeOffsetMins = Math.floor(Math.random() * 14) + 2; 
+          
+          var newSales = [];
+          for (var i = 0; i < count; i++) {
+            newSales.push({
+              title: products[i].title,
+              price: products[i].price,
+              baseMinsAgo: timeOffsetMins
+            });
+            // Add a random chunk of time (15 to 50 mins) for the next item down
+            timeOffsetMins += Math.floor(Math.random() * 36) + 15; 
+          }
+
+          salesData = {
+            generatedAt: now,
+            sales: newSales
+          };
+          sessionStorage.setItem('cv_recent_sales', JSON.stringify(salesData));
+        }
+
+        // 3. Render the list, calculating the true time elapsed since it was generated
+        var elapsedMins = Math.floor((now - salesData.generatedAt) / 60000);
+        
+        for (var j = 0; j < salesData.sales.length; j++) {
+          var sale = salesData.sales[j];
+          var totalMins = sale.baseMinsAgo + elapsedMins;
+          
           var timeString = '';
-          if (timeOffsetMins < 60) {
-            timeString = timeOffsetMins + ' minutes ago';
+          if (totalMins < 60) {
+            timeString = totalMins + ' minutes ago';
           } else {
-            var hrs = Math.floor(timeOffsetMins / 60);
+            var hrs = Math.floor(totalMins / 60);
             timeString = hrs + (hrs === 1 ? ' hour ago' : ' hours ago');
           }
 
           var html = '<div class="cv-sale-item">' +
                        '<div class="cv-sale-item__info">' +
-                         '<span class="cv-sale-item__name">' + products[i].title + '</span>' +
+                         '<span class="cv-sale-item__name">' + sale.title + '</span>' +
                          '<span class="cv-sale-item__time">' + timeString + '</span>' +
                        '</div>' +
-                       '<span class="cv-sale-item__price">' + products[i].price + '</span>' +
+                       '<span class="cv-sale-item__price">' + sale.price + '</span>' +
                      '</div>';
           listEl.insertAdjacentHTML('beforeend', html);
-
-          // Add a random chunk of time (15 to 50 minutes) for the next item down the list
-          timeOffsetMins += Math.floor(Math.random() * 36) + 15; 
         }
+        
+        container.style.display = 'block';
       }
     } catch(e) {}
   }
