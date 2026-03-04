@@ -1,0 +1,102 @@
+{% comment %}
+  Supply District — announcement-bar.liquid
+  Dark announcement bar with centred promo text + right-aligned
+  region/currency selector.  Fully editable via theme editor.
+{% endcomment %}
+
+<div
+  class="sd-announce"
+  id="sd-announce-bar"
+  role="region"
+  aria-label="Announcement"
+  {% unless section.settings.show_bar %}style="display:none"{% endunless %}
+>
+  <div class="sd-announce__inner">
+
+    {%- comment -%} ── Left spacer (mirrors selector width so text stays centred) ── {%- endcomment -%}
+    <div class="sd-announce__left" aria-hidden="true"></div>
+
+    {%- comment -%} ── Centre promo text ── {%- endcomment -%}
+    <p class="sd-announce__text">
+      {%- if section.settings.promo_url != blank -%}
+        <a href="{{ section.settings.promo_url }}" class="sd-announce__link">
+      {%- endif -%}
+      {%- if section.settings.icon_show -%}
+        <svg class="sd-announce__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      {%- endif -%}
+      {{ section.settings.promo_text }}
+      {%- if section.settings.promo_url != blank -%}</a>{%- endif -%}
+    </p>
+
+    {%- comment -%} ── Right: currency / region selector ── {%- endcomment -%}
+    <div class="sd-announce__right">
+      {%- if localization.available_currencies.size > 1 -%}
+        {%- form 'localization', id: 'sd-currency-form', class: 'sd-currency-form' -%}
+          <div class="sd-currency-wrap">
+            <svg class="sd-currency-globe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <select
+              name="currency_code"
+              id="sd-currency-select"
+              class="sd-currency-select"
+              aria-label="Select currency"
+              onchange="this.closest('form').submit()"
+            >
+              {%- for currency in localization.available_currencies -%}
+                <option
+                  value="{{ currency.iso_code }}"
+                  {%- if currency.iso_code == localization.currency.iso_code %} selected{%- endif -%}
+                >
+                  {{ currency.iso_code }} {{ currency.symbol }}
+                </option>
+              {%- endfor -%}
+            </select>
+            <svg class="sd-currency-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        {%- endform -%}
+      {%- else -%}
+        {%- comment -%} Fallback: show current currency as static text {%- endcomment -%}
+        <span class="sd-currency-static">
+          <svg class="sd-currency-globe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          {{ localization.currency.iso_code }} {{ localization.currency.symbol }}
+        </span>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_bar",
+      "label": "Show announcement bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "Promo message",
+      "default": "Free Shipping on orders over $150"
+    },
+    {
+      "type": "url",
+      "id": "promo_url",
+      "label": "Promo link URL (optional)"
+    },
+    {
+      "type": "checkbox",
+      "id": "icon_show",
+      "label": "Show shipping truck icon",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar"
+    }
+  ]
+}
+{% endschema %}

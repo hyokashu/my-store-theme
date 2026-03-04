@@ -1,59 +1,26 @@
 {% comment %}
-  Supply District — sections/main-collection.liquid
-  Full collection page: Banner · Breadcrumbs · Facet Filters · Product Grid.
-  All design tokens, CSS, and JS are loaded from sd-collection.{css,js}.
-  This single section is the entry point for the collection Liquid template.
-  (If migrating to JSON templates, split into separate section files instead.)
+  Supply District — sections/main-collection-product-grid.liquid
+  Paginated product grid for collection pages.
+  Renders sd-product-card for each product.
+  Can be used as a standalone section in a collection.json template.
+
+  Grid layout:
+  • Mobile: 2 columns (strictly)
+  • Tablet (≥640px): 3 columns
+  • Desktop (≥1024px): 4 columns
+
+  Relies on:
+  • assets/sd-collection.css — styles
+  • assets/sd-collection.js — Quick Add + filter JS
+  • snippets/sd-product-card.liquid — product card
 {% endcomment %}
 
 {{ 'sd-collection.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'sd-collection.js' | asset_url }}" defer></script>
 
 {%- liquid
-  assign sort_by = collection.sort_by | default: collection.default_sort_by
   assign products_per_page = section.settings.products_per_page | default: 24
 -%}
-
-{%- comment -%} ════════════════════════════════
-    BANNER — breadcrumbs + title + description
-════════════════════════════════ {%- endcomment -%}
-
-<div class="sdcb-banner">
-  <div class="sdcb-banner__inner">
-
-    {%- render 'breadcrumbs' -%}
-
-    <h1 class="sdcb-banner__title">{{ collection.title | escape }}</h1>
-
-    {%- if collection.description != blank -%}
-      <div class="sdcb-banner__desc">{{ collection.description }}</div>
-    {%- endif -%}
-
-    <div class="sdcb-banner__meta">
-      {%- assign pc = collection.products_count -%}
-      {%- if pc == 0 -%}
-        <span class="sdcb-banner__count">No products</span>
-      {%- elsif pc == 1 -%}
-        <span class="sdcb-banner__count">1 product</span>
-      {%- else -%}
-        <span class="sdcb-banner__count">{{ pc }} products</span>
-      {%- endif -%}
-    </div>
-
-  </div>
-</div>
-
-{%- comment -%} ════════════════════════════════
-    FACETS — filter bar + mobile drawer
-════════════════════════════════ {%- endcomment -%}
-
-{%- if section.settings.show_filters -%}
-  {%- render 'facets', results: collection, results_count: collection.products_count -%}
-{%- endif -%}
-
-{%- comment -%} ════════════════════════════════
-    PRODUCT GRID
-════════════════════════════════ {%- endcomment -%}
 
 {%- paginate collection.products by products_per_page -%}
 
@@ -83,7 +50,7 @@
 
       {%- comment -%} ── Pagination ── {%- endcomment -%}
       {%- if paginate.pages > 1 -%}
-        <nav class="sdcpg__pagination" aria-label="Collection pages">
+        <nav class="sdcpg__pagination" aria-label="Collection pagination">
 
           {%- if paginate.previous -%}
             <a href="{{ paginate.previous.url }}" class="sdcpg__page-link" aria-label="Previous page">
@@ -130,14 +97,15 @@
         </svg>
         <h2 class="sdcpg__empty-title">No products found</h2>
         <p class="sdcpg__empty-text">
-          Try adjusting or clearing your filters, or browse the full collection.
+          Try adjusting or clearing your filters, or browse all products.
         </p>
         <a href="{{ collection.url | split: '?' | first }}"
           style="
             display:inline-flex;align-items:center;margin-top:1.25rem;
             padding:0.65rem 1.5rem;border-radius:999px;
             background:var(--cv-primary);color:var(--cv-primary-fg);
-            font-weight:600;font-size:0.875rem;text-decoration:none;">
+            font-weight:600;font-size:0.875rem;text-decoration:none;
+            transition:opacity 0.15s;">
           Clear all filters
         </a>
       </div>
@@ -151,9 +119,9 @@
 
 {% schema %}
 {
-  "name": "Collection",
+  "name": "Collection Product Grid",
   "tag": "div",
-  "class": "sd-collection-page",
+  "class": "sd-collection-grid",
   "settings": [
     {
       "type": "range",
@@ -163,17 +131,11 @@
       "max": 48,
       "step": 4,
       "default": 24
-    },
-    {
-      "type": "checkbox",
-      "id": "show_filters",
-      "label": "Show filter bar",
-      "default": true
     }
   ],
   "presets": [
     {
-      "name": "Collection Page"
+      "name": "Collection Product Grid"
     }
   ]
 }

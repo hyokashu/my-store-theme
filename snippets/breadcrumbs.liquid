@@ -1,0 +1,93 @@
+{% comment %}
+  Supply District — snippets/breadcrumbs.liquid
+  Schema-compliant breadcrumb nav (JSON-LD + HTML5 nav).
+  Usage: {% render 'breadcrumbs' %}
+  Relies on `product`, `collection`, `page`, `blog`, `article`
+  objects being available in the calling template's context.
+{% endcomment %}
+
+{%- liquid
+  assign bc_sep = '›'
+
+  comment
+    Build the breadcrumb trail based on current template.
+    We always start with Home.
+  endcomment
+-%}
+
+<nav class="cv-bc-nav" aria-label="Breadcrumb">
+  <ol class="cv-breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+
+    {%- comment -%} Home {%- endcomment -%}
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a href="{{ routes.root_url }}" itemprop="item">
+        <span itemprop="name">Home</span>
+      </a>
+      <meta itemprop="position" content="1">
+    </li>
+
+    {%- if template.name == 'product' -%}
+
+      {%- if product.collections.first -%}
+        <li class="cv-breadcrumb__sep" aria-hidden="true">{{ bc_sep }}</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="{{ product.collections.first.url }}" itemprop="item">
+            <span itemprop="name">{{ product.collections.first.title }}</span>
+          </a>
+          <meta itemprop="position" content="2">
+        </li>
+        <li class="cv-breadcrumb__sep" aria-hidden="true">{{ bc_sep }}</li>
+        <li class="cv-breadcrumb__current" aria-current="page"
+            itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name">{{ product.title }}</span>
+          <meta itemprop="position" content="3">
+        </li>
+      {%- else -%}
+        <li class="cv-breadcrumb__sep" aria-hidden="true">{{ bc_sep }}</li>
+        <li class="cv-breadcrumb__current" aria-current="page"
+            itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name">{{ product.title }}</span>
+          <meta itemprop="position" content="2">
+        </li>
+      {%- endif -%}
+
+    {%- elsif template.name == 'collection' -%}
+
+      <li class="cv-breadcrumb__sep" aria-hidden="true">{{ bc_sep }}</li>
+      <li class="cv-breadcrumb__current" aria-current="page"
+          itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">{{ collection.title }}</span>
+        <meta itemprop="position" content="2">
+      </li>
+
+    {%- elsif template.name == 'article' -%}
+
+      {%- if blog -%}
+        <li class="cv-breadcrumb__sep" aria-hidden="true">{{ bc_sep }}</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="{{ blog.url }}" itemprop="item">
+            <span itemprop="name">{{ blog.title }}</span>
+          </a>
+          <meta itemprop="position" content="2">
+        </li>
+        <li class="cv-breadcrumb__sep" aria-hidden="true">{{ bc_sep }}</li>
+        <li class="cv-breadcrumb__current" aria-current="page"
+            itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="name">{{ article.title }}</span>
+          <meta itemprop="position" content="3">
+        </li>
+      {%- endif -%}
+
+    {%- elsif template.name == 'page' -%}
+
+      <li class="cv-breadcrumb__sep" aria-hidden="true">{{ bc_sep }}</li>
+      <li class="cv-breadcrumb__current" aria-current="page"
+          itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span itemprop="name">{{ page.title }}</span>
+        <meta itemprop="position" content="2">
+      </li>
+
+    {%- endif -%}
+
+  </ol>
+</nav>

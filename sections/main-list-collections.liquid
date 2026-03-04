@@ -1,0 +1,268 @@
+{% comment %}
+  Supply District — sections/main-list-collections.liquid
+  "Choose Your TCG" — premium gateway to collection categories.
+  2-column card grid on desktop · single column on mobile.
+  Each card: full-bleed image · gradient overlay · title · CTA pill.
+  Configurable via theme Customizer: heading, subheading, up to 6 collection cards.
+{% endcomment %}
+
+{{ 'sd-collection.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="sdcl-gateway"
+  aria-labelledby="sdcl-gateway-heading"
+  style="padding-top: {{ section.settings.padding_top | default: 48 }}px; padding-bottom: {{ section.settings.padding_bottom | default: 64 }}px;"
+>
+  <div class="sdcl-gateway__inner">
+
+    {%- if section.settings.heading != blank -%}
+      <h1 class="sdcl-gateway__heading" id="sdcl-gateway-heading">
+        {{ section.settings.heading | escape }}
+      </h1>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="sdcl-gateway__subheading">{{ section.settings.subheading | escape }}</p>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="sdcl-gateway__grid">
+
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'collection_card' -%}
+
+            {%- liquid
+              assign col       = collections[block.settings.collection]
+              assign card_url  = block.settings.card_url | default: col.url | default: '#'
+              assign card_title = block.settings.card_title | default: col.title | default: 'Collection'
+              assign card_cta  = block.settings.cta_label | default: 'Shop Now'
+            -%}
+
+            <a
+              href="{{ card_url }}"
+              class="sdcl-card"
+              aria-label="{{ card_title | escape }} — {{ card_cta | escape }}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="sdcl-card__img-wrap">
+
+                {%- if block.settings.card_image != blank -%}
+                  <img
+                    src="{{ block.settings.card_image | image_url: width: 900 }}"
+                    srcset="
+                      {{ block.settings.card_image | image_url: width: 480 }} 480w,
+                      {{ block.settings.card_image | image_url: width: 720 }} 720w,
+                      {{ block.settings.card_image | image_url: width: 960 }} 960w,
+                      {{ block.settings.card_image | image_url: width: 1200 }} 1200w"
+                    sizes="(max-width: 639px) 100vw, 50vw"
+                    alt="{{ card_title | escape }}"
+                    class="sdcl-card__img"
+                    loading="lazy"
+                    width="900"
+                    height="675"
+                  >
+                {%- elsif col != blank and col.featured_image != blank -%}
+                  <img
+                    src="{{ col.featured_image | image_url: width: 900 }}"
+                    srcset="
+                      {{ col.featured_image | image_url: width: 480 }} 480w,
+                      {{ col.featured_image | image_url: width: 720 }} 720w,
+                      {{ col.featured_image | image_url: width: 960 }} 960w,
+                      {{ col.featured_image | image_url: width: 1200 }} 1200w"
+                    sizes="(max-width: 639px) 100vw, 50vw"
+                    alt="{{ card_title | escape }}"
+                    class="sdcl-card__img"
+                    loading="lazy"
+                    width="900"
+                    height="675"
+                  >
+                {%- else -%}
+                  <div class="sdcl-card__img sdcl-card__img--placeholder" aria-hidden="true"></div>
+                {%- endif -%}
+
+                <div class="sdcl-card__overlay" aria-hidden="true">
+                  <div class="sdcl-card__content">
+
+                    {%- if block.settings.card_eyebrow != blank -%}
+                      <span class="sdcl-card__eyebrow">{{ block.settings.card_eyebrow | escape }}</span>
+                    {%- endif -%}
+
+                    <h2 class="sdcl-card__title">{{ card_title | escape }}</h2>
+
+                    {%- if block.settings.card_desc != blank -%}
+                      <p class="sdcl-card__desc">{{ block.settings.card_desc | escape }}</p>
+                    {%- endif -%}
+
+                    <span class="sdcl-card__cta">
+                      {{ card_cta | escape }}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
+                        <path d="m9 18 6-6-6-6"/>
+                      </svg>
+                    </span>
+
+                  </div>
+                </div>
+
+              </div>
+            </a>
+
+          {%- endif -%}
+        {%- endfor -%}
+
+      </div><!-- /.sdcl-gateway__grid -->
+    {%- else -%}
+      {%- comment -%} Fallback: auto-loop all non-empty collections (max 6) {%- endcomment -%}
+      {%- assign col_count = 0 -%}
+      <div class="sdcl-gateway__grid">
+        {%- for col in collections -%}
+          {%- if col.products_count > 0 and col_count < 6 -%}
+            {%- assign col_count = col_count | plus: 1 -%}
+            <a href="{{ col.url }}" class="sdcl-card">
+              <div class="sdcl-card__img-wrap">
+                {%- if col.featured_image != blank -%}
+                  <img
+                    src="{{ col.featured_image | image_url: width: 900 }}"
+                    alt="{{ col.title | escape }}"
+                    class="sdcl-card__img"
+                    loading="lazy"
+                    width="900" height="675"
+                  >
+                {%- else -%}
+                  <div class="sdcl-card__img sdcl-card__img--placeholder"></div>
+                {%- endif -%}
+                <div class="sdcl-card__overlay" aria-hidden="true">
+                  <div class="sdcl-card__content">
+                    <h2 class="sdcl-card__title">{{ col.title | escape }}</h2>
+                    <span class="sdcl-card__cta">
+                      Shop Now
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m9 18 6-6-6-6"/>
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection Gateway",
+  "tag": "section",
+  "class": "sd-collection-gateway",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Choose Your TCG"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Browse our premium sealed product by game."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding (px)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection Card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection (auto-fills image & URL)"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Custom image (overrides collection image)"
+        },
+        {
+          "type": "url",
+          "id": "card_url",
+          "label": "Custom URL (overrides collection URL)"
+        },
+        {
+          "type": "text",
+          "id": "card_eyebrow",
+          "label": "Eyebrow label",
+          "placeholder": "e.g. Trading Card Game",
+          "default": "Trading Card Game"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card title (overrides collection name)",
+          "placeholder": "e.g. Pokémon"
+        },
+        {
+          "type": "text",
+          "id": "card_desc",
+          "label": "Short description",
+          "placeholder": "e.g. Booster boxes, ETBs, and sealed product."
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Gateway",
+      "blocks": [
+        {
+          "type": "collection_card",
+          "settings": {
+            "card_eyebrow": "Trading Card Game",
+            "card_title": "Pokémon",
+            "card_desc": "Booster boxes, ETBs, and sealed product for all sets.",
+            "cta_label": "Shop Pokémon"
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "card_eyebrow": "Trading Card Game",
+            "card_title": "One Piece",
+            "card_desc": "Sealed booster boxes and special sets from every arc.",
+            "cta_label": "Shop One Piece"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

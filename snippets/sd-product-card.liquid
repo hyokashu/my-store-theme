@@ -1,0 +1,145 @@
+{% comment %}
+  Supply District — snippets/sd-product-card.liquid
+  Usage: {%- render 'sd-product-card', product: product -%}
+
+  Features:
+  • Sale badge (green, --color-cta-primary) + discount %
+  • Sold Out badge (muted grey)
+  • Quick Add: Ajax for single-variant · navigates to PDP for multi-variant
+  • Product image with lazy loading + aspect-ratio 1:1
+  • Vendor · Title · Price (current + compare)
+  • Hover: image scale + Quick Add button slide-up (CSS-only)
+{% endcomment %}
+
+{%- liquid
+  assign first_variant    = product.selected_or_first_available_variant
+  assign on_sale          = false
+  assign sold_out         = false
+  assign has_variants     = false
+  assign discount_pct     = 0
+
+  if first_variant.compare_at_price > first_variant.price
+    assign on_sale = true
+    if first_variant.compare_at_price > 0
+      assign discount_pct = first_variant.compare_at_price | minus: first_variant.price | times: 100 | divided_by: first_variant.compare_at_price
+    endif
+  endif
+
+  unless first_variant.available
+    assign sold_out = true
+  endunless
+
+  if product.variants.size > 1
+    assign has_variants = true
+  endif
+
+  assign card_img = product.featured_image
+-%}
+
+<article class="sdpc" aria-label="{{ product.title | escape }}">
+
+  {%- comment -%} ── Image zone ── {%- endcomment -%}
+  <div class="sdpc__img-wrap">
+    <a href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+      {%- if card_img != blank -%}
+        <img
+          src="{{ card_img | image_url: width: 480 }}"
+          srcset="
+            {{ card_img | image_url: width: 240 }} 240w,
+            {{ card_img | image_url: width: 360 }} 360w,
+            {{ card_img | image_url: width: 480 }} 480w,
+            {{ card_img | image_url: width: 640 }} 640w"
+          sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
+          alt="{{ card_img.alt | escape | default: product.title | escape }}"
+          class="sdpc__img"
+          loading="lazy"
+          width="480"
+          height="480"
+        >
+      {%- else -%}
+        <div class="sdpc__img" style="background:var(--cv-secondary);width:100%;height:100%;"></div>
+      {%- endif -%}
+    </a>
+
+    {%- comment -%} ── Badges ── {%- endcomment -%}
+    <div class="sdpc__badges">
+      {%- if sold_out -%}
+        <span class="sdpc__badge sdpc__badge--sold-out">Sold Out</span>
+      {%- elsif on_sale -%}
+        <span class="sdpc__badge sdpc__badge--sale">
+          {%- if discount_pct > 0 -%}−{{ discount_pct }}%{%- else -%}Sale{%- endif -%}
+        </span>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Quick Add button (overlay on image) ── {%- endcomment -%}
+    <div class="sdpc__quick-add-wrap">
+      {%- if sold_out -%}
+        <button
+          class="sdpc__quick-add"
+          disabled
+          aria-disabled="true"
+          aria-label="Sold out — {{ product.title | escape }}"
+        >
+          Sold Out
+        </button>
+      {%- elsif has_variants -%}
+        <button
+          class="sdpc__quick-add sdpc__quick-add--goto"
+          type="button"
+          data-product-url="{{ product.url }}"
+          data-variant-id="{{ first_variant.id }}"
+          data-has-variants="true"
+          aria-label="Select options for {{ product.title | escape }}"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          Select Options
+        </button>
+      {%- else -%}
+        <button
+          class="sdpc__quick-add"
+          type="button"
+          data-product-url="{{ product.url }}"
+          data-variant-id="{{ first_variant.id }}"
+          data-has-variants="false"
+          aria-label="Quick add {{ product.title | escape }} to cart"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          Quick Add
+        </button>
+      {%- endif -%}
+    </div>
+
+  </div><!-- /.sdpc__img-wrap -->
+
+  {%- comment -%} ── Card body ── {%- endcomment -%}
+  <div class="sdpc__body">
+
+    {%- if product.vendor != blank -%}
+      <p class="sdpc__vendor">{{ product.vendor | escape }}</p>
+    {%- endif -%}
+
+    <h3 class="sdpc__title">
+      <a href="{{ product.url }}" style="text-decoration:none;color:inherit;">
+        {{ product.title | escape }}
+      </a>
+    </h3>
+
+    <div class="sdpc__price-row">
+      <span class="sdpc__price-current">{{ first_variant.price | money }}</span>
+      {%- if on_sale -%}
+        <span class="sdpc__price-compare">{{ first_variant.compare_at_price | money }}</span>
+      {%- endif -%}
+    </div>
+
+  </div><!-- /.sdpc__body -->
+
+</article>

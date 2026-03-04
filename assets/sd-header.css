@@ -1,0 +1,347 @@
+/* ============================================================
+   Supply District — sd-header.css
+   Announcement bar + main header styles + sticky behaviour.
+   All selectors are namespaced with sd- to avoid conflicts.
+   ============================================================ */
+
+/* ── Design tokens ─────────────────────────────────────────── */
+:root {
+  --sd-announce-bg:     #12111a;   /* near-black with a hint of purple */
+  --sd-announce-fg:     #e8e6f0;   /* off-white text */
+  --sd-announce-accent: #a78bfa;   /* soft violet for the icon/link hover */
+  --sd-announce-height: 2.5rem;    /* used by sticky JS offset */
+
+  --sd-header-bg:       #ffffff;
+  --sd-header-fg:       #1a1a2e;
+  --sd-header-border:   #e5e7eb;
+  --sd-header-height:   4.5rem;    /* comfortable desktop height */
+
+  --sd-search-bg:       #f3f4f6;
+  --sd-search-border:   #d1d5db;
+  --sd-search-focus:    #6d28d9;   /* violet focus ring */
+  --sd-search-radius:   9999px;    /* fully pill-shaped */
+
+  --sd-cart-badge-bg:   #dc2626;   /* red dot */
+  --sd-cart-badge-fg:   #ffffff;
+
+  --sd-transition:      0.25s ease;
+}
+
+/* ============================================================
+   1. ANNOUNCEMENT BAR
+   ============================================================ */
+.sd-announce {
+  background: var(--sd-announce-bg);
+  color:      var(--sd-announce-fg);
+  font-size:  0.8125rem;           /* 13 px */
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  height: var(--sd-announce-height);
+}
+
+.sd-announce__inner {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  max-width:       80rem;
+  margin:          0 auto;
+  padding:         0 1.5rem;
+  height:          100%;
+}
+
+/* Left spacer mirrors the selector width so promo text stays centred */
+.sd-announce__left {
+  flex:      0 0 auto;
+  min-width: 7rem;          /* must stay ≥ selector width */
+}
+
+/* ── Promo text ── */
+.sd-announce__text {
+  flex:        1 1 auto;
+  text-align:  center;
+  display:     flex;
+  align-items: center;
+  justify-content: center;
+  gap:         0.4rem;
+  margin:      0;
+}
+
+.sd-announce__icon {
+  width:        1rem;
+  height:       1rem;
+  flex-shrink:  0;
+  color:        var(--sd-announce-accent);
+}
+
+.sd-announce__link {
+  color:           inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition:      color var(--sd-transition);
+}
+.sd-announce__link:hover { color: var(--sd-announce-accent); }
+
+/* ── Currency / region selector ── */
+.sd-announce__right {
+  flex:       0 0 auto;
+  min-width:  7rem;
+  display:    flex;
+  justify-content: flex-end;
+}
+
+.sd-currency-form { margin: 0; }
+
+.sd-currency-wrap {
+  position:   relative;
+  display:    flex;
+  align-items: center;
+  gap:        0.3rem;
+}
+
+.sd-currency-globe {
+  width:       0.9rem;
+  height:      0.9rem;
+  flex-shrink: 0;
+  opacity:     0.75;
+}
+
+.sd-currency-select {
+  appearance:      none;
+  background:      transparent;
+  border:          none;
+  color:           var(--sd-announce-fg);
+  font-size:       0.8125rem;
+  font-weight:     500;
+  cursor:          pointer;
+  padding-right:   1.1rem;  /* room for chevron */
+  outline:         none;
+}
+.sd-currency-select:focus-visible {
+  outline: 2px solid var(--sd-announce-accent);
+  border-radius: 2px;
+}
+.sd-currency-select option { background: var(--sd-announce-bg); }
+
+.sd-currency-chevron {
+  position:    absolute;
+  right:       0;
+  width:       0.7rem;
+  height:      0.7rem;
+  pointer-events: none;
+  opacity:     0.7;
+}
+
+.sd-currency-static {
+  display:     flex;
+  align-items: center;
+  gap:         0.3rem;
+  font-size:   0.8125rem;
+  font-weight: 500;
+  opacity:     0.9;
+}
+
+
+/* ============================================================
+   2. MAIN HEADER
+   ============================================================ */
+.sd-header {
+  position:         relative;   /* becomes sticky via JS */
+  z-index:          100;
+  background:       var(--sd-header-bg);
+  border-bottom:    1px solid var(--sd-header-border);
+  height:           var(--sd-header-height);
+  transition:       box-shadow var(--sd-transition),
+                    background var(--sd-transition);
+}
+
+.sd-header__inner {
+  display:         grid;
+  grid-template-columns: 1fr 2fr 1fr;  /* logo | search | icons */
+  align-items:     center;
+  max-width:       80rem;
+  margin:          0 auto;
+  padding:         0 1.5rem;
+  height:          100%;
+  gap:             1rem;
+}
+
+/* ── Sticky state ── */
+.sd-header.is-sticky {
+  position:   fixed;
+  top:        0;
+  left:       0;
+  right:      0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+}
+
+/* ── Logo ── */
+.sd-header__logo {
+  display: flex;
+  align-items: center;
+}
+
+.sd-header__logo-link {
+  display:         inline-flex;
+  align-items:     center;
+  text-decoration: none;
+}
+
+.sd-header__logo-img {
+  max-width:  200px;   /* overridden by JS from schema setting */
+  max-height: calc(var(--sd-header-height) - 1.25rem);
+  width:      auto;
+  height:     auto;
+  display:    block;
+  object-fit: contain;
+}
+
+.sd-header__logo-text {
+  font-size:   1.375rem;
+  font-weight: 700;
+  color:       var(--sd-header-fg);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* ── Search ── */
+.sd-header__search { width: 100%; }
+
+.sd-search-form { width: 100%; }
+
+.sd-search-wrap {
+  position:    relative;
+  display:     flex;
+  align-items: center;
+  width:       100%;
+}
+
+.sd-search-btn {
+  position:   absolute;
+  left:       0.875rem;
+  top:        50%;
+  transform:  translateY(-50%);
+  background: none;
+  border:     none;
+  padding:    0;
+  cursor:     pointer;
+  color:      #9ca3af;
+  display:    flex;
+  align-items: center;
+  transition: color var(--sd-transition);
+  line-height: 0;
+}
+.sd-search-btn:hover { color: var(--sd-search-focus); }
+
+.sd-search-icon {
+  width:  1.1rem;
+  height: 1.1rem;
+}
+
+.sd-search-input {
+  width:            100%;
+  padding:          0.6rem 1rem 0.6rem 2.75rem;  /* left indent for icon */
+  background:       var(--sd-search-bg);
+  border:           1.5px solid var(--sd-search-border);
+  border-radius:    var(--sd-search-radius);
+  font-size:        0.9375rem;
+  color:            var(--sd-header-fg);
+  outline:          none;
+  transition:       border-color var(--sd-transition),
+                    box-shadow var(--sd-transition);
+  /* Chrome removes default search decoration */
+  -webkit-appearance: none;
+}
+.sd-search-input::placeholder { color: #9ca3af; }
+.sd-search-input:focus {
+  border-color: var(--sd-search-focus);
+  box-shadow:   0 0 0 3px rgba(109, 40, 217, 0.12);
+  background:   #ffffff;
+}
+/* Hide native clear button in WebKit */
+.sd-search-input::-webkit-search-cancel-button { display: none; }
+
+/* ── Utility icon group ── */
+.sd-header__icons {
+  display:         flex;
+  align-items:     center;
+  justify-content: flex-end;
+  gap:             0.25rem;
+}
+
+.sd-icon-btn {
+  position:       relative;
+  display:        inline-flex;
+  align-items:    center;
+  justify-content: center;
+  width:          2.5rem;
+  height:         2.5rem;
+  border-radius:  50%;
+  color:          var(--sd-header-fg);
+  text-decoration: none;
+  transition:     background var(--sd-transition), color var(--sd-transition);
+}
+.sd-icon-btn:hover { background: var(--sd-search-bg); color: var(--sd-search-focus); }
+.sd-icon-btn svg  { width: 1.375rem; height: 1.375rem; }
+
+/* Cart badge */
+.sd-cart-badge {
+  position:    absolute;
+  top:         4px;
+  right:       4px;
+  min-width:   1.1rem;
+  height:      1.1rem;
+  padding:     0 0.25rem;
+  background:  var(--sd-cart-badge-bg);
+  color:       var(--sd-cart-badge-fg);
+  font-size:   0.625rem;
+  font-weight: 700;
+  line-height: 1.1rem;
+  text-align:  center;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   3. STICKY OFFSET — push page content down when header fixes
+   ============================================================ */
+body.sd-sticky-active {
+  padding-top: var(--sd-header-height);
+}
+
+
+/* ============================================================
+   4. MOBILE RESPONSIVE  (≤ 768 px)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Collapse to 2 columns on mobile: logo | icons (search below) */
+  .sd-header__inner {
+    grid-template-columns: 1fr auto;
+    grid-template-rows:    auto auto;
+    height:      auto;
+    padding:     0.75rem 1rem;
+    gap:         0.5rem;
+  }
+
+  .sd-header__logo  { grid-column: 1; grid-row: 1; }
+  .sd-header__icons { grid-column: 2; grid-row: 1; }
+  .sd-header__search {
+    grid-column: 1 / -1;
+    grid-row:    2;
+  }
+
+  /* Slightly smaller header height */
+  .sd-header { height: auto; }
+
+  /* Announcement bar wraps if needed */
+  .sd-announce        { height: auto; min-height: var(--sd-announce-height); }
+  .sd-announce__inner { flex-wrap: wrap; gap: 0.25rem; padding: 0.35rem 1rem; }
+  .sd-announce__left  { display: none; }
+  .sd-announce__text  { flex: 1 1 100%; justify-content: center; order: 1; }
+  .sd-announce__right { flex: 1 1 100%; justify-content: center; order: 2; }
+}
+
+@media (max-width: 480px) {
+  .sd-header__logo-img  { max-width: 140px; }
+  .sd-header__logo-text { font-size: 1.125rem; }
+}
