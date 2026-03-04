@@ -1340,30 +1340,44 @@ input.cv-qty__input {
     }
   }
 
-  /* ── 5. Dynamic Recent Sales ── */
+ /* ── 5. Dynamic Recent Sales ── */
   var recentDataEl = document.getElementById('cv-recent-products-data');
   if (recentDataEl) {
     try {
       var products = JSON.parse(recentDataEl.textContent);
       if (products.length > 0) {
+        // Randomly shuffle the pool of products
         products.sort(function() { return 0.5 - Math.random(); });
         var listEl = document.getElementById('cv-recent-sales-list');
         var container = document.getElementById('cv-recent-sales-container');
         container.style.display = 'block';
 
-        var count = Math.min(3, products.length);
-        var times = ['12 minutes ago', '28 minutes ago', '1 hour ago', '3 hours ago', '5 hours ago'];
-        times.sort(function() { return 0.5 - Math.random(); });
+        var count = Math.min(4, products.length);
+        
+        // Start the top item somewhere between 2 and 15 minutes ago
+        var timeOffsetMins = Math.floor(Math.random() * 14) + 2; 
 
         for (var i = 0; i < count; i++) {
+          // Format the time correctly (switch to hours if it goes over 60 mins)
+          var timeString = '';
+          if (timeOffsetMins < 60) {
+            timeString = timeOffsetMins + ' minutes ago';
+          } else {
+            var hrs = Math.floor(timeOffsetMins / 60);
+            timeString = hrs + (hrs === 1 ? ' hour ago' : ' hours ago');
+          }
+
           var html = '<div class="cv-sale-item">' +
                        '<div class="cv-sale-item__info">' +
                          '<span class="cv-sale-item__name">' + products[i].title + '</span>' +
-                         '<span class="cv-sale-item__time">' + times[i] + '</span>' +
+                         '<span class="cv-sale-item__time">' + timeString + '</span>' +
                        '</div>' +
                        '<span class="cv-sale-item__price">' + products[i].price + '</span>' +
                      '</div>';
           listEl.insertAdjacentHTML('beforeend', html);
+
+          // Add a random chunk of time (15 to 50 minutes) for the next item down the list
+          timeOffsetMins += Math.floor(Math.random() * 36) + 15; 
         }
       }
     } catch(e) {}
