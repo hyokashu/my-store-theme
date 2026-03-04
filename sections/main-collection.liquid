@@ -18,10 +18,77 @@
     BANNER — breadcrumbs + title + description
 ════════════════════════════════ {%- endcomment -%}
 
+<style>
+  /* Scoped Banner Styles utilizing our global tokens */
+  .sdcb-banner {
+    background: var(--cv-bg, #f7f6f3);
+    padding: 3rem 1rem 2.5rem;
+    border-bottom: 1px solid var(--cv-border, #dedad5);
+  }
+  .sdcb-banner__inner {
+    max-width: 80rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Overriding the broken breadcrumbs seen in the screenshot */
+  .sdcb-banner .cv-breadcrumb {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; gap: 0.375rem;
+    font-family: var(--cv-font-sans, 'Inter', sans-serif); 
+    font-size: 0.875rem; color: var(--cv-muted-fg, #76798c);
+    flex-wrap: wrap; align-items: center;
+  }
+  .sdcb-banner .cv-breadcrumb a { color: var(--cv-muted-fg); text-decoration: none; transition: color 0.15s; }
+  .sdcb-banner .cv-breadcrumb a:hover { color: var(--cv-fg, #1c1f36); }
+  .sdcb-banner .cv-breadcrumb__sep { color: var(--cv-border); }
+  .sdcb-banner .cv-breadcrumb__current { color: var(--cv-fg); font-weight: 500; }
+
+  .sdcb-banner__title {
+    font-family: var(--cv-font-head, 'Space Grotesk', sans-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--cv-primary, #282d52);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  
+  .sdcb-banner__desc {
+    font-family: var(--cv-font-sans);
+    font-size: 1rem;
+    color: var(--cv-muted-fg);
+    max-width: 48rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  .sdcb-banner__meta {
+    font-family: var(--cv-font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--cv-muted-fg);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.5rem;
+  }
+</style>
+
 <div class="sdcb-banner">
   <div class="sdcb-banner__inner">
 
-    {%- render 'breadcrumbs' -%}
+    {%- comment -%} 
+      Replaced the external 'breadcrumbs' snippet with a hardcoded clean version 
+      to immediately fix the numbered list formatting bug 
+    {%- endcomment -%}
+    <nav aria-label="Breadcrumb">
+      <ul class="cv-breadcrumb">
+        <li><a href="{{ routes.root_url }}">Home</a></li>
+        <li class="cv-breadcrumb__sep" aria-hidden="true">/</li>
+        <li><span class="cv-breadcrumb__current" aria-current="page">{{ collection.title | escape }}</span></li>
+      </ul>
+    </nav>
 
     <h1 class="sdcb-banner__title">{{ collection.title | escape }}</h1>
 
@@ -31,13 +98,15 @@
 
     <div class="sdcb-banner__meta">
       {%- assign pc = collection.products_count -%}
-      {%- if pc == 0 -%}
-        <span class="sdcb-banner__count">No products</span>
-      {%- elsif pc == 1 -%}
-        <span class="sdcb-banner__count">1 product</span>
-      {%- else -%}
-        <span class="sdcb-banner__count">{{ pc }} products</span>
-      {%- endif -%}
+      <span class="sdcb-banner__count">
+        {%- if pc == 0 -%}
+          No products
+        {%- elsif pc == 1 -%}
+          1 product
+        {%- else -%}
+          {{ pc }} products
+        {%- endif -%}
+      </span>
     </div>
 
   </div>
