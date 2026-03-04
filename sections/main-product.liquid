@@ -1,5 +1,5 @@
 {% comment %}
-  CardVault — main-product.liquid
+  Supply District — main-product.liquid
   Self-contained product page section.
   Fonts, design tokens, layout, interactivity — all scoped here.
 {% endcomment %}
@@ -391,8 +391,6 @@ input.cv-qty__input {
 }
 .cv-btn--icon.is-wishlisted svg { fill: var(--cv-destructive); }
 
-/* cv-btn--outline-primary now defined in the CTA section above */
-
 .cv-btn-row { display: flex; gap: 0.75rem; }
 
 /* Trust signals */
@@ -640,10 +638,13 @@ input.cv-qty__input {
   border-radius: calc(var(--cv-radius) - 2px);
   box-shadow: var(--cv-shadow-sm);
 }
-.cv-product-card__info    { display: flex; flex-direction: column; gap: 0.25rem; }
-.cv-product-card__name    { font-size: 0.875rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* THE OPTION 1 FIX: Flex: 1 forces the info box to stretch, margin-top: auto pushes the price down */
+.cv-product-card__info    { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; }
+.cv-product-card__name    { font-size: 0.875rem; font-weight: 600; line-height: 1.4; }
 .cv-product-card__type    { font-size: 0.75rem; color: var(--cv-muted-fg); }
-.cv-product-card__prices  { display: flex; align-items: baseline; gap: 0.5rem; margin-top: 0.25rem; }
+.cv-product-card__prices  { display: flex; align-items: baseline; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem; }
+
 .cv-product-card__price   { font-family: var(--cv-font-head); font-size: 1rem; font-weight: 700; }
 .cv-product-card__compare { font-size: 0.75rem; color: var(--cv-muted-fg); text-decoration: line-through; }
 
@@ -1251,34 +1252,47 @@ input.cv-qty__input {
 
   {%- comment -%} ── Similar Products ── {%- endcomment -%}
   <section class="cv-similar" aria-label="Similar products">
+    {%- liquid
+      assign related_collection = blank
+      for c in product.collections
+        if c.handle != 'all' and c.handle != 'frontpage'
+          assign related_collection = c
+          break
+        endif
+      endfor
+    -%}
     <div class="cv-similar__header">
       <h2 class="cv-similar__title">You May Also Like</h2>
-      <a href="/collections/all" class="cv-similar__all">View All</a>
+      <a href="{% if related_collection %}{{ related_collection.url }}{% else %}/collections/all{% endif %}" class="cv-similar__all">View All</a>
     </div>
     <div class="cv-similar__grid">
-      {%- if recommendations.performed and recommendations.products_count > 0 -%}
-        {%- for rec in recommendations.products limit: 4 -%}
-          {%- assign rec_var    = rec.selected_or_first_available_variant -%}
-          {%- assign rec_sale   = false -%}
-          {%- if rec_var.compare_at_price > rec_var.price -%}{%- assign rec_sale = true -%}{%- endif -%}
-          <a href="{{ rec.url }}" class="cv-product-card">
-            <div class="cv-product-card__img-wrap">
-              {%- if rec.featured_image -%}
-                <img src="{{ rec.featured_image | image_url: width: 400 }}" alt="{{ rec.featured_image.alt | default: rec.title | escape }}" width="400" height="400" loading="lazy">
-              {%- else -%}
-                <img src="https://placehold.co/400x400/eeecea/76798c?text=Product" alt="{{ rec.title | escape }}" width="400" height="400" loading="lazy">
-              {%- endif -%}
-              {%- if rec_sale -%}<span class="cv-product-card__sale-badge">Sale</span>{%- endif -%}
-            </div>
-            <div class="cv-product-card__info">
-              <h3 class="cv-product-card__name">{{ rec.title }}</h3>
-              <p class="cv-product-card__type">{{ rec.type }}</p>
-              <div class="cv-product-card__prices">
-                <span class="cv-product-card__price">{{ rec_var.price | money }}</span>
-                {%- if rec_sale -%}<span class="cv-product-card__compare">{{ rec_var.compare_at_price | money }}</span>{%- endif -%}
+      {%- if related_collection and related_collection.products_count > 1 -%}
+        {%- assign rendered_count = 0 -%}
+        {%- for rec in related_collection.products limit: 10 -%}
+          {%- if rec.id != product.id and rendered_count < 4 -%}
+            {%- assign rendered_count = rendered_count | plus: 1 -%}
+            {%- assign rec_var    = rec.selected_or_first_available_variant -%}
+            {%- assign rec_sale   = false -%}
+            {%- if rec_var.compare_at_price > rec_var.price -%}{%- assign rec_sale = true -%}{%- endif -%}
+            <a href="{{ rec.url }}" class="cv-product-card">
+              <div class="cv-product-card__img-wrap">
+                {%- if rec.featured_image -%}
+                  <img src="{{ rec.featured_image | image_url: width: 400 }}" alt="{{ rec.featured_image.alt | default: rec.title | escape }}" width="400" height="400" loading="lazy">
+                {%- else -%}
+                  <img src="https://placehold.co/400x400/eeecea/76798c?text=Product" alt="{{ rec.title | escape }}" width="400" height="400" loading="lazy">
+                {%- endif -%}
+                {%- if rec_sale -%}<span class="cv-product-card__sale-badge">Sale</span>{%- endif -%}
               </div>
-            </div>
-          </a>
+              <div class="cv-product-card__info">
+                <h3 class="cv-product-card__name">{{ rec.title }}</h3>
+                <p class="cv-product-card__type">{{ rec.type | default: '&nbsp;' }}</p>
+                <div class="cv-product-card__prices">
+                  <span class="cv-product-card__price">{{ rec_var.price | money }}</span>
+                  {%- if rec_sale -%}<span class="cv-product-card__compare">{{ rec_var.compare_at_price | money }}</span>{%- endif -%}
+                </div>
+              </div>
+            </a>
+          {%- endif -%}
         {%- endfor -%}
       {%- else -%}
         <a href="#" class="cv-product-card">
