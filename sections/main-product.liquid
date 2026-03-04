@@ -1251,17 +1251,26 @@ input.cv-qty__input {
 
   {%- comment -%} ── Similar Products ── {%- endcomment -%}
   <section class="cv-similar" aria-label="Similar products">
+    {%- liquid
+      comment
+        1. Find the first meaningful collection this product belongs to using a safe loop.
+      endcomment
+      assign related_collection = blank
+      for c in product.collections
+        if c.handle != 'all' and c.handle != 'frontpage'
+          assign related_collection = c
+          break
+        endif
+      endfor
+    -%}
+
     <div class="cv-similar__header">
       <h2 class="cv-similar__title">You May Also Like</h2>
-      <a href="/collections/all" class="cv-similar__all">View All</a>
+      <a href="{{ related_collection.url | default: '/collections/all' }}" class="cv-similar__all">View All</a>
     </div>
     
     <div class="cv-similar__grid">
       {%- liquid
-        comment
-          1. Find the first meaningful collection this product belongs to.
-        endcomment
-        assign related_collection = product.collections | where: "handle", "!=", "all" | where: "handle", "!=", "frontpage" | first
         assign has_related = false
 
         if related_collection and related_collection.products_count > 1
