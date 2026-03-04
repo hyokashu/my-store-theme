@@ -1,446 +1,1636 @@
 {% comment %}
-  Supply District — sections/footer.liquid
-  Multi-column trust-anchor footer.
-  Background: deep slate/purple · Text: cream/off-white
-  Columns: Brand | Customer Care | Business Address | Community
-  All dynamic settings accessed by explicit ID (not bracket notation).
+  CardVault — main-home.liquid
+  Gameology-inspired homepage. Fully self-contained CSS + JS.
+  Shares the CardVault design tokens established in main-product.liquid.
+  ALL content is editable via Shopify's "Customize" theme editor.
+  CSS is 100% unchanged — only data bindings have been updated.
 {% endcomment %}
 
-<footer class="sd-footer" role="contentinfo" aria-label="Site footer">
-  <div class="sd-footer__inner">
+{%- liquid
+  assign hero_slides   = section.blocks | where: "type", "hero_slide"
+  assign trust_items   = section.blocks | where: "type", "trust_item"
+  assign marquee_items = section.blocks | where: "type", "marquee_item"
+  assign cat_cards     = section.blocks | where: "type", "category_card"
+  assign brand_links   = section.blocks | where: "type", "brand_link"
+  assign promo_banners = section.blocks | where: "type", "promo_banner"
+  assign about_checks  = section.blocks | where: "type", "about_check"
+  assign reward_items  = section.blocks | where: "type", "reward_item"
+  assign reviews       = section.blocks | where: "type", "review"
 
-    {%- comment -%} ── 1. Brand column ── {%- endcomment -%}
-    <div class="sd-footer__col sd-footer__col--brand">
-      <a href="{{ routes.root_url }}" class="sd-footer__brand-link" aria-label="{{ shop.name }}">
-        {%- if section.settings.footer_logo != blank -%}
-          <img
-            src="{{ section.settings.footer_logo | image_url: width: 240 }}"
-            alt="{{ shop.name }}"
-            class="sd-footer__logo"
-            loading="lazy"
-          >
-        {%- else -%}
-          <span class="sd-footer__brand-name">{{ shop.name }}</span>
-        {%- endif -%}
-      </a>
-      <p class="sd-footer__tagline">{{ section.settings.tagline | default: 'Your one-stop destination for sealed TCG products. Authentic. Affordable. Fast.' }}</p>
-    </div>
+  assign tab1_col = collections[section.settings.tab1_collection]
+  assign tab2_col = collections[section.settings.tab2_collection]
+  assign tab3_col = collections[section.settings.tab3_collection]
+-%}
 
-    {%- comment -%} ── 2. Customer Care column ── {%- endcomment -%}
-    <div class="sd-footer__col">
-      <h3 class="sd-footer__col-title">Customer Care</h3>
-      <ul class="sd-footer__list">
-
-        {%- comment -%} Email {%- endcomment -%}
-        <li class="sd-footer__list-item">
-          <svg class="sd-footer__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          <a href="mailto:{{ section.settings.support_email | default: 'support@supplydistrict.com' }}" class="sd-footer__link">
-            {{ section.settings.support_email | default: 'support@supplydistrict.com' }}
-          </a>
-        </li>
-
-        {%- comment -%} Phone {%- endcomment -%}
-        {%- if section.settings.phone != blank -%}
-          <li class="sd-footer__list-item">
-            <svg class="sd-footer__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.25a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <a href="tel:{{ section.settings.phone }}" class="sd-footer__link">{{ section.settings.phone }}</a>
-          </li>
-        {%- endif -%}
-
-        {%- comment -%} Hours {%- endcomment -%}
-        <li class="sd-footer__list-item">
-          <svg class="sd-footer__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span class="sd-footer__text">{{ section.settings.hours | default: 'Mon–Fri: 9am – 5pm AEST' }}</span>
-        </li>
-      </ul>
-
-      {%- comment -%} Quick links — explicit IDs, no bracket notation {%- endcomment -%}
-      <ul class="sd-footer__links-list">
-        {%- if section.settings.quick_link_1_label != blank -%}
-          <li><a href="{{ section.settings.quick_link_1_url | default: '#' }}" class="sd-footer__link">{{ section.settings.quick_link_1_label }}</a></li>
-        {%- endif -%}
-        {%- if section.settings.quick_link_2_label != blank -%}
-          <li><a href="{{ section.settings.quick_link_2_url | default: '#' }}" class="sd-footer__link">{{ section.settings.quick_link_2_label }}</a></li>
-        {%- endif -%}
-        {%- if section.settings.quick_link_3_label != blank -%}
-          <li><a href="{{ section.settings.quick_link_3_url | default: '#' }}" class="sd-footer__link">{{ section.settings.quick_link_3_label }}</a></li>
-        {%- endif -%}
-        {%- if section.settings.quick_link_4_label != blank -%}
-          <li><a href="{{ section.settings.quick_link_4_url | default: '#' }}" class="sd-footer__link">{{ section.settings.quick_link_4_label }}</a></li>
-        {%- endif -%}
-      </ul>
-    </div>
-
-    {%- comment -%} ── 3. Business Address column ── {%- endcomment -%}
-    <div class="sd-footer__col">
-      <h3 class="sd-footer__col-title">Our Location</h3>
-      <address class="sd-footer__address">
-        <svg class="sd-footer__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <span>
-          {%- if section.settings.address != blank -%}
-            {{ section.settings.address | newline_to_br }}
-          {%- else -%}
-            Supply District Pty Ltd<br>
-            123 Collector Way<br>
-            Melbourne VIC 3000<br>
-            Australia
-          {%- endif -%}
-        </span>
-      </address>
-      {%- if section.settings.abn != blank -%}
-        <p class="sd-footer__abn">ABN: {{ section.settings.abn }}</p>
-      {%- endif -%}
-    </div>
-
-    {%- comment -%} ── 4. Community / Social column ── {%- endcomment -%}
-    <div class="sd-footer__col">
-      <h3 class="sd-footer__col-title">Community</h3>
-      <p class="sd-footer__social-intro">{{ section.settings.social_intro | default: 'Follow us for drops, pulls & community events.' }}</p>
-      <div class="sd-footer__socials">
-
-        {%- if section.settings.instagram_url != blank -%}
-          <a href="{{ section.settings.instagram_url }}" class="sd-footer__social-btn" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            <span>Instagram</span>
-          </a>
-        {%- endif -%}
-
-        {%- if section.settings.discord_url != blank -%}
-          <a href="{{ section.settings.discord_url }}" class="sd-footer__social-btn" aria-label="Discord" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.317 4.37a19.8 19.8 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-            <span>Discord</span>
-          </a>
-        {%- endif -%}
-
-        {%- if section.settings.youtube_url != blank -%}
-          <a href="{{ section.settings.youtube_url }}" class="sd-footer__social-btn" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" style="fill:currentColor;stroke:none"/></svg>
-            <span>YouTube</span>
-          </a>
-        {%- endif -%}
-
-        {%- if section.settings.tiktok_url != blank -%}
-          <a href="{{ section.settings.tiktok_url }}" class="sd-footer__social-btn" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
-            <span>TikTok</span>
-          </a>
-        {%- endif -%}
-
-      </div>
-    </div>
-
-  </div>{%- comment -%} /.sd-footer__inner {%- endcomment -%}
-
-  {%- comment -%} ── Bottom bar ── {%- endcomment -%}
-  <div class="sd-footer__bottom">
-    <div class="sd-footer__bottom-inner">
-      <p class="sd-footer__copy">
-        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}.
-        {{ section.settings.legal_note | default: 'All rights reserved.' }}
-      </p>
-      <nav class="sd-footer__legal-nav" aria-label="Legal links">
-        {%- if section.settings.legal_link_1_label != blank -%}
-          <a href="{{ section.settings.legal_link_1_url | default: '#' }}" class="sd-footer__legal-link">{{ section.settings.legal_link_1_label }}</a>
-        {%- endif -%}
-        {%- if section.settings.legal_link_2_label != blank -%}
-          <a href="{{ section.settings.legal_link_2_url | default: '#' }}" class="sd-footer__legal-link">{{ section.settings.legal_link_2_label }}</a>
-        {%- endif -%}
-        {%- if section.settings.legal_link_3_label != blank -%}
-          <a href="{{ section.settings.legal_link_3_url | default: '#' }}" class="sd-footer__legal-link">{{ section.settings.legal_link_3_label }}</a>
-        {%- endif -%}
-      </nav>
-    </div>
-  </div>
-
-</footer>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-/* ============================================================
-   Supply District — Footer
-   Deep slate background (#1c1f36) · cream/off-white text
-   ============================================================ */
+/* =============================================================
+   CardVault Design Tokens (shared with product page)
+   ============================================================= */
 :root {
-  --sdf-bg:      #1c1f36;
-  --sdf-fg:      #f0eee8;
-  --sdf-muted:   rgba(240,238,232,0.65);
-  --sdf-border:  rgba(240,238,232,0.12);
-  --sdf-accent:  #a78bfa;
-  --sdf-radius:  0.5rem;
+  --cv-bg:         #f7f6f3;
+  --cv-fg:         #1c1f36;
+  --cv-card:       #ffffff;
+  --cv-primary:    #282d52;
+  --cv-primary-fg: #f8f7f5;
+  --cv-secondary:  #eeecea;
+  --cv-muted-fg:   #76798c;
+  --cv-border:     #dedad5;
+  --cv-destructive:#c94030;
+  --cv-success:    #2e9963;
+  --cv-success-fg: #f8f7f5;
+  --cv-star:       #d4783a;
+  --cv-radius:     0.5rem;
+  --cv-shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+  --cv-shadow:     0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --cv-font-sans:  'Inter', system-ui, -apple-system, sans-serif;
+  --cv-font-head:  'Space Grotesk', system-ui, sans-serif;
 }
 
-.sd-footer {
-  background:   var(--sdf-bg);
-  color:        var(--sdf-fg);
-  font-family:  var(--cv-font-sans, 'Inter', system-ui, sans-serif);
-  font-size:    0.9375rem;
-  line-height:  1.6;
+/* =============================================================
+   Home Page Base
+   ============================================================= */
+.cvh * { box-sizing: border-box; }
+.cvh {
+  font-family: var(--cv-font-sans);
+  color: var(--cv-fg);
+  background: var(--cv-bg);
+}
+.cvh a { text-decoration: none; color: inherit; }
+.cvh img { display: block; max-width: 100%; }
+
+.cvh__inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 1024px) {
+  .cvh__inner { padding-left: 2rem; padding-right: 2rem; }
 }
 
-/* ── 4-column grid ── */
-.sd-footer__inner {
-  display:     grid;
+/* =============================================================
+   Shared Button
+   ============================================================= */
+.cvh-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--cv-font-sans);
+  font-size: 0.9375rem; font-weight: 600;
+  border-radius: var(--cv-radius);
+  border: 1px solid transparent;
+  cursor: pointer; text-decoration: none;
+  padding: 0 1.5rem;
+  height: 2.875rem;
+  transition: opacity 0.15s, background 0.15s, transform 0.15s;
+  white-space: nowrap;
+  -webkit-appearance: none;
+}
+.cvh-btn:hover   { opacity: 0.88; transform: translateY(-1px); }
+.cvh-btn:active  { transform: translateY(0); }
+
+.cvh-btn--primary {
+  background: var(--cv-primary); color: var(--cv-primary-fg);
+  border-color: var(--cv-primary);
+}
+.cvh-btn--outline {
+  background: transparent;
+  border-color: var(--cv-primary); color: var(--cv-primary);
+}
+.cvh-btn--outline:hover { background: rgba(40,45,82,0.06); }
+.cvh-btn--white {
+  background: #fff; color: var(--cv-primary);
+  border-color: #fff;
+}
+.cvh-btn--ghost {
+  background: transparent; color: var(--cv-primary-fg);
+  border-color: rgba(255,255,255,0.5);
+}
+.cvh-btn--ghost:hover { background: rgba(255,255,255,0.12); }
+.cvh-btn svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+.cvh-btn--sm { height: 2.25rem; font-size: 0.8125rem; padding: 0 1rem; }
+
+/* Section headers */
+.cvh-section-hd { display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 1.75rem; }
+.cvh-section-hd--row { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.cvh-section-title {
+  font-family: var(--cv-font-head);
+  font-size: 1.75rem; font-weight: 700;
+  letter-spacing: -0.02em; line-height: 1.15;
+}
+@media (min-width: 768px) { .cvh-section-title { font-size: 2.25rem; } }
+.cvh-section-sub { font-size: 0.9375rem; color: var(--cv-muted-fg); }
+
+/* =============================================================
+   1. HERO SLIDER
+   ============================================================= */
+.cvh-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--cv-card);
+  border-bottom: 1px solid var(--cv-border);
+}
+
+.cvh-hero__track {
+  display: flex;
+  transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+}
+
+.cvh-hero__slide {
+  min-width: 100%;
+  display: grid;
   grid-template-columns: 1fr;
-  gap:         2.5rem;
-  max-width:   80rem;
-  margin:      0 auto;
-  padding:     3.5rem 1.5rem 3rem;
+  align-items: center;
+  gap: 0;
+  padding: 3rem 1rem 2rem;
 }
-@media (min-width: 640px)  { .sd-footer__inner { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1024px) { .sd-footer__inner { grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 3rem; } }
-
-/* ── Brand ── */
-.sd-footer__brand-link { text-decoration: none; display: inline-block; margin-bottom: 0.875rem; }
-.sd-footer__logo       { max-height: 2.5rem; width: auto; display: block; }
-.sd-footer__brand-name {
-  font-family:    var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
-  font-size:      1.375rem; font-weight: 800;
-  color:          var(--sdf-fg); letter-spacing: -0.02em;
-  display:        block;
-  margin-bottom:  0.875rem;
+@media (min-width: 768px) {
+  .cvh-hero__slide {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 4rem 2rem;
+    min-height: 520px;
+  }
 }
-.sd-footer__tagline { font-size: 0.875rem; color: var(--sdf-muted); margin: 0; max-width: 22rem; }
-
-/* ── Column heading ── */
-.sd-footer__col-title {
-  font-family:    var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
-  font-size:      0.75rem; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color:          var(--sdf-muted);
-  margin:         0 0 1rem;
-  padding-bottom: 0.625rem;
-  border-bottom:  1px solid var(--sdf-border);
+@media (min-width: 1024px) {
+  .cvh-hero__slide {
+    padding: 5rem 2rem;
+    min-height: 560px;
+    max-width: 80rem;
+    margin: 0 auto;
+  }
 }
 
-/* ── List items ── */
-.sd-footer__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.625rem; }
-.sd-footer__list-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; }
-.sd-footer__icon { width: 1rem; height: 1rem; flex-shrink: 0; opacity: 0.7; }
-.sd-footer__link { color: var(--sdf-fg); text-decoration: none; transition: color 0.15s; word-break: break-all; }
-.sd-footer__link:hover { color: var(--sdf-accent); }
-.sd-footer__text { color: var(--sdf-muted); font-size: 0.875rem; }
-
-/* ── Quick links (no icons) ── */
-.sd-footer__links-list {
-  list-style: none; padding: 0; margin: 1rem 0 0;
-  display: flex; flex-direction: column; gap: 0.375rem;
+/* Slide wrapper for full-bleed background */
+.cvh-hero__slide-wrap {
+  min-width: 100%;
+  position: relative;
 }
-.sd-footer__links-list .sd-footer__link { font-size: 0.875rem; color: var(--sdf-muted); }
-.sd-footer__links-list .sd-footer__link:hover { color: var(--sdf-fg); }
-
-/* ── Address ── */
-.sd-footer__address {
-  font-style:  normal; font-size: 0.875rem; color: var(--sdf-muted);
-  display:     flex; gap: 0.5rem; align-items: flex-start; line-height: 1.75;
+.cvh-hero__slide-wrap::before {
+  content: '';
+  position: absolute; inset: 0;
+  z-index: 0;
 }
-.sd-footer__address .sd-footer__icon { margin-top: 0.225rem; }
-.sd-footer__abn { font-size: 0.8125rem; color: var(--sdf-muted); margin-top: 0.75rem; }
+.cvh-hero__slide-wrap--1::before { background: linear-gradient(135deg, #f0edf8 0%, #e8e4f5 100%); }
+.cvh-hero__slide-wrap--2::before { background: linear-gradient(135deg, #e8f5ed 0%, #d4eedd 100%); }
+.cvh-hero__slide-wrap--3::before { background: linear-gradient(135deg, #fdf0e8 0%, #f5e0cc 100%); }
 
-/* ── Social ── */
-.sd-footer__social-intro { font-size: 0.875rem; color: var(--sdf-muted); margin: 0 0 1rem; }
-.sd-footer__socials      { display: flex; flex-direction: column; gap: 0.5rem; }
-.sd-footer__social-btn {
-  display:          inline-flex; align-items: center; gap: 0.625rem;
-  text-decoration:  none; color: var(--sdf-fg);
-  font-size:        0.875rem; font-weight: 500;
-  padding:          0.5rem 0.75rem;
-  border:           1px solid var(--sdf-border);
-  border-radius:    var(--sdf-radius);
-  width:            fit-content;
-  transition:       background 0.15s, border-color 0.15s, color 0.15s;
+.cvh-hero__slide-wrap > .cvh-hero__slide { position: relative; z-index: 1; max-width: 80rem; margin: 0 auto; }
+
+.cvh-hero__text { display: flex; flex-direction: column; gap: 1.25rem; }
+.cvh-hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  background: rgba(40,45,82,0.08);
+  color: var(--cv-primary);
+  font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  width: fit-content;
 }
-.sd-footer__social-btn:hover { background: rgba(255,255,255,0.07); border-color: var(--sdf-accent); color: var(--sdf-accent); }
-.sd-footer__social-btn svg   { width: 1.125rem; height: 1.125rem; }
+.cvh-hero__eyebrow svg { width: 0.875rem; height: 0.875rem; }
+.cvh-hero__title {
+  font-family: var(--cv-font-head);
+  font-size: 2.5rem; font-weight: 800;
+  line-height: 1.1; letter-spacing: -0.03em;
+  color: var(--cv-fg);
+}
+@media (min-width: 768px)  { .cvh-hero__title { font-size: 3rem; } }
+@media (min-width: 1024px) { .cvh-hero__title { font-size: 3.5rem; } }
+.cvh-hero__title em { font-style: normal; color: var(--cv-primary); }
 
-/* ── Bottom bar ── */
-.sd-footer__bottom { border-top: 1px solid var(--sdf-border); padding: 1rem 1.5rem; }
-.sd-footer__bottom-inner {
+.cvh-hero__desc { font-size: 1rem; line-height: 1.65; color: var(--cv-muted-fg); max-width: 32rem; }
+
+.cvh-hero__ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.cvh-hero__img-wrap {
+  display: none;
+  position: relative;
+  border-radius: calc(var(--cv-radius) * 3);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+@media (min-width: 768px) { .cvh-hero__img-wrap { display: block; } }
+.cvh-hero__img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Floating badge on hero image */
+.cvh-hero__badge {
+  position: absolute;
+  bottom: 1.25rem; left: 1.25rem;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 1.5);
+  padding: 0.75rem 1rem;
+  box-shadow: var(--cv-shadow);
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.cvh-hero__badge-icon {
+  width: 2.5rem; height: 2.5rem;
+  border-radius: var(--cv-radius);
+  background: var(--cv-primary);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cvh-hero__badge-icon svg { width: 1.25rem; height: 1.25rem; color: #fff; }
+.cvh-hero__badge-text { display: flex; flex-direction: column; }
+.cvh-hero__badge-val  { font-family: var(--cv-font-head); font-size: 1.125rem; font-weight: 700; }
+.cvh-hero__badge-label { font-size: 0.75rem; color: var(--cv-muted-fg); }
+
+/* Slider controls */
+.cvh-hero__controls {
+  position: absolute;
+  bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 0.75rem;
+  z-index: 10;
+}
+.cvh-hero__dot {
+  width: 0.5rem; height: 0.5rem;
+  border-radius: 9999px;
+  background: rgba(40,45,82,0.25);
+  border: none; cursor: pointer; padding: 0;
+  transition: background 0.2s, width 0.2s;
+}
+.cvh-hero__dot.is-active { background: var(--cv-primary); width: 1.5rem; }
+
+.cvh-hero__arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 2.5rem; height: 2.5rem;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid var(--cv-border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--cv-shadow);
+  z-index: 10;
+  color: var(--cv-fg);
+  transition: background 0.15s;
+  -webkit-appearance: none;
+}
+.cvh-hero__arrow:hover { background: #fff; }
+.cvh-hero__arrow svg { width: 1.25rem; height: 1.25rem; }
+.cvh-hero__arrow--prev { left: 1rem; }
+.cvh-hero__arrow--next { right: 1rem; }
+@media (min-width: 768px) {
+  .cvh-hero__arrow--prev { left: 1.5rem; }
+  .cvh-hero__arrow--next { right: 1.5rem; }
+}
+
+/* =============================================================
+   2. TRUST BAR
+   ============================================================= */
+.cvh-trust-bar {
+  background: var(--cv-primary);
+  color: var(--cv-primary-fg);
+  padding: 1.75rem 1rem;
+}
+.cvh-trust-bar__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
   max-width: 80rem; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
 }
-.sd-footer__copy { font-size: 0.8125rem; color: var(--sdf-muted); margin: 0; }
-.sd-footer__legal-nav  { display: flex; gap: 1rem; flex-wrap: wrap; }
-.sd-footer__legal-link { font-size: 0.8125rem; color: var(--sdf-muted); text-decoration: none; transition: color 0.15s; }
-.sd-footer__legal-link:hover { color: var(--sdf-fg); }
+@media (min-width: 768px) { .cvh-trust-bar__grid { grid-template-columns: repeat(4, 1fr); gap: 2rem; padding: 0 2rem; } }
+
+.cvh-trust-item {
+  display: flex; align-items: flex-start; gap: 0.875rem;
+}
+.cvh-trust-item__icon {
+  flex-shrink: 0;
+  width: 2.5rem; height: 2.5rem;
+  background: rgba(255,255,255,0.1);
+  border-radius: var(--cv-radius);
+  display: flex; align-items: center; justify-content: center;
+}
+.cvh-trust-item__icon svg { width: 1.25rem; height: 1.25rem; color: rgba(255,255,255,0.9); }
+.cvh-trust-item__text { display: flex; flex-direction: column; gap: 0.2rem; }
+.cvh-trust-item__title { font-size: 0.9375rem; font-weight: 700; color: rgba(255,255,255,0.95); }
+.cvh-trust-item__desc  { font-size: 0.8125rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+/* =============================================================
+   3. FAN FAVOURITES (tabbed product carousel)
+   ============================================================= */
+.cvh-featured { padding: 4rem 0; }
+
+.cvh-featured__tabs {
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.cvh-featured__tab {
+  font-family: var(--cv-font-sans);
+  font-size: 0.8125rem; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--cv-border);
+  border-radius: 9999px;
+  background: var(--cv-card);
+  color: var(--cv-muted-fg);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  -webkit-appearance: none;
+}
+.cvh-featured__tab.is-active,
+.cvh-featured__tab:hover {
+  background: var(--cv-primary); color: var(--cv-primary-fg); border-color: var(--cv-primary);
+}
+
+/* Scroll container */
+.cvh-featured__scroll-wrap { position: relative; }
+.cvh-featured__scroll {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 0.5rem;
+}
+.cvh-featured__scroll::-webkit-scrollbar { display: none; }
+
+.cvh-featured__panel { display: none; }
+.cvh-featured__panel.is-active { display: block; }
+
+/* Product card (homepage version) */
+.cvh-prod-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: calc(50vw - 1.5rem);
+  max-width: 14rem;
+  display: flex; flex-direction: column; gap: 0.75rem;
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 2);
+  background: var(--cv-card);
+  padding: 0.75rem;
+  box-shadow: var(--cv-shadow-sm);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  text-decoration: none; color: inherit;
+}
+@media (min-width: 640px)  { .cvh-prod-card { width: 13rem; max-width: 13rem; } }
+@media (min-width: 1024px) { .cvh-prod-card { width: 14.5rem; max-width: 14.5rem; } }
+.cvh-prod-card:hover {
+  border-color: rgba(40,45,82,0.25);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+  transform: translateY(-2px);
+}
+.cvh-prod-card__img {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--cv-radius);
+  background: var(--cv-secondary);
+}
+.cvh-prod-card__img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.35s;
+}
+.cvh-prod-card:hover .cvh-prod-card__img img { transform: scale(1.06); }
+
+.cvh-prod-card__badges {
+  position: absolute; top: 0.5rem; left: 0.5rem;
+  display: flex; flex-direction: column; gap: 0.25rem;
+}
+.cvh-prod-badge {
+  font-size: 0.625rem; font-weight: 700;
+  padding: 0.125rem 0.4rem;
+  border-radius: calc(var(--cv-radius) - 2px);
+  display: inline-block; line-height: 1.6;
+}
+.cvh-prod-badge--sale    { background: var(--cv-success);     color: var(--cv-success-fg); }
+.cvh-prod-badge--new     { background: var(--cv-primary);     color: var(--cv-primary-fg); }
+.cvh-prod-badge--preorder { background: var(--cv-destructive); color: #fff; }
+.cvh-prod-badge--hot     { background: var(--cv-star);         color: #fff; }
+
+.cvh-prod-card__info  { display: flex; flex-direction: column; gap: 0.25rem; }
+.cvh-prod-card__type  { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--cv-muted-fg); font-weight: 600; }
+.cvh-prod-card__name  { font-size: 0.875rem; font-weight: 600; line-height: 1.35; }
+.cvh-prod-card__prices { display: flex; align-items: baseline; gap: 0.4rem; margin-top: 0.25rem; }
+.cvh-prod-card__price {
+  font-family: var(--cv-font-head); font-size: 1.0625rem; font-weight: 700;
+}
+.cvh-prod-card__was   { font-size: 0.75rem; color: var(--cv-muted-fg); text-decoration: line-through; }
+
+/* Scroll nav arrows */
+.cvh-scroll-arrow {
+  display: none;
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 2.5rem; height: 2.5rem; border-radius: 9999px;
+  background: var(--cv-card); border: 1px solid var(--cv-border);
+  box-shadow: var(--cv-shadow);
+  align-items: center; justify-content: center;
+  cursor: pointer; z-index: 5; color: var(--cv-fg);
+  transition: background 0.15s;
+  -webkit-appearance: none;
+}
+@media (min-width: 768px) { .cvh-scroll-arrow { display: flex; } }
+.cvh-scroll-arrow:hover { background: var(--cv-secondary); }
+.cvh-scroll-arrow svg   { width: 1.25rem; height: 1.25rem; }
+.cvh-scroll-arrow--prev { left: -1.25rem; }
+.cvh-scroll-arrow--next { right: -1.25rem; }
+
+/* =============================================================
+   4. MARQUEE TICKER
+   ============================================================= */
+.cvh-marquee {
+  background: var(--cv-primary);
+  padding: 0.875rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.cvh-marquee__track {
+  display: inline-flex; gap: 0;
+  animation: cvhMarquee 28s linear infinite;
+}
+.cvh-marquee__track:hover { animation-play-state: paused; }
+@keyframes cvhMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.cvh-marquee__item {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  font-family: var(--cv-font-head);
+  font-size: 0.875rem; font-weight: 600; letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.9);
+  padding: 0 2rem;
+}
+.cvh-marquee__item svg  { width: 1rem; height: 1rem; color: rgba(255,255,255,0.5); }
+.cvh-marquee__sep { color: rgba(255,255,255,0.3); font-size: 1.25rem; padding: 0 0.5rem; }
+
+/* =============================================================
+   5. BROWSE BY CATEGORY
+   ============================================================= */
+.cvh-categories { padding: 4rem 0; }
+
+.cvh-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+@media (min-width: 480px) { .cvh-cat-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) { .cvh-cat-grid { grid-template-columns: repeat(6, 1fr); gap: 1rem; } }
+
+.cvh-cat-card {
+  display: flex; flex-direction: column; align-items: center; gap: 0.875rem;
+  padding: 1.25rem 0.75rem;
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 2);
+  background: var(--cv-card);
+  box-shadow: var(--cv-shadow-sm);
+  text-decoration: none; color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  text-align: center;
+}
+.cvh-cat-card:hover {
+  border-color: var(--cv-primary);
+  box-shadow: 0 4px 16px rgba(40,45,82,0.12);
+  transform: translateY(-3px);
+}
+.cvh-cat-card__icon {
+  width: 3.5rem; height: 3.5rem;
+  border-radius: calc(var(--cv-radius) * 1.5);
+  background: var(--cv-secondary);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.cvh-cat-card:hover .cvh-cat-card__icon { background: rgba(40,45,82,0.08); }
+.cvh-cat-card__icon svg { width: 1.75rem; height: 1.75rem; color: var(--cv-primary); }
+.cvh-cat-card__label {
+  font-size: 0.8125rem; font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+/* Sale category — accent style */
+.cvh-cat-card--sale { border-color: rgba(201,64,48,0.2); }
+.cvh-cat-card--sale .cvh-cat-card__icon { background: rgba(201,64,48,0.08); }
+.cvh-cat-card--sale .cvh-cat-card__icon svg { color: var(--cv-destructive); }
+.cvh-cat-card--sale .cvh-cat-card__label { color: var(--cv-destructive); }
+.cvh-cat-card--sale:hover { border-color: var(--cv-destructive); box-shadow: 0 4px 16px rgba(201,64,48,0.12); }
+
+/* =============================================================
+   6. PROMOTIONAL BANNERS (2-up)
+   ============================================================= */
+.cvh-promo { padding: 2rem 0 4rem; }
+.cvh-promo__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 768px) { .cvh-promo__grid { grid-template-columns: 1fr 1fr; gap: 1.25rem; } }
+
+.cvh-promo-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(var(--cv-radius) * 2.5);
+  min-height: 240px;
+  display: flex; align-items: flex-end;
+  padding: 2rem;
+  text-decoration: none;
+  background: var(--cv-primary);
+}
+@media (min-width: 768px) { .cvh-promo-card { min-height: 300px; } }
+
+.cvh-promo-card__bg {
+  position: absolute; inset: 0; z-index: 0;
+}
+.cvh-promo-card__bg img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.cvh-promo-card:hover .cvh-promo-card__bg img { transform: scale(1.04); }
+
+/* Gradient overlay */
+.cvh-promo-card::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, rgba(20,20,40,0.82) 0%, rgba(20,20,40,0.25) 55%, transparent 100%);
+}
+.cvh-promo-card__content { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 0.75rem; }
+.cvh-promo-card__eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+.cvh-promo-card__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.625rem; font-weight: 800;
+  color: #fff; line-height: 1.15; letter-spacing: -0.02em;
+}
+@media (min-width: 768px) { .cvh-promo-card__title { font-size: 2rem; } }
+.cvh-promo-card__cta {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  font-size: 0.875rem; font-weight: 600;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  padding-bottom: 0.125rem;
+  transition: border-color 0.15s;
+  width: fit-content;
+}
+.cvh-promo-card__cta:hover { border-color: #fff; }
+.cvh-promo-card__cta svg { width: 0.875rem; height: 0.875rem; }
+
+/* =============================================================
+   7. ABOUT SECTION
+   ============================================================= */
+.cvh-about { padding: 4rem 0; background: var(--cv-card); }
+.cvh-about__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+@media (min-width: 768px) { .cvh-about__grid { grid-template-columns: 1fr 1fr; gap: 4rem; } }
+
+.cvh-about__img {
+  border-radius: calc(var(--cv-radius) * 3);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+}
+.cvh-about__img img { width: 100%; height: 100%; object-fit: cover; }
+
+.cvh-about__text { display: flex; flex-direction: column; gap: 1.25rem; }
+.cvh-about__title {
+  font-family: var(--cv-font-head);
+  font-size: 2.25rem; font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1.1;
+}
+@media (min-width: 768px) { .cvh-about__title { font-size: 2.75rem; } }
+.cvh-about__desc { font-size: 1rem; line-height: 1.7; color: var(--cv-muted-fg); }
+.cvh-about__checklist { display: flex; flex-direction: column; gap: 0.625rem; margin-top: 0.5rem; }
+.cvh-about__check {
+  display: flex; align-items: center; gap: 0.625rem;
+  font-size: 0.9375rem; font-weight: 500;
+}
+.cvh-about__check svg { width: 1.125rem; height: 1.125rem; color: var(--cv-success); flex-shrink: 0; }
+.cvh-about__check--dim { color: var(--cv-muted-fg); }
+.cvh-about__check--dim svg { color: var(--cv-border); }
+.cvh-about__ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+
+/* =============================================================
+   8. NEW ARRIVALS STRIP
+   ============================================================= */
+.cvh-new { padding: 4rem 0; }
+
+/* =============================================================
+   9. REWARDS SECTION
+   ============================================================= */
+.cvh-rewards {
+  padding: 4rem 0;
+  background: var(--cv-primary);
+  color: var(--cv-primary-fg);
+}
+.cvh-rewards__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+@media (min-width: 768px) { .cvh-rewards__grid { grid-template-columns: 1fr 1fr; gap: 4rem; } }
+
+.cvh-rewards__text { display: flex; flex-direction: column; gap: 1.25rem; }
+.cvh-rewards__eyebrow {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  width: fit-content;
+}
+.cvh-rewards__eyebrow svg { width: 1rem; height: 1rem; color: var(--cv-star); }
+.cvh-rewards__title {
+  font-family: var(--cv-font-head);
+  font-size: 2.25rem; font-weight: 800;
+  color: #fff; letter-spacing: -0.03em; line-height: 1.1;
+}
+@media (min-width: 768px) { .cvh-rewards__title { font-size: 2.75rem; } }
+.cvh-rewards__desc { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.65); }
+.cvh-rewards__list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.25rem; }
+.cvh-rewards__item {
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 0.9375rem; font-weight: 500;
+  color: rgba(255,255,255,0.85);
+}
+.cvh-rewards__item-icon {
+  width: 2rem; height: 2rem; flex-shrink: 0;
+  border-radius: var(--cv-radius);
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+}
+.cvh-rewards__item-icon svg { width: 1rem; height: 1rem; color: rgba(255,255,255,0.8); }
+
+.cvh-rewards__img {
+  border-radius: calc(var(--cv-radius) * 3);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+.cvh-rewards__img img { width: 100%; height: 100%; object-fit: cover; }
+
+/* =============================================================
+   10. REVIEWS
+   ============================================================= */
+.cvh-reviews { padding: 4rem 0; }
+.cvh-reviews__title-wrap { text-align: center; margin-bottom: 3rem; }
+.cvh-reviews__mega {
+  font-family: var(--cv-font-head);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
+}
+.cvh-reviews__scroll {
+  display: flex; gap: 1rem;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; -ms-overflow-style: none;
+  padding-bottom: 0.5rem;
+}
+.cvh-reviews__scroll::-webkit-scrollbar { display: none; }
+.cvh-review-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: calc(100vw - 3rem); max-width: 22rem;
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 2);
+  background: var(--cv-card);
+  padding: 1.5rem;
+  box-shadow: var(--cv-shadow-sm);
+}
+@media (min-width: 768px) { .cvh-review-card { width: 22rem; } }
+.cvh-review-card__stars { display: flex; gap: 0.125rem; margin-bottom: 0.75rem; }
+.cvh-review-card__stars svg { width: 1rem; height: 1rem; fill: var(--cv-star); color: var(--cv-star); }
+.cvh-review-card__text { font-size: 0.9375rem; line-height: 1.65; color: var(--cv-muted-fg); margin-bottom: 1.25rem; }
+.cvh-review-card__author { display: flex; align-items: center; gap: 0.625rem; }
+.cvh-review-card__avatar {
+  width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+  background: rgba(40,45,82,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8125rem; font-weight: 700; color: var(--cv-primary);
+  flex-shrink: 0;
+}
+.cvh-review-card__name { font-size: 0.875rem; font-weight: 600; }
+.cvh-review-card__meta { font-size: 0.75rem; color: var(--cv-muted-fg); }
+
+/* =============================================================
+   11. NEWSLETTER
+   ============================================================= */
+.cvh-newsletter {
+  padding: 4rem 1rem;
+  background: var(--cv-secondary);
+  border-top: 1px solid var(--cv-border);
+  border-bottom: 1px solid var(--cv-border);
+}
+.cvh-newsletter__inner {
+  max-width: 38rem; margin: 0 auto; text-align: center;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.cvh-newsletter__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.875rem; font-weight: 800; letter-spacing: -0.02em;
+}
+.cvh-newsletter__sub { font-size: 0.9375rem; color: var(--cv-muted-fg); }
+.cvh-newsletter__form {
+  display: flex; gap: 0.625rem; flex-wrap: wrap; justify-content: center;
+}
+.cvh-newsletter__input {
+  flex: 1; min-width: 0;
+  height: 2.875rem;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  padding: 0 1rem;
+  font-family: var(--cv-font-sans);
+  font-size: 0.9375rem;
+  background: var(--cv-card);
+  color: var(--cv-fg);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.cvh-newsletter__input:focus { border-color: var(--cv-primary); }
+.cvh-newsletter__input::placeholder { color: var(--cv-muted-fg); }
+.cvh-newsletter__disclaimer { font-size: 0.8125rem; color: var(--cv-muted-fg); }
 </style>
+
+{%- comment -%} ====================================================
+    HOME PAGE SECTIONS
+    ==================================================== {%- endcomment -%}
+
+<div class="cvh">
+
+  {%- comment -%} ── 1. HERO SLIDER ── {%- endcomment -%}
+  <section class="cvh-hero" aria-label="Featured promotions" id="cvh-hero">
+    <div class="cvh-hero__track" id="cvh-hero-track">
+
+      {%- for block in hero_slides -%}
+        {%- assign slide_scheme = block.settings.color_scheme | default: '1' -%}
+        <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--{{ slide_scheme }}" {{ block.shopify_attributes }}>
+          <div class="cvh-hero__slide cvh-inner">
+            <div class="cvh-hero__text">
+              <span class="cvh-hero__eyebrow">
+                {%- case block.settings.eyebrow_icon -%}
+                  {%- when 'tag' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  {%- when 'clock' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  {%- when 'zap' -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                  {%- else -%}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {%- endcase -%}
+                {{ block.settings.eyebrow }}
+              </span>
+              <h1 class="cvh-hero__title">
+                {{ block.settings.title_line1 }}{%- if block.settings.title_em != blank -%}<br><em>{{ block.settings.title_em }}</em>{%- endif -%}
+              </h1>
+              <p class="cvh-hero__desc">{{ block.settings.description }}</p>
+              <div class="cvh-hero__ctas">
+                {%- if block.settings.cta1_label != blank -%}
+                  <a href="{{ block.settings.cta1_url | default: '/collections/all' }}" class="cvh-btn cvh-btn--primary">{{ block.settings.cta1_label }}</a>
+                {%- endif -%}
+                {%- if block.settings.cta2_label != blank -%}
+                  <a href="{{ block.settings.cta2_url | default: '#' }}" class="cvh-btn cvh-btn--outline">{{ block.settings.cta2_label }}</a>
+                {%- endif -%}
+              </div>
+            </div>
+            <div class="cvh-hero__img-wrap">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.image.alt | escape | default: block.settings.title_line1 }}" width="600" height="600" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+              {%- else -%}
+                <img src="https://placehold.co/600x600/e8e4f5/282d52?text={{ block.settings.title_line1 | url_encode }}" alt="{{ block.settings.title_line1 }}" width="600" height="600" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+              {%- endif -%}
+              {%- if block.settings.badge_value != blank -%}
+                <div class="cvh-hero__badge">
+                  <div class="cvh-hero__badge-icon">
+                    {%- case block.settings.badge_icon -%}
+                      {%- when 'tag' -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                      {%- when 'clock' -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      {%- else -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    {%- endcase -%}
+                  </div>
+                  <div class="cvh-hero__badge-text">
+                    <span class="cvh-hero__badge-val">{{ block.settings.badge_value }}</span>
+                    <span class="cvh-hero__badge-label">{{ block.settings.badge_label }}</span>
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- else -%}
+        {%- if request.design_mode -%}
+          <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--1">
+            <div class="cvh-hero__slide cvh-inner">
+              <div class="cvh-hero__text">
+                <span class="cvh-hero__eyebrow">Add Hero Slides in the theme editor</span>
+                <h1 class="cvh-hero__title">Your Hero Headline</h1>
+                <p class="cvh-hero__desc">Add "Hero Slide" blocks in the Customize panel to populate this section.</p>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+    </div><!-- /track -->
+
+    <button class="cvh-hero__arrow cvh-hero__arrow--prev" id="cvh-hero-prev" aria-label="Previous slide" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="cvh-hero__arrow cvh-hero__arrow--next" id="cvh-hero-next" aria-label="Next slide" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <div class="cvh-hero__controls" role="tablist" aria-label="Slide navigation">
+      {%- for block in hero_slides -%}
+        <button class="cvh-hero__dot{% if forloop.first %} is-active{% endif %}"
+          data-slide="{{ forloop.index0 }}"
+          role="tab"
+          aria-label="Slide {{ forloop.index }}"
+          aria-selected="{{ forloop.first }}"
+          type="button"></button>
+      {%- endfor -%}
+    </div>
+  </section>
+
+  {%- comment -%} ── 2. TRUST BAR ── {%- endcomment -%}
+  {%- if section.settings.show_trust_bar and trust_items.size > 0 -%}
+  <div class="cvh-trust-bar" role="region" aria-label="Store guarantees">
+    <div class="cvh-trust-bar__grid">
+      {%- for block in trust_items -%}
+        <div class="cvh-trust-item" {{ block.shopify_attributes }}>
+          <div class="cvh-trust-item__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              {%- case block.settings.icon -%}
+                {%- when 'credit-card' -%}<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+                {%- when 'dollar' -%}<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                {%- when 'shield' -%}<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                {%- when 'truck' -%}<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+                {%- when 'gift' -%}<path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                {%- when 'users' -%}<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                {%- when 'package' -%}<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              {%- endcase -%}
+            </svg>
+          </div>
+          <div class="cvh-trust-item__text">
+            <span class="cvh-trust-item__title">{{ block.settings.title }}</span>
+            <span class="cvh-trust-item__desc">{{ block.settings.description }}</span>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- comment -%} ── 3. FAN FAVOURITES ── {%- endcomment -%}
+  <section class="cvh-featured" aria-label="Featured products">
+    <div class="cvh__inner">
+      <div class="cvh-section-hd cvh-section-hd--row">
+        <div>
+          <h2 class="cvh-section-title">{{ section.settings.featured_title | default: 'Fan Favourites' }}</h2>
+          <p class="cvh-section-sub">{{ section.settings.featured_subtitle | default: 'Whether you&rsquo;re building your collection or buying your first box — these are going fast.' }}</p>
+        </div>
+        <a href="/collections/all" class="cvh-btn cvh-btn--outline cvh-btn--sm" style="flex-shrink:0">View All</a>
+      </div>
+
+      {%- assign tab1_label = section.settings.tab1_label | default: 'Pre-Orders' -%}
+      {%- assign tab2_label = section.settings.tab2_label | default: 'New Arrivals' -%}
+      {%- assign tab3_label = section.settings.tab3_label | default: 'Best Sellers' -%}
+      {%- assign tab1_id = tab1_label | handle -%}
+      {%- assign tab2_id = tab2_label | handle -%}
+      {%- assign tab3_id = tab3_label | handle -%}
+
+      <div class="cvh-featured__tabs" role="tablist" aria-label="Product filter">
+        <button class="cvh-featured__tab is-active" data-panel="{{ tab1_id }}" role="tab" aria-selected="true" aria-controls="cvh-panel-{{ tab1_id }}" type="button">{{ tab1_label }}</button>
+        <button class="cvh-featured__tab" data-panel="{{ tab2_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab2_id }}" type="button">{{ tab2_label }}</button>
+        <button class="cvh-featured__tab" data-panel="{{ tab3_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab3_id }}" type="button">{{ tab3_label }}</button>
+      </div>
+
+      {%- comment -%} Tab 1 Panel {%- endcomment -%}
+      <div class="cvh-featured__panel is-active" id="cvh-panel-{{ tab1_id }}" role="tabpanel">
+        <div class="cvh-featured__scroll-wrap">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="{{ tab1_id }}" aria-label="Scroll left" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="cvh-featured__scroll" id="cvh-scroll-{{ tab1_id }}">
+            {%- if tab1_col != blank -%}
+              {%- for p in tab1_col.products limit: 8 -%}
+                {%- assign pv = p.selected_or_first_available_variant -%}
+                {%- assign p_sale = false -%}
+                {%- if pv.compare_at_price > pv.price -%}{%- assign p_sale = true -%}{%- endif -%}
+                <a href="{{ p.url }}" class="cvh-prod-card">
+                  <div class="cvh-prod-card__img">
+                    {%- if p.featured_image -%}
+                      <img src="{{ p.featured_image | image_url: width: 280 }}" alt="{{ p.featured_image.alt | escape }}" width="280" height="280" loading="lazy">
+                    {%- else -%}
+                      <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p.title | url_encode | truncate: 20, '' }}" alt="{{ p.title }}" width="280" height="280" loading="lazy">
+                    {%- endif -%}
+                    <div class="cvh-prod-card__badges">
+                      <span class="cvh-prod-badge cvh-prod-badge--preorder">Pre-Order</span>
+                      {%- if p_sale -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+                    </div>
+                  </div>
+                  <div class="cvh-prod-card__info">
+                    <span class="cvh-prod-card__type">{{ p.type }}</span>
+                    <span class="cvh-prod-card__name">{{ p.title }}</span>
+                    <div class="cvh-prod-card__prices">
+                      <span class="cvh-prod-card__price">{{ pv.price | money }}</span>
+                      {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
+                    </div>
+                  </div>
+                </a>
+              {%- endfor -%}
+            {%- elsif request.design_mode -%}
+              <p style="color:var(--cv-muted-fg);padding:2rem 0;font-size:0.9rem;">Select a collection for <strong>{{ tab1_label }}</strong> in the theme editor sidebar.</p>
+            {%- endif -%}
+          </div>
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="{{ tab1_id }}" aria-label="Scroll right" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      {%- comment -%} Tab 2 Panel {%- endcomment -%}
+      <div class="cvh-featured__panel" id="cvh-panel-{{ tab2_id }}" role="tabpanel">
+        <div class="cvh-featured__scroll-wrap">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="{{ tab2_id }}" aria-label="Scroll left" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="cvh-featured__scroll" id="cvh-scroll-{{ tab2_id }}">
+            {%- if tab2_col != blank -%}
+              {%- for p in tab2_col.products limit: 8 -%}
+                {%- assign pv = p.selected_or_first_available_variant -%}
+                {%- assign p_sale = false -%}
+                {%- if pv.compare_at_price > pv.price -%}{%- assign p_sale = true -%}{%- endif -%}
+                <a href="{{ p.url }}" class="cvh-prod-card">
+                  <div class="cvh-prod-card__img">
+                    {%- if p.featured_image -%}
+                      <img src="{{ p.featured_image | image_url: width: 280 }}" alt="{{ p.featured_image.alt | escape }}" width="280" height="280" loading="lazy">
+                    {%- else -%}
+                      <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p.title | url_encode | truncate: 20, '' }}" alt="{{ p.title }}" width="280" height="280" loading="lazy">
+                    {%- endif -%}
+                    <div class="cvh-prod-card__badges">
+                      <span class="cvh-prod-badge cvh-prod-badge--new">New</span>
+                      {%- if p_sale -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+                    </div>
+                  </div>
+                  <div class="cvh-prod-card__info">
+                    <span class="cvh-prod-card__type">{{ p.type }}</span>
+                    <span class="cvh-prod-card__name">{{ p.title }}</span>
+                    <div class="cvh-prod-card__prices">
+                      <span class="cvh-prod-card__price">{{ pv.price | money }}</span>
+                      {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
+                    </div>
+                  </div>
+                </a>
+              {%- endfor -%}
+            {%- elsif request.design_mode -%}
+              <p style="color:var(--cv-muted-fg);padding:2rem 0;font-size:0.9rem;">Select a collection for <strong>{{ tab2_label }}</strong> in the theme editor sidebar.</p>
+            {%- endif -%}
+          </div>
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="{{ tab2_id }}" aria-label="Scroll right" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      {%- comment -%} Tab 3 Panel {%- endcomment -%}
+      <div class="cvh-featured__panel" id="cvh-panel-{{ tab3_id }}" role="tabpanel">
+        <div class="cvh-featured__scroll-wrap">
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="{{ tab3_id }}" aria-label="Scroll left" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="cvh-featured__scroll" id="cvh-scroll-{{ tab3_id }}">
+            {%- if tab3_col != blank -%}
+              {%- for p in tab3_col.products limit: 8 -%}
+                {%- assign pv = p.selected_or_first_available_variant -%}
+                {%- assign p_sale = false -%}
+                {%- if pv.compare_at_price > pv.price -%}{%- assign p_sale = true -%}{%- endif -%}
+                <a href="{{ p.url }}" class="cvh-prod-card">
+                  <div class="cvh-prod-card__img">
+                    {%- if p.featured_image -%}
+                      <img src="{{ p.featured_image | image_url: width: 280 }}" alt="{{ p.featured_image.alt | escape }}" width="280" height="280" loading="lazy">
+                    {%- else -%}
+                      <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p.title | url_encode | truncate: 20, '' }}" alt="{{ p.title }}" width="280" height="280" loading="lazy">
+                    {%- endif -%}
+                    <div class="cvh-prod-card__badges">
+                      <span class="cvh-prod-badge cvh-prod-badge--hot">🔥 Hot</span>
+                      {%- if p_sale -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
+                    </div>
+                  </div>
+                  <div class="cvh-prod-card__info">
+                    <span class="cvh-prod-card__type">{{ p.type }}</span>
+                    <span class="cvh-prod-card__name">{{ p.title }}</span>
+                    <div class="cvh-prod-card__prices">
+                      <span class="cvh-prod-card__price">{{ pv.price | money }}</span>
+                      {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
+                    </div>
+                  </div>
+                </a>
+              {%- endfor -%}
+            {%- elsif request.design_mode -%}
+              <p style="color:var(--cv-muted-fg);padding:2rem 0;font-size:0.9rem;">Select a collection for <strong>{{ tab3_label }}</strong> in the theme editor sidebar.</p>
+            {%- endif -%}
+          </div>
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--next" data-target="{{ tab3_id }}" aria-label="Scroll right" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  {%- comment -%} ── 4. MARQUEE ── {%- endcomment -%}
+  {%- if section.settings.show_marquee and marquee_items.size > 0 -%}
+  <div class="cvh-marquee" aria-hidden="true">
+    <div class="cvh-marquee__track" id="cvh-marquee">
+      {%- comment -%} First pass (real blocks for editor) {%- endcomment -%}
+      {%- for block in marquee_items -%}
+        <span class="cvh-marquee__item" {{ block.shopify_attributes }}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          {{ block.settings.text }}
+        </span>
+      {%- endfor -%}
+      {%- comment -%} Duplicate pass for seamless infinite loop {%- endcomment -%}
+      {%- for block in marquee_items -%}
+        <span class="cvh-marquee__item" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          {{ block.settings.text }}
+        </span>
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- comment -%} ── 5. BROWSE BY CATEGORY ── {%- endcomment -%}
+  {%- if cat_cards.size > 0 or brand_links.size > 0 -%}
+  <section class="cvh-categories" aria-label="Browse by category">
+    <div class="cvh__inner">
+      <div class="cvh-section-hd cvh-section-hd--row">
+        <div>
+          <h2 class="cvh-section-title">{{ section.settings.cat_title | default: 'Browse by Category' }}</h2>
+          <p class="cvh-section-sub">{{ section.settings.cat_subtitle | default: 'Booster boxes, ETBs, cases, singles &amp; more — sorted to make your next pick easy.' }}</p>
+        </div>
+        <a href="/collections/all" class="cvh-btn cvh-btn--outline cvh-btn--sm" style="flex-shrink:0">Shop All</a>
+      </div>
+
+      {%- if cat_cards.size > 0 -%}
+      <div class="cvh-cat-grid">
+        {%- for block in cat_cards -%}
+          <a href="{{ block.settings.url | default: '/collections/all' }}"
+             class="cvh-cat-card{% if block.settings.is_sale %} cvh-cat-card--sale{% endif %}"
+             aria-label="Shop {{ block.settings.label }}"
+             {{ block.shopify_attributes }}>
+            <div class="cvh-cat-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                {%- case block.settings.icon -%}
+                  {%- when 'box' -%}<polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                  {%- when 'package' -%}<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                  {%- when 'briefcase' -%}<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                  {%- when 'layers' -%}<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+                  {%- when 'tag' -%}<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
+                  {%- when 'star' -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  {%- when 'shopping-bag' -%}<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                  {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                {%- endcase -%}
+              </svg>
+            </div>
+            <span class="cvh-cat-card__label">{{ block.settings.label }}</span>
+          </a>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+
+      {%- comment -%} Brand links row {%- endcomment -%}
+      {%- if brand_links.size > 0 -%}
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-top:0.75rem;">
+        {%- for block in brand_links -%}
+          <a href="{{ block.settings.url | default: '/collections/all' }}"
+             class="cvh-cat-card"
+             style="flex-direction:row;justify-content:flex-start;padding:1rem 1.25rem;border-radius:var(--cv-radius);gap:0.75rem;"
+             aria-label="Shop {{ block.settings.label }}"
+             {{ block.shopify_attributes }}>
+            <div class="cvh-cat-card__icon" style="width:2.25rem;height:2.25rem;flex-shrink:0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <span class="cvh-cat-card__label" style="font-size:0.9375rem">{{ block.settings.label }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1rem;height:1rem;margin-left:auto;color:var(--cv-muted-fg)"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+
+    </div>
+  </section>
+  {%- endif -%}
+
+  {%- comment -%} ── 6. PROMOTIONAL BANNERS ── {%- endcomment -%}
+  {%- if promo_banners.size > 0 -%}
+  <section class="cvh-promo" aria-label="Promotions">
+    <div class="cvh__inner">
+      <div class="cvh-promo__grid">
+        {%- for block in promo_banners -%}
+          <a href="{{ block.settings.cta_url | default: '/collections/all' }}" class="cvh-promo-card" {{ block.shopify_attributes }}>
+            <div class="cvh-promo-card__bg">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 700 }}" alt="{{ block.settings.image.alt | escape | default: block.settings.title }}" width="700" height="420" loading="lazy">
+              {%- else -%}
+                <img src="https://placehold.co/700x420/282d52/f8f7f5?text={{ block.settings.title | url_encode }}" alt="{{ block.settings.title }}" width="700" height="420" loading="lazy">
+              {%- endif -%}
+            </div>
+            <div class="cvh-promo-card__content">
+              {%- if block.settings.eyebrow != blank -%}
+                <span class="cvh-promo-card__eyebrow">{{ block.settings.eyebrow }}</span>
+              {%- endif -%}
+              <h3 class="cvh-promo-card__title">{{ block.settings.title }}</h3>
+              {%- if block.settings.cta_label != blank -%}
+                <span class="cvh-promo-card__cta">
+                  {{ block.settings.cta_label }}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </span>
+              {%- endif -%}
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+  {%- endif -%}
+
+  {%- comment -%} ── 7. ABOUT SECTION ── {%- endcomment -%}
+  {%- if section.settings.show_about -%}
+  <section class="cvh-about" aria-label="About {{ shop.name }}">
+    <div class="cvh__inner">
+      <div class="cvh-about__grid">
+        <div class="cvh-about__img">
+          {%- if section.settings.about_image != blank -%}
+            <img src="{{ section.settings.about_image | image_url: width: 700 }}" alt="{{ section.settings.about_image.alt | escape | default: section.settings.about_title }}" width="700" height="525" loading="lazy">
+          {%- else -%}
+            <img src="https://placehold.co/700x525/eeecea/76798c?text={{ shop.name | url_encode }}" alt="{{ shop.name }} store" width="700" height="525" loading="lazy">
+          {%- endif -%}
+        </div>
+        <div class="cvh-about__text">
+          <h2 class="cvh-about__title">{{ section.settings.about_title | default: 'About Us' }}</h2>
+          <p class="cvh-about__desc">{{ section.settings.about_desc }}</p>
+          {%- if about_checks.size > 0 -%}
+          <div class="cvh-about__checklist">
+            {%- for block in about_checks -%}
+              <div class="cvh-about__check{% if block.settings.dimmed %} cvh-about__check--dim{% endif %}" {{ block.shopify_attributes }}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                {{ block.settings.text }}
+              </div>
+            {%- endfor -%}
+          </div>
+          {%- endif -%}
+          <div class="cvh-about__ctas">
+            {%- if section.settings.about_cta1_label != blank -%}
+              <a href="{{ section.settings.about_cta1_url | default: '/pages/about' }}" class="cvh-btn cvh-btn--primary">{{ section.settings.about_cta1_label }}</a>
+            {%- endif -%}
+            {%- if section.settings.about_cta2_label != blank -%}
+              <a href="{{ section.settings.about_cta2_url | default: '/pages/contact' }}" class="cvh-btn cvh-btn--outline">{{ section.settings.about_cta2_label }}</a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {%- endif -%}
+
+  {%- comment -%} ── 8. REWARDS SECTION ── {%- endcomment -%}
+  {%- if section.settings.show_rewards -%}
+  <section class="cvh-rewards" aria-label="Rewards program">
+    <div class="cvh__inner">
+      <div class="cvh-rewards__grid">
+        <div class="cvh-rewards__text">
+          {%- if section.settings.rewards_eyebrow != blank -%}
+            <span class="cvh-rewards__eyebrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {{ section.settings.rewards_eyebrow }}
+            </span>
+          {%- endif -%}
+          <h2 class="cvh-rewards__title">{{ section.settings.rewards_title | default: 'Level Up Every Time You Shop' }}</h2>
+          <p class="cvh-rewards__desc">{{ section.settings.rewards_desc }}</p>
+          {%- if reward_items.size > 0 -%}
+          <div class="cvh-rewards__list">
+            {%- for block in reward_items -%}
+              <div class="cvh-rewards__item" {{ block.shopify_attributes }}>
+                <div class="cvh-rewards__item-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    {%- case block.settings.icon -%}
+                      {%- when 'dollar' -%}<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                      {%- when 'gift' -%}<path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                      {%- when 'users' -%}<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                      {%- when 'star' -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      {%- when 'zap' -%}<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                      {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    {%- endcase -%}
+                  </svg>
+                </div>
+                {{ block.settings.text }}
+              </div>
+            {%- endfor -%}
+          </div>
+          {%- endif -%}
+          <div style="margin-top:1rem">
+            <a href="{{ section.settings.rewards_cta_url | default: '/pages/rewards' }}" class="cvh-btn cvh-btn--white">{{ section.settings.rewards_cta_label | default: "Join Rewards — It's Free" }}</a>
+          </div>
+        </div>
+        <div class="cvh-rewards__img">
+          {%- if section.settings.rewards_image != blank -%}
+            <img src="{{ section.settings.rewards_image | image_url: width: 700 }}" alt="{{ section.settings.rewards_image.alt | escape | default: 'Rewards program' }}" width="700" height="525" loading="lazy">
+          {%- else -%}
+            <img src="https://placehold.co/700x525/1c2440/6472a8?text=Vault+Rewards" alt="Rewards program" width="700" height="525" loading="lazy">
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+  {%- endif -%}
+
+  {%- comment -%} ── 9. REVIEWS ── {%- endcomment -%}
+  {%- if reviews.size > 0 -%}
+  <section class="cvh-reviews" aria-label="Customer reviews">
+    <div class="cvh__inner">
+      <div class="cvh-reviews__title-wrap">
+        <h2 class="cvh-reviews__mega">{{ section.settings.reviews_title | default: 'Loved by Thousands of Players' }}</h2>
+      </div>
+      <div class="cvh-reviews__scroll" role="list">
+        {%- for block in reviews -%}
+          <div class="cvh-review-card" role="listitem" {{ block.shopify_attributes }}>
+            <div class="cvh-review-card__stars" aria-label="5 out of 5 stars">
+              {%- for i in (1..5) -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--cv-star)"/></svg>
+              {%- endfor -%}
+            </div>
+            <p class="cvh-review-card__text">&ldquo;{{ block.settings.text }}&rdquo;</p>
+            <div class="cvh-review-card__author">
+              <div class="cvh-review-card__avatar" aria-hidden="true">{{ block.settings.author_name | slice: 0 }}</div>
+              <div>
+                <div class="cvh-review-card__name">{{ block.settings.author_name }}</div>
+                <div class="cvh-review-card__meta">{{ block.settings.author_role }}</div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+  {%- endif -%}
+
+  {%- comment -%} ── 10. NEWSLETTER ── {%- endcomment -%}
+  {%- if section.settings.show_newsletter -%}
+  <section class="cvh-newsletter" aria-label="Newsletter signup">
+    <div class="cvh-newsletter__inner">
+      <div>
+        <h2 class="cvh-newsletter__title">{{ section.settings.nl_title | default: 'Stay in the Loop' }}</h2>
+        <p class="cvh-newsletter__sub">{{ section.settings.nl_subtitle | default: 'New drops, restocks, and exclusive deals delivered straight to your inbox.' }}</p>
+      </div>
+      {% form 'customer', id: 'cvh-newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="cvh-newsletter__form">
+          <input
+            class="cvh-newsletter__input"
+            type="email"
+            name="contact[email]"
+            id="cvh-email"
+            placeholder="your@email.com"
+            required
+            autocomplete="email"
+            aria-label="Email address"
+          >
+          <button type="submit" class="cvh-btn cvh-btn--primary">Subscribe</button>
+        </div>
+      {% endform %}
+      <p class="cvh-newsletter__disclaimer">{{ section.settings.nl_disclaimer | default: 'No spam, ever. Unsubscribe anytime.' }}</p>
+    </div>
+  </section>
+  {%- endif -%}
+
+</div><!-- /cvh -->
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Hero Slider ── */
+  var track   = document.getElementById('cvh-hero-track');
+  var slides  = track ? Array.prototype.slice.call(track.children) : [];
+  var dots    = Array.prototype.slice.call(document.querySelectorAll('.cvh-hero__dot'));
+  var prevBtn = document.getElementById('cvh-hero-prev');
+  var nextBtn = document.getElementById('cvh-hero-next');
+  var total   = slides.length;
+  var current = 0;
+  var autoplay;
+  var interval = {{ section.settings.hero_autoplay_ms | default: 5000 }};
+
+  function goTo(idx) {
+    current = (idx + total) % total;
+    if (track) track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dots.forEach(function (d, i) {
+      d.classList.toggle('is-active', i === current);
+      d.setAttribute('aria-selected', String(i === current));
+    });
+  }
+
+  function startAutoplay() {
+    autoplay = setInterval(function () { goTo(current + 1); }, interval);
+  }
+  function stopAutoplay()  { clearInterval(autoplay); }
+
+  if (prevBtn) prevBtn.addEventListener('click', function () { stopAutoplay(); goTo(current - 1); startAutoplay(); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { stopAutoplay(); goTo(current + 1); startAutoplay(); });
+
+  dots.forEach(function (dot) {
+    dot.addEventListener('click', function () {
+      stopAutoplay();
+      goTo(parseInt(this.dataset.slide, 10));
+      startAutoplay();
+    });
+  });
+
+  /* Touch swipe on hero */
+  if (track) {
+    var heroSwipeX = 0;
+    track.addEventListener('touchstart', function (e) { heroSwipeX = e.changedTouches[0].screenX; }, { passive: true });
+    track.addEventListener('touchend',   function (e) {
+      var diff = heroSwipeX - e.changedTouches[0].screenX;
+      if (Math.abs(diff) > 50) { stopAutoplay(); goTo(diff > 0 ? current + 1 : current - 1); startAutoplay(); }
+    }, { passive: true });
+  }
+
+  if (total > 1) startAutoplay();
+
+  /* ── Featured Product Tabs ── */
+  var featTabs   = Array.prototype.slice.call(document.querySelectorAll('.cvh-featured__tab'));
+  var featPanels = Array.prototype.slice.call(document.querySelectorAll('.cvh-featured__panel'));
+
+  featTabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      featTabs.forEach(function (t)   { t.classList.remove('is-active'); t.setAttribute('aria-selected', 'false'); });
+      featPanels.forEach(function (p) { p.classList.remove('is-active'); });
+      this.classList.add('is-active');
+      this.setAttribute('aria-selected', 'true');
+      var panel = document.getElementById('cvh-panel-' + this.dataset.panel);
+      if (panel) panel.classList.add('is-active');
+    });
+  });
+
+  /* ── Scroll Arrows ── */
+  var scrollArrows = Array.prototype.slice.call(document.querySelectorAll('.cvh-scroll-arrow'));
+  scrollArrows.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var panelId = 'cvh-panel-' + this.dataset.target;
+      var panel   = document.getElementById(panelId);
+      if (!panel) return;
+      var scroll  = panel.querySelector('.cvh-featured__scroll');
+      if (!scroll) return;
+      var dir     = this.classList.contains('cvh-scroll-arrow--next') ? 1 : -1;
+      var amount  = scroll.offsetWidth * 0.75;
+      scroll.scrollBy({ left: dir * amount, behavior: 'smooth' });
+    });
+  });
+
+  /* ── Newsletter form ── */
+  var nlForm = document.getElementById('cvh-newsletter-form');
+  if (nlForm) {
+    nlForm.addEventListener('submit', function () {
+      var btn = nlForm.querySelector('[type="submit"]');
+      if (btn) {
+        setTimeout(function () { btn.textContent = 'Subscribed!'; btn.disabled = true; }, 100);
+      }
+    });
+  }
+
+}());
+</script>
 
 {% schema %}
 {
-  "name": "Footer",
-  "tag": "div",
-  "class": "sd-footer-wrap",
+  "name": "Home",
+  "tag": "section",
+  "class": "section-main-home",
+  "blocks": [
+    {
+      "type": "hero_slide",
+      "name": "Hero Slide",
+      "settings": [
+        { "type": "header", "content": "Slide Content" },
+        { "type": "select", "id": "eyebrow_icon", "label": "Eyebrow icon", "options": [
+            { "value": "star",  "label": "Star" },
+            { "value": "tag",   "label": "Tag" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "zap",   "label": "Zap / Lightning" }
+          ], "default": "star" },
+        { "type": "text",     "id": "eyebrow",    "label": "Eyebrow text",         "default": "New Season Drops" },
+        { "type": "text",     "id": "title_line1","label": "Title (line 1)",        "default": "Premium TCG" },
+        { "type": "text",     "id": "title_em",   "label": "Title accent (highlighted)", "default": "Sealed Products" },
+        { "type": "textarea", "id": "description","label": "Description",          "default": "Factory sealed booster boxes, Elite Trainer Boxes & more. 100% authentic." },
+        { "type": "header",   "content": "Buttons" },
+        { "type": "text", "id": "cta1_label", "label": "Button 1 label", "default": "Shop All Products" },
+        { "type": "url",  "id": "cta1_url",   "label": "Button 1 URL" },
+        { "type": "text", "id": "cta2_label", "label": "Button 2 label", "default": "New Arrivals" },
+        { "type": "url",  "id": "cta2_url",   "label": "Button 2 URL" },
+        { "type": "header", "content": "Image & Badge" },
+        { "type": "image_picker", "id": "image", "label": "Slide image" },
+        { "type": "text", "id": "badge_value", "label": "Badge value",  "default": "100% Authentic" },
+        { "type": "text", "id": "badge_label", "label": "Badge label",  "default": "Verified sealed product" },
+        { "type": "select", "id": "badge_icon", "label": "Badge icon", "options": [
+            { "value": "shield", "label": "Shield" },
+            { "value": "tag",    "label": "Tag" },
+            { "value": "clock",  "label": "Clock" }
+          ], "default": "shield" },
+        { "type": "header", "content": "Style" },
+        { "type": "select", "id": "color_scheme", "label": "Background colour", "options": [
+            { "value": "1", "label": "Purple (default)" },
+            { "value": "2", "label": "Green" },
+            { "value": "3", "label": "Orange" }
+          ], "default": "1" }
+      ]
+    },
+    {
+      "type": "trust_item",
+      "name": "Trust Bar Item",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [
+            { "value": "credit-card", "label": "Credit Card" },
+            { "value": "dollar",      "label": "Dollar / Price" },
+            { "value": "shield",      "label": "Shield" },
+            { "value": "truck",       "label": "Truck / Shipping" },
+            { "value": "gift",        "label": "Gift" },
+            { "value": "users",       "label": "People / Community" },
+            { "value": "package",     "label": "Package" },
+            { "value": "star",        "label": "Star" }
+          ], "default": "shield" },
+        { "type": "text", "id": "title",       "label": "Title",       "default": "Free Shipping" },
+        { "type": "text", "id": "description", "label": "Description", "default": "On all orders over $100" }
+      ]
+    },
+    {
+      "type": "marquee_item",
+      "name": "Ticker Item",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Free insured shipping on orders over $100" }
+      ]
+    },
+    {
+      "type": "category_card",
+      "name": "Category Card",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label",       "default": "Booster Boxes" },
+        { "type": "url",  "id": "url",   "label": "Link URL" },
+        { "type": "select", "id": "icon", "label": "Icon", "options": [
+            { "value": "star",         "label": "Star" },
+            { "value": "package",      "label": "Package / Box" },
+            { "value": "box",          "label": "Archive Box" },
+            { "value": "briefcase",    "label": "Briefcase / ETB" },
+            { "value": "layers",       "label": "Layers / Cases" },
+            { "value": "tag",          "label": "Tag / Deals" },
+            { "value": "shopping-bag", "label": "Shopping Bag" }
+          ], "default": "package" },
+        { "type": "checkbox", "id": "is_sale", "label": "Use sale (red) style", "default": false }
+      ]
+    },
+    {
+      "type": "brand_link",
+      "name": "Brand Link (row)",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Brand name", "default": "Pokemon" },
+        { "type": "url",  "id": "url",   "label": "Collection URL" }
+      ]
+    },
+    {
+      "type": "promo_banner",
+      "name": "Promo Banner",
+      "settings": [
+        { "type": "image_picker", "id": "image",    "label": "Background image" },
+        { "type": "text",         "id": "eyebrow",  "label": "Eyebrow",    "default": "Shop Now" },
+        { "type": "text",         "id": "title",    "label": "Title",      "default": "Booster Boxes from $39.99" },
+        { "type": "text",         "id": "cta_label","label": "CTA label",  "default": "Shop Collection" },
+        { "type": "url",          "id": "cta_url",  "label": "CTA URL" }
+      ]
+    },
+    {
+      "type": "about_check",
+      "name": "About Checklist Item",
+      "settings": [
+        { "type": "text",     "id": "text",   "label": "Text",         "default": "100% authentic products" },
+        { "type": "checkbox", "id": "dimmed", "label": "Dimmed style", "default": false }
+      ]
+    },
+    {
+      "type": "reward_item",
+      "name": "Rewards List Item",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [
+            { "value": "dollar", "label": "Dollar / Earn" },
+            { "value": "gift",   "label": "Gift / Redeem" },
+            { "value": "users",  "label": "People / Access" },
+            { "value": "star",   "label": "Star" },
+            { "value": "zap",    "label": "Zap / Fast" }
+          ], "default": "dollar" },
+        { "type": "text", "id": "text", "label": "Text", "default": "1 Vault Coin for every $1 spent" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Customer Review",
+      "settings": [
+        { "type": "textarea", "id": "text",        "label": "Review text",    "default": "Amazing service! My order arrived in perfect condition." },
+        { "type": "text",     "id": "author_name", "label": "Author name",    "default": "Alex M." },
+        { "type": "text",     "id": "author_role", "label": "Author role",    "default": "Pokemon Collector" }
+      ]
+    }
+  ],
   "settings": [
+    { "type": "header", "content": "Hero Slider" },
+    { "type": "number", "id": "hero_autoplay_ms", "label": "Slide interval (ms)", "default": 5000 },
+
+    { "type": "header", "content": "Fan Favourites" },
+    { "type": "text",       "id": "featured_title",    "label": "Section title",    "default": "Fan Favourites" },
+    { "type": "text",       "id": "featured_subtitle", "label": "Section subtitle", "default": "Whether you're building your collection or buying your first box — these are going fast." },
+    { "type": "text",       "id": "tab1_label",        "label": "Tab 1 label",      "default": "Pre-Orders" },
+    { "type": "collection", "id": "tab1_collection",   "label": "Tab 1 collection" },
+    { "type": "text",       "id": "tab2_label",        "label": "Tab 2 label",      "default": "New Arrivals" },
+    { "type": "collection", "id": "tab2_collection",   "label": "Tab 2 collection" },
+    { "type": "text",       "id": "tab3_label",        "label": "Tab 3 label",      "default": "Best Sellers" },
+    { "type": "collection", "id": "tab3_collection",   "label": "Tab 3 collection" },
+
+    { "type": "header", "content": "Browse by Category" },
+    { "type": "text", "id": "cat_title",    "label": "Section title",    "default": "Browse by Category" },
+    { "type": "text", "id": "cat_subtitle", "label": "Section subtitle", "default": "Booster boxes, ETBs, cases, singles & more." },
+
+    { "type": "header", "content": "About Section" },
+    { "type": "checkbox",     "id": "show_about",      "label": "Show about section", "default": true },
+    { "type": "image_picker", "id": "about_image",     "label": "About image" },
+    { "type": "text",         "id": "about_title",     "label": "Title",              "default": "About CardVault" },
+    { "type": "textarea",     "id": "about_desc",      "label": "Description",        "default": "We're passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all — and ship it fast with full insurance." },
+    { "type": "text",         "id": "about_cta1_label","label": "Button 1 label",     "default": "Our Story" },
+    { "type": "url",          "id": "about_cta1_url",  "label": "Button 1 URL" },
+    { "type": "text",         "id": "about_cta2_label","label": "Button 2 label",     "default": "Contact Us" },
+    { "type": "url",          "id": "about_cta2_url",  "label": "Button 2 URL" },
+
+    { "type": "header", "content": "Rewards Section" },
+    { "type": "checkbox",     "id": "show_rewards",      "label": "Show rewards section", "default": true },
+    { "type": "image_picker", "id": "rewards_image",     "label": "Rewards image" },
+    { "type": "text",         "id": "rewards_eyebrow",   "label": "Eyebrow text",    "default": "CardVault Rewards" },
+    { "type": "text",         "id": "rewards_title",     "label": "Title",           "default": "Level Up Every Time You Shop" },
+    { "type": "textarea",     "id": "rewards_desc",      "label": "Description",     "default": "Every dollar you spend earns Vault Coins redeemable for discounts, early access, and exclusive member perks." },
+    { "type": "text",         "id": "rewards_cta_label", "label": "Button label",    "default": "Join Rewards — It's Free" },
+    { "type": "url",          "id": "rewards_cta_url",   "label": "Button URL" },
+
+    { "type": "header", "content": "Reviews" },
+    { "type": "text", "id": "reviews_title", "label": "Section heading", "default": "Loved by Thousands of Players" },
+
+    { "type": "header", "content": "Newsletter" },
+    { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter",   "default": true },
+    { "type": "text",     "id": "nl_title",        "label": "Title",             "default": "Stay in the Loop" },
+    { "type": "text",     "id": "nl_subtitle",     "label": "Subtitle",          "default": "New drops, restocks, and exclusive deals delivered straight to your inbox." },
+    { "type": "text",     "id": "nl_disclaimer",   "label": "Disclaimer text",   "default": "No spam, ever. Unsubscribe anytime." },
+
+    { "type": "header", "content": "Display Options" },
+    { "type": "checkbox", "id": "show_trust_bar", "label": "Show trust bar",      "default": true },
+    { "type": "checkbox", "id": "show_marquee",   "label": "Show scrolling ticker","default": true }
+  ],
+  "presets": [
     {
-      "type": "header",
-      "content": "Brand"
-    },
-    {
-      "type": "image_picker",
-      "id": "footer_logo",
-      "label": "Footer logo",
-      "info": "Recommended: white/transparent PNG"
-    },
-    {
-      "type": "text",
-      "id": "tagline",
-      "label": "Brand tagline",
-      "default": "Your one-stop destination for sealed TCG products. Authentic. Affordable. Fast."
-    },
-    {
-      "type": "header",
-      "content": "Customer Care"
-    },
-    {
-      "type": "text",
-      "id": "support_email",
-      "label": "Support email",
-      "default": "support@supplydistrict.com"
-    },
-    {
-      "type": "text",
-      "id": "phone",
-      "label": "Phone number",
-      "default": "+61 3 0000 0000"
-    },
-    {
-      "type": "text",
-      "id": "hours",
-      "label": "Operating hours",
-      "default": "Mon–Fri: 9am – 5pm AEST"
-    },
-    {
-      "type": "header",
-      "content": "Quick Links"
-    },
-    {
-      "type": "text",
-      "id": "quick_link_1_label",
-      "label": "Quick link 1 — label",
-      "default": "FAQ"
-    },
-    {
-      "type": "url",
-      "id": "quick_link_1_url",
-      "label": "Quick link 1 — URL"
-    },
-    {
-      "type": "text",
-      "id": "quick_link_2_label",
-      "label": "Quick link 2 — label",
-      "default": "Shipping & Returns"
-    },
-    {
-      "type": "url",
-      "id": "quick_link_2_url",
-      "label": "Quick link 2 — URL"
-    },
-    {
-      "type": "text",
-      "id": "quick_link_3_label",
-      "label": "Quick link 3 — label",
-      "default": "Track My Order"
-    },
-    {
-      "type": "url",
-      "id": "quick_link_3_url",
-      "label": "Quick link 3 — URL"
-    },
-    {
-      "type": "text",
-      "id": "quick_link_4_label",
-      "label": "Quick link 4 — label"
-    },
-    {
-      "type": "url",
-      "id": "quick_link_4_url",
-      "label": "Quick link 4 — URL"
-    },
-    {
-      "type": "header",
-      "content": "Business Address"
-    },
-    {
-      "type": "textarea",
-      "id": "address",
-      "label": "Business address",
-      "default": "Supply District Pty Ltd\n123 Collector Way\nMelbourne VIC 3000\nAustralia"
-    },
-    {
-      "type": "text",
-      "id": "abn",
-      "label": "ABN / Business number"
-    },
-    {
-      "type": "header",
-      "content": "Social Media"
-    },
-    {
-      "type": "text",
-      "id": "social_intro",
-      "label": "Social intro text",
-      "default": "Follow us for drops, pulls & community events."
-    },
-    {
-      "type": "url",
-      "id": "instagram_url",
-      "label": "Instagram URL"
-    },
-    {
-      "type": "url",
-      "id": "discord_url",
-      "label": "Discord URL"
-    },
-    {
-      "type": "url",
-      "id": "youtube_url",
-      "label": "YouTube URL"
-    },
-    {
-      "type": "url",
-      "id": "tiktok_url",
-      "label": "TikTok URL"
-    },
-    {
-      "type": "header",
-      "content": "Legal"
-    },
-    {
-      "type": "text",
-      "id": "legal_note",
-      "label": "Legal note (after copyright)",
-      "default": "All rights reserved."
-    },
-    {
-      "type": "text",
-      "id": "legal_link_1_label",
-      "label": "Legal link 1 — label",
-      "default": "Privacy Policy"
-    },
-    {
-      "type": "url",
-      "id": "legal_link_1_url",
-      "label": "Legal link 1 — URL"
-    },
-    {
-      "type": "text",
-      "id": "legal_link_2_label",
-      "label": "Legal link 2 — label",
-      "default": "Terms of Service"
-    },
-    {
-      "type": "url",
-      "id": "legal_link_2_url",
-      "label": "Legal link 2 — URL"
-    },
-    {
-      "type": "text",
-      "id": "legal_link_3_label",
-      "label": "Legal link 3 — label",
-      "default": "Refund Policy"
-    },
-    {
-      "type": "url",
-      "id": "legal_link_3_url",
-      "label": "Legal link 3 — URL"
+      "name": "Home",
+      "blocks": [
+        { "type": "hero_slide", "settings": { "eyebrow": "New Season Drops", "eyebrow_icon": "star", "title_line1": "Premium TCG", "title_em": "Sealed Products", "description": "Factory sealed booster boxes, Elite Trainer Boxes & more. 100% authentic, sourced directly from authorized distributors.", "cta1_label": "Shop All Products", "cta2_label": "New Arrivals", "badge_value": "100% Authentic", "badge_label": "Verified sealed product", "badge_icon": "shield", "color_scheme": "1" } },
+        { "type": "hero_slide", "settings": { "eyebrow": "Limited Time Deals", "eyebrow_icon": "tag", "title_line1": "Up to 25% Off", "title_em": "Elite Trainer Boxes", "description": "Stock up on your favourite ETBs while supplies last. Free insured shipping on all orders over $100.", "cta1_label": "Shop the Sale", "cta2_label": "View ETBs", "badge_value": "Save up to 25%", "badge_label": "On selected ETBs", "badge_icon": "tag", "color_scheme": "2" } },
+        { "type": "hero_slide", "settings": { "eyebrow": "Coming Soon", "eyebrow_icon": "clock", "title_line1": "Pre-Order", "title_em": "Scarlet & Violet", "description": "Lock in your allocation before they sell out. We ship on release day — guaranteed first to your door.", "cta1_label": "Pre-Order Now", "cta2_label": "Learn More", "badge_value": "Ships on Release Day", "badge_label": "Guaranteed first", "badge_icon": "clock", "color_scheme": "3" } },
+        { "type": "trust_item", "settings": { "icon": "credit-card", "title": "Buy Now, Pay Later", "description": "Afterpay & Zip available at checkout" } },
+        { "type": "trust_item", "settings": { "icon": "dollar", "title": "Best Price Guarantee", "description": "We match any verified lower price" } },
+        { "type": "trust_item", "settings": { "icon": "shield", "title": "Trusted by Players", "description": "500k+ happy customers, 5-star rated" } },
+        { "type": "trust_item", "settings": { "icon": "truck", "title": "Free Insured Shipping", "description": "On all orders over $100" } },
+        { "type": "marquee_item", "settings": { "text": "Free insured shipping on orders over $100" } },
+        { "type": "marquee_item", "settings": { "text": "100% authentic sealed product" } },
+        { "type": "marquee_item", "settings": { "text": "Afterpay & Zip available" } },
+        { "type": "marquee_item", "settings": { "text": "14-day returns on sealed items" } },
+        { "type": "marquee_item", "settings": { "text": "Same-day dispatch on weekdays" } },
+        { "type": "marquee_item", "settings": { "text": "500k+ happy customers" } },
+        { "type": "marquee_item", "settings": { "text": "Best price guarantee" } },
+        { "type": "marquee_item", "settings": { "text": "Factory sealed — always" } },
+        { "type": "category_card", "settings": { "label": "Sale", "icon": "shopping-bag", "is_sale": true } },
+        { "type": "category_card", "settings": { "label": "Booster Boxes", "icon": "package", "is_sale": false } },
+        { "type": "category_card", "settings": { "label": "Elite Trainer Boxes", "icon": "briefcase", "is_sale": false } },
+        { "type": "category_card", "settings": { "label": "Cases", "icon": "layers", "is_sale": false } },
+        { "type": "category_card", "settings": { "label": "Bundles & Tins", "icon": "tag", "is_sale": false } },
+        { "type": "category_card", "settings": { "label": "New Arrivals", "icon": "star", "is_sale": false } },
+        { "type": "brand_link", "settings": { "label": "Pokemon" } },
+        { "type": "brand_link", "settings": { "label": "Yu-Gi-Oh!" } },
+        { "type": "brand_link", "settings": { "label": "Magic: The Gathering" } },
+        { "type": "brand_link", "settings": { "label": "One Piece TCG" } },
+        { "type": "brand_link", "settings": { "label": "Dragon Ball Super" } },
+        { "type": "brand_link", "settings": { "label": "Lorcana" } },
+        { "type": "promo_banner", "settings": { "eyebrow": "Shop Now", "title": "Booster Boxes from $39.99", "cta_label": "Shop Collection" } },
+        { "type": "promo_banner", "settings": { "eyebrow": "Most Popular", "title": "Elite Trainer Boxes from $44.99", "cta_label": "Shop ETBs" } },
+        { "type": "about_check", "settings": { "text": "Insured & protected packaging", "dimmed": false } },
+        { "type": "about_check", "settings": { "text": "100% authentic, authorized distributor sourced", "dimmed": false } },
+        { "type": "about_check", "settings": { "text": "Same-day dispatch on weekday orders", "dimmed": false } },
+        { "type": "about_check", "settings": { "text": "14-day returns on sealed & unopened products", "dimmed": true } },
+        { "type": "reward_item", "settings": { "icon": "dollar", "text": "1 Vault Coin for every $1 spent" } },
+        { "type": "reward_item", "settings": { "icon": "gift",   "text": "Redeem coins for discounts & gifts" } },
+        { "type": "reward_item", "settings": { "icon": "users",  "text": "Early access for loyal members" } },
+        { "type": "review", "settings": { "text": "Amazing service! My booster boxes arrived double-boxed and in perfect condition. Factory seals intact. Will definitely be a repeat customer.", "author_name": "Alex M.", "author_role": "Pokemon Collector" } },
+        { "type": "review", "settings": { "text": "Fastest shipping I've experienced. Ordered Monday morning and it arrived Tuesday. The price was unbeatable too — best in the market.", "author_name": "Sarah K.", "author_role": "Yu-Gi-Oh Player" } },
+        { "type": "review", "settings": { "text": "Got my Obsidian Flames case and every single box was sealed perfectly. The packaging was incredible. 10/10 experience.", "author_name": "David R.", "author_role": "MTG Enthusiast" } },
+        { "type": "review", "settings": { "text": "The pre-order experience was smooth. They kept me updated and my box arrived exactly on release day. Top tier store.", "author_name": "James T.", "author_role": "TCG Investor" } },
+        { "type": "review", "settings": { "text": "Incredible range — found products here I couldn't source anywhere else. Customer service was also super helpful when I had a question.", "author_name": "Emma L.", "author_role": "Card Collector" } }
+      ]
     }
   ]
 }
