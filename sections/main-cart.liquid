@@ -1,12 +1,1206 @@
-<div class="cart-page">
-  <h1>Your Cart</h1>
-  {% for item in cart.items %}
-    <p>{{ item.title }} x{{ item.quantity }}</p>
-  {% endfor %}
-</div>
+{% comment %}
+  Supply District — sections/main-cart.liquid
+  Premium cart page. Inherits all design tokens from main-product.liquid.
+  Two-column desktop layout (items left · sticky summary right).
+  AJAX quantity updates via /cart/change.js — no full-page refresh.
+  Free-shipping progress bar at $150 threshold.
+  Payment badges identical to product page.
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =============================================================
+   Design Tokens — mirror main-product.liquid
+   ============================================================= */
+:root {
+  --cv-bg:                  #f7f6f3;
+  --cv-fg:                  #1c1f36;
+  --cv-card:                #ffffff;
+  --cv-primary:             #282d52;
+  --cv-primary-fg:          #f8f7f5;
+  --cv-secondary:           #eeecea;
+  --cv-muted-fg:            #76798c;
+  --cv-border:              #dedad5;
+  --cv-destructive:         #c94030;
+  --cv-radius:              0.5rem;
+  --cv-shadow-sm:           0 1px 2px rgba(0,0,0,0.05);
+  --cv-shadow:              0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --cv-font-sans:           'Inter', system-ui, -apple-system, sans-serif;
+  --cv-font-head:           'Space Grotesk', system-ui, sans-serif;
+  --color-cta-primary:      #2e9963;
+  --color-cta-primary-fg:   #ffffff;
+  --color-cta-primary-hover:#25834f;
+}
+
+/* =============================================================
+   Page Shell
+   ============================================================= */
+.sdc-wrap {
+  font-family: var(--cv-font-sans);
+  color: var(--cv-fg);
+  background: var(--cv-bg);
+  min-height: 60vh;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 5rem;
+}
+@media (min-width: 768px)  { .sdc-wrap { padding: 2.5rem 2rem 4rem; } }
+@media (min-width: 1024px) { .sdc-wrap { padding: 3rem 2rem; } }
+
+.sdc-wrap *, .sdc-wrap *::before, .sdc-wrap *::after { box-sizing: border-box; }
+
+/* Page heading */
+.sdc-heading {
+  font-family: var(--cv-font-head);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 800;
+  color: var(--cv-primary);
+  letter-spacing: -0.025em;
+  margin: 0 0 0.25rem;
+}
+.sdc-heading-meta {
+  font-size: 0.875rem;
+  color: var(--cv-muted-fg);
+  margin: 0 0 2rem;
+}
+
+/* =============================================================
+   Two-Column Layout
+   ============================================================= */
+.sdc-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .sdc-layout { grid-template-columns: 1fr 360px; gap: 2.5rem; }
+}
+
+/* =============================================================
+   Cart Items Column
+   ============================================================= */
+.sdc-items-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.sdc-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Section label */
+.sdc-col-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cv-muted-fg);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--cv-border);
+  margin-bottom: 0;
+}
+
+/* ── Single cart row ── */
+.sdc-item {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--cv-border);
+  transition: opacity 0.2s;
+  position: relative;
+}
+@media (min-width: 640px) {
+  .sdc-item { grid-template-columns: 6rem 1fr; gap: 1.25rem; }
+}
+
+/* Loading state applied by JS */
+.sdc-item.is-updating {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.sdc-item.is-updating::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--cv-radius);
+  animation: sdc-pulse 1s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes sdc-pulse {
+  0%, 100% { background: transparent; }
+  50%       { background: rgba(28,31,54,0.03); }
+}
+
+/* ── Item image ── */
+.sdc-item__img-wrap {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--cv-radius);
+  overflow: hidden;
+  border: 1px solid var(--cv-border);
+  background: var(--cv-card);
+  box-shadow: var(--cv-shadow-sm);
+  flex-shrink: 0;
+}
+.sdc-item__img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.sdc-item__img--placeholder {
+  width: 100%; height: 100%;
+  background: var(--cv-secondary);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--cv-border);
+}
+
+/* ── Item details ── */
+.sdc-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.sdc-item__vendor {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--cv-muted-fg);
+}
+
+.sdc-item__title {
+  font-family: var(--cv-font-head);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cv-primary);
+  text-decoration: none;
+  line-height: 1.3;
+}
+.sdc-item__title:hover { color: var(--color-cta-primary); }
+
+.sdc-item__variant {
+  font-size: 0.8125rem;
+  color: var(--cv-muted-fg);
+}
+
+/* Price row */
+.sdc-item__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+.sdc-item__price {
+  font-family: var(--cv-font-head);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cv-primary);
+}
+.sdc-item__compare {
+  font-size: 0.8125rem;
+  color: var(--cv-muted-fg);
+  text-decoration: line-through;
+}
+
+/* ── Bottom row: qty + remove ── */
+.sdc-item__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: auto;
+  padding-top: 0.625rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ── Quantity stepper — exact match to main-product.liquid ── */
+.cv-qty {
+  display: flex; align-items: center;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-card);
+  box-shadow: var(--cv-shadow-sm);
+  overflow: hidden;
+}
+.cv-qty__btn {
+  padding: 0.625rem 0.75rem;
+  background: none; border: none; cursor: pointer;
+  color: var(--cv-muted-fg); transition: color 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.cv-qty__btn:hover  { color: var(--cv-fg); }
+.cv-qty__btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.cv-qty__btn svg    { width: 1rem; height: 1rem; }
+input.cv-qty__input {
+  min-width: 2.75rem; text-align: center;
+  font-size: 0.875rem; font-weight: 600;
+  border: none; outline: none;
+  background: transparent; color: var(--cv-fg);
+  font-family: var(--cv-font-sans);
+  padding: 0.625rem 0;
+}
+
+/* ── Remove link (Updated to Trash Icon next to Qty) ── */
+.sdc-item__remove {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.5rem; height: 2.5rem;
+  color: var(--cv-muted-fg);
+  background: none; border: none; cursor: pointer;
+  border-radius: var(--cv-radius);
+  transition: color 0.15s, background 0.15s;
+  text-decoration: none;
+}
+.sdc-item__remove:hover { 
+  color: var(--cv-destructive); 
+  background: rgba(201,64,48,0.08); 
+}
+.sdc-item__remove svg   { width: 1.1rem; height: 1.1rem; }
+.sdc-item__remove span  { display: none; }
+
+/* Line-item total (right-aligned on wider screens) */
+.sdc-item__line-total {
+  font-family: var(--cv-font-head);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cv-primary);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* =============================================================
+   In-Cart Upsell
+   ============================================================= */
+.sdc-upsell {
+  margin-top: 3rem;
+  border-top: 1px solid var(--cv-border);
+  padding-top: 1.5rem;
+}
+.sdc-upsell__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--cv-primary);
+  margin-bottom: 1rem;
+}
+.sdc-upsell__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .sdc-upsell__grid { grid-template-columns: repeat(3, 1fr); }
+}
+.sdc-upsell-card {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-card);
+  box-shadow: var(--cv-shadow-sm);
+}
+.sdc-upsell-card__img-wrap {
+  aspect-ratio: 1/1;
+  border-radius: calc(var(--cv-radius) - 2px);
+  overflow: hidden;
+  background: var(--cv-secondary);
+}
+.sdc-upsell-card__img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.sdc-upsell-card__title {
+  font-size: 0.8125rem; font-weight: 600; line-height: 1.3;
+  color: var(--cv-fg); text-decoration: none;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.sdc-upsell-card__price { font-family: var(--cv-font-head); font-size: 0.875rem; font-weight: 700; }
+.sdc-upsell-card__btn {
+  width: 100%; margin-top: auto; padding: 0.5rem;
+  font-size: 0.75rem; font-weight: 600;
+  background: var(--cv-secondary); color: var(--cv-fg);
+  border: 1px solid var(--cv-border); border-radius: var(--cv-radius);
+  cursor: pointer; transition: background 0.15s;
+}
+.sdc-upsell-card__btn:hover { background: var(--cv-border); }
+
+/* =============================================================
+   Order Summary Column
+   ============================================================= */
+.sdc-summary {
+  background: var(--cv-card);
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) * 2);
+  box-shadow: var(--cv-shadow);
+  padding: 1.5rem;
+}
+@media (min-width: 1024px) {
+  .sdc-summary { position: sticky; top: 1.5rem; }
+  body.sd-sticky-active .sdc-summary { top: calc(var(--sd-header-height, 64px) + 1rem); }
+}
+
+.sdc-summary__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--cv-primary);
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--cv-border);
+}
+
+/* Row: label + value */
+.sdc-summary__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+}
+.sdc-summary__label {
+  font-size: 0.875rem;
+  color: var(--cv-muted-fg);
+}
+.sdc-summary__value {
+  font-family: var(--cv-font-head);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--cv-primary);
+}
+.sdc-summary__value--large {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.sdc-summary__divider {
+  border: none;
+  border-top: 1px solid var(--cv-border);
+  margin: 0.75rem 0;
+}
+
+/* Savings badge */
+.sdc-summary__savings {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: rgba(46,153,99,0.07);
+  border: 1px solid rgba(46,153,99,0.18);
+  border-radius: var(--cv-radius);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.sdc-summary__savings-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-cta-primary);
+}
+.sdc-summary__savings-amount {
+  font-family: var(--cv-font-head);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-cta-primary);
+}
+
+/* Microcopy & Trust */
+.sdc-summary__micro {
+  font-size: 0.78rem;
+  color: var(--cv-muted-fg);
+  text-align: center;
+  margin: 0.5rem 0 0;
+  line-height: 1.5;
+}
+.sdc-summary__trust {
+  display: flex; align-items: center; justify-content: center; gap: 0.375rem;
+  font-size: 0.75rem; font-weight: 500;
+  color: var(--cv-muted-fg);
+  margin-top: 0.75rem;
+}
+
+/* ── Checkout button — exact match to product page ATC ── */
+.sdc-checkout-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 3rem;
+  background: var(--color-cta-primary);
+  color: var(--color-cta-primary-fg);
+  border: 1px solid var(--color-cta-primary);
+  border-radius: var(--cv-radius);
+  font-family: var(--cv-font-sans);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(46,153,99,0.30);
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+  -webkit-appearance: none;
+}
+.sdc-checkout-btn:hover  { background: var(--color-cta-primary-hover); border-color: var(--color-cta-primary-hover); }
+.sdc-checkout-btn:active { opacity: 0.85; }
+.sdc-checkout-btn svg    { width: 1.125rem; height: 1.125rem; flex-shrink: 0; }
+
+/* ── Clean Payment Badges ── */
+.cv-payment-badges {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+}
+.cv-payment-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 1.625rem; padding: 0 0.5rem;
+  border: 1px solid var(--cv-border);
+  border-radius: calc(var(--cv-radius) - 2px);
+  background: var(--cv-card);
+  box-shadow: var(--cv-shadow-sm);
+  opacity: 0.8;
+}
+.cv-payment-badge svg { display: block; }
+
+/* =============================================================
+   Free Shipping Progress Bar (Enhanced)
+   ============================================================= */
+.sdc-shipping-bar {
+  background: var(--cv-secondary);
+  border-radius: var(--cv-radius);
+  padding: 0.75rem 0.875rem;
+  margin-bottom: 1rem;
+  transition: background 0.3s, border-color 0.3s;
+  border: 1px solid transparent;
+}
+.sdc-shipping-bar.is-unlocked {
+  background: rgba(46,153,99,0.07);
+  border-color: rgba(46,153,99,0.18);
+}
+.sdc-shipping-bar__text {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--cv-fg);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+.sdc-shipping-bar.is-unlocked .sdc-shipping-bar__text {
+  color: var(--color-cta-primary);
+  font-weight: 600;
+  margin-bottom: 0;
+}
+.sdc-shipping-bar__text strong { color: var(--color-cta-primary); }
+.sdc-shipping-bar__track {
+  height: 5px;
+  background: var(--cv-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.sdc-shipping-bar.is-unlocked .sdc-shipping-bar__track {
+  display: none;
+}
+.sdc-shipping-bar__fill {
+  height: 100%;
+  background: var(--color-cta-primary);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* =============================================================
+   Buttons — Continue Shopping
+   ============================================================= */
+.cv-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--cv-font-sans);
+  font-size: 1rem; font-weight: 600;
+  border-radius: var(--cv-radius);
+  border: 1px solid transparent;
+  cursor: pointer; text-decoration: none;
+  transition: opacity 0.15s, background 0.15s, border-color 0.15s, color 0.15s;
+  box-shadow: var(--cv-shadow-sm);
+  height: 3rem;
+  -webkit-appearance: none;
+}
+.cv-btn--outline-primary {
+  background: transparent;
+  border-color: var(--color-cta-primary);
+  color: var(--color-cta-primary);
+}
+.cv-btn--outline-primary:hover {
+  background: rgba(46,153,99,0.06);
+  border-color: var(--color-cta-primary-hover);
+  color: var(--color-cta-primary-hover);
+}
+
+/* =============================================================
+   Empty State
+   ============================================================= */
+.sdc-empty {
+  text-align: center;
+  padding: 5rem 1rem 4rem;
+  max-width: 32rem;
+  margin: 0 auto;
+}
+.sdc-empty__icon {
+  color: var(--cv-border);
+  margin-bottom: 1.25rem;
+}
+.sdc-empty__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--cv-primary);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+.sdc-empty__sub {
+  font-size: 0.9375rem;
+  color: var(--cv-muted-fg);
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+/* =============================================================
+   Cart error / note
+   ============================================================= */
+.sdc-error {
+  display: none;
+  background: rgba(201,64,48,0.07);
+  border: 1px solid rgba(201,64,48,0.25);
+  border-radius: var(--cv-radius);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--cv-destructive);
+  margin-bottom: 1rem;
+}
+.sdc-error.is-visible { display: block; }
+
+.sdc-note-toggle {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--cv-muted-fg);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  text-decoration: underline dotted;
+  transition: color 0.15s;
+}
+.sdc-note-toggle:hover { color: var(--cv-fg); }
+
+.sdc-note-field {
+  display: none;
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  font-family: var(--cv-font-sans);
+  font-size: 0.875rem;
+  color: var(--cv-fg);
+  background: var(--cv-card);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  resize: vertical;
+  min-height: 5rem;
+  outline: none;
+  box-shadow: var(--cv-shadow-sm);
+  transition: border-color 0.15s;
+}
+.sdc-note-field:focus { border-color: var(--cv-primary); }
+.sdc-note-field.is-open { display: block; }
+</style>
+
+{%- liquid
+  assign free_ship_threshold  = section.settings.free_ship_threshold | default: 15000
+  assign subtotal             = cart.items_subtotal_price
+  assign item_count           = cart.item_count
+  assign has_savings          = false
+  assign total_savings        = 0
+
+  for item in cart.items
+    if item.original_line_price > item.final_line_price
+      assign has_savings = true
+      assign savings_amt = item.original_line_price | minus: item.final_line_price
+      assign total_savings = total_savings | plus: savings_amt
+    endif
+  endfor
+
+  assign ship_pct = subtotal | times: 100 | divided_by: free_ship_threshold
+  assign is_unlocked = false
+  if ship_pct >= 100
+    assign ship_pct = 100
+    assign is_unlocked = true
+  endif
+  assign ship_remaining = free_ship_threshold | minus: subtotal
+-%}
+
+<div class="sdc-wrap" id="sdc-cart-wrap">
+
+  {%- if item_count > 0 -%}
+
+    {%- comment -%} ── Page heading ── {%- endcomment -%}
+    <h1 class="sdc-heading">Your Cart</h1>
+    <p class="sdc-heading-meta">
+      {{ item_count }} item{%- if item_count != 1 -%}s{%- endif -%}
+    </p>
+
+    {%- comment -%} ── Error banner (hidden, shown by JS on AJAX failure) ── {%- endcomment -%}
+    <div class="sdc-error" id="sdc-error" role="alert" aria-live="polite"></div>
+
+    <form action="/cart" method="post" id="sdc-cart-form" novalidate>
+
+      <div class="sdc-layout">
+
+        {%- comment -%} ════════════════════════════════
+            LEFT — Cart items list
+        ════════════════════════════════ {%- endcomment -%}
+        <div class="sdc-items-col">
+          <div class="sdc-items" id="sdc-items-list">
+            <p class="sdc-col-label">Products</p>
+
+            {%- for item in cart.items -%}
+              {%- liquid
+                assign item_on_sale  = false
+                assign item_compare  = item.variant.compare_at_price
+                if item_compare > item.price
+                  assign item_on_sale = true
+                endif
+              -%}
+
+              <div
+                class="sdc-item"
+                id="sdc-item-{{ item.key | replace: ':', '-' }}"
+                data-item-key="{{ item.key }}"
+                data-variant-id="{{ item.variant_id }}"
+              >
+
+                {%- comment -%} ── Product image ── {%- endcomment -%}
+                <div class="sdc-item__img-wrap">
+                  {%- if item.image != blank -%}
+                    <img
+                      src="{{ item.image | image_url: width: 200 }}"
+                      srcset="{{ item.image | image_url: width: 120 }} 120w, {{ item.image | image_url: width: 200 }} 200w"
+                      sizes="(max-width: 639px) 80px, 96px"
+                      alt="{{ item.image.alt | default: item.title | escape }}"
+                      class="sdc-item__img"
+                      loading="lazy"
+                      width="200" height="200"
+                    >
+                  {%- else -%}
+                    <div class="sdc-item__img--placeholder" aria-hidden="true">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                  {%- endif -%}
+                </div>
+
+                {%- comment -%} ── Item details ── {%- endcomment -%}
+                <div class="sdc-item__body">
+
+                  {%- if item.vendor != blank -%}
+                    <span class="sdc-item__vendor">{{ item.vendor | escape }}</span>
+                  {%- endif -%}
+
+                  <a href="{{ item.url }}" class="sdc-item__title">{{ item.product.title | escape }}</a>
+
+                  {%- unless item.variant.title == 'Default Title' -%}
+                    <span class="sdc-item__variant">{{ item.variant.title | escape }}</span>
+                  {%- endunless -%}
+
+                  <div class="sdc-item__price-row">
+                    <span class="sdc-item__price">{{ item.final_price | money }}</span>
+                    {%- if item_on_sale -%}
+                      <span class="sdc-item__compare">{{ item_compare | money }}</span>
+                    {%- endif -%}
+                  </div>
+
+                  {%- comment -%} ── Actions: qty stepper + remove ── {%- endcomment -%}
+                  <div class="sdc-item__actions">
+
+                    {%- comment -%} Quantity stepper {%- endcomment -%}
+                    <div class="cv-qty" role="group" aria-label="Quantity for {{ item.title | escape }}">
+                      <button
+                        type="button"
+                        class="cv-qty__btn sdc-qty-minus"
+                        aria-label="Decrease quantity"
+                        data-item-key="{{ item.key }}"
+                        {%- if item.quantity <= 1 %} disabled{%- endif -%}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                      </button>
+                      <input
+                        type="number"
+                        class="cv-qty__input sdc-qty-input"
+                        name="updates[]"
+                        value="{{ item.quantity }}"
+                        min="0"
+                        aria-label="Quantity"
+                        data-item-key="{{ item.key }}"
+                        data-item-id="{{ item.variant_id }}"
+                      >
+                      <button
+                        type="button"
+                        class="cv-qty__btn sdc-qty-plus"
+                        aria-label="Increase quantity"
+                        data-item-key="{{ item.key }}"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                      </button>
+                    </div>
+
+                    {%- comment -%} Grouped Remove Icon {%- endcomment -%}
+                    <button
+                      type="button"
+                      class="sdc-item__remove sdc-remove-btn"
+                      aria-label="Remove {{ item.title | escape }} from cart"
+                      title="Remove Item"
+                      data-item-key="{{ item.key }}"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                      <span>Remove</span>
+                    </button>
+
+                    {%- comment -%} Line total {%- endcomment -%}
+                    <span
+                      class="sdc-item__line-total"
+                      id="sdc-line-{{ item.key | replace: ':', '-' }}"
+                    >
+                      {{ item.final_line_price | money }}
+                    </span>
+
+                  </div>{%- comment -%} /.sdc-item__actions {%- endcomment -%}
+                </div>{%- comment -%} /.sdc-item__body {%- endcomment -%}
+              </div>{%- comment -%} /.sdc-item {%- endcomment -%}
+
+            {%- endfor -%}
+          </div>{%- comment -%} /.sdc-items {%- endcomment -%}
+
+          {%- comment -%} ── In-Cart Upsell ── {%- endcomment -%}
+          {%- if section.settings.upsell_collection != blank and section.settings.upsell_collection.products_count > 0 -%}
+            <div class="sdc-upsell">
+              <h3 class="sdc-upsell__title">Frequently Bought Together</h3>
+              <div class="sdc-upsell__grid">
+                {%- for product in section.settings.upsell_collection.products limit: 3 -%}
+                  {%- if product.available -%}
+                    <div class="sdc-upsell-card">
+                      <a href="{{ product.url }}" class="sdc-upsell-card__img-wrap">
+                        <img src="{{ product.featured_image | image_url: width: 200 }}" alt="{{ product.title | escape }}" loading="lazy" width="200" height="200">
+                      </a>
+                      <a href="{{ product.url }}" class="sdc-upsell-card__title">{{ product.title }}</a>
+                      <span class="sdc-upsell-card__price">{{ product.price | money }}</span>
+                      <button type="button" class="sdc-upsell-card__btn sdc-upsell-btn" data-variant-id="{{ product.selected_or_first_available_variant.id }}">Quick Add</button>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+        </div>{%- comment -%} /.sdc-items-col {%- endcomment -%}
+
+        {%- comment -%} ════════════════════════════════
+            RIGHT — Order Summary
+        ════════════════════════════════ {%- endcomment -%}
+        <aside class="sdc-summary" aria-label="Order summary">
+
+          <h2 class="sdc-summary__title">Order Summary</h2>
+
+          {%- comment -%} ── Free shipping progress bar (Enhanced) ── {%- endcomment -%}
+          {%- if section.settings.show_free_ship -%}
+            <div class="sdc-shipping-bar {% if is_unlocked %}is-unlocked{% endif %}" id="sdc-ship-bar">
+              <p class="sdc-shipping-bar__text" id="sdc-ship-text">
+                {%- if is_unlocked -%}
+                  🎉 You've unlocked <strong>free shipping!</strong>
+                {%- else -%}
+                  Add <strong>{{ ship_remaining | money }}</strong> more for free shipping
+                {%- endif -%}
+              </p>
+              <div class="sdc-shipping-bar__track">
+                <div
+                  class="sdc-shipping-bar__fill"
+                  id="sdc-ship-fill"
+                  style="width: {{ ship_pct }}%"
+                  role="progressbar"
+                  aria-valuenow="{{ ship_pct }}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} ── Subtotal rows ── {%- endcomment -%}
+          <div class="sdc-summary__row">
+            <span class="sdc-summary__label">Subtotal</span>
+            <span class="sdc-summary__value sdc-summary__value--large" id="sdc-subtotal">
+              {{ subtotal | money }}
+            </span>
+          </div>
+
+          {%- if has_savings -%}
+            <div class="sdc-summary__savings" id="sdc-savings-row">
+              <span class="sdc-summary__savings-label">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                You're saving
+              </span>
+              <span class="sdc-summary__savings-amount" id="sdc-savings-amount">{{ total_savings | money }}</span>
+            </div>
+          {%- endif -%}
+
+          <hr class="sdc-summary__divider">
+
+          {%- comment -%} ── Cart note toggle ── {%- endcomment -%}
+          <button type="button" class="sdc-note-toggle" id="sdc-note-toggle">
+            + Add an order note
+          </button>
+          <textarea
+            class="sdc-note-field"
+            id="sdc-note-field"
+            name="note"
+            aria-label="Order note"
+            placeholder="Special instructions, gift message…"
+          >{{- cart.note -}}</textarea>
+
+          <hr class="sdc-summary__divider" style="margin-top:0.75rem">
+
+          {%- comment -%} ── Checkout button ── {%- endcomment -%}
+          <button
+            type="submit"
+            name="checkout"
+            class="sdc-checkout-btn"
+            id="sdc-checkout-btn"
+            aria-label="Proceed to secure checkout"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Checkout Securely
+          </button>
+
+          <p class="sdc-summary__micro">Taxes and shipping calculated at checkout</p>
+
+          {%- comment -%} ── Clean Payment badges ── {%- endcomment -%}
+          <div class="cv-payment-badges" aria-label="Accepted payment methods">
+
+            <span class="cv-payment-badge" title="Visa">
+              <svg xmlns="http://www.w3.org/2000/svg" width="38" height="12" viewBox="0 0 38 12" aria-hidden="true">
+                <text x="0" y="10" font-family="Arial,sans-serif" font-size="10" font-weight="900" fill="#1A1F71" letter-spacing="-0.5">VISA</text>
+              </svg>
+            </span>
+
+            <span class="cv-payment-badge" title="Mastercard" style="padding:0 0.375rem">
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 30 18" aria-hidden="true">
+                <circle cx="11" cy="9" r="8" fill="#EB001B"/>
+                <circle cx="19" cy="9" r="8" fill="#F79E1B"/>
+                <path d="M15 3.5a8 8 0 0 1 0 11A8 8 0 0 1 15 3.5z" fill="#FF5F00"/>
+              </svg>
+            </span>
+
+            <span class="cv-payment-badge" title="PayPal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="46" height="12" viewBox="0 0 46 12" aria-hidden="true">
+                <text x="0" y="9.5" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#003087">Pay</text>
+                <text x="14" y="9.5" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#009CDE">Pal</text>
+              </svg>
+            </span>
+
+            <span class="cv-payment-badge" title="Shop Pay" style="background:#5A31F4;border-color:#5A31F4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="12" viewBox="0 0 36 12" aria-hidden="true">
+                <text x="2" y="9.5" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9" font-weight="700" fill="#fff">Shop</text>
+              </svg>
+            </span>
+
+          </div>
+
+          {%- comment -%} ── Trust text ── {%- endcomment -%}
+          <p class="sdc-summary__trust">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            100% Authentic & Factory Sealed
+          </p>
+
+        </aside>{%- comment -%} /.sdc-summary {%- endcomment -%}
+
+      </div>{%- comment -%} /.sdc-layout {%- endcomment -%}
+
+    </form>
+
+  {%- else -%}
+
+    {%- comment -%} ════════════════════════════════
+        EMPTY STATE
+    ════════════════════════════════ {%- endcomment -%}
+    <div class="sdc-empty">
+      <div class="sdc-empty__icon" aria-hidden="true">
+        <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9"  cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+      </div>
+      <h1 class="sdc-empty__title">Your cart is empty</h1>
+      <p class="sdc-empty__sub">
+        Looks like you haven't added anything yet. Browse our Pokémon and One Piece range to find something you'll love.
+      </p>
+      <a href="{{ routes.all_products_collection_url }}" class="cv-btn cv-btn--outline-primary" style="padding:0 2rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        Continue Shopping
+      </a>
+    </div>
+
+  {%- endif -%}
+
+</div>{%- comment -%} /.sdc-wrap {%- endcomment -%}
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Config ── */
+  var FREE_SHIP_THRESHOLD = {{ section.settings.free_ship_threshold | default: 15000 }};  /* cents */
+  var DEBOUNCE_MS         = 500;
+
+  /* ── Helpers ── */
+  function $(id)  { return document.getElementById(id); }
+  function money(cents) {
+    /* Mirror Shopify money format — AUD $x.xx */
+    return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  /* ── Error banner ── */
+  var errorEl = $('sdc-error');
+  function showError(msg) {
+    if (!errorEl) return;
+    errorEl.textContent = msg;
+    errorEl.classList.add('is-visible');
+    errorEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function clearError() {
+    if (errorEl) errorEl.classList.remove('is-visible');
+  }
+
+  /* ── Note toggle ── */
+  var noteToggle = $('sdc-note-toggle');
+  var noteField  = $('sdc-note-field');
+  if (noteToggle && noteField) {
+    noteToggle.addEventListener('click', function () {
+      noteField.classList.toggle('is-open');
+      noteToggle.textContent = noteField.classList.contains('is-open')
+        ? '- Hide order note'
+        : '+ Add an order note';
+    });
+    /* Pre-open if there's already a note */
+    if (noteField.value.trim().length > 0) {
+      noteField.classList.add('is-open');
+      noteToggle.textContent = '- Hide order note';
+    }
+  }
+
+  /* ── AJAX cart update ── */
+  function setItemUpdating(key, busy) {
+    var safeKey = key.replace(/:/g, '-');
+    var el = $('sdc-item-' + safeKey);
+    if (el) el.classList.toggle('is-updating', busy);
+  }
+
+  function updateCart(key, newQty) {
+    clearError();
+    setItemUpdating(key, true);
+
+    fetch('/cart/change.js', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body:    JSON.stringify({ id: key, quantity: newQty })
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('Cart update failed (' + r.status + ')');
+        return r.json();
+      })
+      .then(function (cart) {
+        /* ── 1. Update subtotal ── */
+        var subtotalEl = $('sdc-subtotal');
+        if (subtotalEl) subtotalEl.textContent = money(cart.items_subtotal_price);
+
+        /* ── 2. Update free-ship bar (Enhanced Logic) ── */
+        var pct  = Math.min(Math.round(cart.items_subtotal_price / FREE_SHIP_THRESHOLD * 100), 100);
+        var fill = $('sdc-ship-fill');
+        var txt  = $('sdc-ship-text');
+        var bar  = $('sdc-ship-bar');
+        
+        if (fill) {
+          fill.style.width = pct + '%';
+          fill.setAttribute('aria-valuenow', pct);
+        }
+        if (txt && bar) {
+          var rem = FREE_SHIP_THRESHOLD - cart.items_subtotal_price;
+          if (rem <= 0) {
+            bar.classList.add('is-unlocked');
+            txt.innerHTML = '🎉 You\'ve unlocked <strong>free shipping!</strong>';
+          } else {
+            bar.classList.remove('is-unlocked');
+            txt.innerHTML = 'Add <strong>' + money(rem) + '</strong> more for free shipping';
+          }
+        }
+
+        /* ── 3. Update this item's line total or remove the row ── */
+        var safeKey = key.replace(/:/g, '-');
+        var lineEl  = $('sdc-line-' + safeKey);
+        var rowEl   = $('sdc-item-' + safeKey);
+
+        var lineItem = null;
+        for (var i = 0; i < cart.items.length; i++) {
+          if (cart.items[i].key === key) { lineItem = cart.items[i]; break; }
+        }
+
+        if (newQty === 0 || !lineItem) {
+          /* Animate removal */
+          if (rowEl) {
+            rowEl.style.transition = 'opacity 0.3s, transform 0.3s';
+            rowEl.style.opacity = '0';
+            rowEl.style.transform = 'translateX(-12px)';
+            setTimeout(function () {
+              if (rowEl.parentNode) rowEl.parentNode.removeChild(rowEl);
+              /* Reload if cart empty */
+              if (cart.item_count === 0) location.reload();
+            }, 320);
+          }
+        } else {
+          if (lineEl) lineEl.textContent = money(lineItem.final_line_price);
+          /* Update minus button disabled state */
+          if (rowEl) {
+            var minusBtn = rowEl.querySelector('.sdc-qty-minus');
+            if (minusBtn) minusBtn.disabled = (newQty <= 1);
+          }
+        }
+
+        /* ── 4. Update cart badge in header ── */
+        document.querySelectorAll('[data-cart-count]').forEach(function (el) {
+          el.textContent = cart.item_count;
+          el.hidden = cart.item_count === 0;
+        });
+        document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+      })
+      .catch(function (err) {
+        console.error('Cart update error:', err);
+        showError('Something went wrong updating your cart. Please refresh and try again.');
+      })
+      .finally(function () {
+        setItemUpdating(key, false);
+      });
+  }
+
+  /* ── Debounce helper (for typing in qty input) ── */
+  var debounceTimers = {};
+  function debounce(key, fn) {
+    clearTimeout(debounceTimers[key]);
+    debounceTimers[key] = setTimeout(fn, DEBOUNCE_MS);
+  }
+
+  /* ── Event delegation on the items list ── */
+  var list = $('sdc-items-list');
+  if (list) {
+    list.addEventListener('click', function (e) {
+      var btn = e.target.closest('.sdc-qty-minus, .sdc-qty-plus, .sdc-remove-btn');
+      if (!btn) return;
+
+      var key = btn.dataset.itemKey;
+      if (!key) return;
+
+      var row   = $('sdc-item-' + key.replace(/:/g, '-'));
+      var input = row ? row.querySelector('.sdc-qty-input') : null;
+      var qty   = input ? parseInt(input.value, 10) : 1;
+
+      if (btn.classList.contains('sdc-qty-minus')) {
+        var newQty = Math.max(0, qty - 1);
+        if (input) input.value = newQty;
+        updateCart(key, newQty);
+
+      } else if (btn.classList.contains('sdc-qty-plus')) {
+        var newQty = qty + 1;
+        if (input) input.value = newQty;
+        updateCart(key, newQty);
+
+      } else if (btn.classList.contains('sdc-remove-btn')) {
+        updateCart(key, 0);
+      }
+    });
+
+    /* ── Direct input change (debounced) ── */
+    list.addEventListener('change', function (e) {
+      var input = e.target.closest('.sdc-qty-input');
+      if (!input) return;
+      var key    = input.dataset.itemKey;
+      var newQty = Math.max(0, parseInt(input.value, 10) || 0);
+      input.value = newQty;
+      debounce(key, function () { updateCart(key, newQty); });
+    });
+  }
+
+  /* ── Upsell Quick Add ── */
+  document.querySelectorAll('.sdc-upsell-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var variantId = this.dataset.variantId;
+      var originalText = this.textContent;
+      
+      this.disabled = true;
+      this.textContent = 'Adding...';
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function() {
+        location.reload(); // Refresh to show new cart state immediately
+      })
+      .catch(function() {
+        btn.textContent = 'Error';
+        setTimeout(function() {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }, 2000);
+      });
+    });
+  });
+
+})();
+</script>
+
 {% schema %}
 {
   "name": "Cart",
-  "settings": []
+  "tag": "div",
+  "class": "sd-cart-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Free Shipping Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_free_ship",
+      "label": "Show free shipping progress bar",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "free_ship_threshold",
+      "label": "Free shipping threshold (cents)",
+      "info": "Enter the amount in cents — e.g. 15000 = $150.00",
+      "default": 15000
+    },
+    {
+      "type": "header",
+      "content": "In-Cart Upsell"
+    },
+    {
+      "type": "collection",
+      "id": "upsell_collection",
+      "label": "Upsell Collection",
+      "info": "Select a collection (like accessories or single packs) to display below the cart items."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart"
+    }
+  ]
 }
 {% endschema %}
