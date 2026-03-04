@@ -9,18 +9,401 @@
  */
 {
   "sections": {
-    "main": {
+    "main_home_faAae4": {
       "type": "main-home",
+      "blocks": {
+        "hero_slide_pj8jtq": {
+          "type": "hero_slide",
+          "settings": {
+            "eyebrow_icon": "star",
+            "eyebrow": "New Season Drops",
+            "title_line1": "Premium TCG",
+            "title_em": "Sealed Products",
+            "description": "Factory sealed booster boxes, Elite Trainer Boxes & more. 100% authentic, sourced directly from authorized distributors.",
+            "cta1_label": "Shop All Products",
+            "cta1_url": "",
+            "cta2_label": "New Arrivals",
+            "cta2_url": "",
+            "badge_value": "100% Authentic",
+            "badge_label": "Verified sealed product",
+            "badge_icon": "shield",
+            "color_scheme": "1"
+          }
+        },
+        "hero_slide_qJtCnY": {
+          "type": "hero_slide",
+          "settings": {
+            "eyebrow_icon": "tag",
+            "eyebrow": "Limited Time Deals",
+            "title_line1": "Up to 25% Off",
+            "title_em": "Elite Trainer Boxes",
+            "description": "Stock up on your favourite ETBs while supplies last. Free insured shipping on all orders over $100.",
+            "cta1_label": "Shop the Sale",
+            "cta1_url": "",
+            "cta2_label": "View ETBs",
+            "cta2_url": "",
+            "badge_value": "Save up to 25%",
+            "badge_label": "On selected ETBs",
+            "badge_icon": "tag",
+            "color_scheme": "2"
+          }
+        },
+        "hero_slide_KR9c4n": {
+          "type": "hero_slide",
+          "settings": {
+            "eyebrow_icon": "clock",
+            "eyebrow": "Coming Soon",
+            "title_line1": "Pre-Order",
+            "title_em": "Scarlet & Violet",
+            "description": "Lock in your allocation before they sell out. We ship on release day — guaranteed first to your door.",
+            "cta1_label": "Pre-Order Now",
+            "cta1_url": "",
+            "cta2_label": "Learn More",
+            "cta2_url": "",
+            "badge_value": "Ships on Release Day",
+            "badge_label": "Guaranteed first",
+            "badge_icon": "clock",
+            "color_scheme": "3"
+          }
+        },
+        "trust_item_VgmMdE": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "credit-card",
+            "title": "Buy Now, Pay Later",
+            "description": "Afterpay & Zip available at checkout"
+          }
+        },
+        "trust_item_nw3tnX": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "dollar",
+            "title": "Best Price Guarantee",
+            "description": "We match any verified lower price"
+          }
+        },
+        "trust_item_BET6FL": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shield",
+            "title": "Trusted by Players",
+            "description": "500k+ happy customers, 5-star rated"
+          }
+        },
+        "trust_item_yQfwnb": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "truck",
+            "title": "Free Insured Shipping",
+            "description": "On all orders over $100"
+          }
+        },
+        "marquee_item_hhJwwx": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Free insured shipping on orders over $100"
+          }
+        },
+        "marquee_item_kNEhD6": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "100% authentic sealed product"
+          }
+        },
+        "marquee_item_A4EQHL": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Afterpay & Zip available"
+          }
+        },
+        "marquee_item_9E3Ky7": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "14-day returns on sealed items"
+          }
+        },
+        "marquee_item_yzQAFj": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Same-day dispatch on weekdays"
+          }
+        },
+        "marquee_item_Hhn66M": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "500k+ happy customers"
+          }
+        },
+        "marquee_item_X6cDQR": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Best price guarantee"
+          }
+        },
+        "marquee_item_wr9J7N": {
+          "type": "marquee_item",
+          "settings": {
+            "text": "Factory sealed — always"
+          }
+        },
+        "category_card_mcdDyt": {
+          "type": "category_card",
+          "settings": {
+            "label": "Sale",
+            "url": "",
+            "icon": "shopping-bag",
+            "is_sale": true
+          }
+        },
+        "category_card_FxxDLJ": {
+          "type": "category_card",
+          "settings": {
+            "label": "Booster Boxes",
+            "url": "",
+            "icon": "package",
+            "is_sale": false
+          }
+        },
+        "category_card_TmLA9c": {
+          "type": "category_card",
+          "settings": {
+            "label": "Elite Trainer Boxes",
+            "url": "",
+            "icon": "briefcase",
+            "is_sale": false
+          }
+        },
+        "category_card_6473yk": {
+          "type": "category_card",
+          "settings": {
+            "label": "Cases",
+            "url": "",
+            "icon": "layers",
+            "is_sale": false
+          }
+        },
+        "category_card_rNVHMV": {
+          "type": "category_card",
+          "settings": {
+            "label": "Bundles & Tins",
+            "url": "",
+            "icon": "tag",
+            "is_sale": false
+          }
+        },
+        "category_card_Rchcgy": {
+          "type": "category_card",
+          "settings": {
+            "label": "New Arrivals",
+            "url": "",
+            "icon": "star",
+            "is_sale": false
+          }
+        },
+        "brand_link_C8KPGz": {
+          "type": "brand_link",
+          "settings": {
+            "label": "Pokemon",
+            "url": ""
+          }
+        },
+        "brand_link_LyJdt6": {
+          "type": "brand_link",
+          "settings": {
+            "label": "Yu-Gi-Oh!",
+            "url": ""
+          }
+        },
+        "brand_link_iHQiy6": {
+          "type": "brand_link",
+          "settings": {
+            "label": "Magic: The Gathering",
+            "url": ""
+          }
+        },
+        "brand_link_k4wXFB": {
+          "type": "brand_link",
+          "settings": {
+            "label": "One Piece TCG",
+            "url": ""
+          }
+        },
+        "brand_link_DRkfr9": {
+          "type": "brand_link",
+          "settings": {
+            "label": "Dragon Ball Super",
+            "url": ""
+          }
+        },
+        "brand_link_PEhMeb": {
+          "type": "brand_link",
+          "settings": {
+            "label": "Lorcana",
+            "url": ""
+          }
+        },
+        "promo_banner_FqmJpP": {
+          "type": "promo_banner",
+          "settings": {
+            "eyebrow": "Shop Now",
+            "title": "Booster Boxes from $39.99",
+            "cta_label": "Shop Collection",
+            "cta_url": ""
+          }
+        },
+        "promo_banner_9RGRWE": {
+          "type": "promo_banner",
+          "settings": {
+            "eyebrow": "Most Popular",
+            "title": "Elite Trainer Boxes from $44.99",
+            "cta_label": "Shop ETBs",
+            "cta_url": ""
+          }
+        },
+        "about_check_i7Lq8f": {
+          "type": "about_check",
+          "settings": {
+            "text": "Insured & protected packaging",
+            "dimmed": false
+          }
+        },
+        "about_check_mYFMhK": {
+          "type": "about_check",
+          "settings": {
+            "text": "100% authentic, authorized distributor sourced",
+            "dimmed": false
+          }
+        },
+        "about_check_HbfCbd": {
+          "type": "about_check",
+          "settings": {
+            "text": "Same-day dispatch on weekday orders",
+            "dimmed": false
+          }
+        },
+        "about_check_W8mwDB": {
+          "type": "about_check",
+          "settings": {
+            "text": "14-day returns on sealed & unopened products",
+            "dimmed": true
+          }
+        },
+        "reward_item_bhUGGP": {
+          "type": "reward_item",
+          "settings": {
+            "icon": "dollar",
+            "text": "1 Vault Coin for every $1 spent"
+          }
+        },
+        "reward_item_3TmXQP": {
+          "type": "reward_item",
+          "settings": {
+            "icon": "gift",
+            "text": "Redeem coins for discounts & gifts"
+          }
+        },
+        "reward_item_BN7YQa": {
+          "type": "reward_item",
+          "settings": {
+            "icon": "users",
+            "text": "Early access for loyal members"
+          }
+        },
+        "review_iPJA6Y": {
+          "type": "review",
+          "settings": {
+            "text": "Amazing service! My booster boxes arrived double-boxed and in perfect condition. Factory seals intact. Will definitely be a repeat customer.",
+            "author_name": "Alex M.",
+            "author_role": "Pokemon Collector"
+          }
+        },
+        "review_KUHLAG": {
+          "type": "review",
+          "settings": {
+            "text": "Fastest shipping I've experienced. Ordered Monday morning and it arrived Tuesday. The price was unbeatable too — best in the market.",
+            "author_name": "Sarah K.",
+            "author_role": "Yu-Gi-Oh Player"
+          }
+        },
+        "review_3x84YE": {
+          "type": "review",
+          "settings": {
+            "text": "Got my Obsidian Flames case and every single box was sealed perfectly. The packaging was incredible. 10/10 experience.",
+            "author_name": "David R.",
+            "author_role": "MTG Enthusiast"
+          }
+        },
+        "review_HtWNHT": {
+          "type": "review",
+          "settings": {
+            "text": "The pre-order experience was smooth. They kept me updated and my box arrived exactly on release day. Top tier store.",
+            "author_name": "James T.",
+            "author_role": "TCG Investor"
+          }
+        },
+        "review_GrbgWh": {
+          "type": "review",
+          "settings": {
+            "text": "Incredible range — found products here I couldn't source anywhere else. Customer service was also super helpful when I had a question.",
+            "author_name": "Emma L.",
+            "author_role": "Card Collector"
+          }
+        }
+      },
+      "block_order": [
+        "hero_slide_pj8jtq",
+        "hero_slide_qJtCnY",
+        "hero_slide_KR9c4n",
+        "trust_item_VgmMdE",
+        "trust_item_nw3tnX",
+        "trust_item_BET6FL",
+        "trust_item_yQfwnb",
+        "marquee_item_hhJwwx",
+        "marquee_item_kNEhD6",
+        "marquee_item_A4EQHL",
+        "marquee_item_9E3Ky7",
+        "marquee_item_yzQAFj",
+        "marquee_item_Hhn66M",
+        "marquee_item_X6cDQR",
+        "marquee_item_wr9J7N",
+        "category_card_mcdDyt",
+        "category_card_FxxDLJ",
+        "category_card_TmLA9c",
+        "category_card_6473yk",
+        "category_card_rNVHMV",
+        "category_card_Rchcgy",
+        "brand_link_C8KPGz",
+        "brand_link_LyJdt6",
+        "brand_link_iHQiy6",
+        "brand_link_k4wXFB",
+        "brand_link_DRkfr9",
+        "brand_link_PEhMeb",
+        "promo_banner_FqmJpP",
+        "promo_banner_9RGRWE",
+        "about_check_i7Lq8f",
+        "about_check_mYFMhK",
+        "about_check_HbfCbd",
+        "about_check_W8mwDB",
+        "reward_item_bhUGGP",
+        "reward_item_3TmXQP",
+        "reward_item_BN7YQa",
+        "review_iPJA6Y",
+        "review_KUHLAG",
+        "review_3x84YE",
+        "review_HtWNHT",
+        "review_GrbgWh"
+      ],
+      "name": "Home",
       "settings": {
         "hero_autoplay_ms": 5000,
         "featured_title": "Fan Favourites",
         "featured_subtitle": "Whether you're building your collection or buying your first box — these are going fast.",
         "tab1_label": "Pre-Orders",
-        "tab1_collection": "one-piece",
+        "tab1_collection": "",
         "tab2_label": "New Arrivals",
-        "tab2_collection": "one-piece",
+        "tab2_collection": "",
         "tab3_label": "Best Sellers",
-        "tab3_collection": "one-piece",
+        "tab3_collection": "",
         "cat_title": "Browse by Category",
         "cat_subtitle": "Booster boxes, ETBs, cases, singles & more.",
         "show_about": true,
@@ -47,6 +430,6 @@
     }
   },
   "order": [
-    "main"
+    "main_home_faAae4"
   ]
 }
