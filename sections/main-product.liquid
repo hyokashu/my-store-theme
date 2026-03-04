@@ -1,5 +1,5 @@
 {% comment %}
-  CardVault — main-product.liquid
+  Supply District — main-product.liquid
   Self-contained product page section.
   Fonts, design tokens, layout, interactivity — all scoped here.
 {% endcomment %}
@@ -1255,32 +1255,78 @@ input.cv-qty__input {
       <h2 class="cv-similar__title">You May Also Like</h2>
       <a href="/collections/all" class="cv-similar__all">View All</a>
     </div>
+    
     <div class="cv-similar__grid">
-      {%- if recommendations.performed and recommendations.products_count > 0 -%}
-        {%- for rec in recommendations.products limit: 4 -%}
-          {%- assign rec_var    = rec.selected_or_first_available_variant -%}
-          {%- assign rec_sale   = false -%}
-          {%- if rec_var.compare_at_price > rec_var.price -%}{%- assign rec_sale = true -%}{%- endif -%}
-          <a href="{{ rec.url }}" class="cv-product-card">
-            <div class="cv-product-card__img-wrap">
-              {%- if rec.featured_image -%}
-                <img src="{{ rec.featured_image | image_url: width: 400 }}" alt="{{ rec.featured_image.alt | default: rec.title | escape }}" width="400" height="400" loading="lazy">
-              {%- else -%}
-                <img src="https://placehold.co/400x400/eeecea/76798c?text=Product" alt="{{ rec.title | escape }}" width="400" height="400" loading="lazy">
-              {%- endif -%}
-              {%- if rec_sale -%}<span class="cv-product-card__sale-badge">Sale</span>{%- endif -%}
-            </div>
-            <div class="cv-product-card__info">
-              <h3 class="cv-product-card__name">{{ rec.title }}</h3>
-              <p class="cv-product-card__type">{{ rec.type }}</p>
-              <div class="cv-product-card__prices">
-                <span class="cv-product-card__price">{{ rec_var.price | money }}</span>
-                {%- if rec_sale -%}<span class="cv-product-card__compare">{{ rec_var.compare_at_price | money }}</span>{%- endif -%}
+      {%- liquid
+        comment
+          1. Find the first meaningful collection this product belongs to.
+        endcomment
+        assign related_collection = product.collections | where: "handle", "!=", "all" | where: "handle", "!=", "frontpage" | first
+        assign has_related = false
+
+        if related_collection and related_collection.products_count > 1
+          assign product_limit = 4
+          assign available_count = related_collection.products_count | minus: 1
+          
+          comment
+            2. Calculate the maximum offset so we don't run out of products to show.
+          endcomment
+          assign max_offset = available_count | minus: product_limit
+          if max_offset < 0
+            assign max_offset = 0
+          endif
+
+          comment
+            3. Pseudo-randomizer: Use the current server second (0-59) as a seed.
+          endcomment
+          assign current_second = "now" | date: "%S" | plus: 0
+          if max_offset > 0
+            assign random_offset = current_second | modulo: max_offset
+          else
+            assign random_offset = 0
+          endif
+
+          assign rendered_count = 0
+        endif
+      -%}
+
+      {%- if related_collection and related_collection.products_count > 1 -%}
+        {%- comment -%} 4. Loop through the collection starting at our random offset {%- endcomment -%}
+        {%- for rec in related_collection.products offset: random_offset limit: 10 -%}
+          
+          {%- comment -%} Ensure we skip the current product and stop at 4 items {%- endcomment -%}
+          {%- if rec.id != product.id and rendered_count < product_limit -%}
+            {%- assign rendered_count = rendered_count | plus: 1 -%}
+            {%- assign has_related = true -%}
+            
+            {%- assign rec_var = rec.selected_or_first_available_variant -%}
+            {%- assign rec_sale = false -%}
+            {%- if rec_var.compare_at_price > rec_var.price -%}{%- assign rec_sale = true -%}{%- endif -%}
+
+            <a href="{{ rec.url }}" class="cv-product-card">
+              <div class="cv-product-card__img-wrap">
+                {%- if rec.featured_image -%}
+                  <img src="{{ rec.featured_image | image_url: width: 400 }}" alt="{{ rec.featured_image.alt | default: rec.title | escape }}" width="400" height="400" loading="lazy">
+                {%- else -%}
+                  <img src="https://placehold.co/400x400/eeecea/76798c?text=Product" alt="{{ rec.title | escape }}" width="400" height="400" loading="lazy">
+                {%- endif -%}
+                {%- if rec_sale -%}<span class="cv-product-card__sale-badge">Sale</span>{%- endif -%}
               </div>
-            </div>
-          </a>
+              <div class="cv-product-card__info">
+                <h3 class="cv-product-card__name">{{ rec.title }}</h3>
+                <p class="cv-product-card__type">{{ rec.type }}</p>
+                <div class="cv-product-card__prices">
+                  <span class="cv-product-card__price">{{ rec_var.price | money }}</span>
+                  {%- if rec_sale -%}<span class="cv-product-card__compare">{{ rec_var.compare_at_price | money }}</span>{%- endif -%}
+                </div>
+              </div>
+            </a>
+          {%- endif -%}
         {%- endfor -%}
-      {%- else -%}
+      {%- endif -%}
+
+      {%- comment -%} Fallback placeholders if no collection data is found {%- endcomment -%}
+      {%- if has_related == false -%}
         <a href="#" class="cv-product-card">
           <div class="cv-product-card__img-wrap"><img src="https://placehold.co/400x400/eeecea/76798c?text=Paldea+ETB" alt="Paldea Evolved ETB" width="400" height="400" loading="lazy"><span class="cv-product-card__sale-badge">Sale</span></div>
           <div class="cv-product-card__info"><h3 class="cv-product-card__name">Paldea Evolved ETB</h3><p class="cv-product-card__type">Elite Trainer Box</p><div class="cv-product-card__prices"><span class="cv-product-card__price">$44.99</span><span class="cv-product-card__compare">$49.99</span></div></div>
