@@ -713,6 +713,29 @@ input.cv-qty__input {
 .cv-sticky-cart__prices { display: flex; flex-direction: column; }
 .cv-sticky-cart__price  { font-family: var(--cv-font-head); font-size: 1.25rem; font-weight: 700; }
 .cv-sticky-cart__was    { font-size: 0.75rem; color: var(--cv-muted-fg); text-decoration: line-through; }
+
+/* ── Add to Cart Animations ── */
+.cv-pulsating-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: currentColor;
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: cv-pulse 0.6s infinite alternate;
+}
+@keyframes cv-pulse {
+  0% { transform: scale(0.8); opacity: 0.4; }
+  100% { transform: scale(1.5); opacity: 1; }
+}
+
+.cv-btn.is-success {
+  background: var(--cv-success) !important;
+  border-color: var(--cv-success) !important;
+  transform: scale(1.02);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s, border-color 0.2s;
+}
+
 </style>
 
 {%- comment -%} ====================================================
@@ -1527,16 +1550,21 @@ input.cv-qty__input {
     });
   });
 
-  /* ── Ajax Add to Cart ── */
+/* ── Ajax Add to Cart (Animated) ── */
   var form      = document.getElementById('cv-product-form');
   var atcBtn    = document.getElementById('cv-add-to-cart');
-  var atcLabel  = document.getElementById('cv-atc-label');
   var stickyAtc = document.getElementById('cv-sticky-atc');
 
-  function submitCart() {
-    if (!form || !atcBtn) return;
-    atcBtn.disabled = true;
-    if (atcLabel) atcLabel.textContent = 'Adding\u2026';
+  function submitCart(event, btnElement) {
+    if (!form || !btnElement) return;
+    
+    // Save original button HTML to restore later
+    var originalHtml = btnElement.innerHTML;
+    
+    // Disable button and trigger pulsating dot loading state
+    btnElement.disabled = true;
+    btnElement.innerHTML = '<span style="display:flex;align-items:center;justify-content:center;">Adding <span class="cv-pulsating-dot"></span></span>';
+
     var formData = new FormData(form);
     fetch('/cart/add.js', {
       method: 'POST',
@@ -1545,28 +1573,44 @@ input.cv-qty__input {
     })
     .then(function (r) { return r.json(); })
     .then(function () {
-      if (atcLabel) atcLabel.textContent = '\u2713 Added!';
+      // Success State: Button pop, green color, checkmark icon
+      btnElement.classList.add('is-success');
+      btnElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1.25rem;height:1.25rem;margin-right:0.5rem;"><polyline points="20 6 9 17 4 12"/></svg> Added to Cart';
+      
+      // Update cart count badge if it exists on your theme
       fetch('/cart.js').then(function (r) { return r.json(); }).then(function (cart) {
         var badge = document.querySelector('[data-cart-count]');
         if (badge) badge.textContent = cart.item_count;
       });
+
+      // Restore button to original state after 2.5 seconds
       setTimeout(function () {
-        atcBtn.disabled = false;
-        if (atcLabel) atcLabel.textContent = 'Add to Cart';
-      }, 2000);
+        btnElement.disabled = false;
+        btnElement.classList.remove('is-success');
+        btnElement.style.transform = 'scale(1)';
+        btnElement.innerHTML = originalHtml;
+      }, 2500);
     })
     .catch(function () {
-      if (atcLabel) atcLabel.textContent = 'Error \u2013 Try Again';
-      atcBtn.disabled = false;
-      setTimeout(function () { if (atcLabel) atcLabel.textContent = 'Add to Cart'; }, 3000);
+      // Error State
+      btnElement.innerHTML = 'Error \u2013 Try Again';
+      btnElement.disabled = false;
+      setTimeout(function () { btnElement.innerHTML = originalHtml; }, 3000);
     });
   }
 
-  if (form) {
-    form.addEventListener('submit', function (e) { e.preventDefault(); submitCart(); });
+  // Bind the updated function to both buttons
+  if (form && atcBtn) {
+    form.addEventListener('submit', function (e) { 
+      e.preventDefault(); 
+      submitCart(e, atcBtn); 
+    });
   }
   if (stickyAtc) {
-    stickyAtc.addEventListener('click', submitCart);
+    stickyAtc.addEventListener('click', function(e) {
+      e.preventDefault();
+      submitCart(e, stickyAtc);
+    });
   }
 
   /* ── Buy Now ── */
