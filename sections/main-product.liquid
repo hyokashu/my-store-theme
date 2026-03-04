@@ -1590,7 +1590,7 @@ input.cv-qty__input {
       var diffMs  = cutoff - now;
       var diffSec = Math.floor(diffMs / 1000);
       var hrs     = Math.floor(diffSec / 3600);
-      var mins    = Math.floor((diffSec % 3600) / 60);
+      var mins = Math.floor((diffSec % 3600) / 60);
 
       if (hrs <= 0 && mins <= 0) {
         timerEl.classList.add('cv-dispatch-timer--expired');
