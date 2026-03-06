@@ -7,15 +7,15 @@
 {% endcomment %}
 
 {%- liquid
-  assign hero_slides   = section.blocks | where: "type", "hero_slide"
-  assign trust_items   = section.blocks | where: "type", "trust_item"
+  assign hero_slides = section.blocks | where: "type", "hero_slide"
+  assign trust_items = section.blocks | where: "type", "trust_item"
   assign marquee_items = section.blocks | where: "type", "marquee_item"
-  assign cat_cards     = section.blocks | where: "type", "category_card"
-  assign brand_links   = section.blocks | where: "type", "brand_link"
+  assign cat_cards = section.blocks | where: "type", "category_card"
+  assign brand_links = section.blocks | where: "type", "brand_link"
   assign promo_banners = section.blocks | where: "type", "promo_banner"
-  assign about_checks  = section.blocks | where: "type", "about_check"
-  assign reward_items  = section.blocks | where: "type", "reward_item"
-  assign reviews       = section.blocks | where: "type", "review"
+  assign about_checks = section.blocks | where: "type", "about_check"
+  assign reward_items = section.blocks | where: "type", "reward_item"
+  assign reviews = section.blocks | where: "type", "review"
 
   assign tab1_col = collections[section.settings.tab1_collection]
   assign tab2_col = collections[section.settings.tab2_collection]
@@ -28,24 +28,24 @@
 
 <style>
 /* =============================================================
-   CardVault Design Tokens (shared with product page)
+   CardVault Design Tokens (Minimalist Premium Theme)
    ============================================================= */
 :root {
-  --cv-bg:         #f7f6f3;
-  --cv-fg:         #1c1f36;
+  --cv-bg:         #F4F4F6;
+  --cv-fg:         #111827;
   --cv-card:       #ffffff;
-  --cv-primary:    #282d52;
-  --cv-primary-fg: #f8f7f5;
-  --cv-secondary:  #eeecea;
-  --cv-muted-fg:   #76798c;
-  --cv-border:     #dedad5;
-  --cv-destructive:#c94030;
-  --cv-success:    #2e9963;
-  --cv-success-fg: #f8f7f5;
-  --cv-star:       #d4783a;
+  --cv-primary:    #111827;
+  --cv-primary-fg: #ffffff;
+  --cv-secondary:  #E5E7EB;
+  --cv-muted-fg:   #6B7280;
+  --cv-border:     #E5E7EB;
+  --cv-destructive:#DC2626;
+  --cv-success:    #059669;
+  --cv-success-fg: #ffffff;
+  --cv-star:       #F59E0B;
   --cv-radius:     0.5rem;
   --cv-shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
-  --cv-shadow:     0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --cv-shadow:     0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
   --cv-font-sans:  'Inter', system-ui, -apple-system, sans-serif;
   --cv-font-head:  'Space Grotesk', system-ui, sans-serif;
 }
@@ -174,16 +174,16 @@
   position: absolute; inset: 0;
   z-index: 0;
 }
-.cvh-hero__slide-wrap--1::before { background: linear-gradient(135deg, #f0edf8 0%, #e8e4f5 100%); }
-.cvh-hero__slide-wrap--2::before { background: linear-gradient(135deg, #e8f5ed 0%, #d4eedd 100%); }
-.cvh-hero__slide-wrap--3::before { background: linear-gradient(135deg, #fdf0e8 0%, #f5e0cc 100%); }
+.cvh-hero__slide-wrap--1::before { background: linear-gradient(135deg, #F8F8F9 0%, #E5E7EB 100%); }
+.cvh-hero__slide-wrap--2::before { background: linear-gradient(135deg, #111827 0%, #1F2937 100%); }
+.cvh-hero__slide-wrap--3::before { background: linear-gradient(135deg, #FFFFFF 0%, #F3F4F6 100%); }
 
 .cvh-hero__slide-wrap > .cvh-hero__slide { position: relative; z-index: 1; max-width: 80rem; margin: 0 auto; }
 
 .cvh-hero__text { display: flex; flex-direction: column; gap: 1.25rem; }
 .cvh-hero__eyebrow {
   display: inline-flex; align-items: center; gap: 0.375rem;
-  background: rgba(40,45,82,0.08);
+  background: rgba(17,24,39,0.08);
   color: var(--cv-primary);
   font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   padding: 0.375rem 0.75rem;
@@ -250,7 +250,7 @@
 .cvh-hero__dot {
   width: 0.5rem; height: 0.5rem;
   border-radius: 9999px;
-  background: rgba(40,45,82,0.25);
+  background: rgba(17,24,39,0.25);
   border: none; cursor: pointer; padding: 0;
   transition: background 0.2s, width 0.2s;
 }
@@ -372,7 +372,7 @@
 @media (min-width: 640px)  { .cvh-prod-card { width: 13rem; max-width: 13rem; } }
 @media (min-width: 1024px) { .cvh-prod-card { width: 14.5rem; max-width: 14.5rem; } }
 .cvh-prod-card:hover {
-  border-color: rgba(40,45,82,0.25);
+  border-color: rgba(17,24,39,0.25);
   box-shadow: 0 6px 20px rgba(0,0,0,0.09);
   transform: translateY(-2px);
 }
@@ -485,7 +485,7 @@
 }
 .cvh-cat-card:hover {
   border-color: var(--cv-primary);
-  box-shadow: 0 4px 16px rgba(40,45,82,0.12);
+  box-shadow: 0 4px 16px rgba(17,24,39,0.12);
   transform: translateY(-3px);
 }
 .cvh-cat-card__icon {
@@ -495,7 +495,7 @@
   display: flex; align-items: center; justify-content: center;
   transition: background 0.2s;
 }
-.cvh-cat-card:hover .cvh-cat-card__icon { background: rgba(40,45,82,0.08); }
+.cvh-cat-card:hover .cvh-cat-card__icon { background: rgba(17,24,39,0.08); }
 .cvh-cat-card__icon svg { width: 1.75rem; height: 1.75rem; color: var(--cv-primary); }
 .cvh-cat-card__label {
   font-size: 0.8125rem; font-weight: 700;
@@ -504,11 +504,11 @@
 }
 
 /* Sale category — accent style */
-.cvh-cat-card--sale { border-color: rgba(201,64,48,0.2); }
-.cvh-cat-card--sale .cvh-cat-card__icon { background: rgba(201,64,48,0.08); }
+.cvh-cat-card--sale { border-color: rgba(220,38,38,0.2); }
+.cvh-cat-card--sale .cvh-cat-card__icon { background: rgba(220,38,38,0.08); }
 .cvh-cat-card--sale .cvh-cat-card__icon svg { color: var(--cv-destructive); }
 .cvh-cat-card--sale .cvh-cat-card__label { color: var(--cv-destructive); }
-.cvh-cat-card--sale:hover { border-color: var(--cv-destructive); box-shadow: 0 4px 16px rgba(201,64,48,0.12); }
+.cvh-cat-card--sale:hover { border-color: var(--cv-destructive); box-shadow: 0 4px 16px rgba(220,38,38,0.12); }
 
 /* =============================================================
    6. PROMOTIONAL BANNERS (2-up)
@@ -543,7 +543,7 @@
 .cvh-promo-card::after {
   content: '';
   position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(to top, rgba(20,20,40,0.82) 0%, rgba(20,20,40,0.25) 55%, transparent 100%);
+  background: linear-gradient(to top, rgba(17,24,39,0.82) 0%, rgba(17,24,39,0.25) 55%, transparent 100%);
 }
 .cvh-promo-card__content { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 0.75rem; }
 .cvh-promo-card__eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
@@ -695,7 +695,7 @@
 .cvh-review-card__author { display: flex; align-items: center; gap: 0.625rem; }
 .cvh-review-card__avatar {
   width: 2.25rem; height: 2.25rem; border-radius: 9999px;
-  background: rgba(40,45,82,0.1);
+  background: rgba(17,24,39,0.1);
   display: flex; align-items: center; justify-content: center;
   font-size: 0.8125rem; font-weight: 700; color: var(--cv-primary);
   flex-shrink: 0;
@@ -824,9 +824,7 @@
         {%- endif -%}
       {%- endfor -%}
 
-    </div><!-- /track -->
-
-    <button class="cvh-hero__arrow cvh-hero__arrow--prev" id="cvh-hero-prev" aria-label="Previous slide" type="button">
+    </div><button class="cvh-hero__arrow cvh-hero__arrow--prev" id="cvh-hero-prev" aria-label="Previous slide" type="button">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
     <button class="cvh-hero__arrow cvh-hero__arrow--next" id="cvh-hero-next" aria-label="Next slide" type="button">
@@ -875,7 +873,7 @@
   </div>
   {%- endif -%}
 
-  {%- comment -%} ── 3. FAN FAVOURITES ── {%- endcomment -%}
+  {%- comment -%} ── 3. FAN FAVOURITES (tabbed product carousel) ── {%- endcomment -%}
   <section class="cvh-featured" aria-label="Featured products">
     <div class="cvh__inner">
       <div class="cvh-section-hd cvh-section-hd--row">
@@ -1300,20 +1298,18 @@
   </section>
   {%- endif -%}
 
-</div><!-- /cvh -->
-
-<script>
+</div><script>
 (function () {
   'use strict';
 
   /* ── Hero Slider ── */
-  var track   = document.getElementById('cvh-hero-track');
-  var slides  = track ? Array.prototype.slice.call(track.children) : [];
-  var dots    = Array.prototype.slice.call(document.querySelectorAll('.cvh-hero__dot'));
-  var prevBtn = document.getElementById('cvh-hero-prev');
-  var nextBtn = document.getElementById('cvh-hero-next');
-  var total   = slides.length;
-  var current = 0;
+  var track    = document.getElementById('cvh-hero-track');
+  var slides   = track ? Array.prototype.slice.call(track.children) : [];
+  var dots     = Array.prototype.slice.call(document.querySelectorAll('.cvh-hero__dot'));
+  var prevBtn  = document.getElementById('cvh-hero-prev');
+  var nextBtn  = document.getElementById('cvh-hero-next');
+  var total    = slides.length;
+  var current  = 0;
   var autoplay;
   var interval = {{ section.settings.hero_autoplay_ms | default: 5000 }};
 
@@ -1556,11 +1552,11 @@
     { "type": "header", "content": "About Section" },
     { "type": "checkbox",     "id": "show_about",      "label": "Show about section", "default": true },
     { "type": "image_picker", "id": "about_image",     "label": "About image" },
-    { "type": "text",         "id": "about_title",     "label": "Title",              "default": "About CardVault" },
-    { "type": "textarea",     "id": "about_desc",      "label": "Description",        "default": "We're passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all — and ship it fast with full insurance." },
-    { "type": "text",         "id": "about_cta1_label","label": "Button 1 label",     "default": "Our Story" },
+    { "type": "text",         "id": "about_title",     "label": "Title",               "default": "About CardVault" },
+    { "type": "textarea",     "id": "about_desc",      "label": "Description",         "default": "We're passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all — and ship it fast with full insurance." },
+    { "type": "text",         "id": "about_cta1_label","label": "Button 1 label",      "default": "Our Story" },
     { "type": "url",          "id": "about_cta1_url",  "label": "Button 1 URL" },
-    { "type": "text",         "id": "about_cta2_label","label": "Button 2 label",     "default": "Contact Us" },
+    { "type": "text",         "id": "about_cta2_label","label": "Button 2 label",      "default": "Contact Us" },
     { "type": "url",          "id": "about_cta2_url",  "label": "Button 2 URL" },
 
     { "type": "header", "content": "Rewards Section" },
