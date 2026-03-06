@@ -2,92 +2,89 @@
   Supply District — header.liquid
   3-column CSS Grid: [Logo] [Search Bar] [Cart Icon]
   Sticky behaviour driven by sd-header.css + theme.js (IntersectionObserver).
-  Fully editable via the Shopify theme editor.
+  Added wrapper to prevent scroll-flicker / layout shift loop.
 {% endcomment %}
 
-<header class="sd-header" id="sd-header" role="banner">
-  <div class="sd-header__inner">
+<div class="sd-header-wrapper" id="sd-header-wrapper">
+  <header class="sd-header" id="sd-header" role="banner">
+    <div class="sd-header__inner">
 
-    {%- comment -%} ── Column 1: Logo ── {%- endcomment -%}
-    <div class="sd-header__logo">
-      <a href="{{ routes.root_url }}" class="sd-header__logo-link" aria-label="{{ shop.name }} — home">
-        {%- if section.settings.logo != blank -%}
-          <img
-            src="{{ section.settings.logo | image_url: width: 400 }}"
-            alt="{{ shop.name }}"
-            width="{{ section.settings.logo.width | at_most: 200 }}"
-            height="{{ section.settings.logo.height | times: 1.0 | divided_by: section.settings.logo.width | times: 200 | round }}"
-            class="sd-header__logo-img"
-            loading="eager"
-          >
-        {%- else -%}
-          <span class="sd-header__logo-text">{{ shop.name }}</span>
-        {%- endif -%}
-      </a>
-    </div>
+      {%- comment -%} ── Column 1: Logo ── {%- endcomment -%}
+      <div class="sd-header__logo">
+        <a href="{{ routes.root_url }}" class="sd-header__logo-link" aria-label="{{ shop.name }} — home">
+          {%- if section.settings.logo != blank -%}
+            <img
+              src="{{ section.settings.logo | image_url: width: 400 }}"
+              alt="{{ shop.name }}"
+              width="{{ section.settings.logo.width | at_most: 200 }}"
+              height="{{ section.settings.logo.height | times: 1.0 | divided_by: section.settings.logo.width | times: 200 | round }}"
+              class="sd-header__logo-img"
+              loading="eager"
+            >
+          {%- else -%}
+            <span class="sd-header__logo-text">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+      </div>
 
-    {%- comment -%} ── Column 2: Search bar ── {%- endcomment -%}
-    <div class="sd-header__search">
-      <form action="{{ routes.search_url }}" method="get" role="search" class="sd-search-form">
-        <input type="hidden" name="type" value="product">
-        <div class="sd-search-wrap">
-          <button type="submit" class="sd-search-btn" aria-label="Search">
+      {%- comment -%} ── Column 2: Search bar ── {%- endcomment -%}
+      <div class="sd-header__search">
+        <form action="{{ routes.search_url }}" method="get" role="search" class="sd-search-form">
+          <input type="hidden" name="type" value="product">
+          <div class="sd-search-wrap">
+            <button type="submit" class="sd-search-btn" aria-label="Search">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true" class="sd-search-icon">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </button>
+            <input
+              type="search"
+              name="q"
+              id="sd-search-input"
+              class="sd-search-input"
+              placeholder="{{ section.settings.search_placeholder | default: 'Search for sets, singles, or accessories...' }}"
+              aria-label="{{ section.settings.search_placeholder | default: 'Search for sets, singles, or accessories...' }}"
+              autocomplete="off"
+              spellcheck="false"
+            >
+          </div>
+        </form>
+      </div>
+
+      {%- comment -%} ── Column 3: Utility icons ── {%- endcomment -%}
+      <div class="sd-header__icons">
+
+        {%- comment -%} Account (optional) {%- endcomment -%}
+        {%- if section.settings.show_account -%}
+          <a href="{{ routes.account_url }}" class="sd-icon-btn" aria-label="Account">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                 stroke-linejoin="round" aria-hidden="true" class="sd-search-icon">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
             </svg>
-          </button>
-          <input
-            type="search"
-            name="q"
-            id="sd-search-input"
-            class="sd-search-input"
-            placeholder="{{ section.settings.search_placeholder | default: 'Search for sets, singles, or accessories...' }}"
-            aria-label="{{ section.settings.search_placeholder | default: 'Search for sets, singles, or accessories...' }}"
-            autocomplete="off"
-            spellcheck="false"
-          >
-        </div>
-      </form>
-    </div>
+          </a>
+        {%- endif -%}
 
-    {%- comment -%} ── Column 3: Utility icons ── {%- endcomment -%}
-    <div class="sd-header__icons">
-
-      {%- comment -%} Account (optional) {%- endcomment -%}
-      {%- if section.settings.show_account -%}
-        <a href="{{ routes.account_url }}" class="sd-icon-btn" aria-label="Account">
+        {%- comment -%} Cart {%- endcomment -%}
+        <a href="{{ routes.cart_url }}" class="sd-icon-btn sd-cart-btn" aria-label="Cart ({{ cart.item_count }} items)">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round"
                stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
           </svg>
+          {%- if cart.item_count > 0 -%}
+            <span class="sd-cart-badge" aria-hidden="true">{{ cart.item_count }}</span>
+          {%- endif -%}
         </a>
-      {%- endif -%}
 
-      {%- comment -%} Cart {%- endcomment -%}
-      <a href="{{ routes.cart_url }}" class="sd-icon-btn sd-cart-btn" aria-label="Cart ({{ cart.item_count }} items)">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round"
-             stroke-linejoin="round" aria-hidden="true">
-          <circle cx="9" cy="21" r="1"/>
-          <circle cx="20" cy="21" r="1"/>
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-        </svg>
-        {%- if cart.item_count > 0 -%}
-          <span class="sd-cart-badge" aria-hidden="true">{{ cart.item_count }}</span>
-        {%- endif -%}
-      </a>
-
-    </div><!-- /.sd-header__icons -->
-
-  </div><!-- /.sd-header__inner -->
-</header>
-
-{% schema %}
+      </div></div></header>
+</div>{% schema %}
 {
   "name": "Header",
   "settings": [
