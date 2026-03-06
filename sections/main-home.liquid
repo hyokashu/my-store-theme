@@ -174,9 +174,18 @@
   position: absolute; inset: 0;
   z-index: 0;
 }
-.cvh-hero__slide-wrap--1::before { background: linear-gradient(135deg, #f0edf8 0%, #e8e4f5 100%); }
-.cvh-hero__slide-wrap--2::before { background: linear-gradient(135deg, #e8f5ed 0%, #d4eedd 100%); }
-.cvh-hero__slide-wrap--3::before { background: linear-gradient(135deg, #fdf0e8 0%, #f5e0cc 100%); }
+/* ── Hero slide colour schemes ──────────────────────────────────────────
+   All three derive directly from the brand's design token palette so
+   the dark-navy buttons (.cvh-btn--primary / --outline) remain legible
+   and the page feels cohesive end-to-end.
+
+   Scheme 1 — Warm Cream   : brand --cv-bg deepened; signature neutral
+   Scheme 2 — Slate Indigo  : pulled from --cv-primary (#282d52); trust
+   Scheme 3 — Warm Stone    : amber-tinted depth; premium / exclusive feel
+   ─────────────────────────────────────────────────────────────────────── */
+.cvh-hero__slide-wrap--1::before { background: linear-gradient(135deg, #f7f6f3 0%, #ece8e2 100%); }
+.cvh-hero__slide-wrap--2::before { background: linear-gradient(135deg, #eaecf5 0%, #d8deee 100%); }
+.cvh-hero__slide-wrap--3::before { background: linear-gradient(135deg, #f2ede5 0%, #e5ded3 100%); }
 
 .cvh-hero__slide-wrap > .cvh-hero__slide { position: relative; z-index: 1; max-width: 80rem; margin: 0 auto; }
 
