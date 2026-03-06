@@ -1,6 +1,6 @@
 /* ============================================================
    Supply District — sd-header.css
-   Announcement bar + main header styles + sticky behaviour.
+   Announcement bar + main header styles + native sticky behavior.
    All selectors are namespaced with sd- to avoid conflicts.
    ============================================================ */
 
@@ -9,7 +9,7 @@
   --sd-announce-bg:     #12111a;   /* near-black with a hint of purple */
   --sd-announce-fg:     #e8e6f0;   /* off-white text */
   --sd-announce-accent: #a78bfa;   /* soft violet for the icon/link hover */
-  --sd-announce-height: 2.5rem;    /* used by sticky JS offset */
+  --sd-announce-height: 2.5rem;    
 
   --sd-header-bg:       #ffffff;
   --sd-header-fg:       #1a1a2e;
@@ -145,7 +145,8 @@
    2. MAIN HEADER
    ============================================================ */
 .sd-header {
-  position:         relative;   /* becomes sticky via JS */
+  position:         sticky;
+  top:              0;
   z-index:          100;
   background:       var(--sd-header-bg);
   border-bottom:    1px solid var(--sd-header-border);
@@ -163,15 +164,6 @@
   padding:         0 1.5rem;
   height:          100%;
   gap:             1rem;
-}
-
-/* ── Sticky state ── */
-.sd-header.is-sticky {
-  position:   fixed;
-  top:        0;
-  left:       0;
-  right:      0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
 }
 
 /* ── Logo ── */
@@ -303,15 +295,7 @@
 
 
 /* ============================================================
-   3. STICKY OFFSET — push page content down when header fixes
-   ============================================================ */
-body.sd-sticky-active {
-  padding-top: var(--sd-header-height);
-}
-
-
-/* ============================================================
-   4. MOBILE RESPONSIVE  (≤ 768 px)
+   3. MOBILE RESPONSIVE  (≤ 768 px)
    ============================================================ */
 @media (max-width: 768px) {
   /* Collapse to 2 columns on mobile: logo | icons (search below) */
