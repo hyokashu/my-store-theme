@@ -44,6 +44,10 @@
   --cv-success-fg: #f8f7f5;
   --cv-star:       #d4783a;
   --cv-radius:     0.5rem;
+  /* CTA green — matches sd-collection.css & product page convention */
+  --color-cta-primary:       #2e9963;
+  --color-cta-primary-fg:    #ffffff;
+  --color-cta-primary-hover: #25834f;
   --cv-shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
   --cv-shadow:     0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
   --cv-font-sans:  'Inter', system-ui, -apple-system, sans-serif;
@@ -93,8 +97,14 @@
 .cvh-btn:active  { transform: translateY(0); }
 
 .cvh-btn--primary {
-  background: var(--cv-primary); color: var(--cv-primary-fg);
-  border-color: var(--cv-primary);
+  background: var(--color-cta-primary);
+  color:       var(--color-cta-primary-fg);
+  border-color: var(--color-cta-primary);
+}
+.cvh-btn--primary:hover {
+  background:   var(--color-cta-primary-hover);
+  border-color: var(--color-cta-primary-hover);
+  opacity: 1; /* override the generic .cvh-btn:hover opacity */
 }
 .cvh-btn--outline {
   background: transparent;
