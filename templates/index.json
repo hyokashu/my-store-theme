@@ -16,14 +16,14 @@
           "type": "hero_slide",
           "settings": {
             "eyebrow_icon": "star",
-            "eyebrow": "New Season Drops",
-            "title_line1": "Premium TCG",
+            "eyebrow": "Now In Stock",
+            "title_line1": "One Piece",
             "title_em": "Sealed Products",
-            "description": "Factory sealed booster boxes, Elite Trainer Boxes & more. 100% authentic, sourced directly from authorized distributors.",
-            "cta1_label": "Shop All Products",
-            "cta1_url": "",
-            "cta2_label": "New Arrivals",
-            "cta2_url": "",
+            "description": "Hunt for your chase cards with total confidence. 100% factory-sealed, unweighed booster boxes sourced straight from official distributors and shipped with collector-grade care.",
+            "cta1_label": "Shop Booster Boxes",
+            "cta1_url": "shopify://collections/one-piece",
+            "cta2_label": "Shop All",
+            "cta2_url": "shopify://collections/one-piece",
             "badge_value": "100% Authentic",
             "badge_label": "Verified sealed product",
             "badge_icon": "shield",
@@ -69,33 +69,33 @@
         "trust_item_VgmMdE": {
           "type": "trust_item",
           "settings": {
-            "icon": "credit-card",
-            "title": "Buy Now, Pay Later",
-            "description": "Afterpay & Zip available at checkout"
+            "icon": "users",
+            "title": "Australian Owned & Operated",
+            "description": "Support local! Fast, reliable service from a team that loves the game."
           }
         },
         "trust_item_nw3tnX": {
           "type": "trust_item",
           "settings": {
-            "icon": "dollar",
-            "title": "Best Price Guarantee",
-            "description": "We match any verified lower price"
+            "icon": "shield",
+            "title": "100% Factory Sealed",
+            "description": "Guaranteed authentic, unweighed, and untampered products."
           }
         },
         "trust_item_BET6FL": {
           "type": "trust_item",
           "settings": {
-            "icon": "shield",
-            "title": "Trusted by Players",
-            "description": "500k+ happy customers, 5-star rated"
+            "icon": "package",
+            "title": "Collector-Grade Packaging",
+            "description": "Packed with extreme care and bubble wrap to protect those corners."
           }
         },
         "trust_item_yQfwnb": {
           "type": "trust_item",
           "settings": {
             "icon": "truck",
-            "title": "Free Insured Shipping",
-            "description": "On all orders over $100"
+            "title": "Fast, Insured Shipping",
+            "description": "Fully tracked and insured. Free on orders over $200."
           }
         },
         "marquee_item_hhJwwx": {
@@ -207,38 +207,10 @@
             "url": ""
           }
         },
-        "brand_link_LyJdt6": {
-          "type": "brand_link",
-          "settings": {
-            "label": "Yu-Gi-Oh!",
-            "url": ""
-          }
-        },
-        "brand_link_iHQiy6": {
-          "type": "brand_link",
-          "settings": {
-            "label": "Magic: The Gathering",
-            "url": ""
-          }
-        },
         "brand_link_k4wXFB": {
           "type": "brand_link",
           "settings": {
             "label": "One Piece TCG",
-            "url": ""
-          }
-        },
-        "brand_link_DRkfr9": {
-          "type": "brand_link",
-          "settings": {
-            "label": "Dragon Ball Super",
-            "url": ""
-          }
-        },
-        "brand_link_PEhMeb": {
-          "type": "brand_link",
-          "settings": {
-            "label": "Lorcana",
             "url": ""
           }
         },
@@ -373,11 +345,7 @@
         "category_card_rNVHMV",
         "category_card_Rchcgy",
         "brand_link_C8KPGz",
-        "brand_link_LyJdt6",
-        "brand_link_iHQiy6",
         "brand_link_k4wXFB",
-        "brand_link_DRkfr9",
-        "brand_link_PEhMeb",
         "promo_banner_FqmJpP",
         "promo_banner_9RGRWE",
         "about_check_i7Lq8f",
