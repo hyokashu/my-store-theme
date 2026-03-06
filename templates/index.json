@@ -263,6 +263,7 @@
         },
         "reward_item_bhUGGP": {
           "type": "reward_item",
+          "disabled": true,
           "settings": {
             "icon": "dollar",
             "text": "1 Vault Coin for every $1 spent"
@@ -270,6 +271,7 @@
         },
         "reward_item_3TmXQP": {
           "type": "reward_item",
+          "disabled": true,
           "settings": {
             "icon": "gift",
             "text": "Redeem coins for discounts & gifts"
@@ -277,6 +279,7 @@
         },
         "reward_item_BN7YQa": {
           "type": "reward_item",
+          "disabled": true,
           "settings": {
             "icon": "users",
             "text": "Early access for loyal members"
@@ -367,7 +370,7 @@
         "hero_autoplay_ms": 5000,
         "featured_title": "Fan Favourites",
         "featured_subtitle": "Whether you're building your collection or buying your first box — these are going fast.",
-        "tab1_label": "Pre-Orders",
+        "tab1_label": "",
         "tab1_collection": "",
         "tab2_label": "New Arrivals",
         "tab2_collection": "",
