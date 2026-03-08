@@ -1245,57 +1245,100 @@
 
   /* ══════════════════════════════════════════════════════════
      HIGH-DENSITY MOBILE GRID — premium app-like layout
+     All rules use !important to defeat Shopify base-theme
+     specificity (main { padding: 2rem }, theme grid variables,
+     Dawn card classes, etc.)
      ══════════════════════════════════════════════════════════ */
 
-  /* ── 1. Edge-to-edge: collapse container side padding to 5px ── */
+  /* ── 1a. Escape the base.css `main { padding: 2rem }` wrapper ──
+     sd-collection.css is only loaded on collection pages, so
+     this override is completely safe and page-scoped. ── */
+  main {
+    padding-left:  0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* ── 1b. Edge-to-edge: collection catalog wrapper = 5px gutters ── */
   .sd-catalog__wrap {
-    padding-left:  5px;
-    padding-right: 5px;
+    padding-left:  5px !important;
+    padding-right: 5px !important;
     padding-top:   0.75rem;
-    /* bottom padding intentionally preserved for scroll comfort */
   }
 
-  /* ── 2. Tighten grid gap to 8px ── */
+  /* Also target .page-width if the theme or any app ever injects it */
+  .page-width,
+  .page-width--wide,
+  .collection-grid-wrapper {
+    padding-left:  5px !important;
+    padding-right: 5px !important;
+  }
+
+  /* ── 2. Tighten grid gap — hard value + CSS variable overrides ── */
   .sdcpg__grid {
-    gap: 8px;
+    gap: 8px !important;
+
+    /* Override Shopify/Dawn CSS variable names that control grid spacing */
+    --grid-mobile-horizontal-spacing: 8px !important;
+    --grid-horizontal-spacing:        8px !important;
+    --product-grid-horizontal-spacing: 8px !important;
+    --column-gap: 8px !important;
   }
 
-  /* ── 3. Image container: zero internal padding/margin
-     The image already uses width/height:100% + object-fit:cover
-     inside an aspect-ratio wrapper. Explicitly enforcing zero
-     ensures no inherited spacing sneaks in. ── */
+  /* ── 3. Image container: pixel-perfect zero padding ── */
   .sdpc__img-wrap {
-    padding: 0;
-    margin:  0;
+    padding:       0 !important;
+    margin:        0 !important;
+    border-radius: 0 !important;  /* hard zero — images bleed to column edge */
   }
 
-  /* Ensure the image itself has zero margin */
+  /* Ensure the image itself has zero margin / no rounding bleed */
   .sdpc__img {
-    display: block;
-    margin:  0;
-    padding: 0;
+    display:       block;
+    margin:        0 !important;
+    padding:       0 !important;
+    border-radius: 0 !important;
   }
 
-  /* ── 4. Remove "box" look — transparent card, no border/shadow ──
-     Cards become transparent so products appear to float directly
-     on the warm cream page background. Border-radius is kept at
-     the base token value so image corners remain slightly rounded
-     (a zero radius looks unfinished on premium layouts). ── */
+  /* ── 4. Remove "box" look — transparent card, zero radius ──
+     Cards are fully transparent so products float on the page
+     background. Border-radius is zeroed (not just reduced) so
+     images bleed to the absolute pixel edge of each grid column. ── */
   .sdpc {
-    background:    transparent;
-    border:        none;
-    box-shadow:    none;
-    /* border-radius already set to var(--cv-radius) earlier in this block */
+    background:    transparent !important;
+    border:        none        !important;
+    box-shadow:    none        !important;
+    border-radius: 0           !important;
   }
 
-  /* Lift/shadow on hover is meaningless on touch — remove entirely */
+  /* Lift/shadow + border-color on hover — remove on touch devices */
   .sdpc:hover {
-    box-shadow:   none;
-    border-color: transparent;
-    transform:    none;
+    box-shadow:    none        !important;
+    border-color:  transparent !important;
+    transform:     none        !important;
+    border-radius: 0           !important;
   }
 
-  /* On hover-capable touch devices that still fire hover events (iPad),
-     keep the Quick Add hidden as set above — no regression */
+  /* ── Safety net: Dawn theme card classes ──
+     .card__inner and .card__media are used by Shopify's Dawn base
+     theme and any apps that render product cards. Added here as a
+     catch-all so any injected card markup also gets the borderless
+     treatment on mobile. ── */
+  .card__inner,
+  .card__media,
+  .card--product,
+  .card-wrapper {
+    border-radius: 0    !important;
+    border:        none !important;
+    box-shadow:    none !important;
+    background:    transparent !important;
+  }
+
+  /* Also nuke the sticky topbar margin to match main's new zero padding */
+  .sd-catalog__topbar {
+    margin-left:  0 !important;   /* main padding is now 0; no need to escape */
+    margin-right: 0 !important;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
 
 } /* end @media (max-width: 768px) */
