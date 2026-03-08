@@ -639,58 +639,6 @@
    ============================================================= */
 .cvh-new { padding: 4rem 0; }
 
-/* =============================================================
-   9. REWARDS SECTION
-   ============================================================= */
-.cvh-rewards {
-  padding: 4rem 0;
-  background: var(--cv-primary);
-  color: var(--cv-primary-fg);
-}
-.cvh-rewards__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
-  align-items: center;
-}
-@media (min-width: 768px) { .cvh-rewards__grid { grid-template-columns: 1fr 1fr; gap: 4rem; } }
-
-.cvh-rewards__text { display: flex; flex-direction: column; gap: 1.25rem; }
-.cvh-rewards__eyebrow {
-  display: inline-flex; align-items: center; gap: 0.375rem;
-  font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
-  width: fit-content;
-}
-.cvh-rewards__eyebrow svg { width: 1rem; height: 1rem; color: var(--cv-star); }
-.cvh-rewards__title {
-  font-family: var(--cv-font-head);
-  font-size: 2.25rem; font-weight: 800;
-  color: #fff; letter-spacing: -0.03em; line-height: 1.1;
-}
-@media (min-width: 768px) { .cvh-rewards__title { font-size: 2.75rem; } }
-.cvh-rewards__desc { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.65); }
-.cvh-rewards__list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.25rem; }
-.cvh-rewards__item {
-  display: flex; align-items: center; gap: 0.75rem;
-  font-size: 0.9375rem; font-weight: 500;
-  color: rgba(255,255,255,0.85);
-}
-.cvh-rewards__item-icon {
-  width: 2rem; height: 2rem; flex-shrink: 0;
-  border-radius: var(--cv-radius);
-  background: rgba(255,255,255,0.1);
-  display: flex; align-items: center; justify-content: center;
-}
-.cvh-rewards__item-icon svg { width: 1rem; height: 1rem; color: rgba(255,255,255,0.8); }
-
-.cvh-rewards__img {
-  border-radius: calc(var(--cv-radius) * 3);
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-}
-.cvh-rewards__img img { width: 100%; height: 100%; object-fit: cover; }
 
 /* =============================================================
    10. REVIEWS
@@ -1215,57 +1163,6 @@
               <a href="{{ section.settings.about_cta2_url | default: '/pages/contact' }}" class="cvh-btn cvh-btn--outline">{{ section.settings.about_cta2_label }}</a>
             {%- endif -%}
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  {%- endif -%}
-
-  {%- comment -%} ── 8. REWARDS SECTION ── {%- endcomment -%}
-  {%- if section.settings.show_rewards -%}
-  <section class="cvh-rewards" aria-label="Rewards program">
-    <div class="cvh__inner">
-      <div class="cvh-rewards__grid">
-        <div class="cvh-rewards__text">
-          {%- if section.settings.rewards_eyebrow != blank -%}
-            <span class="cvh-rewards__eyebrow">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              {{ section.settings.rewards_eyebrow }}
-            </span>
-          {%- endif -%}
-          <h2 class="cvh-rewards__title">{{ section.settings.rewards_title | default: 'Level Up Every Time You Shop' }}</h2>
-          <p class="cvh-rewards__desc">{{ section.settings.rewards_desc }}</p>
-          {%- if reward_items.size > 0 -%}
-          <div class="cvh-rewards__list">
-            {%- for block in reward_items -%}
-              <div class="cvh-rewards__item" {{ block.shopify_attributes }}>
-                <div class="cvh-rewards__item-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    {%- case block.settings.icon -%}
-                      {%- when 'dollar' -%}<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                      {%- when 'gift' -%}<path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-                      {%- when 'users' -%}<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                      {%- when 'star' -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                      {%- when 'zap' -%}<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                      {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    {%- endcase -%}
-                  </svg>
-                </div>
-                {{ block.settings.text }}
-              </div>
-            {%- endfor -%}
-          </div>
-          {%- endif -%}
-          <div style="margin-top:1rem">
-            <a href="{{ section.settings.rewards_cta_url | default: '/pages/rewards' }}" class="cvh-btn cvh-btn--white">{{ section.settings.rewards_cta_label | default: "Join Rewards — It's Free" }}</a>
-          </div>
-        </div>
-        <div class="cvh-rewards__img">
-          {%- if section.settings.rewards_image != blank -%}
-            <img src="{{ section.settings.rewards_image | image_url: width: 700 }}" alt="{{ section.settings.rewards_image.alt | escape | default: 'Rewards program' }}" width="700" height="525" loading="lazy">
-          {%- else -%}
-            <img src="https://placehold.co/700x525/1c2440/6472a8?text=Vault+Rewards" alt="Rewards program" width="700" height="525" loading="lazy">
-          {%- endif -%}
         </div>
       </div>
     </div>
