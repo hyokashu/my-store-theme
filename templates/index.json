@@ -246,7 +246,7 @@
           "type": "about_check",
           "settings": {
             "text": "14-day returns on sealed & unopened products",
-            "dimmed": true
+            "dimmed": false
           }
         },
         "reward_item_bhUGGP": {
@@ -366,7 +366,7 @@
         "cat_subtitle": "Booster boxes, ETBs, cases, singles & more.",
         "show_about": true,
         "about_title": "About CardVault",
-        "about_desc": "We're passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all — and ship it fast with full insurance.",
+        "about_desc": "We got tired of crushed corners and sketchy reseals. Whether you're hunting the latest Japanese booster boxes or securing high-demand pre-orders, we deliver 100% authentic, factory-sealed product with the premium protection your pulls deserve.",
         "about_cta1_label": "Our Story",
         "about_cta1_url": "",
         "about_cta2_label": "Contact Us",
