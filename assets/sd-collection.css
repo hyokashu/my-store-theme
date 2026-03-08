@@ -1236,11 +1236,66 @@
     box-shadow:       0 2px 12px rgba(28, 31, 54, 0.10);
     padding-top:      0.625rem;
     padding-bottom:   0.625rem;
-    margin-left:      -1rem;   /* cancel the catalog wrap's 1rem side padding */
-    margin-right:     -1rem;
-    padding-left:     1rem;
-    padding-right:    1rem;
+    margin-left:      -5px;   /* cancel the 5px catalog wrap padding → full-bleed */
+    margin-right:     -5px;
+    padding-left:     5px;
+    padding-right:    5px;
     /* border-bottom from base styles preserved */
   }
+
+  /* ══════════════════════════════════════════════════════════
+     HIGH-DENSITY MOBILE GRID — premium app-like layout
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── 1. Edge-to-edge: collapse container side padding to 5px ── */
+  .sd-catalog__wrap {
+    padding-left:  5px;
+    padding-right: 5px;
+    padding-top:   0.75rem;
+    /* bottom padding intentionally preserved for scroll comfort */
+  }
+
+  /* ── 2. Tighten grid gap to 8px ── */
+  .sdcpg__grid {
+    gap: 8px;
+  }
+
+  /* ── 3. Image container: zero internal padding/margin
+     The image already uses width/height:100% + object-fit:cover
+     inside an aspect-ratio wrapper. Explicitly enforcing zero
+     ensures no inherited spacing sneaks in. ── */
+  .sdpc__img-wrap {
+    padding: 0;
+    margin:  0;
+  }
+
+  /* Ensure the image itself has zero margin */
+  .sdpc__img {
+    display: block;
+    margin:  0;
+    padding: 0;
+  }
+
+  /* ── 4. Remove "box" look — transparent card, no border/shadow ──
+     Cards become transparent so products appear to float directly
+     on the warm cream page background. Border-radius is kept at
+     the base token value so image corners remain slightly rounded
+     (a zero radius looks unfinished on premium layouts). ── */
+  .sdpc {
+    background:    transparent;
+    border:        none;
+    box-shadow:    none;
+    /* border-radius already set to var(--cv-radius) earlier in this block */
+  }
+
+  /* Lift/shadow on hover is meaningless on touch — remove entirely */
+  .sdpc:hover {
+    box-shadow:   none;
+    border-color: transparent;
+    transform:    none;
+  }
+
+  /* On hover-capable touch devices that still fire hover events (iPad),
+     keep the Quick Add hidden as set above — no regression */
 
 } /* end @media (max-width: 768px) */
