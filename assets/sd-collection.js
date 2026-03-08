@@ -262,6 +262,55 @@
   }
 
   /* ─────────────────────────────────────────────
+     Mobile Title Prefix Strip  (max-width: 768px)
+     ─────────────────────────────────────────────
+     Many TCG product titles start with the game name followed by a colon,
+     e.g. "One Piece Card Game: Kingdoms of Intrigue". On mobile the 2-col
+     grid is narrow, so we strip the common prefix and show only the unique
+     set name. Desktop titles are untouched.
+     Add/remove entries in PREFIXES to match your catalogue.
+  ───────────────────────────────────────────── */
+  function initTitleStrip() {
+    if (window.innerWidth >= 769) return; /* desktop — do nothing */
+
+    var PREFIXES = [
+      'One Piece Card Game: ',
+      'One Piece: ',
+      'Pokemon TCG: ',
+      'Pokémon TCG: ',
+      'Magic: The Gathering: ',
+      'MTG: ',
+      'Flesh and Blood: ',
+      'Dragon Ball Super Card Game: ',
+      'Dragon Ball Super: ',
+      'Digimon Card Game: ',
+      'Digimon: ',
+      'Yu-Gi-Oh!: ',
+      'Lorcana: ',
+      'Star Wars: Unlimited: ',
+      'Star Wars Unlimited: ',
+    ];
+
+    var links = document.querySelectorAll('.sdpc__title a[data-raw-title]');
+    for (var i = 0; i < links.length; i++) {
+      var link  = links[i];
+      var title = link.getAttribute('data-raw-title') || '';
+      var stripped = title;
+
+      for (var p = 0; p < PREFIXES.length; p++) {
+        if (stripped.indexOf(PREFIXES[p]) === 0) {
+          stripped = stripped.slice(PREFIXES[p].length);
+          break;
+        }
+      }
+
+      if (stripped && stripped !== title) {
+        link.textContent = stripped;
+      }
+    }
+  }
+
+  /* ─────────────────────────────────────────────
      Spin keyframe injection (for Quick Add loading)
   ───────────────────────────────────────────── */
   function injectSpinKeyframe() {
@@ -282,6 +331,7 @@
     initMobileGroupAccordions();
     initSort();
     initPriceRange();
+    initTitleStrip();
 
     /* Quick Add — event delegation on entire document */
     document.addEventListener('click', function (e) {

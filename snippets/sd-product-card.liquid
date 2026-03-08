@@ -34,6 +34,16 @@
   endif
 
   assign card_img = product.featured_image
+
+  # "New" badge: show if published within last 60 days OR tagged 'new'
+  assign is_new = false
+  assign sixty_days_secs = 5184000
+  assign now_ts          = 'now'              | date: '%s' | plus: 0
+  assign cutoff_ts       = now_ts | minus: sixty_days_secs
+  assign pub_ts          = product.published_at | date: '%s' | plus: 0
+  if pub_ts > cutoff_ts or product.tags contains 'new' or product.tags contains 'New'
+    assign is_new = true
+  endif
 -%}
 
 <article class="sdpc" aria-label="{{ product.title | escape }}">
@@ -69,6 +79,9 @@
         <span class="sdpc__badge sdpc__badge--sale">
           {%- if discount_pct > 0 -%}−{{ discount_pct }}%{%- else -%}Sale{%- endif -%}
         </span>
+      {%- endif -%}
+      {%- if is_new and sold_out == false and on_sale == false -%}
+        <span class="sdpc__badge sdpc__badge--new">New</span>
       {%- endif -%}
     </div>
 
@@ -128,9 +141,11 @@
     {%- endif -%}
 
     <h3 class="sdpc__title">
-      <a href="{{ product.url }}" style="text-decoration:none;color:inherit;">
-        {{ product.title | escape }}
-      </a>
+      <a
+        href="{{ product.url }}"
+        data-raw-title="{{ product.title | escape }}"
+        style="text-decoration:none;color:inherit;"
+      >{{ product.title | escape }}</a>
     </h3>
 
     <div class="sdpc__price-row">
