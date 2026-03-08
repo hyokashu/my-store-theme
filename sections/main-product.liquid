@@ -74,10 +74,15 @@
   background: var(--cv-bg);
   max-width: 80rem;
   margin: 0 auto;
-  padding: 2rem 1rem 5rem;
+  padding: 2rem 8px 5rem;
 }
 @media (min-width: 768px)  { .cv-wrap { padding: 3rem 2rem 3rem; } }
 @media (min-width: 1024px) { .cv-wrap { padding: 3rem 2rem; } }
+
+/* ── Mobile: zero out base.css main { padding: 2rem } so product page reaches edge ── */
+@media (max-width: 767px) {
+  main { padding-left: 0 !important; padding-right: 0 !important; }
+}
 
 /* =============================================================
    Separator
