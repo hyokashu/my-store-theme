@@ -1236,18 +1236,20 @@
     box-shadow:       0 2px 12px rgba(28, 31, 54, 0.10);
     padding-top:      0.625rem;
     padding-bottom:   0.625rem;
-    margin-left:      -5px;   /* cancel the 5px catalog wrap padding → full-bleed */
-    margin-right:     -5px;
-    padding-left:     5px;
-    padding-right:    5px;
+    margin-left:      -8px;   /* cancel the 8px catalog wrap padding → full-bleed */
+    margin-right:     -8px;
+    padding-left:     8px;
+    padding-right:    8px;
     /* border-bottom from base styles preserved */
   }
 
   /* ══════════════════════════════════════════════════════════
-     HIGH-DENSITY MOBILE GRID — premium app-like layout
+     GAMEOLOGY-STYLE MOBILE GRID
+     ─────────────────────────────────────────────────────────
+     Reference: ~8px outer gutters, ~8px column gap, ~10px card
+     radius, white card surface, hairline border + whisper shadow.
      All rules use !important to defeat Shopify base-theme
-     specificity (main { padding: 2rem }, theme grid variables,
-     Dawn card classes, etc.)
+     specificity (main { padding: 2rem }, grid vars, Dawn classes).
      ══════════════════════════════════════════════════════════ */
 
   /* ── 1a. Escape the base.css `main { padding: 2rem }` wrapper ──
@@ -1258,40 +1260,45 @@
     padding-right: 0 !important;
   }
 
-  /* ── 1b. Edge-to-edge: collection catalog wrapper = 5px gutters ── */
+  /* ── 1b. 8px outer gutters — matches Gameology proportions ── */
   .sd-catalog__wrap {
-    padding-left:  5px !important;
-    padding-right: 5px !important;
+    padding-left:  8px !important;
+    padding-right: 8px !important;
     padding-top:   0.75rem;
   }
 
-  /* Also target .page-width if the theme or any app ever injects it */
+  /* Safety net: target .page-width and any app-injected wrappers */
   .page-width,
   .page-width--wide,
   .collection-grid-wrapper {
-    padding-left:  5px !important;
-    padding-right: 5px !important;
+    padding-left:  8px !important;
+    padding-right: 8px !important;
   }
 
-  /* ── 2. Tighten grid gap — hard value + CSS variable overrides ── */
+  /* ── 2. 8px column gap — consistent with outer gutters ── */
   .sdcpg__grid {
     gap: 8px !important;
 
-    /* Override Shopify/Dawn CSS variable names that control grid spacing */
-    --grid-mobile-horizontal-spacing: 8px !important;
-    --grid-horizontal-spacing:        8px !important;
+    /* Override all Shopify/Dawn grid-spacing CSS variable names */
+    --grid-mobile-horizontal-spacing:  8px !important;
+    --grid-horizontal-spacing:         8px !important;
     --product-grid-horizontal-spacing: 8px !important;
-    --column-gap: 8px !important;
+    --column-gap:                      8px !important;
   }
 
-  /* ── 3. Image container: pixel-perfect zero padding ── */
+  /* ── 3. Image container — flush, no padding, top corners rounded ──
+     The card radius clips the image's top-left and top-right corners.
+     The image-wrap has flat bottom edges so it seats cleanly against
+     the card body below, exactly as in the Gameology reference. ── */
   .sdpc__img-wrap {
-    padding:       0 !important;
-    margin:        0 !important;
-    border-radius: 0 !important;  /* hard zero — images bleed to column edge */
+    padding:       0                   !important;
+    margin:        0                   !important;
+    border-radius: 10px 10px 0 0       !important;
+                                       /* top corners match card radius;
+                                          bottom corners flat (no gap/seam) */
   }
 
-  /* Ensure the image itself has zero margin / no rounding bleed */
+  /* Image itself — zero margins, no independent radius */
   .sdpc__img {
     display:       block;
     margin:        0 !important;
@@ -1299,46 +1306,53 @@
     border-radius: 0 !important;
   }
 
-  /* ── 4. Remove "box" look — transparent card, zero radius ──
-     Cards are fully transparent so products float on the page
-     background. Border-radius is zeroed (not just reduced) so
-     images bleed to the absolute pixel edge of each grid column. ── */
+  /* ── 4. Gameology card surface — white, 10px radius, hairline border ──
+     Pure white background so the card reads as a distinct surface.
+     10px radius curves corners cleanly (Gameology appears ~10–12px).
+     Hairline 1px border + barely-there shadow give premium "lift"
+     without the heavy box look from the previous state. ── */
   .sdpc {
-    background:    transparent !important;
-    border:        none        !important;
-    box-shadow:    none        !important;
-    border-radius: 0           !important;
+    background:    #ffffff                       !important;
+    border:        1px solid rgba(0, 0, 0, 0.07) !important;
+    box-shadow:    0 1px 6px rgba(0, 0, 0, 0.07) !important;
+    border-radius: 10px                          !important;
+    overflow:      hidden                        !important;
+                                                 /* ensures img corners
+                                                    are clipped by card */
   }
 
-  /* Lift/shadow + border-color on hover — remove on touch devices */
+  /* On touch devices — no lift transform, preserve the card surface */
   .sdpc:hover {
-    box-shadow:    none        !important;
-    border-color:  transparent !important;
-    transform:     none        !important;
-    border-radius: 0           !important;
+    box-shadow:    0 1px 6px rgba(0, 0, 0, 0.07) !important;
+    border-color:  rgba(0, 0, 0, 0.07)           !important;
+    transform:     none                          !important;
+    border-radius: 10px                          !important;
   }
 
-  /* ── Safety net: Dawn theme card classes ──
-     .card__inner and .card__media are used by Shopify's Dawn base
-     theme and any apps that render product cards. Added here as a
-     catch-all so any injected card markup also gets the borderless
-     treatment on mobile. ── */
+  /* ── Safety net: Dawn / app-injected card classes ──
+     .card__inner and .card__media come from Shopify Dawn or third-
+     party apps. Give them the same 10px radius and no extra border. ── */
   .card__inner,
-  .card__media,
+  .card__media {
+    border-radius: 10px !important;
+    overflow:      hidden !important;
+  }
+
   .card--product,
   .card-wrapper {
-    border-radius: 0    !important;
-    border:        none !important;
-    box-shadow:    none !important;
-    background:    transparent !important;
+    border-radius: 10px                          !important;
+    border:        1px solid rgba(0, 0, 0, 0.07) !important;
+    box-shadow:    0 1px 6px rgba(0, 0, 0, 0.07) !important;
+    background:    #ffffff                       !important;
+    overflow:      hidden                        !important;
   }
 
-  /* Also nuke the sticky topbar margin to match main's new zero padding */
+  /* ── Topbar: compensate for new 8px gutters ── */
   .sd-catalog__topbar {
-    margin-left:  0 !important;   /* main padding is now 0; no need to escape */
+    margin-left:  0 !important;  /* main padding is 0; no negative margin needed */
     margin-right: 0 !important;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left:  8px;
+    padding-right: 8px;
   }
 
 } /* end @media (max-width: 768px) */
