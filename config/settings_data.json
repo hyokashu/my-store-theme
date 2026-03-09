@@ -57,6 +57,13 @@
           "legal_link_3_label": "Refund Policy",
           "legal_link_3_url": ""
         }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "free_ship_threshold": 20000,
+          "upsell_collection": "pokemon-collection"
+        }
       }
     },
     "content_for_index": []
