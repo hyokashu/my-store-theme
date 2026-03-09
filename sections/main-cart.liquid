@@ -163,6 +163,8 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
    MOBILE OVERRIDES (CRO Focused)
    ============================================================= */
 @media (max-width: 767px) {
+  /* Zero out base.css main { padding: 2rem } — same fix as product page */
+  main { padding-left: 0 !important; padding-right: 0 !important; }
   .sdc-wrap { padding-left: 8px !important; padding-right: 8px !important; }
   .sdc-items, .sdc-summary, .sdc-shipping-bar { border: none !important; box-shadow: none !important; border-radius: 0 !important; background: transparent; padding-left: 0; padding-right: 0; }
   .sdc-items { padding-top: 0; }
