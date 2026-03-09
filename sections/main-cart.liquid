@@ -1,7 +1,7 @@
 {% comment %}
   Supply District — sections/main-cart.liquid
   Premium CRO-Optimized Cart.
-  Features: AJAX Qty Steppers, AJAX Quick Add Upsells, Top-Level Free Shipping, Urgency Banner.
+  Features: AJAX Qty Steppers, AJAX Quick Add Upsells, Top-Level Free Shipping, Urgency Banner, Micro-Trust Signals.
 {% endcomment %}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -142,6 +142,30 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
 .cv-payment-badges { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.375rem; margin-top: 1rem; }
 .cv-payment-badge { display: inline-flex; align-items: center; justify-content: center; height: 1.625rem; padding: 0 0.5rem; border: 1px solid var(--cv-border); border-radius: calc(var(--cv-radius) - 2px); background: var(--cv-bg); }
 
+/* Cart Trust List */
+.sdc-summary__trust-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.sdc-summary__trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--cv-muted-fg);
+}
+.sdc-summary__trust-item svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-cta-primary);
+  flex-shrink: 0;
+}
+
 /* Empty State */
 .sdc-empty { text-align: center; padding: 5rem 1rem 4rem; max-width: 32rem; margin: 0 auto; }
 .sdc-empty__icon { color: var(--cv-border); margin-bottom: 1.25rem; }
@@ -164,7 +188,7 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
 
 <div class="sdc-wrap" id="sdc-cart-wrap">
   {%- liquid
-    assign free_ship_threshold  = section.settings.free_ship_threshold | default: 15000
+    assign free_ship_threshold  = section.settings.free_ship_threshold | default: 20000
     assign subtotal             = cart.items_subtotal_price
     assign item_count           = cart.item_count
     assign has_savings          = false
@@ -300,6 +324,23 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
               <span class="cv-payment-badge"><svg width="46" height="12" viewBox="0 0 46 12"><text x="0" y="9.5" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#003087">Pay</text><text x="14" y="9.5" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#009CDE">Pal</text></svg></span>
               <span class="cv-payment-badge" style="background:#5A31F4;border-color:#5A31F4"><svg width="36" height="12" viewBox="0 0 36 12"><text x="2" y="9.5" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#fff">Shop</text></svg></span>
             </div>
+
+            {%- comment -%} ── Trust List ── {%- endcomment -%}
+            <ul class="sdc-summary__trust-list">
+              <li class="sdc-summary__trust-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 16 14"/></svg>
+                Orders dispatch within 24 hours
+              </li>
+              <li class="sdc-summary__trust-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                Shipped securely with bubble wrap
+              </li>
+              <li class="sdc-summary__trust-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                100% Authentic & Factory Sealed
+              </li>
+            </ul>
+
           </aside>
 
           {%- comment -%} RIGHT COLUMN UPSELLS {%- endcomment -%}
@@ -343,7 +384,7 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
 
 <script>
 function initCartLogic() {
-  var FREE_SHIP = {{ section.settings.free_ship_threshold | default: 15000 }};
+  var FREE_SHIP = {{ section.settings.free_ship_threshold | default: 20000 }};
   var errorEl = document.getElementById('sdc-error');
   var list = document.getElementById('sdc-items-list');
 
@@ -459,8 +500,8 @@ if(document.getElementById('sdc-cart-wrap')) { initCartLogic(); }
       "type": "number",
       "id": "free_ship_threshold",
       "label": "Free shipping threshold (cents)",
-      "info": "Enter the amount in cents — e.g. 15000 = $150.00",
-      "default": 15000
+      "info": "Enter the amount in cents — e.g. 20000 = $200.00",
+      "default": 20000
     },
     {
       "type": "header",
