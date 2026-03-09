@@ -6,15 +6,15 @@
 {% endcomment %}
 
 {%- liquid
-  assign hero_slides   = section.blocks | where: "type", "hero_slide"
-  assign trust_items   = section.blocks | where: "type", "trust_item"
+  assign hero_slides = section.blocks | where: "type", "hero_slide"
+  assign trust_items = section.blocks | where: "type", "trust_item"
   assign marquee_items = section.blocks | where: "type", "marquee_item"
-  assign cat_cards     = section.blocks | where: "type", "category_card"
-  assign brand_links   = section.blocks | where: "type", "brand_link"
+  assign cat_cards = section.blocks | where: "type", "category_card"
+  assign brand_links = section.blocks | where: "type", "brand_link"
   assign promo_banners = section.blocks | where: "type", "promo_banner"
-  assign about_checks  = section.blocks | where: "type", "about_check"
-  assign reward_items  = section.blocks | where: "type", "reward_item"
-  assign reviews       = section.blocks | where: "type", "review"
+  assign about_checks = section.blocks | where: "type", "about_check"
+  assign reward_items = section.blocks | where: "type", "reward_item"
+  assign reviews = section.blocks | where: "type", "review"
 
   assign tab1_col = collections[section.settings.tab1_collection]
   assign tab2_col = collections[section.settings.tab2_collection]
@@ -184,8 +184,8 @@
 }
 .cvh-trust-bar__track {
   display: inline-flex;
-  gap: 2.5rem; /* Spacing between trust items */
-  padding-right: 2.5rem; /* Ensure seamless gap at the loop point */
+  gap: 2.5rem;
+  padding-right: 2.5rem;
   animation: cvhMarquee 40s linear infinite;
 }
 .cvh-trust-bar__track:hover {
@@ -430,7 +430,7 @@
       {%- else -%}
         {%- if request.design_mode -%}
           <div class="cvh-hero__slide-wrap cvh-hero__slide-wrap--1">
-            <div class="cvh-hero__slide cvh-inner">
+            <div class="cvh-hero__slide cvh__inner">
               <div class="cvh-hero__text">
                 <span class="cvh-hero__eyebrow">Add Hero Slides in the theme editor</span>
                 <h1 class="cvh-hero__title">Your Hero Headline</h1>
