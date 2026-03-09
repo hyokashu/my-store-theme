@@ -1176,6 +1176,21 @@ window.__SCD__ = {
   document.addEventListener('cart:close',   closeDrawer);
   document.addEventListener('cart:refresh', fetchAndRender);
 
+  /*
+   * sd-collection.js Quick Add dispatches `cart:updated` with the full cart
+   * object as event.detail after every successful /cart/add.js call.
+   * We render with the already-fetched cart data (no extra round-trip) and
+   * open the drawer so the user sees what was just added.
+   */
+  document.addEventListener('cart:updated', function (e) {
+    if (e.detail && typeof e.detail.item_count !== 'undefined') {
+      renderCart(e.detail); /* cart data already in the event — use it directly */
+    } else {
+      fetchAndRender();     /* fallback: fetch fresh data */
+    }
+    openDrawer();
+  });
+
   /* ════════════════════════════════════════
      INIT — populate badge on every page load
      (don't auto-open the drawer)
