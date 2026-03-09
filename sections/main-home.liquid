@@ -171,32 +171,30 @@
 .cvh-hero__arrow--next { right: 1rem; }
 @media (min-width: 768px) { .cvh-hero__arrow--prev { left: 1.5rem; } .cvh-hero__arrow--next { right: 1.5rem; } }
 
+
 /* =============================================================
-   2. TRUST BAR
+   2. TRUST BAR (Animated Marquee Version)
    ============================================================= */
 .cvh-trust-bar {
   background: var(--cv-primary);
   color: var(--cv-primary-fg);
   padding: 0.875rem 0;
+  overflow: hidden;
+  white-space: nowrap;
 }
-.cvh-trust-bar__grid {
-  display: flex;
-  gap: 1.5rem;
-  padding: 0 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+.cvh-trust-bar__track {
+  display: inline-flex;
+  gap: 2.5rem; /* Spacing between trust items */
+  padding-right: 2.5rem; /* Ensure seamless gap at the loop point */
+  animation: cvhMarquee 40s linear infinite;
 }
-.cvh-trust-bar__grid::-webkit-scrollbar { display: none; }
-@media (min-width: 768px) { 
-  .cvh-trust-bar__grid { justify-content: center; overflow-x: visible; padding: 0 2rem; } 
+.cvh-trust-bar__track:hover {
+  animation-play-state: paused;
 }
-
 .cvh-trust-item {
-  display: flex; align-items: center; gap: 0.75rem;
-  flex: 0 0 auto;
-  scroll-snap-align: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 .cvh-trust-item__icon {
   flex-shrink: 0; width: 2rem; height: 2rem;
@@ -205,8 +203,19 @@
 }
 .cvh-trust-item__icon svg { width: 1rem; height: 1rem; color: rgba(255,255,255,0.9); }
 .cvh-trust-item__text { display: flex; flex-direction: column; gap: 0.1rem; }
-.cvh-trust-item__title { font-size: 0.8125rem; font-weight: 700; color: rgba(255,255,255,0.95); white-space: nowrap; }
-.cvh-trust-item__desc  { font-size: 0.75rem; color: rgba(255,255,255,0.6); white-space: nowrap; }
+.cvh-trust-item__title { font-size: 0.8125rem; font-weight: 700; color: rgba(255,255,255,0.95); }
+.cvh-trust-item__desc  { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+
+/* =============================================================
+   4. MARQUEE TICKER (Reusing the shared animation)
+   ============================================================= */
+.cvh-marquee { background: var(--cv-primary); padding: 0.875rem 0; overflow: hidden; white-space: nowrap; }
+.cvh-marquee__track { display: inline-flex; gap: 0; animation: cvhMarquee 28s linear infinite; }
+.cvh-marquee__track:hover { animation-play-state: paused; }
+@keyframes cvhMarquee { from { transform: translateX(0); } to   { transform: translateX(-50%); } }
+.cvh-marquee__item { display: inline-flex; align-items: center; gap: 0.75rem; font-family: var(--cv-font-head); font-size: 0.875rem; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.9); padding: 0 2rem; }
+.cvh-marquee__item svg  { width: 1rem; height: 1rem; color: rgba(255,255,255,0.5); }
+
 
 /* =============================================================
    3. FAN FAVOURITES
@@ -250,16 +259,6 @@
 .cvh-scroll-arrow svg   { width: 1.25rem; height: 1.25rem; }
 .cvh-scroll-arrow--prev { left: -1.25rem; }
 .cvh-scroll-arrow--next { right: -1.25rem; }
-
-/* =============================================================
-   4. MARQUEE TICKER
-   ============================================================= */
-.cvh-marquee { background: var(--cv-primary); padding: 0.875rem 0; overflow: hidden; white-space: nowrap; }
-.cvh-marquee__track { display: inline-flex; gap: 0; animation: cvhMarquee 28s linear infinite; }
-.cvh-marquee__track:hover { animation-play-state: paused; }
-@keyframes cvhMarquee { from { transform: translateX(0); } to   { transform: translateX(-50%); } }
-.cvh-marquee__item { display: inline-flex; align-items: center; gap: 0.75rem; font-family: var(--cv-font-head); font-size: 0.875rem; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.9); padding: 0 2rem; }
-.cvh-marquee__item svg  { width: 1rem; height: 1rem; color: rgba(255,255,255,0.5); }
 
 /* =============================================================
    5. BROWSE BY CATEGORY
@@ -456,9 +455,33 @@
   {%- comment -%} 2. TRUST BAR {%- endcomment -%}
   {%- if section.settings.show_trust_bar and trust_items.size > 0 -%}
   <div class="cvh-trust-bar" role="region" aria-label="Store guarantees">
-    <div class="cvh-trust-bar__grid">
+    <div class="cvh-trust-bar__track">
+      {%- comment -%} First pass for animation {%- endcomment -%}
       {%- for block in trust_items -%}
         <div class="cvh-trust-item" {{ block.shopify_attributes }}>
+          <div class="cvh-trust-item__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              {%- case block.settings.icon -%}
+                {%- when 'credit-card' -%}<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+                {%- when 'dollar' -%}<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                {%- when 'shield' -%}<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                {%- when 'truck' -%}<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+                {%- when 'gift' -%}<path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                {%- when 'users' -%}<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                {%- when 'package' -%}<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              {%- endcase -%}
+            </svg>
+          </div>
+          <div class="cvh-trust-item__text">
+            <span class="cvh-trust-item__title">{{ block.settings.title }}</span>
+            <span class="cvh-trust-item__desc">{{ block.settings.description }}</span>
+          </div>
+        </div>
+      {%- endfor -%}
+      {%- comment -%} Duplicate pass for seamless infinite loop {%- endcomment -%}
+      {%- for block in trust_items -%}
+        <div class="cvh-trust-item" aria-hidden="true">
           <div class="cvh-trust-item__icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               {%- case block.settings.icon -%}
