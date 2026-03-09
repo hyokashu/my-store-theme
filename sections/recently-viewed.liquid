@@ -91,6 +91,12 @@
 .cv-rv-skeleton__line { height:0.75rem; border-radius:9999px; background:var(--cv-secondary,#eeecea); }
 .cv-rv-skeleton__line--short { width: 60%; }
 @keyframes cv-rv-pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+
+/* ── Mobile: remove all card borders ── */
+@media (max-width: 767px) {
+  .cv-rv-card,
+  .cv-rv-skeleton { border: none !important; box-shadow: none !important; }
+}
 </style>
 
 <script>

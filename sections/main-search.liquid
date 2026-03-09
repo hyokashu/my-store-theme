@@ -238,6 +238,11 @@
 .sdsr__suggestion-link:hover {
   background: var(--cv-border, #dedad5);
 }
+
+/* ── Mobile: remove all card borders ── */
+@media (max-width: 767px) {
+  .sdsr__suggestions { border: none !important; box-shadow: none !important; }
+}
 </style>
 
 {%- liquid

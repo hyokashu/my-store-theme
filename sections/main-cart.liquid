@@ -609,6 +609,14 @@ input.cv-qty__input {
 }
 .sdc-note-field:focus { border-color: var(--cv-primary); }
 .sdc-note-field.is-open { display: block; }
+
+/* ── Mobile: remove all card borders ── */
+@media (max-width: 767px) {
+  .sdc-item__img-wrap,
+  .sdc-upsell-card,
+  .sdc-summary,
+  .cv-payment-badge { border: none !important; box-shadow: none !important; }
+}
 </style>
 
 {%- liquid

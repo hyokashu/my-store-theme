@@ -344,6 +344,12 @@
   border-top: 1px solid var(--cvrs-border);
 }
 .cvrs__card-helpful svg { width: 0.875rem; height: 0.875rem; }
+
+/* ── Mobile: remove all card borders ── */
+@media (max-width: 767px) {
+  .cvrs__card,
+  .cvrs__score-pill { border: none !important; box-shadow: none !important; }
+}
 </style>
 
 {% schema %}
