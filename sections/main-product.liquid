@@ -82,6 +82,11 @@
 /* ── Mobile: zero out base.css main { padding: 2rem } so product page reaches edge ── */
 @media (max-width: 767px) {
   main { padding-left: 0 !important; padding-right: 0 !important; }
+
+  /* Remove visible borders on mobile for a clean, borderless look */
+  .cv-gallery__main,
+  .cv-gallery__thumbs li,
+  .cv-similar__card { border: none !important; }
 }
 
 /* =============================================================

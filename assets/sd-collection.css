@@ -1312,26 +1312,22 @@
      Hairline 1px border + barely-there shadow give premium "lift"
      without the heavy box look from the previous state. ── */
   .sdpc {
-    background:    #ffffff                       !important;
-    border:        1px solid rgba(0, 0, 0, 0.07) !important;
-    box-shadow:    0 1px 6px rgba(0, 0, 0, 0.07) !important;
-    border-radius: 10px                          !important;
-    overflow:      hidden                        !important;
-                                                 /* ensures img corners
-                                                    are clipped by card */
+    background:    #ffffff !important;
+    border:        none    !important;
+    box-shadow:    none    !important;
+    border-radius: 10px    !important;
+    overflow:      hidden  !important;
   }
 
   /* On touch devices — no lift transform, preserve the card surface */
   .sdpc:hover {
-    box-shadow:    0 1px 6px rgba(0, 0, 0, 0.07) !important;
-    border-color:  rgba(0, 0, 0, 0.07)           !important;
-    transform:     none                          !important;
-    border-radius: 10px                          !important;
+    box-shadow:    none    !important;
+    border:        none    !important;
+    transform:     none    !important;
+    border-radius: 10px    !important;
   }
 
-  /* ── Safety net: Dawn / app-injected card classes ──
-     .card__inner and .card__media come from Shopify Dawn or third-
-     party apps. Give them the same 10px radius and no extra border. ── */
+  /* ── Safety net: Dawn / app-injected card classes ── */
   .card__inner,
   .card__media {
     border-radius: 10px !important;
@@ -1340,11 +1336,11 @@
 
   .card--product,
   .card-wrapper {
-    border-radius: 10px                          !important;
-    border:        1px solid rgba(0, 0, 0, 0.07) !important;
-    box-shadow:    0 1px 6px rgba(0, 0, 0, 0.07) !important;
-    background:    #ffffff                       !important;
-    overflow:      hidden                        !important;
+    border-radius: 10px    !important;
+    border:        none    !important;
+    box-shadow:    none    !important;
+    background:    #ffffff !important;
+    overflow:      hidden  !important;
   }
 
   /* ── Topbar: compensate for new 8px gutters ── */
