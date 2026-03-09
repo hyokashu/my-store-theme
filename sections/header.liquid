@@ -1,90 +1,1184 @@
 {% comment %}
-  Supply District — header.liquid
-  3-column CSS Grid: [Logo] [Search Bar] [Cart Icon]
-  Sticky behaviour driven by sd-header.css + theme.js (IntersectionObserver).
-  Added wrapper to prevent scroll-flicker / layout shift loop.
+  Supply District — sections/header.liquid
+  Full-featured two-row sticky header with mega menu and mobile slide-in.
+
+  Desktop (≥ 768px):
+    Row 1 — Logo | Pill search bar | Account icon + Cart icon (with badge)
+    Row 2 — Main nav links; hover reveals full-width Mega Menu
+              Mega Menu: sub-links left | promo image + CTA right (optional, schema-driven)
+
+  Mobile (< 768px):
+    Single row — Hamburger | Logo (centred) | Search icon + Cart icon
+    Slide-in drawer from left (85vw, 100vh) with blur overlay
+    Top-level links are accordion toggles when they have sub-links
+
+  Class namespaces:
+    sdh-*  — header layout / nav / mobile (this file only)
+    sd-*   — reused from sd-header.css / cart-drawer.js / theme.js
+             (sd-cart-btn, sd-cart-badge, sd-icon-btn, sd-header)
+
+  Conflicts resolved from sd-header.css:
+    • .sd-header height overridden to auto (was 4.5rem)
+    • .sd-header__logo / .sd-header__icons grid-column overridden for new grid
+    • .sd-header__logo-img max-width driven by schema setting
 {% endcomment %}
 
+{%- liquid
+  assign logo_width   = section.settings.logo_max_width | default: 160
+  assign main_menu    = section.settings.menu | default: 'main-menu'
+  assign promo_blocks = section.blocks | where: 'type', 'mega_menu_promo'
+-%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ================================================================
+   Supply District Header — sdh-* namespace
+   Rendered inline; loads after sd-header.css so equal-specificity
+   rules here win. !important used only where sd-header.css would
+   otherwise override via a media-query rule.
+   ================================================================ */
+
+/* ── Shell overrides ──────────────────────────────────────────────
+   sd-header.css sets height: 4.5rem and overflow defaults.
+   We need height: auto for two rows and overflow: visible for the
+   mega menu to escape the header bounds.
+   ────────────────────────────────────────────────────────────── */
+.sd-header {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* ── Logo image — schema-driven max-width ─────────────────────── */
+.sd-header__logo-img {
+  max-width: {{ logo_width }}px !important;
+  max-height: 3.25rem !important;
+  width: auto;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* ── Logo text fallback ───────────────────────────────────────── */
+.sd-header__logo-text {
+  font-family: var(--cv-font-head, 'Space Grotesk', sans-serif);
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--sd-header-fg, #1a1a2e);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ================================================================
+   TOP ROW
+   ================================================================ */
+.sdh-top__inner {
+  /* Mobile: 3-column centred grid — hamburger | logo | icons */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  gap: 0.5rem;
+}
+
+/* Override sd-header.css @media(max-width:768px) grid positions
+   that target .sd-header__logo and .sd-header__icons unconditionally.
+   Higher specificity (.sdh-top__inner .x > .x alone) wins. */
+.sdh-top__inner .sd-header__logo  { grid-column: 2 !important; grid-row: 1 !important; }
+.sdh-top__inner .sd-header__icons { grid-column: 3 !important; grid-row: 1 !important; }
+.sdh-top__inner .sdh-hamburger    { grid-column: 1 !important; grid-row: 1 !important; }
+
+@media (min-width: 768px) {
+  .sdh-top__inner {
+    /* Desktop: logo | search | icons */
+    grid-template-columns: auto 1fr auto;
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 4.5rem;
+    gap: 1.5rem;
+  }
+  /* Reset mobile column overrides for desktop */
+  .sdh-top__inner .sd-header__logo  { grid-column: auto !important; grid-row: auto !important; }
+  .sdh-top__inner .sd-header__icons { grid-column: auto !important; grid-row: auto !important; }
+}
+
+/* ── Logo column ────────────────────────────────────────────── */
+.sd-header__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centred on mobile */
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .sd-header__logo { justify-content: flex-start; }
+}
+
+.sd-header__logo-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* ── Desktop search bar ─────────────────────────────────────── */
+.sdh-desktop-search { display: none; width: 100%; }
+
+@media (min-width: 768px) { .sdh-desktop-search { display: block; } }
+
+.sdh-search-form { width: 100%; }
+
+.sdh-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sdh-search-icon-btn {
+  position: absolute;
+  left: 0.9375rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+  line-height: 0;
+  z-index: 1;
+}
+.sdh-search-icon-btn:hover { color: var(--sd-search-focus, #6d28d9); }
+.sdh-search-icon-btn svg { width: 1.0625rem; height: 1.0625rem; }
+
+.sdh-search-input {
+  width: 100%;
+  padding: 0.65rem 1.125rem 0.65rem 2.875rem;
+  background: var(--sd-search-bg, #f3f4f6);
+  border: 1.5px solid var(--sd-search-border, #d1d5db);
+  border-radius: 9999px;
+  font-size: 0.9375rem;
+  font-family: var(--cv-font-sans, 'Inter', sans-serif);
+  color: var(--sd-header-fg, #1a1a2e);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+.sdh-search-input::placeholder { color: #9ca3af; }
+.sdh-search-input:focus {
+  border-color: var(--sd-search-focus, #6d28d9);
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
+  background: #fff;
+}
+.sdh-search-input::-webkit-search-cancel-button { display: none; }
+
+/* ── Icon group (cart, account) ─────────────────────────────── */
+.sd-header__icons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* ── Hamburger (mobile only) ────────────────────────────────── */
+.sdh-hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: start;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--sd-header-fg, #1a1a2e);
+  transition: background 0.2s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.sdh-hamburger:hover { background: var(--sd-search-bg, #f3f4f6); }
+.sdh-hamburger svg   { width: 1.375rem; height: 1.375rem; pointer-events: none; }
+
+@media (min-width: 768px) { .sdh-hamburger { display: none; } }
+
+/* ── Mobile search toggle ───────────────────────────────────── */
+.sdh-search-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--sd-header-fg, #1a1a2e);
+  transition: background 0.2s;
+  padding: 0;
+}
+.sdh-search-toggle:hover { background: var(--sd-search-bg, #f3f4f6); }
+.sdh-search-toggle svg   { width: 1.25rem; height: 1.25rem; pointer-events: none; }
+
+@media (min-width: 768px) { .sdh-search-toggle { display: none; } }
+
+/* ================================================================
+   MOBILE SEARCH BAR (expands below the top row when toggled)
+   ================================================================ */
+.sdh-mobile-search {
+  overflow: hidden;
+  max-height: 0;
+  padding: 0 1rem;
+  background: var(--sd-header-bg, #fff);
+  border-top: 0px solid var(--sd-header-border, #e5e7eb);
+  transition: max-height 0.28s ease, padding 0.28s ease, border-top-width 0.28s;
+}
+.sdh-mobile-search.is-open {
+  max-height: 5rem;
+  padding: 0.625rem 1rem 0.75rem;
+  border-top-width: 1px;
+}
+.sdh-mobile-search .sdh-search-input { font-size: 1rem; }
+
+@media (min-width: 768px) { .sdh-mobile-search { display: none !important; } }
+
+/* ================================================================
+   DESKTOP NAV ROW
+   ================================================================ */
+.sdh-nav {
+  display: none;
+  border-top: 1px solid var(--sd-header-border, #e5e7eb);
+  background: var(--sd-header-bg, #fff);
+  position: static; /* mega positions relative to .sd-header (sticky) */
+}
+
+@media (min-width: 768px) { .sdh-nav { display: block; } }
+
+.sdh-nav__inner {
+  display: flex;
+  align-items: stretch;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 0.75rem;
+  height: 3rem;
+}
+
+/* ── Nav item ── */
+.sdh-nav__item {
+  display: flex;
+  align-items: stretch;
+  position: static;
+}
+
+.sdh-nav__link {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 0.875rem;
+  font-family: var(--cv-font-sans, 'Inter', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--sd-header-fg, #1a1a2e);
+  text-decoration: none;
+  background: none;
+  border: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.18s, border-color 0.18s;
+  line-height: 1;
+}
+.sdh-nav__link:hover,
+.sdh-nav__item.is-open > .sdh-nav__link {
+  color: var(--cv-primary, #282d52);
+  border-bottom-color: var(--color-cta-primary, #2e9963);
+}
+
+.sdh-nav__chevron {
+  width: 0.75rem;
+  height: 0.75rem;
+  transition: transform 0.2s ease;
+  pointer-events: none;
+  color: var(--cv-muted-fg, #76798c);
+  flex-shrink: 0;
+}
+.sdh-nav__item.is-open .sdh-nav__chevron { transform: rotate(180deg); }
+
+/* ================================================================
+   MEGA MENU
+   Positioned absolute relative to .sd-header (sticky = containing block).
+   left:0 right:0 = full viewport width.
+   top:100% = below the full two-row header height.
+   ================================================================ */
+.sdh-mega {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 200;
+  background: #fff;
+  border-top: 2.5px solid var(--color-cta-primary, #2e9963);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.13);
+  /* Hidden state */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.22s ease, visibility 0s linear 0.22s;
+}
+.sdh-nav__item.is-open .sdh-mega {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+  transition: opacity 0.2s ease, transform 0.22s ease, visibility 0s linear 0s;
+}
+
+.sdh-mega__inner {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 2.25rem;
+  gap: 3rem;
+  align-items: start;
+}
+.sdh-mega__inner--no-promo { grid-template-columns: 1fr; }
+
+/* Sub-links */
+.sdh-mega__links { display: flex; gap: 3rem; flex-wrap: wrap; }
+
+.sdh-mega__col-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--cv-muted-fg, #76798c);
+  margin: 0 0 0.75rem;
+  padding: 0 0.5rem;
+}
+
+.sdh-mega__col-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 160px;
+}
+
+.sdh-mega__col-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--cv-radius, 0.5rem);
+  text-decoration: none;
+  color: var(--cv-fg, #1c1f36);
+  font-family: var(--cv-font-sans, 'Inter', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+.sdh-mega__col-link:hover {
+  background: var(--cv-secondary, #eeecea);
+  color: var(--cv-primary, #282d52);
+}
+.sdh-mega__col-link svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--cv-muted-fg, #76798c);
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* Promo card */
+.sdh-mega__promo {
+  border-radius: calc(var(--cv-radius, 0.5rem) * 1.5);
+  overflow: hidden;
+  box-shadow: var(--cv-shadow, 0 1px 3px rgba(0,0,0,0.07));
+  border: 1px solid var(--cv-border, #dedad5);
+}
+
+.sdh-mega__promo-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.sdh-mega__promo-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--cv-secondary, #eeecea);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sdh-mega__promo-placeholder svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--cv-border, #dedad5);
+}
+
+.sdh-mega__promo-body {
+  background: var(--cv-card, #fff);
+  padding: 1rem 1.125rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-top: 1px solid var(--cv-border, #dedad5);
+}
+
+.sdh-mega__promo-heading {
+  font-family: var(--cv-font-head, 'Space Grotesk', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--cv-primary, #282d52);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.sdh-mega__promo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-cta-primary, #2e9963);
+  color: #fff;
+  border-radius: var(--cv-radius, 0.5rem);
+  text-decoration: none;
+  font-family: var(--cv-font-sans, 'Inter', sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  transition: background 0.15s;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+.sdh-mega__promo-btn:hover { background: var(--color-cta-primary-hover, #25834f); }
+.sdh-mega__promo-btn svg  { width: 0.875rem; height: 0.875rem; pointer-events: none; }
+
+/* ================================================================
+   MOBILE OVERLAY
+   ================================================================ */
+.sdh-mob-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 900;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.sdh-mob-overlay.is-open { opacity: 1; pointer-events: all; }
+
+/* ================================================================
+   MOBILE SLIDE-IN MENU
+   ================================================================ */
+.sdh-mob-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(85vw, 360px);
+  background: var(--cv-bg, #f7f6f3);
+  z-index: 901;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.16);
+}
+
+.sdh-mob-menu.is-open { transform: translateX(0); }
+
+/* Header strip */
+.sdh-mob-menu__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.125rem 1.25rem;
+  border-bottom: 1px solid var(--cv-border, #dedad5);
+  flex-shrink: 0;
+  background: var(--cv-card, #fff);
+}
+
+.sdh-mob-menu__title {
+  font-family: var(--cv-font-head, 'Space Grotesk', sans-serif);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--cv-primary, #282d52);
+  letter-spacing: -0.01em;
+}
+
+.sdh-mob-menu__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--cv-secondary, #eeecea);
+  border: none;
+  cursor: pointer;
+  color: var(--cv-fg, #1c1f36);
+  transition: background 0.15s;
+  padding: 0;
+  flex-shrink: 0;
+}
+.sdh-mob-menu__close:hover { background: var(--cv-border, #dedad5); }
+.sdh-mob-menu__close svg   { width: 1.125rem; height: 1.125rem; pointer-events: none; }
+
+/* Scrollable nav list */
+.sdh-mob-nav {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.5rem 0;
+}
+
+.sdh-mob-nav__item {
+  border-bottom: 1px solid var(--cv-border, #dedad5);
+}
+.sdh-mob-nav__item:last-child { border-bottom: none; }
+
+/* Top-level link / button */
+.sdh-mob-nav__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  color: var(--cv-fg, #1c1f36);
+  font-family: var(--cv-font-sans, 'Inter', sans-serif);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1.3;
+}
+.sdh-mob-nav__link:hover      { color: var(--cv-primary, #282d52); background: rgba(40,45,82,0.03); }
+.sdh-mob-nav__link.is-open    { color: var(--cv-primary, #282d52); }
+
+.sdh-mob-nav__chevron {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+  pointer-events: none;
+  color: var(--cv-muted-fg, #76798c);
+}
+.sdh-mob-nav__link.is-open .sdh-mob-nav__chevron { transform: rotate(180deg); }
+
+/* Accordion sub-links */
+.sdh-mob-nav__sub {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+  background: var(--cv-card, #fff);
+}
+.sdh-mob-nav__sub.is-open { max-height: 600px; }
+
+.sdh-mob-nav__sub-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem 0.75rem 1.75rem;
+  text-decoration: none;
+  color: var(--cv-muted-fg, #76798c);
+  font-family: var(--cv-font-sans, 'Inter', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-bottom: 1px solid var(--cv-border, #dedad5);
+  transition: color 0.15s, background 0.15s;
+}
+.sdh-mob-nav__sub-link:last-child { border-bottom: none; }
+.sdh-mob-nav__sub-link:hover      { color: var(--cv-primary, #282d52); background: var(--cv-secondary, #eeecea); }
+.sdh-mob-nav__sub-link::before    { content: '—'; font-size: 0.6875rem; color: var(--cv-border, #dedad5); flex-shrink: 0; }
+
+/* Footer CTA */
+.sdh-mob-menu__footer {
+  padding: 1.25rem;
+  border-top: 1px solid var(--cv-border, #dedad5);
+  flex-shrink: 0;
+}
+
+.sdh-mob-menu__footer-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: var(--cv-primary, #282d52);
+  color: var(--cv-primary-fg, #f8f7f5);
+  border-radius: var(--cv-radius, 0.5rem);
+  text-decoration: none;
+  font-family: var(--cv-font-sans, 'Inter', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  transition: background 0.15s;
+}
+.sdh-mob-menu__footer-cta:hover { background: #1c1f36; }
+.sdh-mob-menu__footer-cta svg   { width: 1.125rem; height: 1.125rem; pointer-events: none; }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HEADER
+     ═══════════════════════════════════════════════════════════════ -->
 <div class="sd-header-wrapper" id="sd-header-wrapper">
   <header class="sd-header" id="sd-header" role="banner">
-    <div class="sd-header__inner">
 
-      {%- comment -%} ── Column 1: Logo ── {%- endcomment -%}
-      <div class="sd-header__logo">
-        <a href="{{ routes.root_url }}" class="sd-header__logo-link" aria-label="{{ shop.name }} — home">
-          {%- if section.settings.logo != blank -%}
-            <img
-              src="{{ section.settings.logo | image_url: width: 400 }}"
-              alt="{{ shop.name }}"
-              width="{{ section.settings.logo.width | at_most: 200 }}"
-              height="{{ section.settings.logo.height | times: 1.0 | divided_by: section.settings.logo.width | times: 200 | round }}"
-              class="sd-header__logo-img"
-              loading="eager"
-            >
-          {%- else -%}
-            <span class="sd-header__logo-text">{{ shop.name }}</span>
-          {%- endif -%}
-        </a>
-      </div>
+    <!-- ── TOP ROW ──────────────────────────────────────────── -->
+    <div class="sdh-top">
+      <div class="sdh-top__inner">
 
-      {%- comment -%} ── Column 2: Search bar ── {%- endcomment -%}
-      <div class="sd-header__search">
-        <form action="{{ routes.search_url }}" method="get" role="search" class="sd-search-form">
-          <input type="hidden" name="type" value="product">
-          <div class="sd-search-wrap">
-            <button type="submit" class="sd-search-btn" aria-label="Search">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                   stroke-linejoin="round" aria-hidden="true" class="sd-search-icon">
-                <circle cx="11" cy="11" r="8"/>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-              </svg>
-            </button>
-            <input
-              type="search"
-              name="q"
-              id="sd-search-input"
-              class="sd-search-input"
-              placeholder="{{ section.settings.search_placeholder | default: 'Search for sets, singles, or accessories...' }}"
-              aria-label="{{ section.settings.search_placeholder | default: 'Search for sets, singles, or accessories...' }}"
-              autocomplete="off"
-              spellcheck="false"
-            >
-          </div>
-        </form>
-      </div>
-
-      {%- comment -%} ── Column 3: Utility icons ── {%- endcomment -%}
-      <div class="sd-header__icons">
-
-        {%- comment -%} Account (optional) {%- endcomment -%}
-        {%- if section.settings.show_account -%}
-          <a href="{{ routes.account_url }}" class="sd-icon-btn" aria-label="Account">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                 stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-          </a>
-        {%- endif -%}
-
-        {%- comment -%} Cart {%- endcomment -%}
-        <a href="{{ routes.cart_url }}" class="sd-icon-btn sd-cart-btn" aria-label="Cart ({{ cart.item_count }} items)">
+        <!-- Mobile: Hamburger (grid col 1) -->
+        <button
+          class="sdh-hamburger"
+          id="sdh-hamburger"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="sdh-mob-menu"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round"
                stroke-linejoin="round" aria-hidden="true">
-            <circle cx="9" cy="21" r="1"/>
-            <circle cx="20" cy="21" r="1"/>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            <line x1="3" y1="6"  x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
           </svg>
-          {%- if cart.item_count > 0 -%}
-            <span class="sd-cart-badge" aria-hidden="true">{{ cart.item_count }}</span>
-          {%- endif -%}
-        </a>
+        </button>
 
-      </div></div></header>
-</div>{% schema %}
+        <!-- Logo (mobile: grid col 2 / desktop: grid col 1) -->
+        <div class="sd-header__logo">
+          <a href="{{ routes.root_url }}" class="sd-header__logo-link" aria-label="{{ shop.name }} — home">
+            {%- if section.settings.logo != blank -%}
+              <img
+                src="{{ section.settings.logo | image_url: width: 400 }}"
+                alt="{{ shop.name }}"
+                class="sd-header__logo-img"
+                width="{{ logo_width }}"
+                loading="eager"
+                fetchpriority="high"
+              >
+            {%- else -%}
+              <span class="sd-header__logo-text">{{ shop.name }}</span>
+            {%- endif -%}
+          </a>
+        </div>
+
+        <!-- Desktop: Search bar (grid col 2, hidden on mobile) -->
+        <div class="sdh-desktop-search">
+          <form action="{{ routes.search_url }}" method="get" role="search" class="sdh-search-form">
+            <input type="hidden" name="type" value="product">
+            <div class="sdh-search-wrap">
+              <button type="submit" class="sdh-search-icon-btn" aria-label="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </button>
+              <input
+                type="search"
+                name="q"
+                id="sdh-search-input"
+                class="sdh-search-input"
+                placeholder="{{ section.settings.search_placeholder | default: 'Search cards, sets, accessories...' }}"
+                aria-label="{{ section.settings.search_placeholder | default: 'Search cards, sets, accessories...' }}"
+                autocomplete="off"
+                spellcheck="false"
+              >
+            </div>
+          </form>
+        </div>
+
+        <!-- Icons (mobile: grid col 3 / desktop: grid col 3) -->
+        <div class="sd-header__icons">
+
+          <!-- Mobile: Search toggle -->
+          <button
+            class="sdh-search-toggle"
+            id="sdh-search-toggle"
+            aria-label="Toggle search"
+            aria-expanded="false"
+            aria-controls="sdh-mobile-search"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+
+          <!-- Account icon (optional) -->
+          {%- if section.settings.show_account -%}
+            <a
+              href="{{ routes.account_url }}"
+              class="sd-icon-btn"
+              aria-label="Account"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </a>
+          {%- endif -%}
+
+          <!-- Cart icon — sd-cart-btn / sd-cart-badge retained for cart-drawer.js -->
+          <a
+            href="{{ routes.cart_url }}"
+            class="sd-icon-btn sd-cart-btn"
+            aria-label="Cart ({{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }})"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9"  cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            {%- if cart.item_count > 0 -%}
+              <span class="sd-cart-badge" aria-hidden="true">
+                {%- if cart.item_count > 99 -%}99+{%- else -%}{{ cart.item_count }}{%- endif -%}
+              </span>
+            {%- endif -%}
+          </a>
+
+        </div><!-- /.sd-header__icons -->
+
+      </div><!-- /.sdh-top__inner -->
+    </div><!-- /.sdh-top -->
+
+    <!-- ── Mobile search expansion ──────────────────────────── -->
+    <div class="sdh-mobile-search" id="sdh-mobile-search" aria-hidden="true">
+      <form action="{{ routes.search_url }}" method="get" role="search" class="sdh-search-form">
+        <input type="hidden" name="type" value="product">
+        <div class="sdh-search-wrap">
+          <button type="submit" class="sdh-search-icon-btn" aria-label="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+          <input
+            type="search"
+            name="q"
+            id="sdh-mobile-search-input"
+            class="sdh-search-input"
+            placeholder="{{ section.settings.search_placeholder | default: 'Search cards, sets, accessories...' }}"
+            aria-label="{{ section.settings.search_placeholder | default: 'Search cards, sets, accessories...' }}"
+            autocomplete="off"
+            spellcheck="false"
+          >
+        </div>
+      </form>
+    </div><!-- /.sdh-mobile-search -->
+
+    <!-- ── Desktop Nav Row ───────────────────────────────────── -->
+    <nav class="sdh-nav" id="sdh-nav" aria-label="Main navigation">
+      <div class="sdh-nav__inner">
+
+        {%- for link in linklists[main_menu].links -%}
+
+          {%- comment -%}── Find matching promo block (case-insensitive) ──{%- endcomment -%}
+          {%- assign matched_promo = nil -%}
+          {%- for pb in promo_blocks -%}
+            {%- assign pb_trigger = pb.settings.menu_item_trigger | downcase | strip -%}
+            {%- assign link_title = link.title | downcase | strip -%}
+            {%- if pb_trigger == link_title -%}
+              {%- assign matched_promo = pb -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          <div
+            class="sdh-nav__item{% if link.links.size > 0 %} has-mega{% endif %}"
+            data-mega-item
+          >
+            {%- if link.links.size > 0 -%}
+              <!-- Has sub-links: render as button + mega menu -->
+              <button
+                class="sdh-nav__link"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {{- link.title -}}
+                <svg class="sdh-nav__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+
+              <div class="sdh-mega" role="region" aria-label="{{ link.title }} submenu">
+                <div class="sdh-mega__inner{% unless matched_promo %} sdh-mega__inner--no-promo{% endunless %}">
+
+                  <!-- Sub-link columns -->
+                  <div class="sdh-mega__links">
+                    <div class="sdh-mega__col">
+                      <p class="sdh-mega__col-title">{{ link.title }}</p>
+                      <ul class="sdh-mega__col-list">
+                        {%- for child in link.links -%}
+                          <li>
+                            <a class="sdh-mega__col-link" href="{{ child.url }}">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <polyline points="9 18 15 12 9 6"/>
+                              </svg>
+                              {{- child.title -}}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Promo card (right side, only if block matched) -->
+                  {%- if matched_promo -%}
+                    <div class="sdh-mega__promo">
+                      {%- if matched_promo.settings.image != blank -%}
+                        <img
+                          class="sdh-mega__promo-img"
+                          src="{{ matched_promo.settings.image | image_url: width: 560 }}"
+                          alt="{{ matched_promo.settings.heading | default: link.title | escape }}"
+                          width="280"
+                          height="210"
+                          loading="lazy"
+                        >
+                      {%- else -%}
+                        <div class="sdh-mega__promo-placeholder">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                               stroke="currentColor" stroke-width="1" stroke-linecap="round"
+                               stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                          </svg>
+                        </div>
+                      {%- endif -%}
+                      <div class="sdh-mega__promo-body">
+                        {%- if matched_promo.settings.heading != blank -%}
+                          <p class="sdh-mega__promo-heading">{{ matched_promo.settings.heading }}</p>
+                        {%- endif -%}
+                        {%- if matched_promo.settings.link != blank -%}
+                          <a class="sdh-mega__promo-btn" href="{{ matched_promo.settings.link }}">
+                            {{- matched_promo.settings.link_text | default: 'Shop Now' -}}
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                 stroke-linejoin="round" aria-hidden="true">
+                              <line x1="5" y1="12" x2="19" y2="12"/>
+                              <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                          </a>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+
+                </div><!-- /.sdh-mega__inner -->
+              </div><!-- /.sdh-mega -->
+
+            {%- else -%}
+              <!-- No sub-links: plain anchor -->
+              <a class="sdh-nav__link" href="{{ link.url }}">{{- link.title -}}</a>
+            {%- endif -%}
+
+          </div><!-- /.sdh-nav__item -->
+
+        {%- endfor -%}
+
+      </div><!-- /.sdh-nav__inner -->
+    </nav><!-- /.sdh-nav -->
+
+  </header>
+</div><!-- /.sd-header-wrapper -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MOBILE: Blur overlay + Slide-in menu
+     Positioned outside the header so the overlay covers the full
+     viewport including the header area.
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="sdh-mob-overlay" id="sdh-mob-overlay" aria-hidden="true"></div>
+
+<div
+  class="sdh-mob-menu"
+  id="sdh-mob-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation menu"
+  aria-hidden="true"
+>
+  <!-- Header strip: title + close -->
+  <div class="sdh-mob-menu__header">
+    <span class="sdh-mob-menu__title">Menu</span>
+    <button class="sdh-mob-menu__close" id="sdh-mob-close" aria-label="Close navigation menu">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+           stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6"  x2="6"  y2="18"/>
+        <line x1="6"  y1="6"  x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Nav links (accordion) -->
+  <nav class="sdh-mob-nav" aria-label="Mobile navigation">
+    {%- for link in linklists[main_menu].links -%}
+      <div class="sdh-mob-nav__item">
+
+        {%- if link.links.size > 0 -%}
+          <!-- Has children: accordion toggle button -->
+          <button
+            class="sdh-mob-nav__link"
+            aria-expanded="false"
+          >
+            {{- link.title -}}
+            <svg class="sdh-mob-nav__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <ul class="sdh-mob-nav__sub">
+            {%- for child in link.links -%}
+              <li>
+                <a class="sdh-mob-nav__sub-link" href="{{ child.url }}">
+                  {{- child.title -}}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+
+        {%- else -%}
+          <!-- No children: plain link that closes the menu on tap -->
+          <a class="sdh-mob-nav__link" href="{{ link.url }}">
+            {{- link.title -}}
+          </a>
+        {%- endif -%}
+
+      </div>
+    {%- endfor -%}
+  </nav>
+
+  <!-- Footer CTA -->
+  <div class="sdh-mob-menu__footer">
+    <a href="{{ routes.collections_url }}" class="sdh-mob-menu__footer-cta">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round"
+           stroke-linejoin="round" aria-hidden="true">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      Shop All Products
+    </a>
+  </div>
+</div><!-- /.sdh-mob-menu -->
+
+
+<script>
+/* ================================================================
+   Supply District Header JS — sdh-* namespace
+   1. Desktop mega menu with 150ms hover-intent close delay
+   2. Mobile menu open / close
+   3. Mobile search toggle
+   4. Mobile accordion sub-links (single open at a time)
+   ================================================================ */
+(function () {
+  'use strict';
+
+  /* ════════════════════════════════════════
+     MEGA MENU (desktop)
+     Hover-intent: mouseenter opens immediately;
+     mouseleave starts a 150ms timer — cancelled if re-entering.
+     ════════════════════════════════════════ */
+  var megaItems = Array.from(document.querySelectorAll('[data-mega-item].has-mega'));
+
+  megaItems.forEach(function (item) {
+    var closeTimer;
+    var triggerBtn = item.querySelector('.sdh-nav__link');
+
+    function open() {
+      clearTimeout(closeTimer);
+      /* Close siblings */
+      megaItems.forEach(function (other) {
+        if (other === item) return;
+        other.classList.remove('is-open');
+        var btn = other.querySelector('.sdh-nav__link');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      });
+      item.classList.add('is-open');
+      if (triggerBtn) triggerBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    function close() {
+      closeTimer = setTimeout(function () {
+        item.classList.remove('is-open');
+        if (triggerBtn) triggerBtn.setAttribute('aria-expanded', 'false');
+      }, 150);
+    }
+
+    item.addEventListener('mouseenter', open);
+    item.addEventListener('mouseleave', close);
+
+    /* Keyboard / click on the button trigger (Tab + Enter / Space) */
+    if (triggerBtn && triggerBtn.tagName === 'BUTTON') {
+      triggerBtn.addEventListener('click', function () {
+        item.classList.contains('is-open') ? close() : open();
+      });
+    }
+  });
+
+  /* Close all mega menus when clicking outside the nav */
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-mega-item]') && !e.target.closest('.sdh-mega')) {
+      megaItems.forEach(function (item) {
+        item.classList.remove('is-open');
+        var btn = item.querySelector('.sdh-nav__link');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
+  /* ESC key closes all mega menus */
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    megaItems.forEach(function (item) {
+      item.classList.remove('is-open');
+      var btn = item.querySelector('.sdh-nav__link');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* ════════════════════════════════════════
+     MOBILE MENU
+     ════════════════════════════════════════ */
+  var hamburger  = document.getElementById('sdh-hamburger');
+  var mobOverlay = document.getElementById('sdh-mob-overlay');
+  var mobMenu    = document.getElementById('sdh-mob-menu');
+  var mobClose   = document.getElementById('sdh-mob-close');
+
+  function openMobMenu() {
+    if (!mobMenu) return;
+    mobMenu.classList.add('is-open');
+    mobMenu.setAttribute('aria-hidden', 'false');
+    if (mobOverlay) { mobOverlay.classList.add('is-open'); mobOverlay.removeAttribute('aria-hidden'); }
+    document.body.style.overflow = 'hidden';
+    if (hamburger) hamburger.setAttribute('aria-expanded', 'true');
+    var first = mobMenu.querySelector('button, a[href]');
+    if (first) setTimeout(function () { first.focus(); }, 50);
+  }
+
+  function closeMobMenu() {
+    if (!mobMenu) return;
+    mobMenu.classList.remove('is-open');
+    mobMenu.setAttribute('aria-hidden', 'true');
+    if (mobOverlay) { mobOverlay.classList.remove('is-open'); mobOverlay.setAttribute('aria-hidden', 'true'); }
+    document.body.style.overflow = '';
+    if (hamburger) { hamburger.setAttribute('aria-expanded', 'false'); hamburger.focus(); }
+  }
+
+  if (hamburger)  hamburger.addEventListener('click',  openMobMenu);
+  if (mobClose)   mobClose.addEventListener('click',   closeMobMenu);
+  if (mobOverlay) mobOverlay.addEventListener('click', closeMobMenu);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && mobMenu && mobMenu.classList.contains('is-open')) closeMobMenu();
+  });
+
+  /* Close the menu when a plain (non-accordion) link is tapped */
+  document.querySelectorAll('.sdh-mob-nav .sdh-mob-nav__link[href]').forEach(function (a) {
+    a.addEventListener('click', closeMobMenu);
+  });
+
+  /* ════════════════════════════════════════
+     MOBILE ACCORDION SUB-LINKS
+     One accordion open at a time.
+     ════════════════════════════════════════ */
+  var accordionBtns = Array.from(
+    document.querySelectorAll('.sdh-mob-nav__link[aria-expanded]')
+  );
+
+  accordionBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var isOpen = btn.classList.contains('is-open');
+      var sub    = btn.closest('.sdh-mob-nav__item').querySelector('.sdh-mob-nav__sub');
+
+      /* Close all */
+      accordionBtns.forEach(function (b) {
+        b.classList.remove('is-open');
+        b.setAttribute('aria-expanded', 'false');
+        var s = b.closest('.sdh-mob-nav__item').querySelector('.sdh-mob-nav__sub');
+        if (s) s.classList.remove('is-open');
+      });
+
+      /* Toggle clicked one open */
+      if (!isOpen) {
+        btn.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        if (sub) sub.classList.add('is-open');
+      }
+    });
+  });
+
+  /* ════════════════════════════════════════
+     MOBILE SEARCH TOGGLE
+     ════════════════════════════════════════ */
+  var searchToggle      = document.getElementById('sdh-search-toggle');
+  var mobileSearchBar   = document.getElementById('sdh-mobile-search');
+  var mobileSearchInput = document.getElementById('sdh-mobile-search-input');
+
+  if (searchToggle && mobileSearchBar) {
+    searchToggle.addEventListener('click', function () {
+      var open = mobileSearchBar.classList.contains('is-open');
+      if (open) {
+        mobileSearchBar.classList.remove('is-open');
+        mobileSearchBar.setAttribute('aria-hidden', 'true');
+        searchToggle.setAttribute('aria-expanded', 'false');
+      } else {
+        mobileSearchBar.classList.add('is-open');
+        mobileSearchBar.removeAttribute('aria-hidden');
+        searchToggle.setAttribute('aria-expanded', 'true');
+        if (mobileSearchInput) setTimeout(function () { mobileSearchInput.focus(); }, 60);
+      }
+    });
+  }
+
+})();
+</script>
+
+{% schema %}
 {
   "name": "Header",
   "settings": [
@@ -92,7 +1186,7 @@
       "type": "image_picker",
       "id": "logo",
       "label": "Logo image",
-      "info": "Recommended: transparent PNG, max 400 px wide."
+      "info": "Recommended: transparent PNG, max 400px wide."
     },
     {
       "type": "range",
@@ -104,16 +1198,60 @@
       "default": 160
     },
     {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main navigation menu",
+      "default": "main-menu"
+    },
+    {
       "type": "text",
       "id": "search_placeholder",
-      "label": "Search bar placeholder text",
-      "default": "Search for sets, singles, or accessories..."
+      "label": "Search bar placeholder",
+      "default": "Search cards, sets, accessories..."
     },
     {
       "type": "checkbox",
       "id": "show_account",
       "label": "Show account icon",
       "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu_promo",
+      "name": "Mega Menu Promo",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_item_trigger",
+          "label": "Nav item name (exact match, case-insensitive)",
+          "info": "Type the nav label exactly, e.g. \"TCG\". Matched when the mega menu for that link opens.",
+          "default": "TCG"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Promo image",
+          "info": "Recommended: 4:3 ratio, min 560px wide."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Promo heading",
+          "default": "New Arrivals"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "CTA link"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "CTA button text",
+          "default": "Shop Now"
+        }
+      ]
     }
   ],
   "presets": [
