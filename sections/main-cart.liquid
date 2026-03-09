@@ -1,7 +1,7 @@
 {% comment %}
   Supply District — sections/main-cart.liquid
   Premium CRO-Optimized Cart.
-  Features: AJAX Qty Steppers, AJAX Quick Add Upsells, Top-Level Free Shipping, Urgency Banner, Micro-Trust Signals.
+  Features: AJAX Qty Steppers, AJAX Quick Add Upsells, Top-Level Free Shipping, Urgency Banner, Mobile Sticky Checkout.
 {% endcomment %}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -117,13 +117,13 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
 
 .sdc-summary__divider { border: none; border-top: 1px solid var(--cv-secondary); margin: 1rem 0; }
 
-.sdc-checkout-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; height: 3.25rem; background: var(--color-cta-primary); color: var(--color-cta-primary-fg); border: none; border-radius: var(--cv-radius); font-family: var(--cv-font-sans); font-size: 1.0625rem; font-weight: 700; cursor: pointer; transition: background 0.15s, opacity 0.15s; box-shadow: 0 4px 12px rgba(46,153,99,0.25); }
+.sdc-checkout-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; height: 3.25rem; background: var(--color-cta-primary); color: var(--color-cta-primary-fg); border: none; border-radius: var(--cv-radius); font-family: var(--cv-font-sans); font-size: 1.0625rem; font-weight: 700; cursor: pointer; transition: background 0.15s, opacity 0.15s; box-shadow: 0 4px 12px rgba(46,153,99,0.25); margin-top: 0.5rem; }
 .sdc-checkout-btn:hover { background: var(--color-cta-primary-hover); }
 .sdc-checkout-btn svg { width: 1.125rem; height: 1.125rem; }
 
 .sdc-summary__micro { font-size: 0.75rem; color: var(--cv-muted-fg); text-align: center; margin: 0.75rem 0 0; }
 
-/* Horizontal Upsells in Sidebar */
+/* Horizontal Upsells in Sidebar (Desktop) */
 .sdc-upsell { background: transparent; }
 .sdc-upsell__title { font-size: 0.875rem; font-weight: 700; color: var(--cv-muted-fg); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem; }
 .sdc-upsell__grid { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -143,28 +143,9 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
 .cv-payment-badge { display: inline-flex; align-items: center; justify-content: center; height: 1.625rem; padding: 0 0.5rem; border: 1px solid var(--cv-border); border-radius: calc(var(--cv-radius) - 2px); background: var(--cv-bg); }
 
 /* Cart Trust List */
-.sdc-summary__trust-list {
-  list-style: none;
-  padding: 0;
-  margin: 1.25rem 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.sdc-summary__trust-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--cv-muted-fg);
-}
-.sdc-summary__trust-item svg {
-  width: 1rem;
-  height: 1rem;
-  color: var(--color-cta-primary);
-  flex-shrink: 0;
-}
+.sdc-summary__trust-list { list-style: none; padding: 0; margin: 1.25rem 0 0; display: flex; flex-direction: column; gap: 0.5rem; }
+.sdc-summary__trust-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 500; color: var(--cv-muted-fg); }
+.sdc-summary__trust-item svg { width: 1rem; height: 1rem; color: var(--color-cta-primary); flex-shrink: 0; }
 
 /* Empty State */
 .sdc-empty { text-align: center; padding: 5rem 1rem 4rem; max-width: 32rem; margin: 0 auto; }
@@ -178,11 +159,52 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
 .sdc-error { display: none; background: rgba(201,64,48,0.07); border: 1px solid rgba(201,64,48,0.25); border-radius: var(--cv-radius); padding: 0.75rem 1rem; font-size: 0.875rem; color: var(--cv-destructive); margin-bottom: 1.5rem; }
 .sdc-error.is-visible { display: block; }
 
+/* =============================================================
+   MOBILE OVERRIDES (CRO Focused)
+   ============================================================= */
 @media (max-width: 767px) {
-  .sdc-wrap { padding-left: 8px !important; padding-right: 8px !important; }
+  .sdc-wrap { padding-left: 8px !important; padding-right: 8px !important; padding-bottom: 8rem !important; }
   .sdc-items, .sdc-summary, .sdc-shipping-bar { border: none !important; box-shadow: none !important; border-radius: 0 !important; background: transparent; padding-left: 0; padding-right: 0; }
   .sdc-items { padding-top: 0; }
-  .sdc-upsell-card { border-radius: var(--cv-radius) !important; }
+  .sdc-summary { padding-bottom: 3rem; }
+  
+  /* Hide Vendor to save vertical space */
+  .sdc-item__vendor { display: none; }
+
+  /* Swipeable Horizontal Upsells & Vertical Stacked Cards */
+  .sdc-upsell__grid {
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+    margin-left: -8px;
+    margin-right: -8px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .sdc-upsell__grid::-webkit-scrollbar { display: none; }
+  .sdc-upsell-card {
+    flex: 0 0 45vw; /* Shows approx 2 cards, hinting at a 3rd */
+    scroll-snap-align: center;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    border-radius: var(--cv-radius) !important;
+  }
+  .sdc-upsell-card__info { align-items: center; text-align: center; }
+  .sdc-upsell-card__btn { width: 100%; margin-top: 0.5rem; }
+
+  /* Sticky Bottom Checkout Bar */
+  .sdc-summary__sticky-mobile {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--cv-card);
+    padding: 1rem;
+    border-top: 1px solid var(--cv-border);
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+    z-index: 100;
+  }
+  .sdc-summary__row { padding: 0 0 0.5rem 0; }
+  .sdc-summary__divider--mobile-hide { display: none; }
 }
 </style>
 
@@ -220,7 +242,7 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
 
     {%- comment -%} URGENCY BANNER {%- endcomment -%}
     <div class="sdc-urgency">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 16 14"/></svg>
       <span><strong>High Demand:</strong> Items in your cart are not reserved until checkout is complete.</span>
     </div>
 
@@ -298,24 +320,28 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
           <aside class="sdc-summary">
             <h2 class="sdc-summary__title">Order Summary</h2>
 
-            <div class="sdc-summary__row">
-              <span class="sdc-summary__label">Subtotal</span>
-              <span class="sdc-summary__value" id="sdc-subtotal">{{ subtotal | money }}</span>
+            {%- comment -%} Wrapped elements to create the sticky bottom bar on mobile {%- endcomment -%}
+            <div class="sdc-summary__sticky-mobile">
+              <div class="sdc-summary__row">
+                <span class="sdc-summary__label">Subtotal</span>
+                <span class="sdc-summary__value" id="sdc-subtotal">{{ subtotal | money }}</span>
+              </div>
+
+              {%- if has_savings -%}
+                <div class="sdc-summary__savings" id="sdc-savings-row">
+                  <span class="sdc-summary__savings-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px"><polyline points="20 6 9 17 4 12"/></svg> You're saving</span>
+                  <span class="sdc-summary__savings-amount" id="sdc-savings-amount">{{ total_savings | money }}</span>
+                </div>
+              {%- endif -%}
+
+              <hr class="sdc-summary__divider sdc-summary__divider--mobile-hide">
+
+              <button type="submit" name="checkout" class="sdc-checkout-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Checkout Securely
+              </button>
             </div>
 
-            {%- if has_savings -%}
-              <div class="sdc-summary__savings" id="sdc-savings-row">
-                <span class="sdc-summary__savings-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px"><polyline points="20 6 9 17 4 12"/></svg> You're saving</span>
-                <span class="sdc-summary__savings-amount" id="sdc-savings-amount">{{ total_savings | money }}</span>
-              </div>
-            {%- endif -%}
-
-            <hr class="sdc-summary__divider">
-
-            <button type="submit" name="checkout" class="sdc-checkout-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              Checkout Securely
-            </button>
             <p class="sdc-summary__micro">Taxes and shipping calculated at checkout</p>
 
             <div class="cv-payment-badges">
@@ -328,7 +354,7 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
             {%- comment -%} ── Trust List ── {%- endcomment -%}
             <ul class="sdc-summary__trust-list">
               <li class="sdc-summary__trust-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 16 14"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 Orders dispatch within 24 hours
               </li>
               <li class="sdc-summary__trust-item">
@@ -352,7 +378,7 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
                   {%- if product.available -%}
                     <div class="sdc-upsell-card">
                       <a href="{{ product.url }}" class="sdc-upsell-card__img-wrap">
-                        <img src="{{ product.featured_image | image_url: width: 100 }}" alt="{{ product.title | escape }}" loading="lazy">
+                        <img src="{{ product.featured_image | image_url: width: 200 }}" alt="{{ product.title | escape }}" loading="lazy">
                       </a>
                       <div class="sdc-upsell-card__info">
                         <a href="{{ product.url }}" class="sdc-upsell-card__title">{{ product.title }}</a>
