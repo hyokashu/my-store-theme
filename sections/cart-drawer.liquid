@@ -495,15 +495,13 @@
 .scd-footer__checkout:hover { background: var(--color-cta-primary-hover); }
 .scd-footer__checkout svg { width: 1.125rem; height: 1.125rem; pointer-events: none; }
 
-/* Gameology fix: easy close for mobile thumb reach */
+/* Gameology pattern: "View Cart" link to full cart page */
 .scd-footer__continue {
-  background: none;
-  border: none;
+  display: block;
   color: var(--cv-muted-fg);
   font-family: var(--cv-font-sans);
   font-size: 0.8125rem;
   font-weight: 600;
-  cursor: pointer;
   text-align: center;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -539,6 +537,14 @@
 /* ── Loading pulse animation ── */
 @keyframes scd-pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
 .scd-loading { animation: scd-pulse 1.3s ease-in-out infinite; }
+
+/* ── Guard: some Shopify themes reset [hidden] to display:block/revert.
+   Explicitly force these elements off when the hidden attribute is set so
+   the empty state and savings pill never bleed through. ── */
+#scd-empty[hidden],
+#scd-savings[hidden],
+#scd-footer[hidden],
+#scd-upsell[hidden] { display: none !important; }
 </style>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -561,8 +567,7 @@
   <!-- ── Header ── -->
   <div class="scd-header">
     <h2 class="scd-header__title" id="scd-header-title">
-      Your Cart (<span id="scd-item-count">{{ cart.item_count }}</span>
-      {{ cart.item_count | pluralize: 'item', 'items' }})
+      Your Cart (<span id="scd-item-count">{{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}</span>)
     </h2>
     <button class="scd-header__close" id="scd-close" aria-label="Close cart">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -693,7 +698,7 @@
 
     <!-- Checkout CTA -->
     <a
-      href="{{ routes.checkout }}"
+      href="/checkout"
       class="scd-footer__checkout"
       id="scd-checkout-btn"
     >
@@ -706,10 +711,10 @@
       Checkout Securely
     </a>
 
-    <!-- Gameology CRO fix: thumb-reachable close on mobile -->
-    <button class="scd-footer__continue scd-close-trigger" type="button">
-      Continue Shopping
-    </button>
+    <!-- View Cart: matches Gameology pattern — lets user go to full cart page -->
+    <a class="scd-footer__continue" href="/cart">
+      View Cart
+    </a>
 
     <!-- Micro Trust Signals -->
     <ul class="scd-footer__trust" aria-label="Shopping guarantees">
@@ -814,13 +819,15 @@ window.__SCD__ = {
      OPEN / CLOSE
      ════════════════════════════════════════ */
   function openDrawer() {
-    if (isOpen) return;
-    isOpen = true;
-    overlay.classList.add('is-open');
-    overlay.removeAttribute('aria-hidden');
-    drawer.classList.add('is-open');
-    drawer.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    if (!isOpen) {
+      isOpen = true;
+      overlay.classList.add('is-open');
+      overlay.removeAttribute('aria-hidden');
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    /* Always refresh the cart contents when opening/re-opening */
     fetchAndRender();
   }
 
@@ -1008,6 +1015,7 @@ window.__SCD__ = {
       })
       .then(function () { return fetchAndRender(); })
       .then(function () {
+        openDrawer(); /* open (or keep open) drawer after quick-add */
         btn.classList.remove('is-loading');
         btn.classList.add('is-added');
         btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Added!';
@@ -1050,7 +1058,7 @@ window.__SCD__ = {
       })
       .then(function () {
         if (submitBtn) { submitBtn.textContent = 'Added!'; }
-        openDrawer();
+        openDrawer(); /* openDrawer() now always calls fetchAndRender() */
         setTimeout(function () {
           if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
         }, 1800);
