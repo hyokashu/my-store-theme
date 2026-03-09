@@ -720,8 +720,10 @@
 .cvh-newsletter__input::placeholder { color: var(--cv-muted-fg); }
 .cvh-newsletter__disclaimer { font-size: 0.8125rem; color: var(--cv-muted-fg); }
 
-/* ── Mobile: remove all card borders ── */
+/* ── Mobile: 8px gutters + borderless cards ── */
 @media (max-width: 767px) {
+  main { padding-left: 0 !important; padding-right: 0 !important; }
+  .cvh__inner { padding-left: 8px !important; padding-right: 8px !important; }
   .cvh-prod-card,
   .cvh-cat-card,
   .cvh-review-card { border: none !important; box-shadow: none !important; }

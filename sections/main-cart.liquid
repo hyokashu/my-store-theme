@@ -610,8 +610,10 @@ input.cv-qty__input {
 .sdc-note-field:focus { border-color: var(--cv-primary); }
 .sdc-note-field.is-open { display: block; }
 
-/* ── Mobile: remove all card borders ── */
+/* ── Mobile: 8px gutters + borderless cards ── */
 @media (max-width: 767px) {
+  main { padding-left: 0 !important; padding-right: 0 !important; }
+  .sdc-wrap { padding-left: 8px !important; padding-right: 8px !important; }
   .sdc-item__img-wrap,
   .sdc-upsell-card,
   .sdc-summary,

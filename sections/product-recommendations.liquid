@@ -108,8 +108,9 @@
 .cv-rec-skeleton__line--short { width: 55%; }
 @keyframes cv-rec-pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
 
-/* ── Mobile: remove all card borders ── */
+/* ── Mobile: 8px gutters + borderless cards ── */
 @media (max-width: 767px) {
+  .cv-recs { padding-left: 8px !important; padding-right: 8px !important; }
   .cv-rec-card,
   .cv-rec-skeleton { border: none !important; box-shadow: none !important; }
 }

@@ -345,8 +345,9 @@
 }
 .cvrs__card-helpful svg { width: 0.875rem; height: 0.875rem; }
 
-/* ── Mobile: remove all card borders ── */
+/* ── Mobile: 8px gutters + borderless cards ── */
 @media (max-width: 767px) {
+  .cvrs { padding-left: 8px !important; padding-right: 8px !important; }
   .cvrs__card,
   .cvrs__score-pill { border: none !important; box-shadow: none !important; }
 }
