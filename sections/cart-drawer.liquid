@@ -1,0 +1,1209 @@
+{% comment %}
+  Supply District — sections/cart-drawer.liquid
+  AJAX Cart Drawer (Slide-out, right-side panel)
+
+  Features:
+  - Slides in from right; full-screen on mobile, 440px on desktop
+  - Semi-transparent overlay with blur; click-away or ESC to close
+  - Dynamic Free Shipping progress bar (threshold from schema)
+  - AJAX qty steppers + remove via /cart/change.js
+  - Liquid-rendered upsell carousel (swipeable, peeks next card)
+  - AJAX Quick Add via /cart/add.js with feedback states
+  - Sticky footer: subtotal + savings + checkout + "Continue Shopping" + 3 trust items
+  - Intercepts .sd-cart-btn clicks site-wide
+  - Intercepts form[action="/cart/add"] submissions site-wide
+  - Dispatches / listens to cart:open, cart:refresh custom events
+  - Inherits full Supply District design token system
+{% endcomment %}
+
+{%- liquid
+  assign ship_threshold = section.settings.free_ship_threshold | default: 20000
+-%}
+
+<style>
+/* ================================================================
+   Supply District Cart Drawer — scd-* namespace
+   Design tokens defined here so the drawer works on every page,
+   even pages that don't load main-cart.liquid / main-product.liquid
+   ================================================================ */
+:root {
+  --cv-bg:                  #f7f6f3;
+  --cv-fg:                  #1c1f36;
+  --cv-card:                #ffffff;
+  --cv-primary:             #282d52;
+  --cv-primary-fg:          #f8f7f5;
+  --cv-secondary:           #eeecea;
+  --cv-muted-fg:            #76798c;
+  --cv-border:              #dedad5;
+  --cv-destructive:         #c94030;
+  --cv-radius:              0.5rem;
+  --cv-shadow-sm:           0 1px 2px rgba(0,0,0,0.05);
+  --cv-shadow:              0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --cv-font-sans:           'Inter', system-ui, -apple-system, sans-serif;
+  --cv-font-head:           'Space Grotesk', system-ui, sans-serif;
+  --color-cta-primary:      #2e9963;
+  --color-cta-primary-fg:   #ffffff;
+  --color-cta-primary-hover:#25834f;
+}
+
+/* ── Overlay ── */
+.scd-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 1098;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.scd-overlay.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Drawer Shell ── */
+.scd-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(440px, 100vw);
+  background: var(--cv-bg);
+  z-index: 1099;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -6px 0 40px rgba(0, 0, 0, 0.16);
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--cv-font-sans);
+  color: var(--cv-fg);
+}
+.scd-drawer.is-open {
+  transform: translateX(0);
+}
+@media (max-width: 767px) {
+  .scd-drawer { width: 100vw; }
+}
+
+/* ── Drawer Header ── */
+.scd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.125rem 1.25rem;
+  border-bottom: 1px solid var(--cv-border);
+  background: var(--cv-card);
+  flex-shrink: 0;
+}
+.scd-header__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.1875rem;
+  font-weight: 800;
+  color: var(--cv-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+.scd-header__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: var(--cv-secondary);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--cv-fg);
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.scd-header__close:hover { background: var(--cv-border); }
+.scd-header__close svg { width: 1.125rem; height: 1.125rem; pointer-events: none; }
+
+/* ── Scrollable Body ── */
+.scd-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  -webkit-overflow-scrolling: touch;
+}
+.scd-body::-webkit-scrollbar { width: 3px; }
+.scd-body::-webkit-scrollbar-track { background: transparent; }
+.scd-body::-webkit-scrollbar-thumb {
+  background: var(--cv-border);
+  border-radius: 999px;
+}
+
+/* ── Error Banner ── */
+.scd-error {
+  display: none;
+  background: rgba(201,64,48,0.07);
+  border: 1px solid rgba(201,64,48,0.22);
+  border-radius: var(--cv-radius);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  color: var(--cv-destructive);
+}
+.scd-error.is-visible { display: block; }
+
+/* ── Shipping Bar ── */
+.scd-ship {
+  background: var(--cv-card);
+  border-radius: var(--cv-radius);
+  padding: 0.875rem 1rem;
+  transition: background 0.3s;
+}
+.scd-ship.is-unlocked { background: rgba(46,153,99,0.06); }
+.scd-ship__text {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--cv-fg);
+  margin: 0 0 0.625rem;
+  line-height: 1.4;
+}
+.scd-ship__text strong { color: var(--color-cta-primary); }
+.scd-ship.is-unlocked .scd-ship__text {
+  color: var(--color-cta-primary);
+  font-weight: 600;
+  margin-bottom: 0;
+}
+.scd-ship__track {
+  height: 5px;
+  background: var(--cv-secondary);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.scd-ship.is-unlocked .scd-ship__track { display: none; }
+.scd-ship__fill {
+  height: 100%;
+  background: var(--color-cta-primary);
+  border-radius: 999px;
+  transition: width 0.42s ease;
+  max-width: 100%;
+}
+
+/* ── Cart Items ── */
+.scd-items { display: flex; flex-direction: column; }
+.scd-item {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.875rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--cv-secondary);
+  transition: opacity 0.2s;
+  position: relative;
+}
+.scd-item:last-child { border-bottom: none; }
+.scd-item.is-updating { opacity: 0.4; pointer-events: none; }
+
+.scd-item__img-wrap {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--cv-radius);
+  overflow: hidden;
+  background: var(--cv-secondary);
+  flex-shrink: 0;
+}
+.scd-item__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.scd-item__body { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+
+.scd-item__title {
+  font-family: var(--cv-font-head);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--cv-primary);
+  text-decoration: none;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.scd-item__title:hover { color: var(--color-cta-primary); }
+.scd-item__variant { font-size: 0.75rem; color: var(--cv-muted-fg); margin-top: 0.1rem; }
+.scd-item__price {
+  font-family: var(--cv-font-head);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cv-primary);
+  margin-top: 0.2rem;
+}
+
+.scd-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Qty stepper — inherits cv-qty pattern */
+.scd-item__actions .cv-qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-bg);
+  overflow: hidden;
+  height: 2rem;
+}
+.scd-item__actions .cv-qty__btn {
+  padding: 0 0.45rem;
+  height: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--cv-muted-fg);
+  transition: color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scd-item__actions .cv-qty__btn:hover { color: var(--cv-fg); }
+.scd-item__actions .cv-qty__btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.scd-item__actions .cv-qty__btn svg { width: 0.875rem; height: 0.875rem; }
+.scd-item__actions .cv-qty__input {
+  width: 2.25rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--cv-fg);
+  font-family: var(--cv-font-sans);
+}
+
+.scd-item__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: var(--cv-muted-fg);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--cv-radius);
+  transition: color 0.15s, background 0.15s;
+  margin-left: auto;
+}
+.scd-item__remove:hover { color: var(--cv-destructive); background: rgba(201,64,48,0.07); }
+.scd-item__remove svg { width: 1rem; height: 1rem; pointer-events: none; }
+
+/* ── Upsell Carousel ── */
+.scd-upsell { flex-shrink: 0; }
+.scd-upsell__title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--cv-muted-fg);
+  text-transform: uppercase;
+  letter-spacing: 0.065em;
+  margin: 0 0 0.875rem;
+}
+.scd-upsell__carousel {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.5rem;
+  /* Peek effect: negative margin + padding offset pulls carousel to drawer edge */
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+.scd-upsell__carousel::-webkit-scrollbar { display: none; }
+
+.scd-upsell-card {
+  /* Show ~2.25 cards, with next peeking in */
+  flex: 0 0 calc(46% - 0.375rem);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--cv-card);
+  border-radius: calc(var(--cv-radius) * 1.5);
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+@media (min-width: 400px) {
+  .scd-upsell-card { flex: 0 0 calc(42% - 0.375rem); }
+}
+
+.scd-upsell-card__img-wrap {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  background: var(--cv-secondary);
+  overflow: hidden;
+}
+.scd-upsell-card__img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.scd-upsell-card__info {
+  padding: 0.625rem 0.75rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+.scd-upsell-card__title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--cv-fg);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.scd-upsell-card__price {
+  font-family: var(--cv-font-head);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--cv-primary);
+}
+.scd-upsell-card__btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.5rem;
+  font-family: var(--cv-font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--cv-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--cv-radius);
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  width: 100%;
+  margin-top: 0.625rem;
+}
+.scd-upsell-card__btn:hover { background: var(--color-cta-primary); }
+.scd-upsell-card__btn.is-loading { opacity: 0.55; pointer-events: none; }
+.scd-upsell-card__btn.is-added { background: var(--color-cta-primary); }
+.scd-upsell-card__btn svg { width: 0.875rem; height: 0.875rem; pointer-events: none; }
+
+/* ── Empty State ── */
+.scd-empty {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.scd-empty__icon { color: var(--cv-border); }
+.scd-empty__title {
+  font-family: var(--cv-font-head);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--cv-primary);
+  margin: 0;
+}
+.scd-empty__sub { font-size: 0.875rem; color: var(--cv-muted-fg); margin: 0; line-height: 1.5; }
+.scd-empty__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-cta-primary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: var(--cv-radius);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  margin-top: 0.5rem;
+  transition: background 0.15s;
+}
+.scd-empty__cta:hover { background: var(--color-cta-primary-hover); }
+
+/* ── Sticky Footer ── */
+.scd-footer {
+  border-top: 1px solid var(--cv-border);
+  background: var(--cv-card);
+  padding: 1rem 1.25rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.scd-footer__subtotal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.scd-footer__subtotal-label {
+  font-size: 0.875rem;
+  color: var(--cv-muted-fg);
+  font-weight: 500;
+}
+.scd-footer__subtotal-value {
+  font-family: var(--cv-font-head);
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--cv-primary);
+}
+.scd-footer__savings {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: rgba(46,153,99,0.07);
+  border-radius: var(--cv-radius);
+  padding: 0.5rem 0.75rem;
+}
+.scd-footer__savings-label,
+.scd-footer__savings-amount {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-cta-primary);
+}
+.scd-footer__checkout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 3.25rem;
+  background: var(--color-cta-primary);
+  color: var(--color-cta-primary-fg);
+  border: none;
+  border-radius: var(--cv-radius);
+  font-family: var(--cv-font-sans);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+  box-shadow: 0 4px 14px rgba(46,153,99,0.28);
+}
+.scd-footer__checkout:hover { background: var(--color-cta-primary-hover); }
+.scd-footer__checkout svg { width: 1.125rem; height: 1.125rem; pointer-events: none; }
+
+/* Gameology fix: easy close for mobile thumb reach */
+.scd-footer__continue {
+  background: none;
+  border: none;
+  color: var(--cv-muted-fg);
+  font-family: var(--cv-font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+  padding: 0.125rem 0;
+}
+.scd-footer__continue:hover { color: var(--cv-fg); }
+
+.scd-footer__trust {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.scd-footer__trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--cv-muted-fg);
+}
+.scd-footer__trust-item svg {
+  width: 0.9375rem;
+  height: 0.9375rem;
+  color: var(--color-cta-primary);
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* ── Loading pulse animation ── */
+@keyframes scd-pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+.scd-loading { animation: scd-pulse 1.3s ease-in-out infinite; }
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     OVERLAY
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="scd-overlay" class="scd-overlay" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     DRAWER
+     ═══════════════════════════════════════════════════════════════ -->
+<div
+  id="scd-drawer"
+  class="scd-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="scd-header-title"
+  aria-hidden="true"
+>
+
+  <!-- ── Header ── -->
+  <div class="scd-header">
+    <h2 class="scd-header__title" id="scd-header-title">
+      Your Cart (<span id="scd-item-count">{{ cart.item_count }}</span>
+      {{ cart.item_count | pluralize: 'item', 'items' }})
+    </h2>
+    <button class="scd-header__close" id="scd-close" aria-label="Close cart">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+           stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ── Scrollable Body ── -->
+  <div class="scd-body" id="scd-body">
+
+    <!-- Error -->
+    <div class="scd-error" id="scd-error" role="alert" aria-live="polite"></div>
+
+    <!-- Free Shipping Bar -->
+    <div class="scd-ship" id="scd-ship" aria-label="Free shipping progress">
+      <p class="scd-ship__text" id="scd-ship-text">
+        Add <strong id="scd-ship-amount">—</strong> more for <strong>free shipping!</strong>
+      </p>
+      <div class="scd-ship__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="scd-ship-track">
+        <div class="scd-ship__fill" id="scd-ship-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Cart Items (rendered by JS) -->
+    <div class="scd-items" id="scd-items" aria-live="polite" aria-relevant="additions removals"></div>
+
+    <!-- Empty State -->
+    <div class="scd-empty" id="scd-empty" hidden aria-hidden="true">
+      <div class="scd-empty__icon">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+      </div>
+      <p class="scd-empty__title">Your cart is empty</p>
+      <p class="scd-empty__sub">Add some TCG goodies to get started!</p>
+      <a href="{{ routes.all_products_collection_url }}" class="scd-empty__cta scd-close-trigger">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" width="16" height="16" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        Shop Now
+      </a>
+    </div>
+
+    <!-- ── Upsell Carousel (Liquid rendered, AJAX quick-add via JS) ── -->
+    {%- if section.settings.upsell_collection != blank -%}
+      {%- assign upsell_coll = collections[section.settings.upsell_collection] -%}
+      {%- assign upsell_products = upsell_coll.products | limit: 6 -%}
+      {%- if upsell_products.size > 0 -%}
+        <div class="scd-upsell" id="scd-upsell">
+          <p class="scd-upsell__title">You Might Also Need</p>
+          <div class="scd-upsell__carousel" role="list">
+            {%- for product in upsell_products -%}
+              {%- assign uv = product.first_available_variant -%}
+              {%- if uv != blank -%}
+                <div class="scd-upsell-card" role="listitem">
+                  <div class="scd-upsell-card__img-wrap">
+                    {%- if product.featured_image -%}
+                      <img
+                        src="{{ product.featured_image | image_url: width: 300 }}"
+                        alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                        width="300" height="300"
+                        loading="lazy"
+                      >
+                    {%- else -%}
+                      <div style="width:100%;aspect-ratio:1/1;background:var(--cv-secondary);"></div>
+                    {%- endif -%}
+                  </div>
+                  <div class="scd-upsell-card__info">
+                    <span class="scd-upsell-card__title">{{ product.title | escape }}</span>
+                    <span class="scd-upsell-card__price">{{ uv.price | money }}</span>
+                    <button
+                      class="scd-upsell-card__btn"
+                      data-variant-id="{{ uv.id }}"
+                      data-available="{{ uv.available }}"
+                      aria-label="Quick add {{ product.title | escape }}"
+                      {%- unless uv.available -%} disabled aria-disabled="true" {%- endunless -%}
+                    >
+                      {%- if uv.available -%}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <line x1="12" y1="5" x2="12" y2="19"/>
+                          <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Quick Add
+                      {%- else -%}
+                        Sold Out
+                      {%- endif -%}
+                    </button>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+  </div><!-- /.scd-body -->
+
+  <!-- ── Sticky Footer ── -->
+  <div class="scd-footer" id="scd-footer">
+
+    <!-- Subtotal row -->
+    <div class="scd-footer__subtotal">
+      <span class="scd-footer__subtotal-label">Subtotal</span>
+      <span class="scd-footer__subtotal-value" id="scd-subtotal">
+        {{- cart.total_price | money -}}
+      </span>
+    </div>
+
+    <!-- Savings row (shown only when applicable) -->
+    <div class="scd-footer__savings" id="scd-savings" hidden aria-hidden="true">
+      <span class="scd-footer__savings-label">You're saving</span>
+      <span class="scd-footer__savings-amount" id="scd-savings-amount"></span>
+    </div>
+
+    <!-- Checkout CTA -->
+    <a
+      href="{{ routes.checkout }}"
+      class="scd-footer__checkout"
+      id="scd-checkout-btn"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round"
+           stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      Checkout Securely
+    </a>
+
+    <!-- Gameology CRO fix: thumb-reachable close on mobile -->
+    <button class="scd-footer__continue scd-close-trigger" type="button">
+      Continue Shopping
+    </button>
+
+    <!-- Micro Trust Signals -->
+    <ul class="scd-footer__trust" aria-label="Shopping guarantees">
+      <li class="scd-footer__trust-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Orders dispatch within 24 hours
+      </li>
+      <li class="scd-footer__trust-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Shipped securely with bubble wrap
+      </li>
+      <li class="scd-footer__trust-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        100% Authentic &amp; Factory Sealed
+      </li>
+    </ul>
+
+  </div><!-- /.scd-footer -->
+
+</div><!-- /.scd-drawer -->
+
+<!-- Config object: threshold passed from schema to JS -->
+<script>
+window.__SCD__ = {
+  threshold: {{ section.settings.free_ship_threshold | default: 20000 }},
+  routes: {
+    cart:     '{{ routes.cart_url }}',
+    checkout: '{{ routes.checkout }}'
+  }
+};
+</script>
+
+<script>
+/* ================================================================
+   Supply District Cart Drawer — IIFE
+   All DOM queries scoped to the drawer; no global namespace pollution
+   ================================================================ */
+(function () {
+  'use strict';
+
+  /* ── Config ── */
+  var THRESHOLD = (window.__SCD__ && window.__SCD__.threshold) || 20000;
+
+  /* ── Helpers ── */
+  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function $$(sel, ctx) { return Array.from((ctx || document).querySelectorAll(sel)); }
+
+  function money(cents) {
+    return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function shopifyImageSrc(url, size) {
+    if (!url) return '';
+    return url.replace(/(\.[a-z]+)(\?|$)/, '_' + size + '$1$2');
+  }
+
+  /* ── DOM Refs ── */
+  var overlay    = $('#scd-overlay');
+  var drawer     = $('#scd-drawer');
+  var closeBtn   = $('#scd-close');
+  var itemsEl    = $('#scd-items');
+  var emptyEl    = $('#scd-empty');
+  var errorEl    = $('#scd-error');
+  var shipEl     = $('#scd-ship');
+  var shipText   = $('#scd-ship-text');
+  var shipFill   = $('#scd-ship-fill');
+  var shipTrack  = $('#scd-ship-track');
+  var subtotalEl = $('#scd-subtotal');
+  var savingsEl  = $('#scd-savings');
+  var savingsAmt = $('#scd-savings-amount');
+  var titleCount = $('#scd-item-count');
+  var footerEl   = $('#scd-footer');
+  var upsellEl   = $('#scd-upsell');
+
+  /* ── State ── */
+  var isOpen = false;
+
+  /* ════════════════════════════════════════
+     OPEN / CLOSE
+     ════════════════════════════════════════ */
+  function openDrawer() {
+    if (isOpen) return;
+    isOpen = true;
+    overlay.classList.add('is-open');
+    overlay.removeAttribute('aria-hidden');
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    fetchAndRender();
+  }
+
+  function closeDrawer() {
+    if (!isOpen) return;
+    isOpen = false;
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  /* ════════════════════════════════════════
+     FETCH & RENDER
+     ════════════════════════════════════════ */
+  function fetchAndRender() {
+    return fetch('/cart.js', {
+      headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (cart) { renderCart(cart); return cart; })
+      .catch(function () { showError('Could not load cart. Please refresh the page.'); });
+  }
+
+  function renderCart(cart) {
+    hideError();
+
+    var count = cart.item_count || 0;
+
+    /* Title */
+    titleCount.textContent = count + ' ' + (count === 1 ? 'item' : 'items');
+
+    /* Badge */
+    updateBadge(count);
+
+    /* Subtotal */
+    subtotalEl.textContent = money(cart.total_price || 0);
+
+    /* Savings */
+    var totalSavings = (cart.items || []).reduce(function (acc, item) {
+      var cp = item.compare_at_price || 0;
+      return acc + (cp > item.price ? (cp - item.price) * item.quantity : 0);
+    }, 0);
+    if (totalSavings > 0) {
+      savingsAmt.textContent = money(totalSavings);
+      savingsEl.hidden = false;
+      savingsEl.removeAttribute('aria-hidden');
+    } else {
+      savingsEl.hidden = true;
+      savingsEl.setAttribute('aria-hidden', 'true');
+    }
+
+    /* Shipping bar */
+    updateShippingBar(cart.total_price || 0);
+
+    /* Items vs Empty */
+    if (count === 0) {
+      itemsEl.innerHTML = '';
+      show(emptyEl);
+      hide(footerEl);
+      if (upsellEl) hide(upsellEl);
+    } else {
+      hide(emptyEl);
+      show(footerEl);
+      if (upsellEl) show(upsellEl);
+      itemsEl.innerHTML = (cart.items || []).map(renderItem).join('');
+      bindItemEvents();
+    }
+  }
+
+  /* ── Item HTML ── */
+  function renderItem(item) {
+    var imgSrc = item.image
+      ? shopifyImageSrc(item.image, '120x120_crop_center')
+      : '';
+    var imgHtml = imgSrc
+      ? '<img class="scd-item__img" src="' + imgSrc + '" alt="' + escHtml(item.title) + '" width="90" height="90" loading="lazy">'
+      : '<div class="scd-item__img" style="width:100%;height:100%;background:var(--cv-secondary);"></div>';
+
+    var variantHtml = (item.variant_title && item.variant_title !== 'Default Title')
+      ? '<span class="scd-item__variant">' + escHtml(item.variant_title) + '</span>'
+      : '';
+
+    var priceHtml = '<span class="scd-item__price">' + money(item.price) + '</span>';
+
+    return [
+      '<div class="scd-item" data-key="' + item.key + '">',
+        '<div class="scd-item__img-wrap">',
+          '<a href="' + item.url + '" tabindex="-1">' + imgHtml + '</a>',
+        '</div>',
+        '<div class="scd-item__body">',
+          '<a class="scd-item__title" href="' + item.url + '">' + escHtml(item.product_title) + '</a>',
+          variantHtml,
+          priceHtml,
+          '<div class="scd-item__actions">',
+            '<div class="cv-qty" aria-label="Quantity">',
+              '<button class="cv-qty__btn scd-qty-dec" data-key="' + item.key + '" aria-label="Decrease" ' + (item.quantity <= 1 ? 'disabled' : '') + '>',
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+              '</button>',
+              '<input class="cv-qty__input" type="text" value="' + item.quantity + '" readonly aria-label="Quantity for ' + escHtml(item.product_title) + '">',
+              '<button class="cv-qty__btn scd-qty-inc" data-key="' + item.key + '" aria-label="Increase">',
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+              '</button>',
+            '</div>',
+            '<button class="scd-item__remove" data-key="' + item.key + '" aria-label="Remove ' + escHtml(item.product_title) + '">',
+              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">',
+                '<polyline points="3 6 5 6 21 6"/>',
+                '<path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+                '<path d="M10 11v6"/><path d="M14 11v6"/>',
+                '<path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+              '</svg>',
+            '</button>',
+          '</div>',
+        '</div>',
+      '</div>'
+    ].join('');
+  }
+
+  function bindItemEvents() {
+    /* Qty decrease */
+    $$('.scd-qty-dec', itemsEl).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var key = btn.dataset.key;
+        var input = $('[data-key="' + key + '"]', itemsEl).closest('.scd-item').querySelector('.cv-qty__input');
+        var qty = Math.max(0, parseInt(input.value) - 1);
+        changeQty(key, qty);
+      });
+    });
+
+    /* Qty increase */
+    $$('.scd-qty-inc', itemsEl).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var key = btn.dataset.key;
+        var input = $('[data-key="' + key + '"]', itemsEl).closest('.scd-item').querySelector('.cv-qty__input');
+        var qty = parseInt(input.value) + 1;
+        changeQty(key, qty);
+      });
+    });
+
+    /* Remove */
+    $$('.scd-item__remove', itemsEl).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        changeQty(btn.dataset.key, 0);
+      });
+    });
+  }
+
+  /* ════════════════════════════════════════
+     AJAX CART CHANGE
+     ════════════════════════════════════════ */
+  function changeQty(key, qty) {
+    var itemRow = $('.scd-item[data-key="' + key + '"]');
+    if (itemRow) itemRow.classList.add('is-updating');
+
+    return fetch('/cart/change.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: key, quantity: qty })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (cart) { renderCart(cart); return cart; })
+      .catch(function () {
+        if (itemRow) itemRow.classList.remove('is-updating');
+        showError('Something went wrong. Please try again.');
+      });
+  }
+
+  /* ════════════════════════════════════════
+     AJAX QUICK ADD (Upsells)
+     ════════════════════════════════════════ */
+  function quickAdd(variantId, btn) {
+    var origHTML = btn.innerHTML;
+    btn.classList.add('is-loading');
+    btn.innerHTML = 'Adding…';
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
+    })
+      .then(function (r) {
+        if (!r.ok) return r.json().then(function (e) { throw new Error(e.description || 'Error adding item'); });
+        return r.json();
+      })
+      .then(function () { return fetchAndRender(); })
+      .then(function () {
+        btn.classList.remove('is-loading');
+        btn.classList.add('is-added');
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Added!';
+        setTimeout(function () {
+          btn.classList.remove('is-added');
+          btn.innerHTML = origHTML;
+        }, 2200);
+      })
+      .catch(function (err) {
+        btn.classList.remove('is-loading');
+        btn.innerHTML = origHTML;
+        showError(err.message || 'Could not add item to cart.');
+      });
+  }
+
+  /* ════════════════════════════════════════
+     AJAX ADD-TO-CART (site-wide form intercept)
+     ════════════════════════════════════════ */
+  function handleAddToCartForm(form, e) {
+    e.preventDefault();
+    var data = new FormData(form);
+    var variantId = data.get('id');
+    var quantity  = parseInt(data.get('quantity') || 1, 10);
+
+    if (!variantId) return;
+
+    /* Optimistic button feedback on the triggering form */
+    var submitBtn = form.querySelector('[type="submit"]');
+    var origText  = submitBtn ? submitBtn.textContent : null;
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Adding…'; }
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: parseInt(variantId, 10), quantity: quantity })
+    })
+      .then(function (r) {
+        if (!r.ok) return r.json().then(function (e) { throw new Error(e.description || 'Error'); });
+        return r.json();
+      })
+      .then(function () {
+        if (submitBtn) { submitBtn.textContent = 'Added!'; }
+        openDrawer();
+        setTimeout(function () {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
+        }, 1800);
+      })
+      .catch(function (err) {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
+        showError(err.message || 'Could not add to cart.');
+        openDrawer();
+      });
+  }
+
+  /* ════════════════════════════════════════
+     SHIPPING BAR
+     ════════════════════════════════════════ */
+  function updateShippingBar(subtotal) {
+    var pct       = Math.min(100, Math.round((subtotal / THRESHOLD) * 100));
+    var remaining = THRESHOLD - subtotal;
+
+    shipFill.style.width = pct + '%';
+    shipTrack.setAttribute('aria-valuenow', pct);
+
+    if (subtotal >= THRESHOLD) {
+      shipEl.classList.add('is-unlocked');
+      shipText.innerHTML = '🎉 You\'ve unlocked <strong>free shipping!</strong>';
+    } else {
+      shipEl.classList.remove('is-unlocked');
+      shipText.innerHTML = 'Add <strong>' + money(remaining) + '</strong> more for <strong>free shipping!</strong>';
+    }
+  }
+
+  /* ════════════════════════════════════════
+     HEADER BADGE
+     ════════════════════════════════════════ */
+  function updateBadge(count) {
+    $$('.sd-cart-badge').forEach(function (el) {
+      el.textContent = count;
+      el.style.display = count > 0 ? '' : 'none';
+    });
+
+    /* Create badge if it doesn't exist yet */
+    var cartBtn = $('.sd-cart-btn');
+    if (cartBtn) {
+      var badge = cartBtn.querySelector('.sd-cart-badge');
+      if (!badge && count > 0) {
+        badge = document.createElement('span');
+        badge.className = 'sd-cart-badge';
+        badge.setAttribute('aria-hidden', 'true');
+        cartBtn.appendChild(badge);
+      }
+      if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? '' : 'none';
+      }
+    }
+  }
+
+  /* ════════════════════════════════════════
+     ERROR
+     ════════════════════════════════════════ */
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.classList.add('is-visible');
+    clearTimeout(showError._t);
+    showError._t = setTimeout(hideError, 4500);
+  }
+  function hideError() {
+    errorEl.textContent = '';
+    errorEl.classList.remove('is-visible');
+  }
+
+  /* ── Visibility helpers ── */
+  function show(el) { if (el) { el.hidden = false; el.removeAttribute('aria-hidden'); } }
+  function hide(el) { if (el) { el.hidden = true; el.setAttribute('aria-hidden', 'true'); } }
+
+  /* ════════════════════════════════════════
+     EVENT LISTENERS
+     ════════════════════════════════════════ */
+
+  /* Close triggers: X button, overlay, "Continue Shopping" */
+  if (closeBtn)  closeBtn.addEventListener('click', closeDrawer);
+  if (overlay)   overlay.addEventListener('click', closeDrawer);
+  $$('.scd-close-trigger').forEach(function (el) {
+    el.addEventListener('click', closeDrawer);
+  });
+
+  /* ESC key */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen) closeDrawer();
+  });
+
+  /* Cart icon → open drawer (prevent navigation fallback) */
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.sd-cart-btn')) {
+      e.preventDefault();
+      openDrawer();
+    }
+  }, true); /* capture phase so it fires before other handlers */
+
+  /* Add-to-cart forms site-wide */
+  document.addEventListener('submit', function (e) {
+    var form = e.target.closest('form[action*="/cart/add"]');
+    if (form) handleAddToCartForm(form, e);
+  });
+
+  /* Upsell quick-add buttons */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.scd-upsell-card__btn');
+    if (btn && btn.dataset.variantId && btn.dataset.available !== 'false') {
+      quickAdd(btn.dataset.variantId, btn);
+    }
+  });
+
+  /* Custom events for other scripts to interact */
+  document.addEventListener('cart:open',    openDrawer);
+  document.addEventListener('cart:close',   closeDrawer);
+  document.addEventListener('cart:refresh', fetchAndRender);
+
+  /* ════════════════════════════════════════
+     INIT — populate badge on every page load
+     (don't auto-open the drawer)
+     ════════════════════════════════════════ */
+  fetch('/cart.js', {
+    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+  })
+    .then(function (r) { return r.json(); })
+    .then(function (cart) { updateBadge(cart.item_count || 0); })
+    .catch(function () {});
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": [
+    {
+      "type": "number",
+      "id": "free_ship_threshold",
+      "label": "Free shipping threshold (cents)",
+      "default": 20000,
+      "info": "Enter in cents — e.g. 20000 = $200.00. The progress bar fills as the customer adds items."
+    },
+    {
+      "type": "collection",
+      "id": "upsell_collection",
+      "label": "Upsell collection",
+      "info": "Up to 6 products from this collection appear as swipeable upsell cards in the drawer."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart Drawer"
+    }
+  ]
+}
+{% endschema %}
