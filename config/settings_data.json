@@ -21,22 +21,8 @@
       },
       "header": {
         "type": "header",
-        "blocks": {
-          "mega_menu_promo_whMYNi": {
-            "type": "mega_menu_promo",
-            "settings": {
-              "menu_item_trigger": "TCG",
-              "image": "shopify://shop_images/tohoku-box-cardbot-pokemon-center_grande_dc58bf15-9fa3-4546-be07-fada14d72183.webp",
-              "heading": "New Arrivals",
-              "link": "",
-              "link_text": "Shop Now"
-            }
-          }
-        },
-        "block_order": [
-          "mega_menu_promo_whMYNi"
-        ],
         "settings": {
+          "logo": "shopify://shop_images/hiroshima-box-cardbot-pokemon-center.webp",
           "logo_max_width": 160,
           "menu": "main-menu",
           "search_placeholder": "Search for sets, singles, or accessories...",
