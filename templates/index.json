@@ -73,7 +73,6 @@
         },
         "trust_item_VgmMdE": {
           "type": "trust_item",
-          "disabled": true,
           "settings": {
             "icon": "users",
             "title": "Australian Owned & Operated",
@@ -82,7 +81,6 @@
         },
         "trust_item_nw3tnX": {
           "type": "trust_item",
-          "disabled": true,
           "settings": {
             "icon": "shield",
             "title": "100% Factory Sealed",
@@ -91,7 +89,6 @@
         },
         "trust_item_BET6FL": {
           "type": "trust_item",
-          "disabled": true,
           "settings": {
             "icon": "package",
             "title": "Collector-Grade Packaging",
@@ -100,7 +97,6 @@
         },
         "trust_item_yQfwnb": {
           "type": "trust_item",
-          "disabled": true,
           "settings": {
             "icon": "truck",
             "title": "Fast, Insured Shipping",
