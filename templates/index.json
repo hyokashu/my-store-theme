@@ -154,6 +154,7 @@
           "settings": {
             "label": "Sale",
             "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_xawb0sxawb0sxawb.png",
             "icon": "shopping-bag",
             "is_sale": true
           }
