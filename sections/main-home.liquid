@@ -254,6 +254,14 @@
 .cvh-prod-badge--preorder { background: var(--cv-destructive); color: #fff; }
 .cvh-prod-badge--hot     { background: var(--cv-star);         color: #fff; }
 
+.cvh-prod-card__info  { display: flex; flex-direction: column; gap: 0.25rem; }
+.cvh-prod-card__type  { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--cv-muted-fg); font-weight: 600; }
+.cvh-prod-card__name  { font-size: 0.875rem; font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cvh-prod-card__prices { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem; }
+.cvh-prod-card__price { font-family: var(--cv-font-head); font-size: 1.0625rem; font-weight: 700; }
+.cvh-prod-card__was   { font-size: 0.8125rem; color: var(--cv-muted-fg); text-decoration: line-through; font-weight: 500; }
+.cvh-prod-card__price--sale { color: var(--cv-destructive); }
+
 .cvh-scroll-arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: var(--cv-card); border: 1px solid var(--cv-border); box-shadow: var(--cv-shadow); align-items: center; justify-content: center; cursor: pointer; z-index: 5; color: var(--cv-fg); transition: background 0.15s, opacity 0.2s; -webkit-appearance: none; }
 @media (min-width: 768px) { .cvh-scroll-arrow { display: flex; } }
 .cvh-scroll-arrow:hover { background: var(--cv-secondary); }
@@ -569,9 +577,9 @@
                   </div>
                   <div class="cvh-prod-card__info">
                     <span class="cvh-prod-card__type">{{ p.type }}</span>
-                    <span class="cvh-prod-card__name">{{ p.title }}</span>
+                    <span class="cvh-prod-card__name">{{ p.title | remove: "One Piece Card Game: " | remove: "Pokemon TCG: " | strip }}</span>
                     <div class="cvh-prod-card__prices">
-                      <span class="cvh-prod-card__price">{{ pv.price | money }}</span>
+                      <span class="cvh-prod-card__price{% if p_sale %} cvh-prod-card__price--sale{% endif %}">{{ pv.price | money }}</span>
                       {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
                     </div>
                   </div>
@@ -622,9 +630,9 @@
                   </div>
                   <div class="cvh-prod-card__info">
                     <span class="cvh-prod-card__type">{{ p.type }}</span>
-                    <span class="cvh-prod-card__name">{{ p.title }}</span>
+                    <span class="cvh-prod-card__name">{{ p.title | remove: "One Piece Card Game: " | remove: "Pokemon TCG: " | strip }}</span>
                     <div class="cvh-prod-card__prices">
-                      <span class="cvh-prod-card__price">{{ pv.price | money }}</span>
+                      <span class="cvh-prod-card__price{% if p_sale %} cvh-prod-card__price--sale{% endif %}">{{ pv.price | money }}</span>
                       {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
                     </div>
                   </div>
@@ -675,9 +683,9 @@
                   </div>
                   <div class="cvh-prod-card__info">
                     <span class="cvh-prod-card__type">{{ p.type }}</span>
-                    <span class="cvh-prod-card__name">{{ p.title }}</span>
+                    <span class="cvh-prod-card__name">{{ p.title | remove: "One Piece Card Game: " | remove: "Pokemon TCG: " | strip }}</span>
                     <div class="cvh-prod-card__prices">
-                      <span class="cvh-prod-card__price">{{ pv.price | money }}</span>
+                      <span class="cvh-prod-card__price{% if p_sale %} cvh-prod-card__price--sale{% endif %}">{{ pv.price | money }}</span>
                       {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
                     </div>
                   </div>
