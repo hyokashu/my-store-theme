@@ -255,7 +255,7 @@
    ================================================================ */
 .sdh-nav {
   display: none;
-  border-top: 1px solid var(--sd-header-border, #e5e7eb);
+  border-top: 3px solid var(--cv-primary, #282d52);
   background: var(--sd-header-bg, #fff);
   position: static; /* mega positions relative to .sd-header (sticky) */
 }
@@ -268,7 +268,7 @@
   max-width: 80rem;
   margin: 0 auto;
   padding: 0 0.75rem;
-  height: 3rem;
+  height: 3.25rem;
 }
 
 /* ── Nav item ── */
@@ -282,10 +282,12 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0 0.875rem;
+  padding: 0 1rem;
   font-family: var(--cv-font-sans, 'Inter', sans-serif);
-  font-size: 0.9375rem;
-  font-weight: 600;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--sd-header-fg, #1a1a2e);
   text-decoration: none;
   background: none;
@@ -314,6 +316,20 @@
   flex-shrink: 0;
 }
 .sdh-nav__item.is-open .sdh-nav__chevron { transform: rotate(180deg); }
+
+/* ── Sale nav item highlight ── */
+.sdh-nav__item--sale .sdh-nav__link {
+  color: var(--cv-destructive, #c94030);
+  border: 1.5px solid var(--cv-destructive, #c94030);
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
+  margin: auto 0.25rem;
+}
+.sdh-nav__item--sale .sdh-nav__link:hover {
+  background: var(--cv-destructive, #c94030);
+  color: #fff;
+  border-bottom-color: var(--cv-destructive, #c94030);
+}
 
 /* ================================================================
    MEGA MENU
@@ -754,8 +770,8 @@
                 name="q"
                 id="sdh-search-input"
                 class="sdh-search-input"
-                placeholder="{{ section.settings.search_placeholder | default: 'Search cards, sets, accessories...' }}"
-                aria-label="{{ section.settings.search_placeholder | default: 'Search cards, sets, accessories...' }}"
+                placeholder="{{ section.settings.search_placeholder | default: 'Search sets, singles, packs & more...' }}"
+                aria-label="{{ section.settings.search_placeholder | default: 'Search sets, singles, packs & more...' }}"
                 autocomplete="off"
                 spellcheck="false"
               >
@@ -841,8 +857,8 @@
             name="q"
             id="sdh-mobile-search-input"
             class="sdh-search-input"
-            placeholder="{{ section.settings.search_placeholder | default: 'Search cards, sets, accessories...' }}"
-            aria-label="{{ section.settings.search_placeholder | default: 'Search cards, sets, accessories...' }}"
+            placeholder="{{ section.settings.search_placeholder | default: 'Search sets, singles, packs & more...' }}"
+            aria-label="{{ section.settings.search_placeholder | default: 'Search sets, singles, packs & more...' }}"
             autocomplete="off"
             spellcheck="false"
           >
@@ -868,7 +884,7 @@
           {%- endfor -%}
 
           <div
-            class="sdh-nav__item{% if link.links.size > 0 %} has-mega{% endif %}"
+            class="sdh-nav__item{% if link.links.size > 0 %} has-mega{% endif %}{% if link.title | downcase == 'sale' %} sdh-nav__item--sale{% endif %}"
             data-mega-item
           >
             {%- if link.links.size > 0 -%}
@@ -1327,13 +1343,13 @@
       "type": "text",
       "id": "search_placeholder",
       "label": "Search bar placeholder",
-      "default": "Search cards, sets, accessories..."
+      "default": "Search sets, singles, packs & more..."
     },
     {
       "type": "checkbox",
       "id": "show_account",
       "label": "Show account icon",
-      "default": false
+      "default": true
     }
   ],
   "blocks": [
