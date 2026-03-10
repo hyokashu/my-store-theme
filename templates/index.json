@@ -54,6 +54,7 @@
         },
         "hero_slide_KR9c4n": {
           "type": "hero_slide",
+          "disabled": true,
           "settings": {
             "eyebrow_icon": "zap",
             "eyebrow": "Our Promise",
