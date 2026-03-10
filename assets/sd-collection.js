@@ -76,9 +76,10 @@
     var hasVariants = btn.dataset.hasVariants === 'true';
     var productUrl  = btn.dataset.productUrl;
 
-    /* Multi-variant → navigate to PDP */
+    /* Multi-variant → navigate to PDP, preserving collection context */
     if (hasVariants) {
-      window.location.href = productUrl;
+      sessionStorage.setItem('cv_return_scroll_' + window.location.pathname, window.scrollY);
+      window.location.href = productUrl + '?return_to=' + encodeURIComponent(window.location.href);
       return;
     }
 

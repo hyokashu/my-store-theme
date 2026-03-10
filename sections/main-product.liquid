@@ -23,8 +23,8 @@
   if stock_qty > 0 and stock_qty <= 5
     assign low_stock = true
   endif
-  assign rating_value = product.metafields.reviews.rating.value | default: 4.9
-  assign rating_count = product.metafields.reviews.rating_count | default: 84
+  assign rating_value = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count
 
   assign pack_count = product.metafields.custom.pack_count | default: 24
   assign cards_per_pack = product.metafields.custom.cards_per_pack | default: 6
@@ -205,13 +205,13 @@
 
 /* Breadcrumb */
 .cv-breadcrumb {
-  display: none;
+  display: flex;
   list-style: none; padding: 0; margin: 0;
   gap: 0.375rem;
-  font-size: 0.875rem; color: var(--cv-muted-fg);
+  font-size: 0.75rem; color: var(--cv-muted-fg);
   flex-wrap: wrap; align-items: center;
 }
-@media (min-width: 768px) { .cv-breadcrumb { display: flex; } }
+@media (min-width: 768px) { .cv-breadcrumb { font-size: 0.875rem; } }
 .cv-breadcrumb a { color: var(--cv-muted-fg); text-decoration: none; transition: color 0.15s; }
 .cv-breadcrumb a:hover { color: var(--cv-fg); }
 .cv-breadcrumb__sep { color: var(--cv-border); }
@@ -257,7 +257,7 @@
   align-items: center; gap: 0.25rem;
   font-size: 0.875rem; color: var(--cv-muted-fg);
 }
-@media (max-width: 639px) { .cv-rating__viewers { display: none !important; } }
+@media (max-width: 639px) { .cv-rating__viewers { font-size: 0.75rem; } }
 .cv-rating__viewers svg { width: 0.875rem; height: 0.875rem; }
 
 /* Pricing */
@@ -724,6 +724,27 @@ input.cv-qty__input {
 .cv-sticky-cart__price  { font-family: var(--cv-font-head); font-size: 1.25rem; font-weight: 700; }
 .cv-sticky-cart__was    { font-size: 0.75rem; color: var(--cv-muted-fg); text-decoration: line-through; }
 
+.cv-sticky-cart__qty {
+  display: flex; align-items: center;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-card);
+  overflow: hidden; flex-shrink: 0;
+}
+.cv-sticky-qty-btn {
+  padding: 0 0.625rem; height: 2.75rem;
+  background: none; border: none; cursor: pointer;
+  color: var(--cv-muted-fg); font-size: 1.125rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.15s;
+}
+.cv-sticky-qty-btn:hover { color: var(--cv-fg); }
+.cv-sticky-qty-display {
+  min-width: 2rem; text-align: center;
+  font-size: 0.875rem; font-weight: 600; color: var(--cv-fg);
+  padding: 0 0.25rem;
+}
+
 /* ── Add to Cart Animations ── */
 .cv-pulsating-dot {
   display: inline-block;
@@ -866,24 +887,20 @@ input.cv-qty__input {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             Only {{ stock_qty }} left
           </span>
-        {%- else -%}
-          {%- comment -%} Pseudo-random stock generation based on product ID to bypass caching while remaining consistent {%- endcomment -%}
-          {%- assign pseudo_random = product.id | modulo: 4 | plus: 2 -%}
-          <span class="cv-badge cv-badge--stock">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Only {{ pseudo_random }} left
-          </span>
         {%- endif -%}
       </div>
 
       {%- comment -%} Title block {%- endcomment -%}
       <div class="cv-title-block">
         <h1 class="cv-title">{{ product.title }}</h1>
-        <p class="cv-subtitle">
-          {{ pack_count }} Booster Packs &middot; {{ cards_per_pack }} Cards Per Pack &middot; Factory Sealed
-        </p>
+        {%- if pack_count != blank -%}
+          <p class="cv-subtitle">{{ pack_count }} Booster Packs &middot; {{ cards_per_pack }} Cards Per Pack &middot; Factory Sealed</p>
+        {%- elsif product.type != blank -%}
+          <p class="cv-subtitle">{{ product.type }}</p>
+        {%- endif -%}
 
-        {%- comment -%} Rating row {%- endcomment -%}
+        {%- comment -%} Rating row — only shown when real review data exists {%- endcomment -%}
+        {%- if rating_count > 0 -%}
         <div class="cv-rating">
           <div class="cv-stars" aria-label="{{ rating_value }} out of 5 stars">
             {%- for i in (1..5) -%}
@@ -906,6 +923,7 @@ input.cv-qty__input {
             <span id="cv-viewers-count">0</span>&nbsp;people viewing
           </span>
         </div>
+        {%- endif -%}
       </div>
 
       <hr class="cv-sep" style="margin:0">
@@ -1343,6 +1361,11 @@ input.cv-qty__input {
         <span class="cv-sticky-cart__was">{{ compare_price | money }}</span>
       {%- endif -%}
     </div>
+    <div class="cv-sticky-cart__qty">
+      <button type="button" class="cv-sticky-qty-btn" id="cv-sticky-qty-minus" aria-label="Decrease quantity">−</button>
+      <span class="cv-sticky-qty-display" id="cv-sticky-qty-display">1</span>
+      <button type="button" class="cv-sticky-qty-btn" id="cv-sticky-qty-plus" aria-label="Increase quantity">+</button>
+    </div>
     <button
       class="cv-btn cv-btn--primary"
       style="flex:1;height:2.75rem;font-size:0.9375rem;background:var(--color-cta-primary);border-color:var(--color-cta-primary);color:var(--color-cta-primary-fg);"
@@ -1516,6 +1539,26 @@ input.cv-qty__input {
     qtyInput.addEventListener('change', function () {
       var v = parseInt(qtyInput.value, 10);
       if (isNaN(v) || v < 1) qtyInput.value = 1;
+      if (stickyQtyDisplay) stickyQtyDisplay.textContent = qtyInput.value;
+    });
+  }
+
+  /* ── Sticky Qty Sync ── */
+  var stickyQtyDisplay = document.getElementById('cv-sticky-qty-display');
+  var stickyQtyMinus   = document.getElementById('cv-sticky-qty-minus');
+  var stickyQtyPlus    = document.getElementById('cv-sticky-qty-plus');
+  if (stickyQtyMinus && stickyQtyPlus && stickyQtyDisplay) {
+    stickyQtyMinus.addEventListener('click', function () {
+      var v = parseInt(stickyQtyDisplay.textContent, 10) || 1;
+      if (v > 1) {
+        stickyQtyDisplay.textContent = v - 1;
+        if (qtyInput) qtyInput.value = v - 1;
+      }
+    });
+    stickyQtyPlus.addEventListener('click', function () {
+      var v = parseInt(stickyQtyDisplay.textContent, 10) || 1;
+      stickyQtyDisplay.textContent = v + 1;
+      if (qtyInput) qtyInput.value = v + 1;
     });
   }
 
