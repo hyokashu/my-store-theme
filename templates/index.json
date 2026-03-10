@@ -73,6 +73,7 @@
         },
         "trust_item_VgmMdE": {
           "type": "trust_item",
+          "disabled": true,
           "settings": {
             "icon": "users",
             "title": "Australian Owned & Operated",
@@ -81,6 +82,7 @@
         },
         "trust_item_nw3tnX": {
           "type": "trust_item",
+          "disabled": true,
           "settings": {
             "icon": "shield",
             "title": "100% Factory Sealed",
@@ -89,6 +91,7 @@
         },
         "trust_item_BET6FL": {
           "type": "trust_item",
+          "disabled": true,
           "settings": {
             "icon": "package",
             "title": "Collector-Grade Packaging",
@@ -97,6 +100,7 @@
         },
         "trust_item_yQfwnb": {
           "type": "trust_item",
+          "disabled": true,
           "settings": {
             "icon": "truck",
             "title": "Fast, Insured Shipping",
@@ -105,36 +109,42 @@
         },
         "marquee_item_hhJwwx": {
           "type": "marquee_item",
+          "disabled": true,
           "settings": {
             "text": "Free insured shipping on orders over $100"
           }
         },
         "marquee_item_kNEhD6": {
           "type": "marquee_item",
+          "disabled": true,
           "settings": {
             "text": "100% authentic sealed product"
           }
         },
         "marquee_item_9E3Ky7": {
           "type": "marquee_item",
+          "disabled": true,
           "settings": {
             "text": "14-day returns on sealed items"
           }
         },
         "marquee_item_yzQAFj": {
           "type": "marquee_item",
+          "disabled": true,
           "settings": {
             "text": "Same-day dispatch on weekdays"
           }
         },
         "marquee_item_X6cDQR": {
           "type": "marquee_item",
+          "disabled": true,
           "settings": {
             "text": "Best price guarantee"
           }
         },
         "marquee_item_wr9J7N": {
           "type": "marquee_item",
+          "disabled": true,
           "settings": {
             "text": "Factory sealed — always"
           }
@@ -210,6 +220,7 @@
         "promo_banner_FqmJpP": {
           "type": "promo_banner",
           "settings": {
+            "image": "shopify://shop_images/Japanese-Pokemon-TCG-Inferno-X-M2-Booster-Box-1.webp",
             "eyebrow": "Shop Now",
             "title": "Booster Boxes from $39.99",
             "cta_label": "Shop Collection",
@@ -219,6 +230,7 @@
         "promo_banner_9RGRWE": {
           "type": "promo_banner",
           "settings": {
+            "image": "shopify://shop_images/tohoku-box-cardbot-pokemon-center_grande_dc58bf15-9fa3-4546-be07-fada14d72183.webp",
             "eyebrow": "Most Popular",
             "title": "Elite Trainer Boxes from $44.99",
             "cta_label": "Shop ETBs",
