@@ -148,7 +148,14 @@
 
 .cvh-hero__img-wrap { display: none; position: relative; padding: 1rem; }
 @media (min-width: 768px) { .cvh-hero__img-wrap { display: block; } }
-.cvh-hero__img-wrap img { width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 25px 35px rgba(0,0,0,0.15)); animation: cvhFloatBox 6s ease-in-out infinite; }
+.cvh-hero__img-wrap img { 
+  width: 100%; 
+  aspect-ratio: 1 / 1; 
+  height: 100%; 
+  object-fit: contain; 
+  filter: drop-shadow(0 25px 35px rgba(0,0,0,0.15)); 
+  animation: cvhFloatBox 6s ease-in-out infinite; 
+}
 @keyframes cvhFloatBox { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
 
 .cvh-hero__badge { position: absolute; bottom: 1.25rem; left: 1.25rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border: 1px solid var(--cv-border); border-radius: calc(var(--cv-radius) * 1.5); padding: 0.75rem 1rem; box-shadow: var(--cv-shadow); display: flex; align-items: center; gap: 0.75rem; }
