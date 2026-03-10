@@ -347,36 +347,83 @@
 
 .sdh-mega__inner {
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: 220px 1fr 280px;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 2rem 1.5rem 2.25rem;
-  gap: 3rem;
-  align-items: start;
+  padding: 0 1.5rem 0 0;
+  gap: 0;
+  align-items: stretch;
 }
-.sdh-mega__inner--no-promo { grid-template-columns: 1fr; }
+.sdh-mega__inner--no-promo { grid-template-columns: 220px 1fr; }
 
-/* Sub-links */
-.sdh-mega__links { display: flex; gap: 3rem; flex-wrap: wrap; }
-
-.sdh-mega__col-title {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--cv-muted-fg, #76798c);
-  margin: 0 0 0.75rem;
-  padding: 0 0.5rem;
+/* ── L1 Sidebar ────────────────────────────────────── */
+.sdh-mega__sidebar {
+  background: var(--cv-secondary, #f3f2ef);
+  border-right: 1px solid var(--cv-border, #dedad5);
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
 }
 
+.sdh-mega__sidebar-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.625rem 1.125rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--cv-font-sans, 'Inter', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--cv-fg, #1c1f36);
+  transition: background 0.12s, color 0.12s;
+  border-left: 3px solid transparent;
+}
+.sdh-mega__sidebar-item:hover {
+  background: var(--cv-secondary-hover, #e8e6e2);
+  color: var(--cv-primary, #282d52);
+}
+.sdh-mega__sidebar-item.is-active {
+  background: #fff;
+  color: var(--color-cta-primary, #2e9963);
+  border-left-color: var(--color-cta-primary, #2e9963);
+  font-weight: 600;
+}
+.sdh-mega__sidebar-item svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+  opacity: 0.45;
+  pointer-events: none;
+}
+.sdh-mega__sidebar-item.is-active svg { opacity: 0.8; }
+
+/* ── L2 Panel container ────────────────────────────── */
+.sdh-mega__panels {
+  padding: 1.5rem 1.75rem;
+  align-self: start;
+}
+
+.sdh-mega__panel {
+  display: none;
+}
+.sdh-mega__panel.is-active {
+  display: block;
+}
+
+/* Sub-links (used inside L2 panels) */
 .sdh-mega__col-list {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-  min-width: 160px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.125rem 1.5rem;
 }
 
 .sdh-mega__col-link {
@@ -842,25 +889,66 @@
               <div class="sdh-mega" role="region" aria-label="{{ link.title }} submenu">
                 <div class="sdh-mega__inner{% unless matched_promo %} sdh-mega__inner--no-promo{% endunless %}">
 
-                  <!-- Sub-link columns -->
-                  <div class="sdh-mega__links">
-                    <div class="sdh-mega__col">
-                      <p class="sdh-mega__col-title">{{ link.title }}</p>
-                      <ul class="sdh-mega__col-list">
-                        {%- for child in link.links -%}
-                          <li>
-                            <a class="sdh-mega__col-link" href="{{ child.url }}">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                   stroke-linejoin="round" aria-hidden="true">
-                                <polyline points="9 18 15 12 9 6"/>
-                              </svg>
-                              {{- child.title -}}
-                            </a>
-                          </li>
-                        {%- endfor -%}
-                      </ul>
-                    </div>
+                  <!-- L1 Sidebar -->
+                  <nav class="sdh-mega__sidebar" aria-label="{{ link.title }} categories">
+                    {%- for child in link.links -%}
+                      <button
+                        class="sdh-mega__sidebar-item{% if forloop.first %} is-active{% endif %}"
+                        type="button"
+                        data-panel="sdh-panel-{{ link.title | handleize }}-{{ forloop.index }}"
+                        aria-controls="sdh-panel-{{ link.title | handleize }}-{{ forloop.index }}"
+                        aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                      >
+                        {{- child.title -}}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                      </button>
+                    {%- endfor -%}
+                  </nav>
+
+                  <!-- L2 Panels -->
+                  <div class="sdh-mega__panels">
+                    {%- for child in link.links -%}
+                      <div
+                        class="sdh-mega__panel{% if forloop.first %} is-active{% endif %}"
+                        id="sdh-panel-{{ link.title | handleize }}-{{ forloop.index }}"
+                        role="tabpanel"
+                      >
+                        {%- if child.links.size > 0 -%}
+                          <ul class="sdh-mega__col-list">
+                            {%- for grandchild in child.links -%}
+                              <li>
+                                <a class="sdh-mega__col-link" href="{{ grandchild.url }}">
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                       stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                       stroke-linejoin="round" aria-hidden="true">
+                                    <polyline points="9 18 15 12 9 6"/>
+                                  </svg>
+                                  {{- grandchild.title -}}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        {%- else -%}
+                          <!-- L1 item has no children — show a direct link -->
+                          <ul class="sdh-mega__col-list">
+                            <li>
+                              <a class="sdh-mega__col-link" href="{{ child.url }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" aria-hidden="true">
+                                  <polyline points="9 18 15 12 9 6"/>
+                                </svg>
+                                {{- child.title -}}
+                              </a>
+                            </li>
+                          </ul>
+                        {%- endif -%}
+                      </div>
+                    {%- endfor -%}
                   </div>
 
                   <!-- Promo card (right side, only if block matched) -->
@@ -1078,6 +1166,38 @@
       item.classList.remove('is-open');
       var btn = item.querySelector('.sdh-nav__link');
       if (btn) btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* ════════════════════════════════════════
+     MEGA MENU — L1 sidebar → L2 panel switching
+     Mouseenter / focus on an L1 sidebar button activates
+     the corresponding L2 panel.
+     ════════════════════════════════════════ */
+  megaItems.forEach(function (item) {
+    var sidebarBtns = Array.from(item.querySelectorAll('.sdh-mega__sidebar-item'));
+    var panels      = Array.from(item.querySelectorAll('.sdh-mega__panel'));
+
+    function activateL1(btn) {
+      var targetId = btn.getAttribute('data-panel');
+
+      /* Update sidebar button states */
+      sidebarBtns.forEach(function (b) {
+        b.classList.remove('is-active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('is-active');
+      btn.setAttribute('aria-selected', 'true');
+
+      /* Update panel visibility */
+      panels.forEach(function (p) { p.classList.remove('is-active'); });
+      var panel = item.querySelector('#' + targetId);
+      if (panel) panel.classList.add('is-active');
+    }
+
+    sidebarBtns.forEach(function (btn) {
+      btn.addEventListener('mouseenter', function () { activateL1(btn); });
+      btn.addEventListener('focus',      function () { activateL1(btn); });
     });
   });
 
