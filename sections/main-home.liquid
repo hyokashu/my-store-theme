@@ -124,7 +124,7 @@
 .cvh-hero__slide-wrap.has-bg-image .cvh-hero__eyebrow {
   background: rgba(255,255,255,0.15); color: #ffffff;
 }
-.cvh-hero__slide-wrap.has-bg-image .cvh-hero__title em { color: #FFC107; }
+.cvh-hero__slide-wrap.has-bg-image .cvh-hero__title em { color: #ffffff; }
 .cvh-hero__slide-wrap.has-bg-image .cvh-btn--outline {
   border-color: rgba(255,255,255,0.8); color: #ffffff;
 }
@@ -254,16 +254,10 @@
 .cvh-prod-badge--preorder { background: var(--cv-destructive); color: #fff; }
 .cvh-prod-badge--hot     { background: var(--cv-star);         color: #fff; }
 
-.cvh-prod-card__info  { display: flex; flex-direction: column; gap: 0.25rem; }
-.cvh-prod-card__type  { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--cv-muted-fg); font-weight: 600; }
-.cvh-prod-card__name  { font-size: 0.875rem; font-weight: 600; line-height: 1.35; }
-.cvh-prod-card__prices { display: flex; align-items: baseline; gap: 0.4rem; margin-top: 0.25rem; }
-.cvh-prod-card__price { font-family: var(--cv-font-head); font-size: 1.0625rem; font-weight: 700; }
-.cvh-prod-card__was   { font-size: 0.75rem; color: var(--cv-muted-fg); text-decoration: line-through; }
-
-.cvh-scroll-arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: var(--cv-card); border: 1px solid var(--cv-border); box-shadow: var(--cv-shadow); align-items: center; justify-content: center; cursor: pointer; z-index: 5; color: var(--cv-fg); transition: background 0.15s; -webkit-appearance: none; }
+.cvh-scroll-arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: var(--cv-card); border: 1px solid var(--cv-border); box-shadow: var(--cv-shadow); align-items: center; justify-content: center; cursor: pointer; z-index: 5; color: var(--cv-fg); transition: background 0.15s, opacity 0.2s; -webkit-appearance: none; }
 @media (min-width: 768px) { .cvh-scroll-arrow { display: flex; } }
 .cvh-scroll-arrow:hover { background: var(--cv-secondary); }
+.cvh-scroll-arrow.is-disabled { opacity: 0; pointer-events: none; }
 .cvh-scroll-arrow svg   { width: 1.25rem; height: 1.25rem; }
 .cvh-scroll-arrow--prev { left: -1.25rem; }
 .cvh-scroll-arrow--next { right: -1.25rem; }
@@ -541,13 +535,24 @@
       {%- comment -%} Tab 1 Panel {%- endcomment -%}
       <div class="cvh-featured__panel is-active" id="cvh-panel-{{ tab1_id }}" role="tabpanel">
         <div class="cvh-featured__scroll-wrap">
-          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="{{ tab1_id }}" aria-label="Scroll left" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev is-disabled" data-target="{{ tab1_id }}" aria-label="Scroll left" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
           <div class="cvh-featured__scroll" id="cvh-scroll-{{ tab1_id }}">
             {%- if tab1_col != blank -%}
-              {%- for p in tab1_col.products limit: 8 -%}
+              {%- for p in tab1_col.products limit: 15 -%}
                 {%- assign pv = p.selected_or_first_available_variant -%}
                 {%- assign p_sale = false -%}
                 {%- if pv.compare_at_price > pv.price -%}{%- assign p_sale = true -%}{%- endif -%}
+                {%- assign is_preorder = false -%}
+                {%- assign is_new = false -%}
+                {%- assign is_hot = false -%}
+                {%- for tag in p.tags -%}
+                  {%- assign lower_tag = tag | downcase -%}
+                  {%- if lower_tag == 'pre-order' or lower_tag == 'preorder' -%}{%- assign is_preorder = true -%}
+                  {%- elsif lower_tag == 'new' -%}{%- assign is_new = true -%}
+                  {%- elsif lower_tag == 'hot' -%}{%- assign is_hot = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
                 <a href="{{ p.url }}" class="cvh-prod-card">
                   <div class="cvh-prod-card__img">
                     {%- if p.featured_image -%}
@@ -556,7 +561,9 @@
                       <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p.title | url_encode | truncate: 20, '' }}" alt="{{ p.title }}" width="280" height="280" loading="lazy">
                     {%- endif -%}
                     <div class="cvh-prod-card__badges">
-                      <span class="cvh-prod-badge cvh-prod-badge--preorder">Pre-Order</span>
+                      {%- if is_preorder -%}<span class="cvh-prod-badge cvh-prod-badge--preorder">Pre-Order</span>{%- endif -%}
+                      {%- if is_new -%}<span class="cvh-prod-badge cvh-prod-badge--new">New</span>{%- endif -%}
+                      {%- if is_hot -%}<span class="cvh-prod-badge cvh-prod-badge--hot">🔥 Hot</span>{%- endif -%}
                       {%- if p_sale -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
                     </div>
                   </div>
@@ -581,13 +588,24 @@
       {%- comment -%} Tab 2 Panel {%- endcomment -%}
       <div class="cvh-featured__panel" id="cvh-panel-{{ tab2_id }}" role="tabpanel">
         <div class="cvh-featured__scroll-wrap">
-          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="{{ tab2_id }}" aria-label="Scroll left" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev is-disabled" data-target="{{ tab2_id }}" aria-label="Scroll left" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
           <div class="cvh-featured__scroll" id="cvh-scroll-{{ tab2_id }}">
             {%- if tab2_col != blank -%}
-              {%- for p in tab2_col.products limit: 8 -%}
+              {%- for p in tab2_col.products limit: 15 -%}
                 {%- assign pv = p.selected_or_first_available_variant -%}
                 {%- assign p_sale = false -%}
                 {%- if pv.compare_at_price > pv.price -%}{%- assign p_sale = true -%}{%- endif -%}
+                {%- assign is_preorder = false -%}
+                {%- assign is_new = false -%}
+                {%- assign is_hot = false -%}
+                {%- for tag in p.tags -%}
+                  {%- assign lower_tag = tag | downcase -%}
+                  {%- if lower_tag == 'pre-order' or lower_tag == 'preorder' -%}{%- assign is_preorder = true -%}
+                  {%- elsif lower_tag == 'new' -%}{%- assign is_new = true -%}
+                  {%- elsif lower_tag == 'hot' -%}{%- assign is_hot = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
                 <a href="{{ p.url }}" class="cvh-prod-card">
                   <div class="cvh-prod-card__img">
                     {%- if p.featured_image -%}
@@ -596,7 +614,9 @@
                       <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p.title | url_encode | truncate: 20, '' }}" alt="{{ p.title }}" width="280" height="280" loading="lazy">
                     {%- endif -%}
                     <div class="cvh-prod-card__badges">
-                      <span class="cvh-prod-badge cvh-prod-badge--new">New</span>
+                      {%- if is_preorder -%}<span class="cvh-prod-badge cvh-prod-badge--preorder">Pre-Order</span>{%- endif -%}
+                      {%- if is_new -%}<span class="cvh-prod-badge cvh-prod-badge--new">New</span>{%- endif -%}
+                      {%- if is_hot -%}<span class="cvh-prod-badge cvh-prod-badge--hot">🔥 Hot</span>{%- endif -%}
                       {%- if p_sale -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
                     </div>
                   </div>
@@ -621,13 +641,24 @@
       {%- comment -%} Tab 3 Panel {%- endcomment -%}
       <div class="cvh-featured__panel" id="cvh-panel-{{ tab3_id }}" role="tabpanel">
         <div class="cvh-featured__scroll-wrap">
-          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev" data-target="{{ tab3_id }}" aria-label="Scroll left" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="cvh-scroll-arrow cvh-scroll-arrow--prev is-disabled" data-target="{{ tab3_id }}" aria-label="Scroll left" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
           <div class="cvh-featured__scroll" id="cvh-scroll-{{ tab3_id }}">
             {%- if tab3_col != blank -%}
-              {%- for p in tab3_col.products limit: 8 -%}
+              {%- for p in tab3_col.products limit: 15 -%}
                 {%- assign pv = p.selected_or_first_available_variant -%}
                 {%- assign p_sale = false -%}
                 {%- if pv.compare_at_price > pv.price -%}{%- assign p_sale = true -%}{%- endif -%}
+                {%- assign is_preorder = false -%}
+                {%- assign is_new = false -%}
+                {%- assign is_hot = false -%}
+                {%- for tag in p.tags -%}
+                  {%- assign lower_tag = tag | downcase -%}
+                  {%- if lower_tag == 'pre-order' or lower_tag == 'preorder' -%}{%- assign is_preorder = true -%}
+                  {%- elsif lower_tag == 'new' -%}{%- assign is_new = true -%}
+                  {%- elsif lower_tag == 'hot' -%}{%- assign is_hot = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
                 <a href="{{ p.url }}" class="cvh-prod-card">
                   <div class="cvh-prod-card__img">
                     {%- if p.featured_image -%}
@@ -636,7 +667,9 @@
                       <img src="https://placehold.co/280x280/eeecea/76798c?text={{ p.title | url_encode | truncate: 20, '' }}" alt="{{ p.title }}" width="280" height="280" loading="lazy">
                     {%- endif -%}
                     <div class="cvh-prod-card__badges">
-                      <span class="cvh-prod-badge cvh-prod-badge--hot">🔥 Hot</span>
+                      {%- if is_preorder -%}<span class="cvh-prod-badge cvh-prod-badge--preorder">Pre-Order</span>{%- endif -%}
+                      {%- if is_new -%}<span class="cvh-prod-badge cvh-prod-badge--new">New</span>{%- endif -%}
+                      {%- if is_hot -%}<span class="cvh-prod-badge cvh-prod-badge--hot">🔥 Hot</span>{%- endif -%}
                       {%- if p_sale -%}<span class="cvh-prod-badge cvh-prod-badge--sale">Sale</span>{%- endif -%}
                     </div>
                   </div>
@@ -912,6 +945,38 @@
 
   if (total > 1) startAutoplay();
 
+  // ----- Fan Favourites Scroll Logic -----
+  function updateArrows(panel) {
+    var scroll = panel.querySelector('.cvh-featured__scroll');
+    var prev = panel.querySelector('.cvh-scroll-arrow--prev');
+    var next = panel.querySelector('.cvh-scroll-arrow--next');
+    if (!scroll || !prev || !next) return;
+
+    var maxScroll = scroll.scrollWidth - scroll.clientWidth;
+    if (maxScroll <= 0) {
+      prev.classList.add('is-disabled');
+      next.classList.add('is-disabled');
+      return;
+    }
+    
+    prev.classList.toggle('is-disabled', scroll.scrollLeft <= 5);
+    next.classList.toggle('is-disabled', scroll.scrollLeft >= maxScroll - 5);
+  }
+
+  var scrolls = document.querySelectorAll('.cvh-featured__scroll');
+  scrolls.forEach(function(s) {
+    s.addEventListener('scroll', function() {
+      updateArrows(s.closest('.cvh-featured__panel'));
+    });
+    // Initial check
+    setTimeout(function() { updateArrows(s.closest('.cvh-featured__panel')); }, 100);
+  });
+
+  window.addEventListener('resize', function() {
+    var activePanel = document.querySelector('.cvh-featured__panel.is-active');
+    if (activePanel) updateArrows(activePanel);
+  });
+
   var featTabs   = Array.prototype.slice.call(document.querySelectorAll('.cvh-featured__tab'));
   var featPanels = Array.prototype.slice.call(document.querySelectorAll('.cvh-featured__panel'));
 
@@ -922,7 +987,10 @@
       this.classList.add('is-active');
       this.setAttribute('aria-selected', 'true');
       var panel = document.getElementById('cvh-panel-' + this.dataset.panel);
-      if (panel) panel.classList.add('is-active');
+      if (panel) {
+        panel.classList.add('is-active');
+        updateArrows(panel);
+      }
     });
   });
 
@@ -934,8 +1002,12 @@
       if (!panel) return;
       var scroll  = panel.querySelector('.cvh-featured__scroll');
       if (!scroll) return;
-      var dir     = this.classList.contains('cvh-scroll-arrow--next') ? 1 : -1;
-      var amount  = scroll.offsetWidth * 0.75;
+      
+      var dir = this.classList.contains('cvh-scroll-arrow--next') ? 1 : -1;
+      var card = scroll.querySelector('.cvh-prod-card');
+      // Scroll by exactly 3 cards width + gaps
+      var amount = card ? (card.offsetWidth + 16) * 3 : scroll.offsetWidth * 0.75; 
+      
       scroll.scrollBy({ left: dir * amount, behavior: 'smooth' });
     });
   });
