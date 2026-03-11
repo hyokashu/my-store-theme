@@ -79,6 +79,14 @@
 @media (min-width: 768px)  { .cv-wrap { padding: 3rem 2rem 3rem; } }
 @media (min-width: 1024px) { .cv-wrap { padding: 3rem 2rem; } }
 
+#cv-tabs-section {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+@media (min-width: 768px) { #cv-tabs-section { padding-left: 2rem; padding-right: 2rem; } }
+
 /* ── Mobile: zero out base.css main { padding: 2rem } so product page reaches edge ── */
 @media (max-width: 767px) {
   main { padding-left: 0 !important; padding-right: 0 !important; }
@@ -1095,7 +1103,7 @@ input.cv-qty__input {
     <div class="cv-tabs__nav" role="tablist" aria-label="Product information">
       <button class="cv-tabs__trigger is-active" role="tab" aria-selected="true"  aria-controls="cv-tab-description" id="cv-btn-description" data-tab="description" type="button">{{ section.settings.tab_description_label | default: 'Description' }}</button>
       <button class="cv-tabs__trigger"           role="tab" aria-selected="false" aria-controls="cv-tab-contents"    id="cv-btn-contents"    data-tab="contents"    type="button">{{ section.settings.tab_contents_label | default: 'Box Contents' }}</button>
-      <button class="cv-tabs__trigger"           role="tab" aria-selected="false" aria-controls="cv-tab-reviews"     id="cv-btn-reviews"     data-tab="reviews"     type="button">{{ section.settings.tab_reviews_label | default: 'Reviews' }} ({{ rating_count }})</button>
+      <button class="cv-tabs__trigger"           role="tab" aria-selected="false" aria-controls="cv-tab-reviews"     id="cv-btn-reviews"     data-tab="reviews"     type="button">Shipping &amp; Returns</button>
     </div>
 
     {%- comment -%} Description tab {%- endcomment -%}
@@ -1189,75 +1197,10 @@ input.cv-qty__input {
       </div>
     </div>
 
-    {%- comment -%} 3. Dynamic Theme Blocks Reviews tab {%- endcomment -%}
+    {%- comment -%} 3. Shipping & Returns tab {%- endcomment -%}
     <div class="cv-tabs__panel" id="cv-tab-reviews" role="tabpanel" aria-labelledby="cv-btn-reviews">
-      <div class="cv-reviews">
-
-        <div class="cv-review-summary">
-          <div class="cv-review-summary__score">
-            <span class="cv-review-summary__num">{{ rating_value }}</span>
-            <div class="cv-stars" aria-hidden="true">
-              {%- for i in (1..5) -%}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              {%- endfor -%}
-            </div>
-            <span class="cv-review-summary__label">{{ rating_count }} reviews</span>
-          </div>
-          <div class="cv-rating-bars" aria-label="Rating distribution">
-            {%- assign bar_data = "5,91|4,6|3,2|2,1|1,0" | split: "|" -%}
-            {%- for bar in bar_data -%}
-              {%- assign bar_parts = bar | split: "," -%}
-              <div class="cv-rating-bar">
-                <span class="cv-rating-bar__num">{{ bar_parts[0] }}</span>
-                <span class="cv-rating-bar__star"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
-                <div class="cv-rating-bar__track"><div class="cv-rating-bar__fill" style="width:{{ bar_parts[1] }}%"></div></div>
-                <span class="cv-rating-bar__pct">{{ bar_parts[1] }}%</span>
-              </div>
-            {%- endfor -%}
-          </div>
-        </div>
-
-        {%- assign review_blocks = section.blocks | where: "type", "review" -%}
-        {%- if review_blocks.size > 0 -%}
-          {%- for block in review_blocks -%}
-            <div class="cv-review-card" {{ block.shopify_attributes }}>
-              <div class="cv-reviewer">
-                <div class="cv-reviewer__top">
-                  <div class="cv-reviewer__avatar" aria-hidden="true">{{ block.settings.initial }}</div>
-                  <span class="cv-reviewer__name">{{ block.settings.author }}</span>
-                  <span class="cv-badge--verified">Verified Purchase</span>
-                </div>
-                <div class="cv-reviewer__meta">
-                  <div class="cv-stars" aria-label="{{ block.settings.rating }} out of 5">
-                    {%- for i in (1..5) -%}
-                      {%- if i <= block.settings.rating -%}
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      {%- else -%}
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem;fill:var(--cv-secondary);color:var(--cv-secondary)" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      {%- endif -%}
-                    {%- endfor -%}
-                  </div>
-                  <span class="cv-reviewer__date">{{ block.settings.date }}</span>
-                </div>
-              </div>
-              <p class="cv-review-card__body">{{ block.settings.text }}</p>
-
-              {%- if block.settings.image != blank -%}
-                <div class="cv-review-card__img-wrap">
-                  <img src="{{ block.settings.image | image_url: width: 300 }}" class="cv-review-card__img" alt="Review photo" loading="lazy">
-                </div>
-              {%- endif -%}
-
-              <button class="cv-review-card__helpful" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-                Helpful ({{ block.settings.helpful_count }})
-              </button>
-            </div>
-          {%- endfor -%}
-        {%- else -%}
-          <p style="font-size: 0.875rem; color: var(--cv-muted-fg);">There are no reviews for this product yet.</p>
-        {%- endif -%}
-
+      <div class="cv-tab-card">
+        <p style="font-size: 0.9375rem; line-height: 1.75; color: var(--cv-muted-fg);">We offer 14-day returns on all factory-sealed and unopened products. All orders are packed securely with bubble wrap and dispatched within 24 hours to ensure your items arrive in pristine condition.</p>
       </div>
     </div>
   </section><hr class="cv-sep">
@@ -1327,7 +1270,8 @@ input.cv-qty__input {
     </div>
   </section>
 
-  {%- comment -%} 5. Intelligent Recent Sales Ticker {%- endcomment -%}
+  {%- comment -%} 5. Intelligent Recent Sales Ticker — disabled {%- endcomment -%}
+  {%- comment -%}
   <div class="cv-recent-sales" id="cv-recent-sales-container">
     <p class="cv-recent-sales__title">Recent Sales</p>
     <div class="cv-recent-sales__list" id="cv-recent-sales-list">
@@ -1351,6 +1295,7 @@ input.cv-qty__input {
       {%- endif -%}
     ]
   </script>
+  {%- endcomment -%}
 
 </section>{%- comment -%} ── Sticky Mobile Cart Bar ── {%- endcomment -%}
 <div class="cv-sticky-cart" id="cv-sticky-cart" role="region" aria-label="Quick add to cart">

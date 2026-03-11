@@ -23,21 +23,29 @@
 <style>
 /* ── Product Recommendations ─────────────────────────────── */
 .cv-recs {
-  background: var(--cv-bg, #f7f6f3);
-  padding: 3rem 1rem;
-  border-top: 1px solid var(--cv-border, #dedad5);
+  background: #F8F9FA;
+  padding: 60px 0;
 }
 .cv-recs__inner {
   max-width: 80rem;
   margin: 0 auto;
+  padding-left: 8px;
+  padding-right: 8px;
   display: flex; flex-direction: column; gap: 1.5rem;
 }
+@media (min-width: 768px) { .cv-recs__inner { padding-left: 2rem; padding-right: 2rem; } }
 .cv-recs__header {
   display: flex; align-items: center; justify-content: space-between;
 }
 .cv-recs__title {
   font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
   font-size: 1.25rem; font-weight: 700; color: var(--cv-fg, #1c1f36);
+}
+.cv-recs__title::before {
+  content: ''; display: block;
+  width: 40px; height: 3px;
+  background-color: #2e9963;
+  margin-bottom: 12px;
 }
 @media (min-width: 768px) { .cv-recs__title { font-size: 1.5rem; } }
 .cv-recs__all {
