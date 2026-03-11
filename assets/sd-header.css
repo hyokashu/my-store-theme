@@ -43,7 +43,7 @@
   display:         flex;
   align-items:     center;
   justify-content: space-between;
-  max-width:       80rem;
+  max-width:       90rem;
   margin:          0 auto;
   padding:         0 1.5rem;
   height:          100%;
@@ -159,7 +159,7 @@
   display:         grid;
   grid-template-columns: 1fr 2fr 1fr;  /* logo | search | icons */
   align-items:     center;
-  max-width:       80rem;
+  max-width:       90rem;
   margin:          0 auto;
   padding:         0 1.5rem;
   height:          100%;

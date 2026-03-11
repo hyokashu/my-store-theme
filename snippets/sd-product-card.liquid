@@ -50,7 +50,7 @@
 
   {%- comment -%} ── Image zone ── {%- endcomment -%}
   <div class="sdpc__img-wrap">
-    <a href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+    <a href="{{ product.url }}" tabindex="-1" aria-hidden="true" class="sdpc__img-link">
       {%- if card_img != blank -%}
         <img
           src="{{ card_img | image_url: width: 480 }}"
@@ -61,13 +61,29 @@
             {{ card_img | image_url: width: 640 }} 640w"
           sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
           alt="{{ card_img.alt | escape | default: product.title | escape }}"
-          class="sdpc__img"
+          class="sdpc__img sdpc__img--primary"
           loading="lazy"
           width="480"
           height="480"
         >
+        {%- assign hover_img = product.images[1] -%}
+        {%- if hover_img -%}
+          <img
+            src="{{ hover_img | image_url: width: 480 }}"
+            srcset="
+              {{ hover_img | image_url: width: 240 }} 240w,
+              {{ hover_img | image_url: width: 480 }} 480w,
+              {{ hover_img | image_url: width: 640 }} 640w"
+            sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
+            alt="{{ hover_img.alt | escape | default: product.title | escape }}"
+            class="sdpc__img sdpc__img--hover"
+            loading="lazy"
+            width="480"
+            height="480"
+          >
+        {%- endif -%}
       {%- else -%}
-        <div class="sdpc__img" style="background:var(--cv-secondary);width:100%;height:100%;"></div>
+        <div class="sdpc__img sdpc__img--primary" style="background:var(--cv-secondary);width:100%;height:100%;"></div>
       {%- endif -%}
     </a>
 
@@ -147,6 +163,10 @@
         style="text-decoration:none;color:inherit;"
       >{{ product.title | escape }}</a>
     </h3>
+
+    {%- if product.type != blank -%}
+      <p class="sdpc__type">{{ product.type | escape }}</p>
+    {%- endif -%}
 
     <div class="sdpc__price-row">
       <span class="sdpc__price-current">{{ first_variant.price | money }}</span>

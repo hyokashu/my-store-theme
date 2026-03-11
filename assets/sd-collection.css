@@ -52,7 +52,7 @@
 }
 
 .sdcl-gateway__inner {
-  max-width: 72rem;
+  max-width: 90rem;
   margin: 0 auto;
 }
 
@@ -175,7 +175,7 @@
 }
 
 .sdcb-banner__inner {
-  max-width: 80rem;
+  max-width: 90rem;
   margin: 0 auto;
 }
 
@@ -222,7 +222,7 @@
 
 /* Base wrapper (no sidebar) */
 .sd-catalog__wrap {
-  max-width: 80rem;
+  max-width: 90rem;
   margin: 0 auto;
   padding: 1.5rem 1rem 5rem;
 }
@@ -262,7 +262,10 @@
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--cv-border) transparent;
-    padding-bottom: 2rem;
+    padding: 1rem 1rem 2rem;
+    background: #efede8;
+    border-radius: 0.75rem;
+    border: 1px solid var(--cv-border);
   }
   body.sd-sticky-active .sdcl-sidebar {
     top: calc(var(--sd-header-height, 64px) + 1rem);
@@ -981,9 +984,9 @@
 }
 
 .sdpc:hover {
-  box-shadow: 0 6px 24px rgba(28,31,54,0.10);
+  box-shadow: 0 8px 28px rgba(28,31,54,0.14);
   border-color: #c8c4be;
-  transform: translateY(-2px);
+  transform: translateY(-5px);
 }
 
 /* Out of stock: slight opacity fade */
@@ -999,13 +1002,30 @@
   flex-shrink: 0;
 }
 
+.sdpc__img-link {
+  display: block;
+  height: 100%;
+  position: relative;
+}
+
 .sdpc__img {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.sdpc:hover .sdpc__img { transform: scale(1.04); }
+.sdpc__img--hover {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+@media (hover: hover) {
+  .sdpc:hover .sdpc__img--primary { opacity: 0; }
+  .sdpc:hover .sdpc__img--hover { opacity: 1; }
+}
+
+.sdpc:hover .sdpc__img--primary { transform: scale(1.04); }
 
 /* ── Badges ── */
 .sdpc__badges {
@@ -1081,8 +1101,8 @@
 
 /* ── Card body ── */
 .sdpc__body {
-  padding: 0.75rem 0.85rem 0.85rem;
-  display: flex; flex-direction: column; gap: 0.25rem; flex: 1;
+  padding: 0.6rem 0.75rem 0.75rem;
+  display: flex; flex-direction: column; gap: 0.15rem; flex: 1;
 }
 
 .sdpc__vendor {
@@ -1113,6 +1133,15 @@
 
 .sdpc__price-compare {
   font-size: 0.8rem; color: var(--cv-muted-fg); text-decoration: line-through;
+}
+
+.sdpc__type {
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--cv-muted-fg);
+  margin: 0;
 }
 
 /* ── Skeleton loading ── */
