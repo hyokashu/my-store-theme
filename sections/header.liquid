@@ -49,6 +49,7 @@
 .sd-header {
   height: auto !important;
   overflow: visible !important;
+  background: #f7f7f7 !important;
 }
 
 /* ── Logo image — schema-driven max-width ─────────────────────── */
@@ -93,13 +94,24 @@
 
 @media (min-width: 768px) {
   .sdh-top__inner {
-    /* Desktop: logo | search | icons */
-    grid-template-columns: auto 1fr auto;
-    max-width: 80rem;
+    /* Desktop: logo | search (centered) | icons — strict flexbox */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 90rem;
     margin: 0 auto;
     padding: 0 1.5rem;
     height: 4.5rem;
     gap: 1.5rem;
+  }
+  .sdh-desktop-search {
+    flex: 0 0 auto;
+    width: 50%;
+    max-width: 700px;
+  }
+  .sd-header__icons {
+    gap: 12px;
+    flex-shrink: 0;
   }
   /* Reset mobile column overrides for desktop */
   .sdh-top__inner .sd-header__logo  { grid-column: auto !important; grid-row: auto !important; }
@@ -141,51 +153,75 @@
 
 .sdh-search-icon-btn {
   position: absolute;
-  left: 0.9375rem;
+  left: auto;
+  right: 0.9375rem;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  color: #9ca3af;
+  color: #6b7280;
   display: flex;
   align-items: center;
   transition: color 0.2s;
   line-height: 0;
   z-index: 1;
 }
-.sdh-search-icon-btn:hover { color: var(--sd-search-focus, #6d28d9); }
+.sdh-search-icon-btn:hover { color: #111111; }
 .sdh-search-icon-btn svg { width: 1.0625rem; height: 1.0625rem; }
 
 .sdh-search-input {
   width: 100%;
-  padding: 0.65rem 1.125rem 0.65rem 2.875rem;
-  background: var(--sd-search-bg, #f3f4f6);
-  border: 1.5px solid var(--sd-search-border, #d1d5db);
-  border-radius: 9999px;
+  padding: 0.65rem 2.875rem 0.65rem 1.125rem;  /* right indent for icon */
+  background: #ffffff;
+  border: 2px solid #111111;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 #111111;
   font-size: 0.9375rem;
   font-family: var(--cv-font-sans, 'Inter', sans-serif);
   color: var(--sd-header-fg, #1a1a2e);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  transition: box-shadow 0.15s, transform 0.15s;
   -webkit-appearance: none;
 }
 .sdh-search-input::placeholder { color: #9ca3af; }
 .sdh-search-input:focus {
-  border-color: var(--sd-search-focus, #6d28d9);
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
-  background: #fff;
+  border-color: #111111;
+  box-shadow: 3px 3px 0 #111111;
+  background: #ffffff;
 }
 .sdh-search-input::-webkit-search-cancel-button { display: none; }
 
-/* ── Icon group (cart, account) ─────────────────────────────── */
+/* ── Icon group (location, account, cart) ───────────────────── */
 .sd-header__icons {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.25rem;
+  gap: 12px;
   flex-shrink: 0;
+}
+
+/* ── Icon buttons — square + hard shadow (overrides sd-header.css) ── */
+.sd-icon-btn {
+  border: 2px solid #111111;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 #111111;
+  background: transparent;
+  transition: box-shadow 0.12s, transform 0.12s, background 0.12s;
+}
+.sd-icon-btn:hover {
+  background: #eeeeee;
+  box-shadow: 1px 1px 0 #111111;
+  transform: translate(2px, 2px);
+  color: #111111;
+}
+
+/* ── Cart badge — overlaps top-right corner of button ── */
+.sd-cart-badge {
+  top: -5px;
+  right: -5px;
+  border-radius: 4px;
 }
 
 /* ── Hamburger (mobile only) ────────────────────────────────── */
@@ -255,8 +291,8 @@
    ================================================================ */
 .sdh-nav {
   display: none;
-  border-top: 3px solid var(--cv-primary, #282d52);
-  background: var(--sd-header-bg, #fff);
+  border-top: 1px solid #e5e7eb;
+  background: #f7f7f7;
   position: static; /* mega positions relative to .sd-header (sticky) */
 }
 
@@ -265,7 +301,8 @@
 .sdh-nav__inner {
   display: flex;
   align-items: stretch;
-  max-width: 80rem;
+  justify-content: center;
+  max-width: 90rem;
   margin: 0 auto;
   padding: 0 0.75rem;
   height: 3.25rem;
@@ -284,7 +321,7 @@
   gap: 0.3rem;
   padding: 0 1rem;
   font-family: var(--cv-font-sans, 'Inter', sans-serif);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -798,21 +835,33 @@
             </svg>
           </button>
 
-          <!-- Account icon (optional) -->
-          {%- if section.settings.show_account -%}
-            <a
-              href="{{ routes.account_url }}"
-              class="sd-icon-btn"
-              aria-label="Account"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                   stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-              </svg>
-            </a>
-          {%- endif -%}
+          <!-- Location icon -->
+          <a
+            href="/pages/contact"
+            class="sd-icon-btn"
+            aria-label="Store location"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </a>
+
+          <!-- Account icon -->
+          <a
+            href="{{ routes.account_url }}"
+            class="sd-icon-btn"
+            aria-label="Account"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </a>
 
           <!-- Cart icon — sd-cart-btn / sd-cart-badge retained for cart-drawer.js -->
           <a
