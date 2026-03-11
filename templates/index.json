@@ -217,7 +217,8 @@
           "type": "brand_link",
           "settings": {
             "label": "One Piece TCG",
-            "url": ""
+            "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_bccrjmbccrjmbccr-Photoroom.png"
           }
         },
         "promo_banner_FqmJpP": {
