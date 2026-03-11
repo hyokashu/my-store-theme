@@ -933,7 +933,7 @@
           {%- endfor -%}
 
           <div
-            class="sdh-nav__item{% if link.links.size > 0 %} has-mega{% endif %}{% if link.title | downcase == 'sale' %} sdh-nav__item--sale{% endif %}"
+            class="sdh-nav__item{% if link.links.size > 0 %} has-mega{% endif %}{% if link_title == 'sale' %} sdh-nav__item--sale{% endif %}"
             data-mega-item
           >
             {%- if link.links.size > 0 -%}
