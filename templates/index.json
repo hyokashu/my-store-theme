@@ -170,6 +170,7 @@
           "settings": {
             "label": "Elite Trainer Boxes",
             "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_v8xzegv8xzegv8xz-Photoroom.png",
             "icon": "briefcase",
             "is_sale": false
           }
@@ -179,6 +180,7 @@
           "settings": {
             "label": "Cases",
             "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_e5q440e5q440e5q4-Photoroom.png",
             "icon": "layers",
             "is_sale": false
           }
@@ -186,8 +188,9 @@
         "category_card_rNVHMV": {
           "type": "category_card",
           "settings": {
-            "label": "Bundles & Tins",
+            "label": "Singles",
             "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_tw66ketw66ketw66-Photoroom.png",
             "icon": "tag",
             "is_sale": false
           }
@@ -195,8 +198,9 @@
         "category_card_Rchcgy": {
           "type": "category_card",
           "settings": {
-            "label": "New Arrivals",
+            "label": "Promotional Items",
             "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_nyvlo1nyvlo1nyvl-Photoroom.png",
             "icon": "star",
             "is_sale": false
           }
