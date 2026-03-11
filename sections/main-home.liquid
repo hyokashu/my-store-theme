@@ -278,11 +278,11 @@
 .cvh-cat-grid::-webkit-scrollbar { display: none; }
 .cvh-cat-grid .cvh-cat-card { flex: 0 0 auto; width: calc(100% / 3.2); min-width: 90px; scroll-snap-align: start; }
 @media (min-width: 768px) {
-  .cvh-cat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; overflow-x: visible; padding-bottom: 0; align-items: start; }
+  .cvh-cat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.5rem; overflow-x: visible; padding-bottom: 0; align-items: start; }
   .cvh-cat-card { width: 100%; aspect-ratio: 1 / 1; min-height: 0; justify-content: center; padding: 0.75rem 0.5rem; }
   .cvh-cat-card--brand { aspect-ratio: auto; height: auto; min-height: 0; justify-content: flex-start; }
-  .cvh-cat-card__icon { width: 3.5rem; height: 3.5rem; margin-bottom: 0.5rem; }
-  .cvh-cat-card__icon svg { width: 2rem; height: 2rem; }
+  .cvh-cat-card__icon { width: 5rem; height: 5rem; margin-bottom: 0.75rem; }
+  .cvh-cat-card__icon svg { width: 3rem; height: 3rem; }
 }
 
 .cvh-cat-card { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 0.5rem 0.5rem; border: 1px solid var(--cv-border); border-radius: calc(var(--cv-radius) * 2); background: var(--cv-card); box-shadow: var(--cv-shadow-sm); text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; text-align: center; }
@@ -378,6 +378,10 @@
   .cvh__inner { padding-left: 8px !important; padding-right: 8px !important; }
   .cvh-prod-card, .cvh-cat-card, .cvh-review-card { border: none !important; box-shadow: none !important; }
 }
+@media (min-width: 1024px) {
+  .cvh-categories .cvh__inner { max-width: 96rem; }
+}
+
 </style>
 
 <div class="cvh">
