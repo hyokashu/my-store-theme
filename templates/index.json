@@ -209,7 +209,8 @@
           "type": "brand_link",
           "settings": {
             "label": "Pokemon",
-            "url": ""
+            "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_c37fogc37fogc37f-Photoroom.png"
           }
         },
         "brand_link_k4wXFB": {
