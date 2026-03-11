@@ -26,6 +26,7 @@
           "logo_max_width": 160,
           "menu": "main-menu",
           "search_placeholder": "Search for sets, singles, or accessories...",
+          "show_location": false,
           "show_account": false
         }
       },
