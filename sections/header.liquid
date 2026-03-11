@@ -835,6 +835,7 @@
             </svg>
           </button>
 
+          {%- if section.settings.show_location -%}
           <!-- Location icon -->
           <a
             href="/pages/contact"
@@ -848,7 +849,9 @@
               <circle cx="12" cy="10" r="3"/>
             </svg>
           </a>
+          {%- endif -%}
 
+          {%- if section.settings.show_account -%}
           <!-- Account icon -->
           <a
             href="{{ routes.account_url }}"
@@ -862,6 +865,7 @@
               <circle cx="12" cy="7" r="4"/>
             </svg>
           </a>
+          {%- endif -%}
 
           <!-- Cart icon — sd-cart-btn / sd-cart-badge retained for cart-drawer.js -->
           <a
@@ -1396,9 +1400,15 @@
     },
     {
       "type": "checkbox",
+      "id": "show_location",
+      "label": "Show location icon",
+      "default": false
+    },
+    {
+      "type": "checkbox",
       "id": "show_account",
       "label": "Show account icon",
-      "default": true
+      "default": false
     }
   ],
   "blocks": [
