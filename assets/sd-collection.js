@@ -159,13 +159,7 @@
     if (!panel) return;
 
     function openPanel() {
-      /* Make overlay visible (display:block) then trigger CSS opacity transition */
-      if (overlay) {
-        overlay.classList.add('is-visible');
-        requestAnimationFrame(function () {
-          overlay.classList.add('is-open');
-        });
-      }
+      if (overlay) overlay.classList.add('is-open');
       panel.classList.add('is-open');
       panel.setAttribute('aria-hidden', 'false');
       document.body.classList.add('overflow-hidden');
@@ -174,14 +168,7 @@
     }
 
     function closePanel() {
-      if (overlay) {
-        overlay.classList.remove('is-open');
-        /* Remove display after transition ends */
-        overlay.addEventListener('transitionend', function handler() {
-          overlay.classList.remove('is-visible');
-          overlay.removeEventListener('transitionend', handler);
-        });
-      }
+      if (overlay) overlay.classList.remove('is-open');
       panel.classList.remove('is-open');
       panel.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('overflow-hidden');
