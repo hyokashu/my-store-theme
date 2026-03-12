@@ -1216,21 +1216,6 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
     font-weight: 700;
   }
 
-  /* ── 5. Sticky "Filters & Sort" topbar on mobile ── */
-  .sd-catalog__topbar {
-    position:         sticky;
-    top:              var(--sd-header-height, 64px);
-    z-index:          90;
-    background:       var(--cv-bg, #f7f6f3);
-    box-shadow:       0 2px 12px rgba(28, 31, 54, 0.10);
-    padding-top:      0.625rem;
-    padding-bottom:   0.625rem;
-    margin-left:      -8px;   /* cancel the 8px catalog wrap padding → full-bleed */
-    margin-right:     -8px;
-    padding-left:     8px;
-    padding-right:    8px;
-    /* border-bottom from base styles preserved */
-  }
 
   /* ══════════════════════════════════════════════════════════
      GAMEOLOGY-STYLE MOBILE GRID
@@ -1332,12 +1317,5 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
     overflow:      hidden  !important;
   }
 
-  /* ── Topbar: compensate for new 8px gutters ── */
-  .sd-catalog__topbar {
-    margin-left:  0 !important;  /* main padding is 0; no negative margin needed */
-    margin-right: 0 !important;
-    padding-left:  8px;
-    padding-right: 8px;
-  }
 
 } /* end @media (max-width: 768px) */
