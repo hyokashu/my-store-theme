@@ -160,12 +160,13 @@
     {%- endif -%}
     {%- endcomment -%}
 
+    {%- assign _display_title = product.title | replace: 'One Piece Card Game: ', '' | replace: 'Pokemon Card Game: ', '' -%}
     <h3 class="sdpc__title">
       <a
         href="{{ product.url }}"
         data-raw-title="{{ product.title | escape }}"
         style="text-decoration:none;color:inherit;"
-      >{{ product.title | escape }}</a>
+      >{{ _display_title | escape }}</a>
     </h3>
 
     {%- if product.type != blank -%}

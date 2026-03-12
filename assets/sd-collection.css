@@ -282,6 +282,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
     top: 1.5rem;
     max-height: calc(100vh - 5rem);
     overflow-y: auto;
+    overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: var(--cv-border) transparent;
     padding: 1rem 1rem 2rem;
@@ -422,8 +423,10 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   flex-direction: column;
   max-height: 280px;
   overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--cv-border) transparent;
+  scrollbar-gutter: stable;
 }
 
 
