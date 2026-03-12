@@ -44,7 +44,9 @@
 
       <div class="sdcpg__grid">
         {%- for product in collection.products -%}
-          {%- render 'sd-product-card', product: product -%}
+          {%- if product.price > 0 -%}
+            {%- render 'sd-product-card', product: product -%}
+          {%- endif -%}
         {%- endfor -%}
       </div>
 

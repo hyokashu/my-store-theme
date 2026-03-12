@@ -209,6 +209,17 @@
   border-radius: 999px;
 }
 
+.sdcb-banner__img-wrap {
+  margin: 1rem 0 0;
+  border-radius: var(--cv-radius);
+  overflow: hidden;
+  max-height: 18rem;
+}
+.sdcb-banner__img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
 
 /* =============================================================
    CATALOG LAYOUT — 2-column grid (sidebar + main)
@@ -974,9 +985,10 @@
    ============================================================= */
 
 .sdpc {
-  background: var(--cv-card);
-  border-radius: calc(var(--cv-radius) * 1.5);
-  border: 1px solid var(--cv-border);
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
   overflow: hidden;
   display: flex; flex-direction: column;
   transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
@@ -998,7 +1010,7 @@
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: var(--cv-secondary);
+  background: transparent;
   flex-shrink: 0;
 }
 

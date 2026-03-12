@@ -96,9 +96,11 @@
           {%- if discount_pct > 0 -%}−{{ discount_pct }}%{%- else -%}Sale{%- endif -%}
         </span>
       {%- endif -%}
+      {%- comment -%}
       {%- if is_new and sold_out == false and on_sale == false -%}
         <span class="sdpc__badge sdpc__badge--new">New</span>
       {%- endif -%}
+      {%- endcomment -%}
     </div>
 
     {%- comment -%} ── Quick Add button (overlay on image) ── {%- endcomment -%}
@@ -152,9 +154,11 @@
   {%- comment -%} ── Card body ── {%- endcomment -%}
   <div class="sdpc__body">
 
+    {%- comment -%}
     {%- if product.vendor != blank -%}
       <p class="sdpc__vendor">{{ product.vendor | escape }}</p>
     {%- endif -%}
+    {%- endcomment -%}
 
     <h3 class="sdpc__title">
       <a

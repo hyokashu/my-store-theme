@@ -163,6 +163,7 @@
 
       products.forEach(function (p) {
         var v       = p.variants && p.variants[0];
+        if (!v || v.price <= 0) return;
         var price   = v ? (v.price / 100).toFixed(2) : null;
         var compare = (v && v.compare_at_price && v.compare_at_price > v.price)
           ? (v.compare_at_price / 100).toFixed(2) : null;
