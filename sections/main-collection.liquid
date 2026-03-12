@@ -222,6 +222,86 @@
 
       </div>{%- comment -%} /.sd-catalog__topbar {%- endcomment -%}
 
+      {%- comment -%} ── Mobile inline filter accordion ── {%- endcomment -%}
+      {%- if show_filters -%}
+        <div class="sdcl-mobile-panel" id="sdcf-mobile-panel" aria-hidden="true">
+          <div class="sdcl-mobile-panel__body">
+
+            {%- if collection.sort_options.size > 0 -%}
+              <div class="sdcl-mobile-sort">
+                <p class="sdcl-mobile-sort__title">Sort by</p>
+                <div class="sdcl-mobile-sort__options">
+                  {%- for option in collection.sort_options -%}
+                    <a
+                      href="{{ collection.url | split: '?' | first }}?sort_by={{ option.value | url_encode }}"
+                      class="sdcf-sort-option{% if option.value == sort_by %} is-active{% endif %}"
+                      data-sort="{{ option.value | escape }}"
+                    >
+                      <span class="sdcf-sort-radio" aria-hidden="true"></span>
+                      {{ option.name | escape }}
+                    </a>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+
+            {%- if collection.filters.size > 0 -%}
+              {%- for filter in collection.filters -%}
+                {%- liquid
+                  assign filter_has_active = false
+                  for value in filter.active_values
+                    assign filter_has_active = true
+                    break
+                  endfor
+                -%}
+                <div class="sdcl-mobile-group{% if filter_has_active %} is-open{% endif %}">
+                  <button
+                    class="sdcl-mobile-group__header"
+                    type="button"
+                    aria-expanded="{{ filter_has_active }}"
+                  >
+                    {{ filter.label | escape }}
+                    {%- if filter_has_active and filter.type != 'price_range' -%}
+                      <span class="sdcl-accordion__badge" aria-hidden="true">{{ filter.active_values.size }}</span>
+                    {%- endif -%}
+                    <svg class="sdcl-accordion__chevron" width="13" height="13"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                      aria-hidden="true">
+                      <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                  </button>
+                  {%- if filter.type == 'list' or filter.type == 'boolean' -%}
+                    <ul class="sdcl-accordion__list sdcl-mobile-group__list" role="list">
+                      {%- for value in filter.values -%}
+                        <li role="listitem">
+                          <a
+                            href="{{ value.url_to_add | default: value.url_to_remove }}"
+                            class="sdcf-option__label{% if value.active %} is-active{% endif %}{% if value.count == 0 %} sdcf-option__label--disabled{% endif %}"
+                            aria-pressed="{{ value.active }}"
+                          >
+                            <span class="sdcf-option__check" aria-hidden="true"></span>
+                            <span class="sdcf-option__text">{{ value.label | escape }}</span>
+                            <span class="sdcf-option__count">{{ value.count }}</span>
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- if has_active -%}
+              <div class="sdcl-mobile-panel__clear">
+                <a href="{{ collection.url | split: '?' | first }}" class="sdcl-mobile-panel__clear-link">Clear all filters</a>
+              </div>
+            {%- endif -%}
+
+          </div>
+        </div>
+      {%- endif -%}
+
       {%- comment -%} ─── Active filter pills ─── {%- endcomment -%}
       {%- if has_active -%}
         <div class="sdcf-active-pills" role="group" aria-label="Active filters">

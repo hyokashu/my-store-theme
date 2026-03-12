@@ -149,44 +149,15 @@
      Mobile Panel — open / close
   ───────────────────────────────────────────── */
   function initMobilePanel() {
-    var trigger  = document.getElementById('sdcf-mobile-trigger');
-    var panel    = document.getElementById('sdcf-mobile-panel');
-    var overlay  = document.getElementById('sdcl-mobile-overlay');
-    var closeBtn = document.getElementById('sdcl-panel-close');
-    var cancelBtn = document.getElementById('sdcl-panel-cancel');
-    var applyBtn  = document.getElementById('sdcl-panel-apply');
+    var trigger = document.getElementById('sdcf-mobile-trigger');
+    var panel   = document.getElementById('sdcf-mobile-panel');
+    if (!trigger || !panel) return;
 
-    if (!panel) return;
-
-    function openPanel() {
-      if (overlay) overlay.classList.add('is-open');
-      panel.classList.add('is-open');
-      panel.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('overflow-hidden');
-      if (trigger) trigger.setAttribute('aria-expanded', 'true');
-      if (closeBtn) closeBtn.focus();
-    }
-
-    function closePanel() {
-      if (overlay) overlay.classList.remove('is-open');
-      panel.classList.remove('is-open');
-      panel.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('overflow-hidden');
-      if (trigger) {
-        trigger.setAttribute('aria-expanded', 'false');
-        trigger.focus();
-      }
-    }
-
-    trigger   && trigger.addEventListener('click', openPanel);
-    closeBtn  && closeBtn.addEventListener('click', closePanel);
-    cancelBtn && cancelBtn.addEventListener('click', closePanel);
-    applyBtn  && applyBtn.addEventListener('click', closePanel);
-    overlay   && overlay.addEventListener('click', closePanel);
-
-    /* ESC key */
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && panel.classList.contains('is-open')) closePanel();
+    trigger.addEventListener('click', function () {
+      var isOpen = panel.classList.contains('is-open');
+      panel.classList.toggle('is-open', !isOpen);
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+      panel.setAttribute('aria-hidden', String(isOpen));
     });
   }
 
