@@ -149,7 +149,7 @@
           "type": "category_card",
           "settings": {
             "label": "Sale",
-            "url": "",
+            "url": "shopify://collections/on-sale",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-10_14-23-16-Photoroom.png",
             "icon": "shopping-bag",
             "is_sale": false
