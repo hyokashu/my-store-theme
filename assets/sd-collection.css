@@ -506,12 +506,13 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 .sdcl-price-range__row {
   display: flex;
-  align-items: flex-end;
-  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   margin-bottom: 0.75rem;
 }
 
-.sdcl-price-range__field { flex: 1; }
+.sdcl-price-range__field { flex: 1; min-width: 0; }
 
 .sdcl-price-range__label {
   display: block;
@@ -541,6 +542,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 .sdcl-price-range__input {
   flex: 1; min-width: 0;
+  width: 100%; box-sizing: border-box;
   padding: 0.45rem 0.5rem 0.45rem 0;
   background: none; border: none; outline: none;
   font-size: 0.84rem; font-weight: 500; color: var(--cv-fg);
@@ -553,7 +555,6 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 .sdcl-price-range__sep {
   font-size: 0.82rem;
   color: var(--cv-muted-fg);
-  padding-bottom: 0.45rem;
   flex-shrink: 0;
 }
 
