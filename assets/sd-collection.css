@@ -728,11 +728,19 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
    .sdcl-mobile-overlay
    ============================================================= */
 
+/* iOS-safe body scroll lock — applied via JS classList */
+body.overflow-hidden {
+  overflow: hidden;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+}
+
 .sdcl-mobile-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(28,31,54,0.45);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 200;
   opacity: 0;
   transition: opacity 0.3s;
@@ -757,6 +765,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   position: fixed;
   bottom: 0; left: 0; right: 0;
   width: 100vw;
+  height: 85vh;
   max-height: 85vh;
   border-radius: 16px 16px 0 0;
   background: var(--cv-card);
@@ -798,7 +807,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 /* Panel body (scrollable) */
 .sdcl-mobile-panel__body {
-  flex: 1; overflow-y: auto;
+  flex: 1; min-height: 0; overflow-y: auto;
   padding: 1rem 1.25rem 2rem;
   scrollbar-width: thin;
   scrollbar-color: var(--cv-border) transparent;
@@ -864,7 +873,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 /* Panel footer */
 .sdcl-mobile-panel__footer {
-  display: flex; flex-direction: column-reverse; gap: 0.5rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
   padding: 1rem 1.25rem 1.5rem; border-top: 1px solid var(--cv-border);
   background: var(--cv-card); flex-shrink: 0;
 }

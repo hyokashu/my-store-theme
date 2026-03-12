@@ -168,7 +168,7 @@
       }
       panel.classList.add('is-open');
       panel.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('overflow-hidden');
       if (trigger) trigger.setAttribute('aria-expanded', 'true');
       if (closeBtn) closeBtn.focus();
     }
@@ -184,7 +184,7 @@
       }
       panel.classList.remove('is-open');
       panel.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
+      document.body.classList.remove('overflow-hidden');
       if (trigger) {
         trigger.setAttribute('aria-expanded', 'false');
         trigger.focus();
