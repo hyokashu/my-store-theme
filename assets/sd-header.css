@@ -151,6 +151,7 @@
   background:       var(--sd-header-bg);
   border-bottom:    1px solid var(--sd-header-border);
   height:           var(--sd-header-height);
+  box-shadow:       0 4px 6px -1px rgba(0, 0, 0, 0.03);
   transition:       box-shadow var(--sd-transition),
                     background var(--sd-transition);
 }
