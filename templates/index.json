@@ -167,6 +167,7 @@
         },
         "category_card_TmLA9c": {
           "type": "category_card",
+          "disabled": true,
           "settings": {
             "label": "ETBs",
             "url": "",
