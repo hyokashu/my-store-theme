@@ -1,9 +1,37 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-future-releases",
-      "settings": {}
+      "blocks": {
+        "release_qkaHJa": {
+          "type": "release",
+          "settings": {
+            "set_name": "One Piece Japanese Cases",
+            "estimated_arrival": "Q1 2026",
+            "anchor_id": "set-name",
+            "notify_me_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "release_qkaHJa"
+      ],
+      "settings": {
+        "title": "Future Releases",
+        "subtext": "Stay ahead of the pack. Here's what's dropping soon."
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
