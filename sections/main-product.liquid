@@ -1228,18 +1228,21 @@ input.cv-qty__input {
             </div>
           </div>
 
-          <div class="cv-pull-rates">
-            <h4>Pull Rate Expectations</h4>
-            <p>While pull rates vary, a typical booster box from this set can yield the following on average:</p>
-            <div class="cv-pull-grid">
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Super Rare (SR)</span><span class="cv-pull-item__value">4&ndash;5 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Alternate Art (Parallel)</span><span class="cv-pull-item__value">1&ndash;2 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Secret Rare (SEC)</span><span class="cv-pull-item__value">0&ndash;1 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Special Card (SP)</span><span class="cv-pull-item__value">0&ndash;1 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">DON!! Card / Hyper Rare</span><span class="cv-pull-item__value">1 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Manga Rare / Signed Card</span><span class="cv-pull-item__value">1 Case</span></div>
+          {%- if product.metafields.custom.pull_rates != blank -%}
+            {%- assign pull_rates_json = product.metafields.custom.pull_rates.value -%}
+            <div class="cv-pull-rates">
+              <h4>Pull Rate Expectations</h4>
+              <p>While pull rates vary, a typical booster box from this set can yield the following on average:</p>
+              <div class="cv-pull-grid">
+                {%- for item in pull_rates_json -%}
+                  <div class="cv-pull-item">
+                    <span class="cv-pull-item__label">{{ item.label }}</span>
+                    <span class="cv-pull-item__value">{{ item.value }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
             </div>
-          </div>
+          {%- endif -%}
 
           <div class="cv-meta-grid">
             <div class="cv-meta-card">
