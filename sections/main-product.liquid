@@ -157,7 +157,7 @@
 .cv-gallery__main img {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, opacity 0.22s ease;
 }
 .cv-gallery__main.is-zoomed img { transform: scale(1.5); }
 
@@ -1490,13 +1490,20 @@ input.cv-qty__input {
   function setImage(index) {
     if (!thumbs[index]) return;
     current = index;
-    var t   = thumbs[index];
-    mainImg.src = t.dataset.src;
-    mainImg.alt = t.dataset.alt || '';
-    if (counter) counter.textContent = (index + 1) + ' / ' + total;
+    var t = thumbs[index];
+    if (zoomed) { mainWrap.classList.remove('is-zoomed'); zoomed = false; }
     thumbs.forEach(function(th) { th.classList.remove('is-active'); });
     t.classList.add('is-active');
-    if (zoomed) { mainWrap.classList.remove('is-zoomed'); zoomed = false; }
+    if (counter) counter.textContent = (index + 1) + ' / ' + total;
+    mainImg.style.opacity = '0';
+    mainImg.addEventListener('transitionend', function handler(e) {
+      if (e.propertyName !== 'opacity') return;
+      mainImg.removeEventListener('transitionend', handler);
+      mainImg.src = t.dataset.src;
+      mainImg.alt = t.dataset.alt || '';
+      mainImg.onload = function () { mainImg.style.opacity = '1'; mainImg.onload = null; };
+      if (mainImg.complete) mainImg.style.opacity = '1';
+    });
   }
 
   thumbs.forEach(function(thumb) {
