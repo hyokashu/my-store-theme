@@ -17,9 +17,9 @@
           "settings": {
             "eyebrow_icon": "star",
             "eyebrow": "Now In Stock",
-            "title_line1": "One Piece",
-            "title_em": "Sealed Products",
-            "description": "Hunt for your chase cards with total confidence. 100% factory-sealed, unweighed booster boxes sourced straight from official distributors and shipped with collector-grade care.",
+            "title_line1": "One Piece TCG",
+            "title_em": "Booster Boxes & Sealed Products",
+            "description": "Buy authentic, factory-sealed One Piece TCG booster boxes and hunt for your chase cards with confidence. We guarantee 100% unweighed products sourced from official distributors, shipped Australia-wide with collector-grade care.",
             "cta1_label": "Shop Booster Boxes",
             "cta1_url": "shopify://collections/one-piece",
             "cta2_label": "Shop All",
@@ -37,7 +37,7 @@
           "settings": {
             "eyebrow_icon": "tag",
             "eyebrow": "Back In Stock",
-            "title_line1": "Pokemon TCG",
+            "title_line1": "Pokémon TCG",
             "title_em": "Booster Boxes",
             "description": "The sets you’ve been hunting for are finally back in the vault. Secure your booster boxes and ETBs before they sell out again.",
             "cta1_label": "Shop Booster Boxes",
