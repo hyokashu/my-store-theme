@@ -1228,13 +1228,13 @@ input.cv-qty__input {
             </div>
           </div>
 
-          {%- if product.metafields.custom.pull_rates != blank -%}
-            {%- assign pull_rates_json = product.metafields.custom.pull_rates.value -%}
+          {%- assign pull_rates = product.metafields.custom.pull_rates.value -%}
+          {%- if pull_rates != blank and pull_rates.size > 0 -%}
             <div class="cv-pull-rates">
               <h4>Pull Rate Expectations</h4>
               <p>While pull rates vary, a typical booster box from this set can yield the following on average:</p>
               <div class="cv-pull-grid">
-                {%- for item in pull_rates_json -%}
+                {%- for item in pull_rates -%}
                   <div class="cv-pull-item">
                     <span class="cv-pull-item__label">{{ item.label }}</span>
                     <span class="cv-pull-item__value">{{ item.value }}</span>
