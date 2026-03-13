@@ -23,8 +23,8 @@
   if stock_qty > 0 and stock_qty <= 5
     assign low_stock = true
   endif
-  assign rating_value = product.metafields.reviews.rating.value | default: 4.9
-  assign rating_count = product.metafields.reviews.rating_count | default: 84
+  assign rating_value = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count
 
   assign pack_count = product.metafields.custom.pack_count | default: 24
   assign cards_per_pack = product.metafields.custom.cards_per_pack | default: 6
@@ -32,7 +32,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
 <style>
 /* =============================================================
@@ -54,8 +54,8 @@
   --cv-radius:      0.5rem;
   --cv-shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
   --cv-shadow:      0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
-  --cv-font-sans:   'Inter', system-ui, -apple-system, sans-serif;
-  --cv-font-head:   'Space Grotesk', system-ui, sans-serif;
+  --cv-font-sans:   'DM Sans', system-ui, -apple-system, sans-serif;
+  --cv-font-head:   'Cormorant Garamond', Georgia, serif;
 
   /* ── Von Restorff accent: ONLY used on Add to Cart / Buy Now / Checkout ── */
   --color-cta-primary:    #2e9963;   /* bold green — matches Authentic badge, high contrast on cream + slate */
@@ -71,13 +71,34 @@
 .cv-wrap {
   font-family: var(--cv-font-sans);
   color: var(--cv-fg);
-  background: var(--cv-bg);
+  background: #FFFFFF;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 2rem 1rem 5rem;
+  padding: 2rem 8px 5rem;
 }
 @media (min-width: 768px)  { .cv-wrap { padding: 3rem 2rem 3rem; } }
 @media (min-width: 1024px) { .cv-wrap { padding: 3rem 2rem; } }
+
+#cv-tabs-section {
+  max-width: 80rem;
+  margin: 1.5rem auto 0;
+  padding: 1.5rem 8px;
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+}
+@media (min-width: 768px) { #cv-tabs-section { margin-top: 2rem; padding: 2rem; } }
+
+/* ── Mobile: zero out base.css main { padding: 2rem } so product page reaches edge ── */
+@media (max-width: 767px) {
+  main { padding-left: 0 !important; padding-right: 0 !important; }
+
+  /* Remove visible borders on mobile for a clean, borderless look */
+  .cv-gallery__main,
+  .cv-gallery__thumbs li,
+  .cv-similar__card { border: none !important; }
+}
 
 /* =============================================================
    Separator
@@ -93,8 +114,30 @@
    Product Hero Grid
    ============================================================= */
 .cv-hero { display: grid; gap: 2rem; }
-@media (min-width: 768px)  { .cv-hero { grid-template-columns: 1fr 1fr; gap: 3rem; } }
-@media (min-width: 1024px) { .cv-hero { gap: 4rem; } }
+@media (min-width: 768px)  { .cv-hero { grid-template-columns: 55fr 45fr; gap: 2rem; align-items: start; } }
+@media (min-width: 1024px) { .cv-hero { gap: 2.5rem; } }
+
+
+/* =============================================================
+   Page Load Animations
+   ============================================================= */
+@keyframes cv-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cv-gallery {
+  animation: cv-fade-up 0.5s ease both;
+  animation-delay: 0.05s;
+}
+.cv-info {
+  animation: cv-fade-up 0.5s ease both;
+  animation-delay: 0.18s;
+}
+#cv-tabs-section {
+  animation: cv-fade-up 0.5s ease both;
+  animation-delay: 0.3s;
+}
 
 /* =============================================================
    Image Gallery
@@ -107,16 +150,14 @@
   width: 100%;
   overflow: hidden;
   border-radius: calc(var(--cv-radius) * 2);
-  border: 1px solid var(--cv-border);
-  background: var(--cv-card);
-  box-shadow: var(--cv-shadow);
+  background: transparent;
   cursor: zoom-in;
 }
 .cv-gallery__main.is-zoomed { cursor: zoom-out; }
 .cv-gallery__main img {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, opacity 0.22s ease;
 }
 .cv-gallery__main.is-zoomed img { transform: scale(1.5); }
 
@@ -195,13 +236,13 @@
 
 /* Breadcrumb */
 .cv-breadcrumb {
-  display: none;
+  display: flex;
   list-style: none; padding: 0; margin: 0;
   gap: 0.375rem;
-  font-size: 0.875rem; color: var(--cv-muted-fg);
+  font-size: 0.75rem; color: var(--cv-muted-fg);
   flex-wrap: wrap; align-items: center;
 }
-@media (min-width: 768px) { .cv-breadcrumb { display: flex; } }
+@media (min-width: 768px) { .cv-breadcrumb { font-size: 0.875rem; } }
 .cv-breadcrumb a { color: var(--cv-muted-fg); text-decoration: none; transition: color 0.15s; }
 .cv-breadcrumb a:hover { color: var(--cv-fg); }
 .cv-breadcrumb__sep { color: var(--cv-border); }
@@ -219,7 +260,7 @@
 }
 .cv-badge svg { width: 0.75rem; height: 0.75rem; }
 .cv-badge--sealed   { background: rgba(40,45,82,0.07);   color: var(--cv-primary);     border-color: rgba(40,45,82,0.18); }
-.cv-badge--auth     { background: rgba(46,153,99,0.08);  color: var(--cv-success);     border-color: rgba(46,153,99,0.2); }
+.cv-badge--auth     { background: #E6F4EA;                color: var(--cv-success);     border-color: rgba(46,153,99,0.3); }
 .cv-badge--stock    { background: rgba(201,64,48,0.08);  color: var(--cv-destructive); border-color: rgba(201,64,48,0.2); }
 .cv-badge--oos      { background: rgba(0,0,0,0.06);      color: var(--cv-muted-fg);    border-color: rgba(0,0,0,0.15); }
 
@@ -247,7 +288,7 @@
   align-items: center; gap: 0.25rem;
   font-size: 0.875rem; color: var(--cv-muted-fg);
 }
-@media (max-width: 639px) { .cv-rating__viewers { display: none !important; } }
+@media (max-width: 639px) { .cv-rating__viewers { font-size: 0.75rem; } }
 .cv-rating__viewers svg { width: 0.875rem; height: 0.875rem; }
 
 /* Pricing */
@@ -255,9 +296,13 @@
 .cv-price-row { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
 .cv-price {
   font-family: var(--cv-font-head);
-  font-size: 2rem; font-weight: 700; color: var(--cv-fg);
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--cv-primary);
+  letter-spacing: -0.01em;
+  line-height: 1;
 }
-@media (min-width: 768px) { .cv-price { font-size: 2.25rem; } }
+@media (min-width: 768px) { .cv-price { font-size: clamp(2.5rem, 4vw, 3rem); } }
 .cv-price--compare { font-size: 1.125rem; font-weight: 400; color: var(--cv-muted-fg); text-decoration: line-through; }
 .cv-badge--sale {
   background: var(--cv-success); color: var(--cv-success-fg);
@@ -276,7 +321,7 @@
   padding: 0.625rem 0.875rem;
   border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
-  background: var(--cv-card);
+  background: #F4F6F8;
   box-shadow: var(--cv-shadow-sm);
 }
 .cv-detail-item__label { font-size: 0.75rem; color: var(--cv-muted-fg); }
@@ -327,14 +372,27 @@ input.cv-qty__input {
 }
 .cv-btn svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
 
-.cv-btn--primary {
-  background: var(--color-cta-primary); color: var(--color-cta-primary-fg);
-  flex: 1; border-color: var(--color-cta-primary);
-  box-shadow: 0 2px 8px rgba(46,153,99,0.30);
+@keyframes cv-btn-shine {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
-.cv-btn--primary:hover  { background: var(--color-cta-primary-hover); border-color: var(--color-cta-primary-hover); }
+
+.cv-btn--primary {
+  flex: 1; border-color: var(--color-cta-primary);
+  color: var(--color-cta-primary-fg);
+  box-shadow: 0 2px 8px rgba(46,153,99,0.30);
+  background: linear-gradient(
+    105deg,
+    var(--color-cta-primary) 40%,
+    #3dba7f 50%,
+    var(--color-cta-primary) 60%
+  );
+  background-size: 200% auto;
+  animation: cv-btn-shine 2.5s linear 0.8s 1;
+}
+.cv-btn--primary:hover  { background: var(--color-cta-primary-hover); border-color: var(--color-cta-primary-hover); animation: none; }
 .cv-btn--primary:active { opacity: 0.85; }
-.cv-btn--primary:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+.cv-btn--primary:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; animation: none; }
 
 /* Buy Now inherits CTA colour */
 .cv-btn--outline-primary {
@@ -396,18 +454,32 @@ input.cv-qty__input {
 .cv-btn-row { display: flex; gap: 0.75rem; }
 
 /* Trust signals */
-.cv-trust { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
-@media (min-width: 640px) { .cv-trust { grid-template-columns: repeat(3, 1fr); } }
-.cv-trust-item {
-  display: flex; align-items: flex-start; gap: 0.75rem;
-  padding: 0.875rem;
+.cv-trust {
+  display: flex; flex-direction: column;
   border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
+  overflow: hidden;
   background: var(--cv-card);
   box-shadow: var(--cv-shadow-sm);
 }
-.cv-trust-item__icon { flex-shrink: 0; margin-top: 0.125rem; }
+@media (min-width: 640px) {
+  .cv-trust { flex-direction: row; }
+}
+.cv-trust-item {
+  flex: 1; display: flex; align-items: flex-start; gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--cv-border);
+  transition: background 0.2s;
+}
+@media (min-width: 640px) {
+  .cv-trust-item { border-bottom: none; border-right: 1px solid var(--cv-border); }
+  .cv-trust-item:last-child { border-right: none; }
+}
+.cv-trust-item:last-child { border-bottom: none; }
+.cv-trust-item:hover { background: rgba(40,45,82,0.025); }
+.cv-trust-item__icon { flex-shrink: 0; margin-top: 0.125rem; transition: transform 0.2s; }
 .cv-trust-item__icon svg { width: 1.25rem; height: 1.25rem; color: var(--cv-primary); }
+.cv-trust-item:hover .cv-trust-item__icon { transform: scale(1.12); }
 .cv-trust-item__title { font-size: 0.875rem; font-weight: 600; display: block; }
 .cv-trust-item__desc  { font-size: 0.75rem; color: var(--cv-muted-fg); display: block; }
 
@@ -416,27 +488,31 @@ input.cv-qty__input {
    ============================================================= */
 .cv-tabs__nav {
   display: flex; width: 100%;
-  border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
-  background: var(--cv-card);
-  box-shadow: var(--cv-shadow-sm);
+  background: rgba(0,0,0,0.05);
   padding: 0.25rem; height: 3rem;
-  gap: 0.125rem; overflow-x: auto;
+  gap: 0.25rem; overflow-x: auto;
+  border: none;
+  box-shadow: none;
 }
 .cv-tabs__trigger {
   flex: 1; min-width: max-content;
   font-family: var(--cv-font-sans);
   font-size: 0.875rem; font-weight: 500;
-  background: none; border: none; cursor: pointer;
+  background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer;
   padding: 0 1rem;
   border-radius: calc(var(--cv-radius) - 2px);
   color: var(--cv-muted-fg);
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, border-color 0.2s;
   white-space: nowrap;
 }
-.cv-tabs__trigger.is-active,
-.cv-tabs__trigger:hover { color: var(--cv-fg); }
-.cv-tabs__trigger.is-active { background: var(--cv-secondary); }
+.cv-tabs__trigger:hover { color: var(--cv-fg); background: rgba(255,255,255,0.6); }
+.cv-tabs__trigger.is-active {
+  background: var(--cv-card);
+  color: var(--cv-primary);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04);
+  border-bottom: 3px solid var(--color-cta-primary);
+}
 
 .cv-tabs__panel { display: none; margin-top: 1.25rem; }
 .cv-tabs__panel.is-active { display: block; }
@@ -714,6 +790,27 @@ input.cv-qty__input {
 .cv-sticky-cart__price  { font-family: var(--cv-font-head); font-size: 1.25rem; font-weight: 700; }
 .cv-sticky-cart__was    { font-size: 0.75rem; color: var(--cv-muted-fg); text-decoration: line-through; }
 
+.cv-sticky-cart__qty {
+  display: flex; align-items: center;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: var(--cv-card);
+  overflow: hidden; flex-shrink: 0;
+}
+.cv-sticky-qty-btn {
+  padding: 0 0.625rem; height: 2.75rem;
+  background: none; border: none; cursor: pointer;
+  color: var(--cv-muted-fg); font-size: 1.125rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: color 0.15s;
+}
+.cv-sticky-qty-btn:hover { color: var(--cv-fg); }
+.cv-sticky-qty-display {
+  min-width: 2rem; text-align: center;
+  font-size: 0.875rem; font-weight: 600; color: var(--cv-fg);
+  padding: 0 0.25rem;
+}
+
 /* ── Add to Cart Animations ── */
 .cv-pulsating-dot {
   display: inline-block;
@@ -856,24 +953,20 @@ input.cv-qty__input {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             Only {{ stock_qty }} left
           </span>
-        {%- else -%}
-          {%- comment -%} Pseudo-random stock generation based on product ID to bypass caching while remaining consistent {%- endcomment -%}
-          {%- assign pseudo_random = product.id | modulo: 4 | plus: 2 -%}
-          <span class="cv-badge cv-badge--stock">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Only {{ pseudo_random }} left
-          </span>
         {%- endif -%}
       </div>
 
       {%- comment -%} Title block {%- endcomment -%}
       <div class="cv-title-block">
         <h1 class="cv-title">{{ product.title }}</h1>
-        <p class="cv-subtitle">
-          {{ pack_count }} Booster Packs &middot; {{ cards_per_pack }} Cards Per Pack &middot; Factory Sealed
-        </p>
+        {%- if pack_count != blank -%}
+          <p class="cv-subtitle">{{ pack_count }} Booster Packs &middot; {{ cards_per_pack }} Cards Per Pack &middot; Factory Sealed</p>
+        {%- elsif product.type != blank -%}
+          <p class="cv-subtitle">{{ product.type }}</p>
+        {%- endif -%}
 
-        {%- comment -%} Rating row {%- endcomment -%}
+        {%- comment -%} Rating row — only shown when real review data exists {%- endcomment -%}
+        {%- if rating_count > 0 -%}
         <div class="cv-rating">
           <div class="cv-stars" aria-label="{{ rating_value }} out of 5 stars">
             {%- for i in (1..5) -%}
@@ -896,6 +989,7 @@ input.cv-qty__input {
             <span id="cv-viewers-count">0</span>&nbsp;people viewing
           </span>
         </div>
+        {%- endif -%}
       </div>
 
       <hr class="cv-sep" style="margin:0">
@@ -1067,7 +1161,7 @@ input.cv-qty__input {
     <div class="cv-tabs__nav" role="tablist" aria-label="Product information">
       <button class="cv-tabs__trigger is-active" role="tab" aria-selected="true"  aria-controls="cv-tab-description" id="cv-btn-description" data-tab="description" type="button">{{ section.settings.tab_description_label | default: 'Description' }}</button>
       <button class="cv-tabs__trigger"           role="tab" aria-selected="false" aria-controls="cv-tab-contents"    id="cv-btn-contents"    data-tab="contents"    type="button">{{ section.settings.tab_contents_label | default: 'Box Contents' }}</button>
-      <button class="cv-tabs__trigger"           role="tab" aria-selected="false" aria-controls="cv-tab-reviews"     id="cv-btn-reviews"     data-tab="reviews"     type="button">{{ section.settings.tab_reviews_label | default: 'Reviews' }} ({{ rating_count }})</button>
+      <button class="cv-tabs__trigger"           role="tab" aria-selected="false" aria-controls="cv-tab-reviews"     id="cv-btn-reviews"     data-tab="reviews"     type="button">Shipping &amp; Returns</button>
     </div>
 
     {%- comment -%} Description tab {%- endcomment -%}
@@ -1161,75 +1255,10 @@ input.cv-qty__input {
       </div>
     </div>
 
-    {%- comment -%} 3. Dynamic Theme Blocks Reviews tab {%- endcomment -%}
+    {%- comment -%} 3. Shipping & Returns tab {%- endcomment -%}
     <div class="cv-tabs__panel" id="cv-tab-reviews" role="tabpanel" aria-labelledby="cv-btn-reviews">
-      <div class="cv-reviews">
-
-        <div class="cv-review-summary">
-          <div class="cv-review-summary__score">
-            <span class="cv-review-summary__num">{{ rating_value }}</span>
-            <div class="cv-stars" aria-hidden="true">
-              {%- for i in (1..5) -%}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              {%- endfor -%}
-            </div>
-            <span class="cv-review-summary__label">{{ rating_count }} reviews</span>
-          </div>
-          <div class="cv-rating-bars" aria-label="Rating distribution">
-            {%- assign bar_data = "5,91|4,6|3,2|2,1|1,0" | split: "|" -%}
-            {%- for bar in bar_data -%}
-              {%- assign bar_parts = bar | split: "," -%}
-              <div class="cv-rating-bar">
-                <span class="cv-rating-bar__num">{{ bar_parts[0] }}</span>
-                <span class="cv-rating-bar__star"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
-                <div class="cv-rating-bar__track"><div class="cv-rating-bar__fill" style="width:{{ bar_parts[1] }}%"></div></div>
-                <span class="cv-rating-bar__pct">{{ bar_parts[1] }}%</span>
-              </div>
-            {%- endfor -%}
-          </div>
-        </div>
-
-        {%- assign review_blocks = section.blocks | where: "type", "review" -%}
-        {%- if review_blocks.size > 0 -%}
-          {%- for block in review_blocks -%}
-            <div class="cv-review-card" {{ block.shopify_attributes }}>
-              <div class="cv-reviewer">
-                <div class="cv-reviewer__top">
-                  <div class="cv-reviewer__avatar" aria-hidden="true">{{ block.settings.initial }}</div>
-                  <span class="cv-reviewer__name">{{ block.settings.author }}</span>
-                  <span class="cv-badge--verified">Verified Purchase</span>
-                </div>
-                <div class="cv-reviewer__meta">
-                  <div class="cv-stars" aria-label="{{ block.settings.rating }} out of 5">
-                    {%- for i in (1..5) -%}
-                      {%- if i <= block.settings.rating -%}
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      {%- else -%}
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:.75rem;height:.75rem;fill:var(--cv-secondary);color:var(--cv-secondary)" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      {%- endif -%}
-                    {%- endfor -%}
-                  </div>
-                  <span class="cv-reviewer__date">{{ block.settings.date }}</span>
-                </div>
-              </div>
-              <p class="cv-review-card__body">{{ block.settings.text }}</p>
-
-              {%- if block.settings.image != blank -%}
-                <div class="cv-review-card__img-wrap">
-                  <img src="{{ block.settings.image | image_url: width: 300 }}" class="cv-review-card__img" alt="Review photo" loading="lazy">
-                </div>
-              {%- endif -%}
-
-              <button class="cv-review-card__helpful" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-                Helpful ({{ block.settings.helpful_count }})
-              </button>
-            </div>
-          {%- endfor -%}
-        {%- else -%}
-          <p style="font-size: 0.875rem; color: var(--cv-muted-fg);">There are no reviews for this product yet.</p>
-        {%- endif -%}
-
+      <div class="cv-tab-card">
+        <p style="font-size: 0.9375rem; line-height: 1.75; color: var(--cv-muted-fg);">We offer 14-day returns on all factory-sealed and unopened products. All orders are packed securely with bubble wrap and dispatched within 24 hours to ensure your items arrive in pristine condition.</p>
       </div>
     </div>
   </section><hr class="cv-sep">
@@ -1299,7 +1328,8 @@ input.cv-qty__input {
     </div>
   </section>
 
-  {%- comment -%} 5. Intelligent Recent Sales Ticker {%- endcomment -%}
+  {%- comment -%} 5. Intelligent Recent Sales Ticker — disabled {%- endcomment -%}
+  {%- comment -%}
   <div class="cv-recent-sales" id="cv-recent-sales-container">
     <p class="cv-recent-sales__title">Recent Sales</p>
     <div class="cv-recent-sales__list" id="cv-recent-sales-list">
@@ -1323,6 +1353,7 @@ input.cv-qty__input {
       {%- endif -%}
     ]
   </script>
+  {%- endcomment -%}
 
 </section>{%- comment -%} ── Sticky Mobile Cart Bar ── {%- endcomment -%}
 <div class="cv-sticky-cart" id="cv-sticky-cart" role="region" aria-label="Quick add to cart">
@@ -1332,6 +1363,11 @@ input.cv-qty__input {
       {%- if on_sale -%}
         <span class="cv-sticky-cart__was">{{ compare_price | money }}</span>
       {%- endif -%}
+    </div>
+    <div class="cv-sticky-cart__qty">
+      <button type="button" class="cv-sticky-qty-btn" id="cv-sticky-qty-minus" aria-label="Decrease quantity">−</button>
+      <span class="cv-sticky-qty-display" id="cv-sticky-qty-display">1</span>
+      <button type="button" class="cv-sticky-qty-btn" id="cv-sticky-qty-plus" aria-label="Increase quantity">+</button>
     </div>
     <button
       class="cv-btn cv-btn--primary"
@@ -1454,13 +1490,20 @@ input.cv-qty__input {
   function setImage(index) {
     if (!thumbs[index]) return;
     current = index;
-    var t   = thumbs[index];
-    mainImg.src = t.dataset.src;
-    mainImg.alt = t.dataset.alt || '';
-    if (counter) counter.textContent = (index + 1) + ' / ' + total;
+    var t = thumbs[index];
+    if (zoomed) { mainWrap.classList.remove('is-zoomed'); zoomed = false; }
     thumbs.forEach(function(th) { th.classList.remove('is-active'); });
     t.classList.add('is-active');
-    if (zoomed) { mainWrap.classList.remove('is-zoomed'); zoomed = false; }
+    if (counter) counter.textContent = (index + 1) + ' / ' + total;
+    mainImg.style.opacity = '0';
+    mainImg.addEventListener('transitionend', function handler(e) {
+      if (e.propertyName !== 'opacity') return;
+      mainImg.removeEventListener('transitionend', handler);
+      mainImg.src = t.dataset.src;
+      mainImg.alt = t.dataset.alt || '';
+      mainImg.onload = function () { mainImg.style.opacity = '1'; mainImg.onload = null; };
+      if (mainImg.complete) mainImg.style.opacity = '1';
+    });
   }
 
   thumbs.forEach(function(thumb) {
@@ -1506,6 +1549,26 @@ input.cv-qty__input {
     qtyInput.addEventListener('change', function () {
       var v = parseInt(qtyInput.value, 10);
       if (isNaN(v) || v < 1) qtyInput.value = 1;
+      if (stickyQtyDisplay) stickyQtyDisplay.textContent = qtyInput.value;
+    });
+  }
+
+  /* ── Sticky Qty Sync ── */
+  var stickyQtyDisplay = document.getElementById('cv-sticky-qty-display');
+  var stickyQtyMinus   = document.getElementById('cv-sticky-qty-minus');
+  var stickyQtyPlus    = document.getElementById('cv-sticky-qty-plus');
+  if (stickyQtyMinus && stickyQtyPlus && stickyQtyDisplay) {
+    stickyQtyMinus.addEventListener('click', function () {
+      var v = parseInt(stickyQtyDisplay.textContent, 10) || 1;
+      if (v > 1) {
+        stickyQtyDisplay.textContent = v - 1;
+        if (qtyInput) qtyInput.value = v - 1;
+      }
+    });
+    stickyQtyPlus.addEventListener('click', function () {
+      var v = parseInt(stickyQtyDisplay.textContent, 10) || 1;
+      stickyQtyDisplay.textContent = v + 1;
+      if (qtyInput) qtyInput.value = v + 1;
     });
   }
 

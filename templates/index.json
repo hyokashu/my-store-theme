@@ -9,33 +9,389 @@
  */
 {
   "sections": {
-    "main": {
+    "main_home_faAae4": {
       "type": "main-home",
+      "blocks": {
+        "hero_slide_pj8jtq": {
+          "type": "hero_slide",
+          "settings": {
+            "eyebrow_icon": "star",
+            "eyebrow": "Now In Stock",
+            "title_line1": "One Piece TCG",
+            "title_em": "Booster Boxes & Sealed Products",
+            "description": "Hunt for your chase cards with total confidence. Shop 100% authentic, unweighed booster boxes sourced straight from official distributors and shipped with collector-grade care.",
+            "cta1_label": "Shop Booster Boxes",
+            "cta1_url": "shopify://collections/one-piece",
+            "cta2_label": "Shop All",
+            "cta2_url": "shopify://collections/one-piece-all",
+            "bg_image": "shopify://shop_images/thumb-1920-996396.png",
+            "image": "shopify://shop_images/OP1JP.webp",
+            "badge_value": "100% Authentic",
+            "badge_label": "Verified sealed product",
+            "badge_icon": "shield",
+            "color_scheme": "1"
+          }
+        },
+        "hero_slide_qJtCnY": {
+          "type": "hero_slide",
+          "settings": {
+            "eyebrow_icon": "tag",
+            "eyebrow": "Back In Stock",
+            "title_line1": "Pokémon TCG",
+            "title_em": "Booster Boxes",
+            "description": "The sets you’ve been hunting for are finally back in the vault. Secure 100% authentic, factory-sealed booster boxes and ETBs, delivered to your door with premium packaging guarantees before they sell out.",
+            "cta1_label": "Shop Booster Boxes",
+            "cta1_url": "shopify://collections/pokemon-collection",
+            "cta2_label": "Shop All",
+            "cta2_url": "shopify://collections/pokemon-collection",
+            "bg_image": "shopify://shop_images/charizard-evolution-line-triple-art-extension-16-9-using-v0-tusizb7qpmwb1.webp",
+            "image": "shopify://shop_images/StoreCovers_1.png",
+            "badge_value": "Fast Dispatch",
+            "badge_label": "Ships within 24 hours",
+            "badge_icon": "clock",
+            "color_scheme": "2"
+          }
+        },
+        "hero_slide_KR9c4n": {
+          "type": "hero_slide",
+          "disabled": true,
+          "settings": {
+            "eyebrow_icon": "zap",
+            "eyebrow": "Our Promise",
+            "title_line1": "Collector-Grade",
+            "title_em": "Shipping",
+            "description": "We hate crushed corners as much as you do. Every order is packed with extreme care, heavily protected, and shipped fully insured.",
+            "cta1_label": "Shop All Products",
+            "cta1_url": "",
+            "cta2_label": "Our Story",
+            "cta2_url": "",
+            "badge_value": "Free Shipping",
+            "badge_label": "On all orders over $200",
+            "badge_icon": "tag",
+            "color_scheme": "3"
+          }
+        },
+        "trust_item_VgmMdE": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "users",
+            "title": "Australian Owned & Operated",
+            "description": "Support local! Fast, reliable service from a team that loves the game."
+          }
+        },
+        "trust_item_nw3tnX": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "shield",
+            "title": "100% Factory Sealed",
+            "description": "Guaranteed authentic, unweighed, and untampered products."
+          }
+        },
+        "trust_item_BET6FL": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "package",
+            "title": "Collector-Grade Packaging",
+            "description": "Packed with extreme care and bubble wrap to protect those corners."
+          }
+        },
+        "trust_item_yQfwnb": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "truck",
+            "title": "Fast, Insured Shipping",
+            "description": "Fully tracked and insured. Free on orders over $200."
+          }
+        },
+        "marquee_item_hhJwwx": {
+          "type": "marquee_item",
+          "disabled": true,
+          "settings": {
+            "text": "Free insured shipping on orders over $100"
+          }
+        },
+        "marquee_item_kNEhD6": {
+          "type": "marquee_item",
+          "disabled": true,
+          "settings": {
+            "text": "100% authentic sealed product"
+          }
+        },
+        "marquee_item_9E3Ky7": {
+          "type": "marquee_item",
+          "disabled": true,
+          "settings": {
+            "text": "14-day returns on sealed items"
+          }
+        },
+        "marquee_item_yzQAFj": {
+          "type": "marquee_item",
+          "disabled": true,
+          "settings": {
+            "text": "Same-day dispatch on weekdays"
+          }
+        },
+        "marquee_item_X6cDQR": {
+          "type": "marquee_item",
+          "disabled": true,
+          "settings": {
+            "text": "Best price guarantee"
+          }
+        },
+        "marquee_item_wr9J7N": {
+          "type": "marquee_item",
+          "disabled": true,
+          "settings": {
+            "text": "Factory sealed — always"
+          }
+        },
+        "category_card_mcdDyt": {
+          "type": "category_card",
+          "settings": {
+            "label": "Sale",
+            "url": "shopify://collections/on-sale",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-10_14-23-16-Photoroom.png",
+            "icon": "shopping-bag",
+            "is_sale": false
+          }
+        },
+        "category_card_FxxDLJ": {
+          "type": "category_card",
+          "settings": {
+            "label": "Booster Boxes",
+            "url": "",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-10_14-38-04-Photoroom.png",
+            "icon": "package",
+            "is_sale": false
+          }
+        },
+        "category_card_TmLA9c": {
+          "type": "category_card",
+          "disabled": true,
+          "settings": {
+            "label": "ETBs",
+            "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_v8xzegv8xzegv8xz-Photoroom.png",
+            "icon": "briefcase",
+            "is_sale": false
+          }
+        },
+        "category_card_6473yk": {
+          "type": "category_card",
+          "settings": {
+            "label": "Cases",
+            "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_e5q440e5q440e5q4-Photoroom.png",
+            "icon": "layers",
+            "is_sale": false
+          }
+        },
+        "category_card_rNVHMV": {
+          "type": "category_card",
+          "settings": {
+            "label": "Singles",
+            "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_tw66ketw66ketw66-Photoroom.png",
+            "icon": "tag",
+            "is_sale": false
+          }
+        },
+        "category_card_Rchcgy": {
+          "type": "category_card",
+          "settings": {
+            "label": "Promos",
+            "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_nyvlo1nyvlo1nyvl-Photoroom.png",
+            "icon": "star",
+            "is_sale": false
+          }
+        },
+        "brand_link_C8KPGz": {
+          "type": "brand_link",
+          "settings": {
+            "label": "Pokemon",
+            "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_c37fogc37fogc37f-Photoroom.png"
+          }
+        },
+        "brand_link_k4wXFB": {
+          "type": "brand_link",
+          "settings": {
+            "label": "One Piece TCG",
+            "url": "",
+            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_bccrjmbccrjmbccr-Photoroom.png"
+          }
+        },
+        "promo_banner_FqmJpP": {
+          "type": "promo_banner",
+          "settings": {
+            "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_09-06-48.png",
+            "eyebrow": "Limited Edition Pokemon",
+            "title": "Regional Promotional Boxes",
+            "cta_label": "Shop Collection",
+            "cta_url": "shopify://collections/pokemon-regional-boxes"
+          }
+        },
+        "promo_banner_9RGRWE": {
+          "type": "promo_banner",
+          "settings": {
+            "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_11-17-44.png",
+            "eyebrow": "Limited Edition One Piece",
+            "title": "Anniversary & Promo Sets",
+            "cta_label": "Shop Sets",
+            "cta_url": ""
+          }
+        },
+        "about_check_i7Lq8f": {
+          "type": "about_check",
+          "settings": {
+            "text": "Insured & protected packaging",
+            "dimmed": false
+          }
+        },
+        "about_check_mYFMhK": {
+          "type": "about_check",
+          "settings": {
+            "text": "100% authentic, authorized distributor sourced",
+            "dimmed": false
+          }
+        },
+        "about_check_HbfCbd": {
+          "type": "about_check",
+          "settings": {
+            "text": "Same-day dispatch on weekday orders",
+            "dimmed": false
+          }
+        },
+        "about_check_W8mwDB": {
+          "type": "about_check",
+          "settings": {
+            "text": "14-day returns on sealed & unopened products",
+            "dimmed": false
+          }
+        },
+        "reward_item_bhUGGP": {
+          "type": "reward_item",
+          "disabled": true,
+          "settings": {
+            "icon": "dollar",
+            "text": "1 Vault Coin for every $1 spent"
+          }
+        },
+        "reward_item_3TmXQP": {
+          "type": "reward_item",
+          "disabled": true,
+          "settings": {
+            "icon": "gift",
+            "text": "Redeem coins for discounts & gifts"
+          }
+        },
+        "reward_item_BN7YQa": {
+          "type": "reward_item",
+          "disabled": true,
+          "settings": {
+            "icon": "users",
+            "text": "Early access for loyal members"
+          }
+        },
+        "review_iPJA6Y": {
+          "type": "review",
+          "settings": {
+            "text": "Amazing service! My booster boxes arrived double-boxed and in perfect condition. Factory seals intact. Will definitely be a repeat customer.",
+            "author_name": "Alex M.",
+            "author_role": "Pokemon Collector"
+          }
+        },
+        "review_KUHLAG": {
+          "type": "review",
+          "settings": {
+            "text": "Fastest shipping I've experienced. Ordered Monday morning and it arrived Tuesday. The price was unbeatable too — best in the market.",
+            "author_name": "Sarah K.",
+            "author_role": "Yu-Gi-Oh Player"
+          }
+        },
+        "review_3x84YE": {
+          "type": "review",
+          "settings": {
+            "text": "Got my Obsidian Flames case and every single box was sealed perfectly. The packaging was incredible. 10/10 experience.",
+            "author_name": "David R.",
+            "author_role": "MTG Enthusiast"
+          }
+        },
+        "review_HtWNHT": {
+          "type": "review",
+          "settings": {
+            "text": "The pre-order experience was smooth. They kept me updated and my box arrived exactly on release day. Top tier store.",
+            "author_name": "James T.",
+            "author_role": "TCG Investor"
+          }
+        },
+        "review_GrbgWh": {
+          "type": "review",
+          "settings": {
+            "text": "Incredible range — found products here I couldn't source anywhere else. Customer service was also super helpful when I had a question.",
+            "author_name": "Emma L.",
+            "author_role": "Card Collector"
+          }
+        }
+      },
+      "block_order": [
+        "hero_slide_pj8jtq",
+        "hero_slide_qJtCnY",
+        "hero_slide_KR9c4n",
+        "trust_item_VgmMdE",
+        "trust_item_nw3tnX",
+        "trust_item_BET6FL",
+        "trust_item_yQfwnb",
+        "marquee_item_hhJwwx",
+        "marquee_item_kNEhD6",
+        "marquee_item_9E3Ky7",
+        "marquee_item_yzQAFj",
+        "marquee_item_X6cDQR",
+        "marquee_item_wr9J7N",
+        "category_card_mcdDyt",
+        "category_card_FxxDLJ",
+        "category_card_TmLA9c",
+        "category_card_6473yk",
+        "category_card_rNVHMV",
+        "category_card_Rchcgy",
+        "brand_link_C8KPGz",
+        "brand_link_k4wXFB",
+        "promo_banner_FqmJpP",
+        "promo_banner_9RGRWE",
+        "about_check_i7Lq8f",
+        "about_check_mYFMhK",
+        "about_check_HbfCbd",
+        "about_check_W8mwDB",
+        "reward_item_bhUGGP",
+        "reward_item_3TmXQP",
+        "reward_item_BN7YQa",
+        "review_iPJA6Y",
+        "review_KUHLAG",
+        "review_3x84YE",
+        "review_HtWNHT",
+        "review_GrbgWh"
+      ],
+      "name": "Home",
       "settings": {
         "hero_autoplay_ms": 5000,
         "featured_title": "Fan Favourites",
         "featured_subtitle": "Whether you're building your collection or buying your first box — these are going fast.",
-        "tab1_label": "Pre-Orders",
-        "tab1_collection": "hero-spotlight",
-        "tab2_label": "New Arrivals",
-        "tab2_collection": "",
+        "tab1_label": "One Piece",
+        "tab1_collection": "one-piece-all",
+        "tab2_label": "Pokemon",
+        "tab2_collection": "pokemon-collection",
         "tab3_label": "Best Sellers",
         "tab3_collection": "",
         "cat_title": "Browse by Category",
         "cat_subtitle": "Booster boxes, ETBs, cases, singles & more.",
         "show_about": true,
         "about_title": "About CardVault",
-        "about_desc": "We're passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all — and ship it fast with full insurance.",
+        "about_desc": "We got tired of crushed corners and sketchy reseals. Whether you're hunting the latest Japanese booster boxes or securing high-demand pre-orders, we deliver 100% authentic, factory-sealed product with the premium protection your pulls deserve.",
         "about_cta1_label": "Our Story",
-        "about_cta1_url": "",
+        "about_cta1_url": "shopify://pages/about-us",
         "about_cta2_label": "Contact Us",
         "about_cta2_url": "",
-        "show_rewards": true,
-        "rewards_eyebrow": "CardVault Rewards",
-        "rewards_title": "Level Up Every Time You Shop",
-        "rewards_desc": "Every dollar you spend earns Vault Coins redeemable for discounts, early access, and exclusive member perks.",
-        "rewards_cta_label": "Join Rewards — It's Free",
-        "rewards_cta_url": "",
         "reviews_title": "Loved by Thousands of Players",
         "show_newsletter": true,
         "nl_title": "Stay in the Loop",
@@ -47,6 +403,6 @@
     }
   },
   "order": [
-    "main"
+    "main_home_faAae4"
   ]
 }

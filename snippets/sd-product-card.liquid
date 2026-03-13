@@ -34,13 +34,23 @@
   endif
 
   assign card_img = product.featured_image
+
+  # "New" badge: show if published within last 60 days OR tagged 'new'
+  assign is_new = false
+  assign sixty_days_secs = 5184000
+  assign now_ts          = 'now'              | date: '%s' | plus: 0
+  assign cutoff_ts       = now_ts | minus: sixty_days_secs
+  assign pub_ts          = product.published_at | date: '%s' | plus: 0
+  if pub_ts > cutoff_ts or product.tags contains 'new' or product.tags contains 'New'
+    assign is_new = true
+  endif
 -%}
 
 <article class="sdpc" aria-label="{{ product.title | escape }}">
 
   {%- comment -%} ── Image zone ── {%- endcomment -%}
   <div class="sdpc__img-wrap">
-    <a href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+    <a href="{{ product.url }}" tabindex="-1" aria-hidden="true" class="sdpc__img-link">
       {%- if card_img != blank -%}
         <img
           src="{{ card_img | image_url: width: 480 }}"
@@ -51,13 +61,29 @@
             {{ card_img | image_url: width: 640 }} 640w"
           sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
           alt="{{ card_img.alt | escape | default: product.title | escape }}"
-          class="sdpc__img"
+          class="sdpc__img sdpc__img--primary"
           loading="lazy"
           width="480"
           height="480"
         >
+        {%- assign hover_img = product.images[1] -%}
+        {%- if hover_img -%}
+          <img
+            src="{{ hover_img | image_url: width: 480 }}"
+            srcset="
+              {{ hover_img | image_url: width: 240 }} 240w,
+              {{ hover_img | image_url: width: 480 }} 480w,
+              {{ hover_img | image_url: width: 640 }} 640w"
+            sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
+            alt="{{ hover_img.alt | escape | default: product.title | escape }}"
+            class="sdpc__img sdpc__img--hover"
+            loading="lazy"
+            width="480"
+            height="480"
+          >
+        {%- endif -%}
       {%- else -%}
-        <div class="sdpc__img" style="background:var(--cv-secondary);width:100%;height:100%;"></div>
+        <div class="sdpc__img sdpc__img--primary" style="background:var(--cv-secondary);width:100%;height:100%;"></div>
       {%- endif -%}
     </a>
 
@@ -70,6 +96,11 @@
           {%- if discount_pct > 0 -%}−{{ discount_pct }}%{%- else -%}Sale{%- endif -%}
         </span>
       {%- endif -%}
+      {%- comment -%}
+      {%- if is_new and sold_out == false and on_sale == false -%}
+        <span class="sdpc__badge sdpc__badge--new">New</span>
+      {%- endif -%}
+      {%- endcomment -%}
     </div>
 
     {%- comment -%} ── Quick Add button (overlay on image) ── {%- endcomment -%}
@@ -123,15 +154,24 @@
   {%- comment -%} ── Card body ── {%- endcomment -%}
   <div class="sdpc__body">
 
+    {%- comment -%}
     {%- if product.vendor != blank -%}
       <p class="sdpc__vendor">{{ product.vendor | escape }}</p>
     {%- endif -%}
+    {%- endcomment -%}
 
+    {%- assign _display_title = product.title | replace: 'One Piece Card Game: ', '' | replace: 'Pokemon Card Game: ', '' -%}
     <h3 class="sdpc__title">
-      <a href="{{ product.url }}" style="text-decoration:none;color:inherit;">
-        {{ product.title | escape }}
-      </a>
+      <a
+        href="{{ product.url }}"
+        data-raw-title="{{ product.title | escape }}"
+        style="text-decoration:none;color:inherit;"
+      >{{ _display_title | escape }}</a>
     </h3>
+
+    {%- if product.type != blank -%}
+      <p class="sdpc__type">{{ product.type | escape }}</p>
+    {%- endif -%}
 
     <div class="sdpc__price-row">
       <span class="sdpc__price-current">{{ first_variant.price | money }}</span>

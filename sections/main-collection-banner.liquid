@@ -7,10 +7,23 @@
 
 {{ 'sd-collection.css' | asset_url | stylesheet_tag }}
 
-<div class="sdcb-banner">
+<div class="sdcb-banner" style="background-color: {{ section.settings.banner_bg_color }};">
   <div class="sdcb-banner__inner">
 
     {%- render 'breadcrumbs' -%}
+
+    {%- if section.settings.show_collection_image and collection.image != blank -%}
+      <div class="sdcb-banner__img-wrap">
+        <img
+          src="{{ collection.image | image_url: width: 1400 }}"
+          alt="{{ collection.title | escape }}"
+          class="sdcb-banner__img"
+          loading="lazy"
+          width="1400"
+          height="400"
+        >
+      </div>
+    {%- endif -%}
 
     <h1 class="sdcb-banner__title">
       {{ collection.title | escape }}
@@ -40,7 +53,20 @@
   "name": "Collection Banner",
   "tag": "div",
   "class": "sd-collection-banner",
-  "settings": [],
+  "settings": [
+    {
+      "type": "color",
+      "id": "banner_bg_color",
+      "label": "Banner background color",
+      "default": "#F7F6F3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": false
+    }
+  ],
   "presets": [
     {
       "name": "Collection Banner"

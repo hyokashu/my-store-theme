@@ -1,292 +1,129 @@
 {% comment %}
-  Supply District — snippets/facets.liquid
-  Usage: {%- render 'facets', results: collection, results_count: collection.products_count -%}
+  Supply District — snippets/facets.liquid  v2
+  ─────────────────────────────────────────────────────────────────────
+  Usage: {%- render 'facets', results: collection -%}
 
-  Renders:
-  • Desktop: sticky horizontal filter-bar with per-filter dropdowns + sort select
-  • Mobile: "Filter & Sort" trigger button → bottom-up slide drawer with accordion groups
+  Renders THREE elements:
+  ① <aside class="sdcl-sidebar">   — sticky left column on desktop (≥1024px)
+       • FILTERS eyebrow + Clear All link (when active filters exist)
+       • Sort-by select
+       • Accordion filter groups (Space Grotesk Bold headers)
+       • Price range inputs with Apply form
+  ② <div class="sdcl-mobile-overlay">   — dark backdrop for mobile panel
+  ③ <div class="sdcl-mobile-panel">     — slide-in filter panel on mobile
+       • Sort-by radio links
+       • Same accordion filter groups
+       • Cancel / View Results footer
 
-  Relies on Shopify's native filter system (collection.filters + collection.sort_options).
-  Falls back gracefully when no filters are configured in Shopify admin.
-  Active filter pills appear below the bar; individual pill removes a single filter,
-  "Clear all" strips all filter params from the URL.
+  JS (sd-collection.js) handles all open/close/accordion toggling.
+  Filter links use Shopify-native url_to_add / url_to_remove — no JS
+  required for the actual filtering.
 {% endcomment %}
 
 {%- liquid
-  assign sort_by = results.sort_by | default: results.default_sort_by
+  assign sort_by        = results.sort_by | default: results.default_sort_by
   assign active_filters = results.active_filters
-  assign has_active = false
+  assign has_active     = false
   if active_filters.size > 0
     assign has_active = true
   endif
 -%}
 
-{%- comment -%} ── MOBILE OVERLAY ── {%- endcomment -%}
-<div
-  class="sdcf-drawer-overlay"
-  id="sdcf-overlay"
-  aria-hidden="true"
-></div>
+{%- comment -%} ════════════════════════════════════════════════════
+    ①  DESKTOP SIDEBAR
+════════════════════════════════════════════════════ {%- endcomment -%}
 
-{%- comment -%} ── FILTER BAR ── {%- endcomment -%}
-<div class="sdcf-bar" id="sdcf-bar">
-  <div class="sdcf-bar__inner">
+<aside class="sdcl-sidebar" id="sdcl-sidebar" aria-label="Product filters">
 
-    {%- comment -%} ── MOBILE TRIGGER ── {%- endcomment -%}
-    <button
-      class="sdcf-mobile-trigger"
-      id="sdcf-mobile-trigger"
-      aria-controls="sdcf-drawer"
-      aria-expanded="false"
-      type="button"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round" aria-hidden="true">
-        <line x1="4" y1="6" x2="11" y2="6"/><line x1="13" y1="6" x2="20" y2="6"/>
-        <line x1="4" y1="12" x2="11" y2="12"/><line x1="13" y1="12" x2="20" y2="12"/>
-        <line x1="4" y1="18" x2="11" y2="18"/><line x1="13" y1="18" x2="20" y2="18"/>
-        <circle cx="12" cy="6" r="2" fill="currentColor" stroke="none"/>
-        <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>
-        <circle cx="12" cy="18" r="2" fill="currentColor" stroke="none"/>
-      </svg>
-      Filter &amp; Sort
-      {%- if has_active -%}
-        <span style="
-          background:var(--color-cta-primary);
-          color:#fff;
-          border-radius:999px;
-          font-size:0.65rem;
-          font-weight:700;
-          padding:0.1rem 0.45rem;
-          margin-left:0.25rem;
-        ">{{ active_filters.size }}</span>
-      {%- endif -%}
-    </button>
-
-    {%- comment -%} ── DESKTOP FILTER DROPDOWNS ── {%- endcomment -%}
-    <div class="sdcf-filters" id="sdcf-desktop-filters">
-
-      {%- if results.filters.size > 0 -%}
-
-        {%- for filter in results.filters -%}
-          {%- liquid
-            assign filter_has_active = false
-            for value in filter.active_values
-              assign filter_has_active = true
-              break
-            endfor
-            if filter.type == 'price_range'
-              if filter.min_value.value or filter.max_value.value
-                assign filter_has_active = true
-              endif
-            endif
-          -%}
-
-          <div class="sdcf-dropdown" id="sdcf-dropdown-{{ forloop.index }}">
-            <button
-              class="sdcf-dropdown__trigger{% if filter_has_active %} has-active{% endif %}"
-              type="button"
-              aria-expanded="false"
-              aria-controls="sdcf-panel-{{ forloop.index }}"
-            >
-              {{ filter.label | escape }}
-              {%- if filter_has_active -%}
-                &nbsp;({{ filter.active_values.size }})
-              {%- endif -%}
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="6 9 12 15 18 9"/>
-              </svg>
-            </button>
-
-            <div
-              class="sdcf-dropdown__panel"
-              id="sdcf-panel-{{ forloop.index }}"
-              role="region"
-              aria-label="{{ filter.label | escape }} filter options"
-            >
-
-              {%- if filter.type == 'list' -%}
-                <ul class="sdcf-option-list" role="list">
-                  {%- for value in filter.values -%}
-                    <li class="sdcf-option" role="listitem">
-                      <a
-                        href="{{ value.url_to_add | default: value.url_to_remove }}"
-                        class="sdcf-option__label{% if value.active %} is-active{% endif %}{% if value.count == 0 %} sdcf-option__label--disabled{% endif %}"
-                        aria-pressed="{{ value.active }}"
-                      >
-                        <span class="sdcf-option__check" aria-hidden="true"></span>
-                        <span class="sdcf-option__text">{{ value.label | escape }}</span>
-                        <span class="sdcf-option__count">{{ value.count }}</span>
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-
-              {%- elsif filter.type == 'price_range' -%}
-                {%- comment -%} Price range — render as simple min/max links or inputs {%- endcomment -%}
-                <div style="padding: 0.75rem 1rem;">
-                  <p style="font-size:0.78rem;color:var(--cv-muted-fg);margin:0 0 0.5rem;">
-                    {{ filter.range_min | money }} – {{ filter.range_max | money }}
-                  </p>
-                  <a href="{{ filter.url_to_remove }}"
-                    style="font-size:0.78rem;color:var(--color-cta-primary);text-decoration:underline;">
-                    Reset price
-                  </a>
-                </div>
-
-              {%- elsif filter.type == 'boolean' -%}
-                <ul class="sdcf-option-list">
-                  {%- for value in filter.values -%}
-                    <li class="sdcf-option">
-                      <a
-                        href="{{ value.url_to_add | default: value.url_to_remove }}"
-                        class="sdcf-option__label{% if value.active %} is-active{% endif %}"
-                        aria-pressed="{{ value.active }}"
-                      >
-                        <span class="sdcf-option__check" aria-hidden="true"></span>
-                        <span class="sdcf-option__text">{{ value.label | escape }}</span>
-                        <span class="sdcf-option__count">{{ value.count }}</span>
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              {%- endif -%}
-
-            </div>
-          </div><!-- /.sdcf-dropdown -->
-
-        {%- endfor -%}
-
-      {%- else -%}
-        <p class="sdcf-no-filters">No filters available for this collection.</p>
-      {%- endif -%}
-
-    </div><!-- /.sdcf-filters -->
-
-    {%- comment -%} ── SORT SELECT (desktop) ── {%- endcomment -%}
-    {%- if results.sort_options.size > 0 -%}
-      <div class="sdcf-sort-wrap">
-        <span class="sdcf-sort-label">Sort:</span>
-        <select class="sdcf-sort-select" aria-label="Sort products">
-          {%- for option in results.sort_options -%}
-            <option
-              value="{{ option.value | escape }}"
-              {% if option.value == sort_by %}selected{% endif %}
-            >
-              {{ option.name | escape }}
-            </option>
-          {%- endfor -%}
-        </select>
-      </div>
-    {%- endif -%}
-
-  </div><!-- /.sdcf-bar__inner -->
-
-  {%- comment -%} ── ACTIVE FILTER PILLS ── {%- endcomment -%}
-  {%- if has_active -%}
-    <div class="sdcf-pills" role="group" aria-label="Active filters">
-      {%- for filter in active_filters -%}
-        <a
-          href="{{ filter.url_to_remove }}"
-          class="sdcf-pill"
-          aria-label="Remove filter: {{ filter.label | escape }}"
-        >
-          {{ filter.label | escape }}
-          <span class="sdcf-pill__remove" aria-hidden="true">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="3"
-              stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </span>
-        </a>
-      {%- endfor -%}
+  {%- comment -%} ── Sidebar header ── {%- endcomment -%}
+  <div class="sdcl-sidebar__header">
+    <span class="sdcl-sidebar__title">Filters</span>
+    {%- if has_active -%}
       <a
         href="{{ results.url | split: '?' | first }}"
-        class="sdcf-clear-all"
+        class="sdcl-sidebar__clear"
+        aria-label="Clear all active filters"
+      >Clear all</a>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ── Sort select (desktop sidebar) ── {%- endcomment -%}
+  {%- if results.sort_options.size > 0 -%}
+    <div class="sdcl-sidebar__sort">
+      <label class="sdcl-sidebar__sort-label" for="sdcl-sort-desktop">Sort by</label>
+      <select
+        class="sdcf-sort-select sdcf-sort-select--full"
+        id="sdcl-sort-desktop"
+        aria-label="Sort products"
       >
-        Clear all
-      </a>
+        {%- for option in results.sort_options -%}
+          <option
+            value="{{ option.value | escape }}"
+            {%- if option.value == sort_by %} selected{%- endif -%}
+          >{{ option.name | escape }}</option>
+        {%- endfor -%}
+      </select>
     </div>
   {%- endif -%}
 
-</div><!-- /.sdcf-bar -->
+  {%- comment -%} ── Filter accordion groups ── {%- endcomment -%}
+  {%- if results.filters.size > 0 -%}
 
-{%- comment -%} ── MOBILE DRAWER ── {%- endcomment -%}
-<div
-  class="sdcf-drawer"
-  id="sdcf-drawer"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Filters and sort"
-  hidden
->
-  <div class="sdcf-drawer__header">
-    <h2 class="sdcf-drawer__title">Filter &amp; Sort</h2>
-    <button
-      class="sdcf-drawer__close"
-      id="sdcf-drawer-close"
-      type="button"
-      aria-label="Close filters"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2.5"
-        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-  </div>
-
-  <div class="sdcf-drawer__body">
-
-    {%- comment -%} ── Filter accordion groups ── {%- endcomment -%}
-    {%- if results.filters.size > 0 -%}
-      {%- for filter in results.filters -%}
-        {%- liquid
-          assign filter_has_active = false
-          for value in filter.active_values
+    {%- for filter in results.filters -%}
+      {%- liquid
+        assign filter_has_active = false
+        for value in filter.active_values
+          assign filter_has_active = true
+          break
+        endfor
+        if filter.type == 'price_range'
+          if filter.min_value.value or filter.max_value.value
             assign filter_has_active = true
-            break
-          endfor
-        -%}
-        <div class="sdcf-group{% if forloop.first %} is-open{% endif %}">
-          <button
-            class="sdcf-group__header"
-            type="button"
-            aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
-          >
-            {{ filter.label | escape }}
-            {%- if filter_has_active -%}
-              <span style="
-                background:var(--color-cta-primary);
-                color:#fff;
-                border-radius:999px;
-                font-size:0.65rem;
-                font-weight:700;
-                padding:0.1rem 0.45rem;
-                margin-left:auto;
-                margin-right:0.5rem;
-              ">{{ filter.active_values.size }}</span>
-            {%- endif -%}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
+          endif
+        endif
+        assign acc_open = false
+        if forloop.index <= 4
+          assign acc_open = true
+        endif
+        if filter_has_active
+          assign acc_open = true
+        endif
+      -%}
+
+      <div
+        class="sdcl-accordion{% if acc_open %} is-open{% endif %}"
+        data-accordion="{{ forloop.index }}"
+      >
+        <button
+          class="sdcl-accordion__header"
+          type="button"
+          aria-expanded="{{ acc_open }}"
+          aria-controls="sdcl-acc-{{ forloop.index }}"
+        >
+          <span class="sdcl-accordion__label">{{ filter.label | escape }}</span>
+          {%- if filter_has_active and filter.type != 'price_range' -%}
+            <span class="sdcl-accordion__badge" aria-label="{{ filter.active_values.size }} selected">
+              {{ filter.active_values.size }}
+            </span>
+          {%- endif -%}
+          <svg class="sdcl-accordion__chevron" width="13" height="13"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+
+        <div class="sdcl-accordion__body" id="sdcl-acc-{{ forloop.index }}">
 
           {%- if filter.type == 'list' or filter.type == 'boolean' -%}
-            <ul class="sdcf-group__list">
+            <ul class="sdcl-accordion__list" role="list">
               {%- for value in filter.values -%}
-                <li>
+                <li role="listitem">
                   <a
                     href="{{ value.url_to_add | default: value.url_to_remove }}"
-                    class="sdcf-option__label{% if value.active %} is-active{% endif %}"
+                    class="sdcf-option__label{% if value.active %} is-active{% endif %}{% if value.count == 0 %} sdcf-option__label--disabled{% endif %}"
+                    aria-pressed="{{ value.active }}"
                   >
                     <span class="sdcf-option__check" aria-hidden="true"></span>
                     <span class="sdcf-option__text">{{ value.label | escape }}</span>
@@ -295,114 +132,80 @@
                 </li>
               {%- endfor -%}
             </ul>
+
+          {%- elsif filter.type == 'price_range' -%}
+            {%- comment -%} Price range with GET form ── {%- endcomment -%}
+            <form
+              id="sdcl-price-form-{{ forloop.index }}"
+              method="GET"
+              action="{{ routes.root_url }}collections/{{ results.handle }}"
+              class="sdcl-price-range"
+            >
+              {%- comment -%} Preserve all other active filters ── {%- endcomment -%}
+              {%- for f in results.filters -%}
+                {%- unless f.type == 'price_range' -%}
+                  {%- for v in f.active_values -%}
+                    <input type="hidden" name="{{ v.param_name }}" value="{{ v.value | escape }}">
+                  {%- endfor -%}
+                {%- endunless -%}
+              {%- endfor -%}
+              {%- if sort_by != blank and sort_by != results.default_sort_by -%}
+                <input type="hidden" name="sort_by" value="{{ sort_by | escape }}">
+              {%- endif -%}
+
+              <div class="sdcl-price-range__row">
+                <div class="sdcl-price-range__field">
+                  <label class="sdcl-price-range__label" for="sdcl-pmin-{{ forloop.index }}">Min</label>
+                  <div class="sdcl-price-range__wrap">
+                    <span class="sdcl-price-range__symbol" aria-hidden="true">$</span>
+                    <input
+                      type="number"
+                      id="sdcl-pmin-{{ forloop.index }}"
+                      class="sdcl-price-range__input"
+                      name="{{ filter.min_value.param_name }}"
+                      value="{{ filter.min_value.value | money_without_currency | remove: ',' }}"
+                      min="{{ filter.range_min | money_without_currency | remove: ',' }}"
+                      max="{{ filter.range_max | money_without_currency | remove: ',' }}"
+                      placeholder="{{ filter.range_min | money_without_currency | remove: ',' }}"
+                    >
+                  </div>
+                </div>
+                <span class="sdcl-price-range__sep" aria-hidden="true">–</span>
+                <div class="sdcl-price-range__field">
+                  <label class="sdcl-price-range__label" for="sdcl-pmax-{{ forloop.index }}">Max</label>
+                  <div class="sdcl-price-range__wrap">
+                    <span class="sdcl-price-range__symbol" aria-hidden="true">$</span>
+                    <input
+                      type="number"
+                      id="sdcl-pmax-{{ forloop.index }}"
+                      class="sdcl-price-range__input"
+                      name="{{ filter.max_value.param_name }}"
+                      value="{{ filter.max_value.value | money_without_currency | remove: ',' }}"
+                      min="{{ filter.range_min | money_without_currency | remove: ',' }}"
+                      max="{{ filter.range_max | money_without_currency | remove: ',' }}"
+                      placeholder="{{ filter.range_max | money_without_currency | remove: ',' }}"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="sdcl-price-range__apply">Apply price</button>
+
+              {%- if filter_has_active -%}
+                <a href="{{ filter.url_to_remove }}" class="sdcl-price-range__reset">Reset</a>
+              {%- endif -%}
+
+            </form>
           {%- endif -%}
 
-        </div><!-- /.sdcf-group -->
-      {%- endfor -%}
+        </div>{%- comment -%} /.sdcl-accordion__body {%- endcomment -%}
+      </div>{%- comment -%} /.sdcl-accordion {%- endcomment -%}
 
-    {%- else -%}
-      <p class="sdcf-no-filters">No filters available for this collection.</p>
-    {%- endif -%}
+    {%- endfor -%}
 
-    {%- comment -%} ── Sort section in drawer ── {%- endcomment -%}
-    {%- if results.sort_options.size > 0 -%}
-      <div class="sdcf-drawer-sort">
-        <p class="sdcf-drawer-sort__title">Sort by</p>
-        <div class="sdcf-drawer-sort__options">
-          {%- for option in results.sort_options -%}
-            {%- liquid
-              assign sort_url = results.url
-              assign sort_param = '?sort_by=' | append: option.value
-              if results.url contains '?'
-                assign sort_param = '&sort_by=' | append: option.value
-              endif
-            -%}
-            <a
-              href="{{ results.url | split: '?' | first }}?sort_by={{ option.value | url_encode }}"
-              class="sdcf-sort-option{% if option.value == sort_by %} is-active{% endif %}"
-              data-sort="{{ option.value | escape }}"
-            >
-              <span class="sdcf-sort-radio" aria-hidden="true"></span>
-              {{ option.name | escape }}
-            </a>
-          {%- endfor -%}
-        </div>
-      </div>
-    {%- endif -%}
+  {%- else -%}
+    <p class="sdcl-sidebar__empty">No filters available for this collection.</p>
+  {%- endif -%}
 
-  </div><!-- /.sdcf-drawer__body -->
+</aside>{%- comment -%} /.sdcl-sidebar {%- endcomment -%}
 
-  <div class="sdcf-drawer__footer">
-    {%- if has_active -%}
-      <a
-        href="{{ results.url | split: '?' | first }}"
-        class="sdcf-drawer__btn sdcf-drawer__btn--clear"
-      >
-        Clear all
-      </a>
-    {%- else -%}
-      <button
-        type="button"
-        class="sdcf-drawer__btn sdcf-drawer__btn--clear"
-        id="sdcf-drawer-close-alt"
-      >
-        Cancel
-      </button>
-    {%- endif -%}
-    <button
-      type="button"
-      class="sdcf-drawer__btn sdcf-drawer__btn--apply"
-      id="sdcf-drawer-apply"
-    >
-      View {{ results.products_count }} result{%- if results.products_count != 1 -%}s{%- endif -%}
-    </button>
-  </div>
-
-</div><!-- /.sdcf-drawer -->
-
-<script>
-  /* ── Inline drawer init: remove hidden attr, bind extra buttons ── */
-  (function () {
-    var drawer  = document.getElementById('sdcf-drawer');
-    var trigger = document.getElementById('sdcf-mobile-trigger');
-    var overlay = document.getElementById('sdcf-overlay');
-    var closeBtn = document.getElementById('sdcf-drawer-close');
-    var closeAlt = document.getElementById('sdcf-drawer-close-alt');
-    var applyBtn = document.getElementById('sdcf-drawer-apply');
-
-    if (!drawer) return;
-    drawer.removeAttribute('hidden');
-
-    function open() {
-      drawer.classList.add('is-open');
-      overlay && overlay.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-      trigger && trigger.setAttribute('aria-expanded', 'true');
-    }
-    function close() {
-      drawer.classList.remove('is-open');
-      overlay && overlay.classList.remove('is-open');
-      document.body.style.overflow = '';
-      trigger && trigger.setAttribute('aria-expanded', 'false');
-    }
-
-    trigger  && trigger.addEventListener('click', open);
-    closeBtn && closeBtn.addEventListener('click', close);
-    closeAlt && closeAlt.addEventListener('click', close);
-    overlay  && overlay.addEventListener('click', close);
-    applyBtn && applyBtn.addEventListener('click', close);
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') close();
-    });
-
-    /* Accordion groups */
-    drawer.querySelectorAll('.sdcf-group').forEach(function (g) {
-      var header = g.querySelector('.sdcf-group__header');
-      header && header.addEventListener('click', function () {
-        g.classList.toggle('is-open');
-        header.setAttribute('aria-expanded', g.classList.contains('is-open'));
-      });
-    });
-  })();
-</script>

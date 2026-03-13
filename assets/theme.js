@@ -1,61 +1,35 @@
 /* ============================================================
    Supply District — theme.js
-   Global JS: sticky header via IntersectionObserver.
+   Global JS: sticky header shadow + cart badge live update.
    ============================================================ */
 
 (function () {
   'use strict';
 
   /* ── Sticky header ─────────────────────────────────────────
-     Watch the announcement bar sentinel. Once it leaves the
-     viewport (scrolled past), pin the header to the top and
-     add a body padding offset so content doesn't jump.
+     The header is position:sticky in CSS — it never leaves
+     document flow, so there is NO layout shift and no
+     scroll-based class toggling instead.
+
+     All this function does is toggle .is-sticky (for the
+     drop-shadow) and body.sd-sticky-active (for child-page
+     offsets like the collection sidebar) based on scrollY.
   ────────────────────────────────────────────────────────── */
   function initStickyHeader () {
-    var header   = document.getElementById('sd-header');
-    var announce = document.getElementById('sd-announce-bar');
-
+    var header = document.getElementById('sd-header');
     if (!header) return;
 
-    /* If there's no announcement bar, watch a 1px sentinel at
-       the very top of <main> instead. */
-    var sentinel = announce || document.querySelector('main');
-    if (!sentinel) return;
+    function onScroll () {
+      var scrolled = window.scrollY > 0;
+      header.classList.toggle('is-sticky', scrolled);
+      document.body.classList.toggle('sd-sticky-active', scrolled);
+    }
 
-    var observer = new IntersectionObserver(
-      function (entries) {
-        var entry = entries[0];
-        if (!entry.isIntersecting) {
-          /* Announcement bar has scrolled out → sticky */
-          header.classList.add('is-sticky');
-          document.body.classList.add('sd-sticky-active');
-          /* Update body padding to match actual header height */
-          document.body.style.paddingTop = header.offsetHeight + 'px';
-        } else {
-          /* Back in view → restore */
-          header.classList.remove('is-sticky');
-          document.body.classList.remove('sd-sticky-active');
-          document.body.style.paddingTop = '';
-        }
-      },
-      {
-        threshold: 0,
-        rootMargin: '0px'
-      }
-    );
+    /* passive:true → browser can scroll without waiting for JS */
+    window.addEventListener('scroll', onScroll, { passive: true });
 
-    observer.observe(sentinel);
-
-    /* Re-calculate padding on resize */
-    var resizeTimer;
-    window.addEventListener('resize', function () {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function () {
-        if (header.classList.contains('is-sticky')) {
-          document.body.style.paddingTop = header.offsetHeight + 'px';
-        }
-      }, 100);
-    });
+    /* Evaluate immediately so state is correct on load/refresh */
+    onScroll();
   }
 
   /* ── Cart badge live update ────────────────────────────────

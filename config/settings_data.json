@@ -1,3 +1,74 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "current": {}
+  "current": {
+    "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "show_bar": true,
+          "promo_text": "Free Shipping on orders over $200",
+          "promo_url": "",
+          "icon_show": true
+        }
+      },
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo": "shopify://shop_images/hiroshima-box-cardbot-pokemon-center.webp",
+          "logo_max_width": 160,
+          "menu": "main-menu",
+          "search_placeholder": "Search for sets, singles, or accessories...",
+          "show_location": false,
+          "show_account": false
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "tagline": "Your one-stop destination for sealed TCG products. Authentic. Affordable. Fast.",
+          "support_email": "support@supplydistrict.com",
+          "phone": "+61 3 0000 0000",
+          "hours": "Mon–Fri: 9am – 5pm AEST",
+          "quick_link_1_label": "FAQ",
+          "quick_link_1_url": "",
+          "quick_link_2_label": "Shipping & Returns",
+          "quick_link_2_url": "",
+          "quick_link_3_label": "Track My Order",
+          "quick_link_3_url": "",
+          "quick_link_4_label": "",
+          "quick_link_4_url": "",
+          "address": "Supply District Pty Ltd\n123 Collector Way\nMelbourne VIC 3000\nAustralia",
+          "abn": "",
+          "social_intro": "Follow us for drops, pulls & community events.",
+          "instagram_url": "",
+          "discord_url": "",
+          "youtube_url": "",
+          "tiktok_url": "",
+          "legal_note": "All rights reserved.",
+          "legal_link_1_label": "Privacy Policy",
+          "legal_link_1_url": "",
+          "legal_link_2_label": "Terms of Service",
+          "legal_link_2_url": "",
+          "legal_link_3_label": "Refund Policy",
+          "legal_link_3_url": ""
+        }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "free_ship_threshold": 20000,
+          "upsell_collection": "pokemon-collection"
+        }
+      }
+    },
+    "content_for_index": []
+  }
 }

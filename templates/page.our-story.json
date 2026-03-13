@@ -1,0 +1,85 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "our_story": {
+      "type": "our-story",
+      "blocks": {
+        "pillar1": {
+          "type": "value_pillar",
+          "settings": {
+            "pillar_title": "Authenticity",
+            "pillar_desc": "We source directly from official, verified distributors. No weighed packs, no resealed booster boxes, just legitimate TCG products you can trust to keep sealed or rip with confidence."
+          }
+        },
+        "pillar2": {
+          "type": "value_pillar",
+          "settings": {
+            "pillar_title": "Collector-Grade Packaging",
+            "pillar_desc": "We understand the pain of dented corners on a chase item. Every order is heavily bubble-wrapped and secured in sturdy shipping boxes to ensure your sealed collection arrives in pristine condition."
+          }
+        },
+        "pillar3": {
+          "type": "value_pillar",
+          "settings": {
+            "pillar_title": "Fast Australian Shipping",
+            "pillar_desc": "Operating locally, we provide lightning-fast, fully insured dispatch Australia-wide. We track your highly sought-after sets every step of the way, with free shipping on all orders over $200."
+          }
+        },
+        "gallery1": {
+          "type": "gallery_image",
+          "settings": {}
+        },
+        "gallery2": {
+          "type": "gallery_image",
+          "settings": {}
+        },
+        "gallery3": {
+          "type": "gallery_image",
+          "settings": {}
+        },
+        "gallery4": {
+          "type": "gallery_image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "pillar1",
+        "pillar2",
+        "pillar3",
+        "gallery1",
+        "gallery2",
+        "gallery3",
+        "gallery4"
+      ],
+      "settings": {
+        "eyebrow": "Our Story",
+        "heading": "Built by Collectors. Trusted by the Community.",
+        "subheading": "We started Supply District because we got tired of the same problem every collector faces. Here’s why we exist.",
+        "story_eyebrow": "How It Started",
+        "story_heading": "We got tired of crushed corners and sketchy reseals.",
+        "story_body": "<p>As avid players and collectors based in Sydney, we were exhausted by the anxiety of ordering trading cards online. Crushed ETBs, questionable shrink wrap, and untampered product anxiety were far too common.</p><p>We created Supply District to be the Australian TCG store we always wished existed. Whether you are hunting for highly anticipated Japanese One Piece booster boxes or the latest English Pokémon TCG sets, we guarantee peace of mind. Every product is 100% authentic, factory-sealed, and shipped with the extreme care your collection deserves.</p>",
+        "pillars_heading": "What We Stand For",
+        "pillars_subheading": "Three promises. Every order.",
+        "quote_text": "We didn’t build Supply District to be the biggest. We built it to be the one you’d trust with your most-wanted pull.",
+        "quote_attribution": "— Founder, Supply District",
+        "cta_heading": "Ready to shop with confidence?",
+        "cta_subtext": "Every order backed by our authenticity guarantee.",
+        "cta1_label": "Shop Collection",
+        "cta1_url": "",
+        "cta2_label": "Contact Us",
+        "cta2_url": ""
+      }
+    }
+  },
+  "order": [
+    "our_story"
+  ]
+}

@@ -238,6 +238,14 @@
 .sdsr__suggestion-link:hover {
   background: var(--cv-border, #dedad5);
 }
+
+/* ── Mobile: 8px gutters + borderless cards ── */
+@media (max-width: 767px) {
+  main { padding-left: 0 !important; padding-right: 0 !important; }
+  .sdsr__header,
+  .sdsr__body { padding-left: 8px !important; padding-right: 8px !important; }
+  .sdsr__suggestions { border: none !important; box-shadow: none !important; }
+}
 </style>
 
 {%- liquid

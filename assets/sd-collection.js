@@ -1,6 +1,13 @@
 /* =============================================================
-   Supply District — sd-collection.js
-   Handles: filter dropdowns · mobile drawer · sort URL · Quick Add
+   Supply District — sd-collection.js  v2
+   ─────────────────────────────────────────────────────────────
+   Handles:
+     initSidebarAccordions()  — desktop sidebar filter group toggle
+     initMobilePanel()        — slide-in mobile filter panel
+     initMobileGroupAccordions()  — accordion groups inside the panel
+     initSort()               — sort select URL update (preserves filters)
+     handleQuickAdd()         — AJAX add-to-cart + toast
+     Toast notification system
    ============================================================= */
 
 (function () {
@@ -15,8 +22,8 @@
   /* ─────────────────────────────────────────────
      Toast notification
   ───────────────────────────────────────────── */
-  let toastEl = null;
-  let toastTimer = null;
+  var toastEl = null;
+  var toastTimer = null;
 
   function ensureToast() {
     if (toastEl) return toastEl;
@@ -24,23 +31,24 @@
     toastEl.className = 'sd-toast';
     toastEl.setAttribute('role', 'status');
     toastEl.setAttribute('aria-live', 'polite');
-    toastEl.innerHTML = `
-      <span class="sd-toast__icon" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2.5"
-          stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-      </span>
-      <span class="sd-toast__msg"></span>
-      <button class="sd-toast__close" aria-label="Dismiss">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2.5"
-          stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>`;
+    toastEl.innerHTML = [
+      '<span class="sd-toast__icon" aria-hidden="true">',
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"',
+          ' stroke="currentColor" stroke-width="2.5"',
+          ' stroke-linecap="round" stroke-linejoin="round">',
+          '<polyline points="20 6 9 17 4 12"/>',
+        '</svg>',
+      '</span>',
+      '<span class="sd-toast__msg"></span>',
+      '<button class="sd-toast__close" aria-label="Dismiss">',
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"',
+          ' stroke="currentColor" stroke-width="2.5"',
+          ' stroke-linecap="round" stroke-linejoin="round">',
+          '<line x1="18" y1="6" x2="6" y2="18"/>',
+          '<line x1="6" y1="6" x2="18" y2="18"/>',
+        '</svg>',
+      '</button>'
+    ].join('');
     document.body.appendChild(toastEl);
     toastEl.querySelector('.sd-toast__close').addEventListener('click', hideToast);
     return toastEl;
@@ -51,11 +59,7 @@
     duration = duration || 3500;
     el.className = 'sd-toast sd-toast--' + (type || 'success');
     el.querySelector('.sd-toast__msg').textContent = msg;
-    // update icon for error
-    var icon = el.querySelector('.sd-toast__icon svg polyline, .sd-toast__icon svg path');
-    requestAnimationFrame(function () {
-      el.classList.add('is-visible');
-    });
+    requestAnimationFrame(function () { el.classList.add('is-visible'); });
     clearTimeout(toastTimer);
     toastTimer = setTimeout(hideToast, duration);
   }
@@ -72,25 +76,26 @@
     var hasVariants = btn.dataset.hasVariants === 'true';
     var productUrl  = btn.dataset.productUrl;
 
-    // Multi-variant: navigate to product page
+    /* Multi-variant → navigate to PDP, preserving collection context */
     if (hasVariants) {
-      window.location.href = productUrl;
+      sessionStorage.setItem('cv_return_scroll_' + window.location.pathname, window.scrollY);
+      window.location.href = productUrl + '?return_to=' + encodeURIComponent(window.location.href);
       return;
     }
 
-    // Single variant: Ajax add
     if (!variantId) return;
 
     btn.disabled = true;
     var originalHtml = btn.innerHTML;
-    btn.innerHTML = `
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2.5"
-        stroke-linecap="round" stroke-linejoin="round" class="sd-spin"
-        style="animation:sd-spin .7s linear infinite">
-        <circle cx="12" cy="12" r="10" stroke-dasharray="30 10"/>
-      </svg>
-      Adding…`;
+    btn.innerHTML = [
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"',
+        ' stroke="currentColor" stroke-width="2.5" stroke-linecap="round"',
+        ' stroke-linejoin="round"',
+        ' style="animation:sd-spin .7s linear infinite">',
+        '<circle cx="12" cy="12" r="10" stroke-dasharray="30 10"/>',
+      '</svg>',
+      ' Adding\u2026'
+    ].join('');
 
     fetch('/cart/add.js', {
       method:  'POST',
@@ -102,8 +107,7 @@
         return r.json();
       })
       .then(function (item) {
-        showToast('Added to cart — ' + item.title, 'success');
-        // Update cart badge
+        showToast('Added to cart \u2014 ' + item.title, 'success');
         return fetch('/cart.js');
       })
       .then(function (r) { return r.json(); })
@@ -116,7 +120,7 @@
       })
       .catch(function (err) {
         console.error('Quick Add failed:', err);
-        showToast('Could not add to cart — please try again.', 'error');
+        showToast('Could not add to cart \u2014 please try again.', 'error');
       })
       .finally(function () {
         btn.disabled = false;
@@ -125,107 +129,153 @@
   }
 
   /* ─────────────────────────────────────────────
-     Filter Dropdowns (desktop)
+     Sidebar Accordion (desktop)
+     Toggles .is-open on .sdcl-accordion elements
   ───────────────────────────────────────────── */
-  function initFilterDropdowns() {
-    $$('.sdcf-dropdown').forEach(function (dropdown) {
-      var trigger = $('.sdcf-dropdown__trigger', dropdown);
-      if (!trigger) return;
-
-      trigger.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var isOpen = dropdown.classList.contains('is-open');
-        // Close all others
-        $$('.sdcf-dropdown.is-open').forEach(function (d) {
-          if (d !== dropdown) d.classList.remove('is-open');
-        });
-        dropdown.classList.toggle('is-open', !isOpen);
-      });
-    });
-
-    // Close on outside click
-    document.addEventListener('click', function () {
-      $$('.sdcf-dropdown.is-open').forEach(function (d) {
-        d.classList.remove('is-open');
-      });
-    });
-  }
-
-  /* ─────────────────────────────────────────────
-     Mobile Filter Drawer
-  ───────────────────────────────────────────── */
-  function initMobileDrawer() {
-    var trigger  = $('.sdcf-mobile-trigger');
-    var drawer   = $('.sdcf-drawer');
-    var overlay  = $('.sdcf-drawer-overlay');
-    var closeBtn = $('.sdcf-drawer__close');
-    if (!trigger || !drawer) return;
-
-    function openDrawer() {
-      drawer.classList.add('is-open');
-      if (overlay) overlay.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-      closeBtn && closeBtn.focus();
-    }
-
-    function closeDrawer() {
-      drawer.classList.remove('is-open');
-      if (overlay) overlay.classList.remove('is-open');
-      document.body.style.overflow = '';
-      trigger.focus();
-    }
-
-    trigger.addEventListener('click', openDrawer);
-    closeBtn && closeBtn.addEventListener('click', closeDrawer);
-    overlay && overlay.addEventListener('click', closeDrawer);
-
-    // ESC key
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
-    });
-
-    // Accordion groups in drawer
-    $$('.sdcf-group', drawer).forEach(function (group) {
-      var header = $('.sdcf-group__header', group);
+  function initSidebarAccordions() {
+    $$('.sdcl-accordion').forEach(function (acc) {
+      var header = acc.querySelector('.sdcl-accordion__header');
       if (!header) return;
-      // Open first group by default
-      if (group === $$('.sdcf-group', drawer)[0]) group.classList.add('is-open');
+
       header.addEventListener('click', function () {
-        group.classList.toggle('is-open');
+        var isOpen = acc.classList.contains('is-open');
+        acc.classList.toggle('is-open', !isOpen);
+        header.setAttribute('aria-expanded', !isOpen);
       });
     });
   }
 
   /* ─────────────────────────────────────────────
-     Sort — preserve filter params on change
+     Mobile Panel — open / close
+  ───────────────────────────────────────────── */
+  function initMobilePanel() {
+    var trigger = document.getElementById('sdcf-mobile-trigger');
+    var panel   = document.getElementById('sdcf-mobile-panel');
+    if (!trigger || !panel) return;
+
+    trigger.addEventListener('click', function () {
+      var isOpen = panel.classList.contains('is-open');
+      panel.classList.toggle('is-open', !isOpen);
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+      panel.setAttribute('aria-hidden', String(isOpen));
+    });
+  }
+
+  /* ─────────────────────────────────────────────
+     Mobile Group Accordions (inside the panel)
+  ───────────────────────────────────────────── */
+  function initMobileGroupAccordions() {
+    $$('.sdcl-mobile-group').forEach(function (group) {
+      var header = group.querySelector('.sdcl-mobile-group__header');
+      if (!header) return;
+
+      header.addEventListener('click', function () {
+        var isOpen = group.classList.contains('is-open');
+        group.classList.toggle('is-open', !isOpen);
+        header.setAttribute('aria-expanded', !isOpen);
+      });
+    });
+  }
+
+  /* ─────────────────────────────────────────────
+     Sort — preserve existing filter params on change
   ───────────────────────────────────────────── */
   function initSort() {
-    // Desktop sort select
-    var select = $('.sdcf-sort-select');
-    if (select) {
+    /* Desktop sort select (sidebar or topbar) */
+    $$('.sdcf-sort-select').forEach(function (select) {
       select.addEventListener('change', function () {
         var url = new URL(window.location.href);
         url.searchParams.set('sort_by', this.value);
         window.location.href = url.toString();
       });
-    }
+    });
 
-    // Mobile sort links — mark active
+    /* Mobile sort links — mark active based on current URL */
     var currentSort = new URL(window.location.href).searchParams.get('sort_by') || '';
     $$('.sdcf-sort-option').forEach(function (opt) {
       if ((opt.dataset.sort || '') === currentSort) {
         opt.classList.add('is-active');
+        var radio = opt.querySelector('.sdcf-sort-radio');
+        if (radio) {
+          radio.style.borderColor = 'var(--color-cta-primary)';
+          radio.style.background  = 'var(--color-cta-primary)';
+          radio.style.boxShadow   = 'inset 0 0 0 3px var(--cv-card)';
+        }
       }
     });
   }
 
   /* ─────────────────────────────────────────────
-     Spin keyframe injection
+     Price Range — submit on Enter key in inputs
+  ───────────────────────────────────────────── */
+  function initPriceRange() {
+    $$('.sdcl-price-range__input').forEach(function (input) {
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          var form = input.closest('form');
+          if (form) form.submit();
+        }
+      });
+    });
+  }
+
+  /* ─────────────────────────────────────────────
+     Mobile Title Prefix Strip  (max-width: 768px)
+     ─────────────────────────────────────────────
+     Many TCG product titles start with the game name followed by a colon,
+     e.g. "One Piece Card Game: Kingdoms of Intrigue". On mobile the 2-col
+     grid is narrow, so we strip the common prefix and show only the unique
+     set name. Desktop titles are untouched.
+     Add/remove entries in PREFIXES to match your catalogue.
+  ───────────────────────────────────────────── */
+  function initTitleStrip() {
+    if (window.innerWidth >= 769) return; /* desktop — do nothing */
+
+    var PREFIXES = [
+      'One Piece Card Game: ',
+      'One Piece: ',
+      'Pokemon TCG: ',
+      'Pokémon TCG: ',
+      'Magic: The Gathering: ',
+      'MTG: ',
+      'Flesh and Blood: ',
+      'Dragon Ball Super Card Game: ',
+      'Dragon Ball Super: ',
+      'Digimon Card Game: ',
+      'Digimon: ',
+      'Yu-Gi-Oh!: ',
+      'Lorcana: ',
+      'Star Wars: Unlimited: ',
+      'Star Wars Unlimited: ',
+    ];
+
+    var links = document.querySelectorAll('.sdpc__title a[data-raw-title]');
+    for (var i = 0; i < links.length; i++) {
+      var link  = links[i];
+      var title = link.getAttribute('data-raw-title') || '';
+      var stripped = title;
+
+      for (var p = 0; p < PREFIXES.length; p++) {
+        if (stripped.indexOf(PREFIXES[p]) === 0) {
+          stripped = stripped.slice(PREFIXES[p].length);
+          break;
+        }
+      }
+
+      if (stripped && stripped !== title) {
+        link.textContent = stripped;
+      }
+    }
+  }
+
+  /* ─────────────────────────────────────────────
+     Spin keyframe injection (for Quick Add loading)
   ───────────────────────────────────────────── */
   function injectSpinKeyframe() {
     if (document.getElementById('sd-spin-kf')) return;
     var style = document.createElement('style');
-    style.id = 'sd-spin-kf';
+    style.id  = 'sd-spin-kf';
     style.textContent = '@keyframes sd-spin { to { transform: rotate(360deg); } }';
     document.head.appendChild(style);
   }
@@ -235,11 +285,14 @@
   ───────────────────────────────────────────── */
   function init() {
     injectSpinKeyframe();
-    initFilterDropdowns();
-    initMobileDrawer();
+    initSidebarAccordions();
+    initMobilePanel();
+    initMobileGroupAccordions();
     initSort();
+    initPriceRange();
+    initTitleStrip();
 
-    // Quick Add — event delegation
+    /* Quick Add — event delegation on entire document */
     document.addEventListener('click', function (e) {
       var btn = e.target.closest('.sdpc__quick-add');
       if (btn) handleQuickAdd(btn);
@@ -251,4 +304,5 @@
   } else {
     init();
   }
+
 })();
