@@ -1253,7 +1253,7 @@ input.cv-qty__input {
         <p style="font-size: 0.9375rem; line-height: 1.75; color: var(--cv-muted-fg);">We offer 14-day returns on all factory-sealed and unopened products. All orders are packed securely with bubble wrap and dispatched within 24 hours to ensure your items arrive in pristine condition.</p>
       </div>
     </div>
-  </section><hr class="cv-sep">
+  </section>
 
   {%- comment -%} ── Similar Products ── {%- endcomment -%}
   {%- liquid
@@ -1266,6 +1266,7 @@ input.cv-qty__input {
     endfor
   -%}
   {%- if related_collection and related_collection.products_count > 1 -%}
+  <hr class="cv-sep">
   <section class="cv-similar" aria-label="Similar products">
     <div class="cv-similar__header">
       <h2 class="cv-similar__title">You May Also Like</h2>
