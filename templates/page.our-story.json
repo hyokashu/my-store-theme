@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "our_story": {
+      "type": "our-story",
+      "blocks": {
+        "pillar1": { "type": "value_pillar", "settings": {} },
+        "pillar2": { "type": "value_pillar", "settings": {} },
+        "pillar3": { "type": "value_pillar", "settings": {} },
+        "gallery1": { "type": "gallery_image", "settings": {} },
+        "gallery2": { "type": "gallery_image", "settings": {} },
+        "gallery3": { "type": "gallery_image", "settings": {} },
+        "gallery4": { "type": "gallery_image", "settings": {} }
+      },
+      "block_order": ["pillar1","pillar2","pillar3","gallery1","gallery2","gallery3","gallery4"]
+    }
+  },
+  "order": ["our_story"]
+}
