@@ -1256,6 +1256,7 @@ input.cv-qty__input {
   </section><hr class="cv-sep">
 
   {%- comment -%} ── Similar Products ── {%- endcomment -%}
+  {%- if related_collection and related_collection.products_count > 1 -%}
   <section class="cv-similar" aria-label="Similar products">
     {%- liquid
       assign related_collection = blank
@@ -1299,26 +1300,10 @@ input.cv-qty__input {
             </a>
           {%- endif -%}
         {%- endfor -%}
-      {%- else -%}
-        <a href="#" class="cv-product-card">
-          <div class="cv-product-card__img-wrap"><img src="https://placehold.co/400x400/eeecea/76798c?text=Paldea+ETB" alt="Paldea Evolved ETB" width="400" height="400" loading="lazy"><span class="cv-product-card__sale-badge">Sale</span></div>
-          <div class="cv-product-card__info"><h3 class="cv-product-card__name">Paldea Evolved ETB</h3><p class="cv-product-card__type">Elite Trainer Box</p><div class="cv-product-card__prices"><span class="cv-product-card__price">$44.99</span><span class="cv-product-card__compare">$49.99</span></div></div>
-        </a>
-        <a href="#" class="cv-product-card">
-          <div class="cv-product-card__img-wrap"><img src="https://placehold.co/400x400/eeecea/76798c?text=OBF+Case" alt="Obsidian Flames Case" width="400" height="400" loading="lazy"><span class="cv-product-card__sale-badge">Sale</span></div>
-          <div class="cv-product-card__info"><h3 class="cv-product-card__name">Obsidian Flames Case</h3><p class="cv-product-card__type">Sealed Case (6 Boxes)</p><div class="cv-product-card__prices"><span class="cv-product-card__price">$824.99</span><span class="cv-product-card__compare">$899.99</span></div></div>
-        </a>
-        <a href="#" class="cv-product-card">
-          <div class="cv-product-card__img-wrap"><img src="https://placehold.co/400x400/eeecea/76798c?text=151+Bundle" alt="151 Booster Bundle" width="400" height="400" loading="lazy"></div>
-          <div class="cv-product-card__info"><h3 class="cv-product-card__name">151 Booster Bundle</h3><p class="cv-product-card__type">6 Booster Packs</p><div class="cv-product-card__prices"><span class="cv-product-card__price">$39.99</span></div></div>
-        </a>
-        <a href="#" class="cv-product-card">
-          <div class="cv-product-card__img-wrap"><img src="https://placehold.co/400x400/eeecea/76798c?text=Inf+Forbidden" alt="Infinite Forbidden" width="400" height="400" loading="lazy"><span class="cv-product-card__sale-badge">Sale</span></div>
-          <div class="cv-product-card__info"><h3 class="cv-product-card__name">Infinite Forbidden</h3><p class="cv-product-card__type">Booster Box (24 Packs)</p><div class="cv-product-card__prices"><span class="cv-product-card__price">$79.99</span><span class="cv-product-card__compare">$89.99</span></div></div>
-        </a>
       {%- endif -%}
     </div>
   </section>
+  {%- endif -%}
 
   {%- comment -%} 5. Intelligent Recent Sales Ticker — disabled {%- endcomment -%}
   {%- comment -%}
