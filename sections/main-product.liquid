@@ -1269,7 +1269,7 @@ input.cv-qty__input {
   <section class="cv-similar" aria-label="Similar products">
     <div class="cv-similar__header">
       <h2 class="cv-similar__title">You May Also Like</h2>
-      <a href="{% if related_collection %}{{ related_collection.url }}{% else %}/collections/all{% endif %}" class="cv-similar__all">View All</a>
+      <a href="{{ related_collection.url }}" class="cv-similar__all">View All</a>
     </div>
     <div class="cv-similar__grid">
       {%- assign rendered_count = 0 -%}
