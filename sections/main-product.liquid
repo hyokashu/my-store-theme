@@ -98,6 +98,16 @@
   .cv-gallery__main,
   .cv-gallery__thumbs li,
   .cv-similar__card { border: none !important; }
+
+  /* Details grid: accent-only on mobile — no fill/shadow so cards don't look tappable */
+  .cv-detail-item {
+    background: transparent;
+    border: none;
+    border-left: 3px solid rgba(40,45,82,0.18);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0.5rem 0.625rem;
+  }
 }
 
 /* =============================================================
@@ -314,15 +324,17 @@
 .cv-installment strong { color: var(--cv-fg); font-weight: 600; }
 
 /* Details Grid */
-.cv-details-grid { display: flex; flex-direction: column; }
+.cv-details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
 .cv-detail-item {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--cv-border);
+  display: flex; flex-direction: column; gap: 0.125rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  background: #F4F6F8;
+  box-shadow: var(--cv-shadow-sm);
 }
-.cv-detail-item:last-child { border-bottom: none; }
-.cv-detail-item__label { font-size: 0.8125rem; color: var(--cv-muted-fg); flex-shrink: 0; }
-.cv-detail-item__value { font-size: 0.875rem; font-weight: 600; color: var(--cv-fg); text-align: right; }
+.cv-detail-item__label { font-size: 0.75rem; color: var(--cv-muted-fg); }
+.cv-detail-item__value { font-size: 0.875rem; font-weight: 600; color: var(--cv-fg); }
 
 /* Quantity + Actions */
 .cv-actions { display: flex; flex-direction: column; gap: 1rem; flex-wrap: wrap; }
@@ -1016,20 +1028,29 @@ input.cv-qty__input {
       {%- comment -%} Product Details Grid {%- endcomment -%}
       <div class="cv-details-grid">
         <div class="cv-detail-item">
-          <span class="cv-detail-item__label">Language</span>
-          <span class="cv-detail-item__value">{{ product.metafields.custom.language | default: 'Japanese' }}</span>
+          <span class="cv-detail-item__label">Product Type</span>
+          <span class="cv-detail-item__value">{{ product.type | default: 'Booster Box' }}</span>
+        </div>
+        <div class="cv-detail-item">
+          <span class="cv-detail-item__label">Set</span>
+          <span class="cv-detail-item__value">{{ product.metafields.custom.set_name | default: product.vendor | default: '—' }}</span>
         </div>
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Series</span>
           <span class="cv-detail-item__value">{{ product.metafields.custom.series | default: '—' }}</span>
         </div>
-        {%- assign release_date_raw = product.metafields.custom.release_date -%}
-        {%- if release_date_raw != blank -%}
         <div class="cv-detail-item">
-          <span class="cv-detail-item__label">Release Date</span>
-          <span class="cv-detail-item__value">{{ release_date_raw | date: '%B %Y' }}</span>
+          <span class="cv-detail-item__label">Packs</span>
+          <span class="cv-detail-item__value">{{ pack_count }} Packs</span>
         </div>
-        {%- endif -%}
+        <div class="cv-detail-item">
+          <span class="cv-detail-item__label">Cards Per Pack</span>
+          <span class="cv-detail-item__value">{{ cards_per_pack }} Cards</span>
+        </div>
+        <div class="cv-detail-item">
+          <span class="cv-detail-item__label">Language</span>
+          <span class="cv-detail-item__value">{{ product.metafields.custom.language | default: 'Japanese' }}</span>
+        </div>
       </div>
 
       <hr class="cv-sep" style="margin:0">
