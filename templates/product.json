@@ -11,39 +11,7 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "blocks": {
-        "trust_item_jxMBx8": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "shield",
-            "title": "100% Authentic",
-            "description": "Factory sealed & verified products."
-          }
-        },
-        "trust_item_RPxmmp": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "truck",
-            "title": "Same-Day Dispatch",
-            "description": "Fast, tracked shipping across Australia."
-          }
-        },
-        "trust_item_X8Tqw7": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "check",
-            "title": "Premium TCG Store",
-            "description": "Securely packed One Piece & Pokemon card Game: sets."
-          }
-        }
-      },
-      "block_order": [
-        "trust_item_jxMBx8",
-        "trust_item_RPxmmp",
-        "trust_item_X8Tqw7"
-      ],
       "settings": {
-        "show_payment_icons": true,
         "show_afterpay": false,
         "show_trust_signals": true,
         "show_similar": true,
