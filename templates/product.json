@@ -23,7 +23,7 @@
         "trust_item_RPxmmp": {
           "type": "trust_item",
           "settings": {
-            "icon": "shield",
+            "icon": "truck",
             "title": "Same-Day Dispatch",
             "description": "Fast, tracked shipping across Australia."
           }
@@ -31,7 +31,7 @@
         "trust_item_X8Tqw7": {
           "type": "trust_item",
           "settings": {
-            "icon": "shield",
+            "icon": "check",
             "title": "Premium TCG Store",
             "description": "Securely packed One Piece & Pokemon card Game: sets."
           }
