@@ -433,7 +433,7 @@ input.cv-qty__input {
   box-shadow: var(--cv-shadow-sm);
   opacity: 0.8;
 }
-.cv-payment-badge svg { display: block; }
+.cv-payment-badge svg { display: block; height: 1.125rem; width: auto; }
 
 .cv-btn--icon {
   width: 3rem; flex-shrink: 0; padding: 0;
@@ -1098,37 +1098,13 @@ input.cv-qty__input {
           <a href="/cart" class="cv-btn cv-btn--outline-primary" id="cv-buy-now">Buy Now</a>
         {%- endif -%}
 
-        {%- comment -%} 4. Cleaned up Payment Badges (Visa, MC, PayPal, Shop) {%- endcomment -%}
-        <div class="cv-payment-badges" aria-label="Accepted payment methods">
-
-          <span class="cv-payment-badge" title="Visa">
-            <svg xmlns="http://www.w3.org/2000/svg" width="38" height="12" viewBox="0 0 38 12" aria-hidden="true">
-              <text x="0" y="10" font-family="Arial,sans-serif" font-size="10" font-weight="900" fill="#1A1F71" letter-spacing="-0.5">VISA</text>
-            </svg>
-          </span>
-
-          <span class="cv-payment-badge" title="Mastercard" style="padding:0 0.375rem">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 30 18" aria-hidden="true">
-              <circle cx="11" cy="9" r="8" fill="#EB001B"/>
-              <circle cx="19" cy="9" r="8" fill="#F79E1B"/>
-              <path d="M15 3.5a8 8 0 0 1 0 11A8 8 0 0 1 15 3.5z" fill="#FF5F00"/>
-            </svg>
-          </span>
-
-          <span class="cv-payment-badge" title="PayPal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="46" height="12" viewBox="0 0 46 12" aria-hidden="true">
-              <text x="0" y="9.5" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#003087">Pay</text>
-              <text x="14" y="9.5" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#009CDE">Pal</text>
-            </svg>
-          </span>
-
-          <span class="cv-payment-badge" title="Shop Pay" style="background:#5A31F4;border-color:#5A31F4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="12" viewBox="0 0 36 12" aria-hidden="true">
-              <text x="2" y="9.5" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9" font-weight="700" fill="#fff">Shop</text>
-            </svg>
-          </span>
-
-        </div>
+        {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+          <div class="cv-payment-badges" aria-label="Accepted payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              <span class="cv-payment-badge">{{ type | payment_type_svg_tag }}</span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
 
       {% endform %}
 
@@ -1163,7 +1139,7 @@ input.cv-qty__input {
       </div>
       {%- endif -%}
 
-    </div></div><hr class="cv-sep">
+    </div></div>
 
   {%- comment -%} ── Product Tabs ── {%- endcomment -%}
   <section aria-label="Product details" id="cv-tabs-section">
@@ -1819,6 +1795,12 @@ input.cv-qty__input {
     {
       "type": "header",
       "content": "Display Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
     },
     {
       "type": "checkbox",
