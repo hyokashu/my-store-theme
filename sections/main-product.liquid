@@ -71,7 +71,7 @@
 .cv-wrap {
   font-family: var(--cv-font-sans);
   color: var(--cv-fg);
-  background: #FFFFFF;
+  background: var(--cv-bg);
   max-width: 80rem;
   margin: 0 auto;
   padding: 2rem max(1rem, 4vw) 5rem;
@@ -84,8 +84,8 @@
   margin: 1.5rem auto 0;
   padding: 1.5rem max(1rem, 4vw);
   background-color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-  border: 1px solid #E5E7EB;
+  box-shadow: 0 2px 8px rgba(40,45,82,0.07);
+  border: 1px solid var(--cv-border);
   border-radius: 8px;
 }
 @media (min-width: 768px) { #cv-tabs-section { margin-top: 2rem; padding: 2rem; } }
@@ -93,6 +93,14 @@
 /* ── Mobile: zero out base.css main { padding: 2rem } so product page reaches edge ── */
 @media (max-width: 767px) {
   main { padding-left: 0 !important; padding-right: 0 !important; }
+
+  /* Hero card: bleed edge-to-edge on mobile */
+  .cv-hero {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    padding: 1rem;
+  }
 
   /* Remove visible borders on mobile for a clean, borderless look */
   .cv-gallery__main,
@@ -114,9 +122,23 @@
 /* =============================================================
    Product Hero Grid
    ============================================================= */
-.cv-hero { display: grid; gap: 2rem; }
-@media (min-width: 768px)  { .cv-hero { grid-template-columns: 55fr 45fr; gap: 2rem; align-items: start; } }
-@media (min-width: 1024px) { .cv-hero { gap: 2.5rem; } }
+.cv-hero {
+  display: grid; gap: 2rem;
+  background: var(--cv-card);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  padding: 1.5rem;
+}
+@media (min-width: 768px)  {
+  .cv-hero {
+    grid-template-columns: 55fr 45fr;
+    gap: 2rem;
+    align-items: start;
+    padding: 2rem;
+    border-radius: calc(var(--cv-radius) * 1.5);
+  }
+}
+@media (min-width: 1024px) { .cv-hero { gap: 2.5rem; padding: 2.5rem; } }
 
 
 /* =============================================================
@@ -824,6 +846,53 @@ input.cv-qty__input {
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s, border-color 0.2s;
 }
 
+/* =============================================================
+   Trust Strip — navy accent band between hero and tabs
+   ============================================================= */
+.cv-trust-strip {
+  background: var(--cv-primary);
+  color: var(--cv-primary-fg);
+  border-radius: calc(var(--cv-radius) * 1.5);
+  padding: 0.875rem 1.5rem;
+  margin: 1.25rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.cv-trust-strip__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.cv-trust-strip__item svg {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+.cv-trust-strip__dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(248,247,245,0.4);
+  flex-shrink: 0;
+}
+@media (max-width: 767px) {
+  .cv-trust-strip {
+    border-radius: 0;
+    gap: 1.25rem;
+    padding: 0.75rem 1rem;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+}
+
 /* Details Grid — mobile: spec-sheet dotted leader (must be after desktop rules) */
 @media (max-width: 767px) {
   .cv-details-grid { display: flex; flex-direction: column; gap: 0; }
@@ -1130,6 +1199,29 @@ input.cv-qty__input {
       {%- endif -%}
 
     </div></div>
+
+  {%- comment -%} ── Trust Strip ── {%- endcomment -%}
+  <div class="cv-trust-strip" aria-label="Store guarantees">
+    <div class="cv-trust-strip__item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      100% Authentic
+    </div>
+    <div class="cv-trust-strip__dot" aria-hidden="true"></div>
+    <div class="cv-trust-strip__item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      Same-Day Dispatch
+    </div>
+    <div class="cv-trust-strip__dot" aria-hidden="true"></div>
+    <div class="cv-trust-strip__item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      14-Day Returns
+    </div>
+    <div class="cv-trust-strip__dot" aria-hidden="true"></div>
+    <div class="cv-trust-strip__item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Secure Checkout
+    </div>
+  </div>
 
   {%- comment -%} ── Product Tabs ── {%- endcomment -%}
   <section aria-label="Product details" id="cv-tabs-section">
