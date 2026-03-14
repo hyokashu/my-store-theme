@@ -99,15 +99,6 @@
   .cv-gallery__thumbs li,
   .cv-similar__card { border: none !important; }
 
-  /* Details grid: top-rule on mobile — 2-col grid preserved, no box enclosure */
-  .cv-detail-item {
-    background: transparent;
-    border: none;
-    border-top: 2px solid rgba(40,45,82,0.12);
-    border-radius: 0;
-    box-shadow: none;
-    padding: 0.5rem 0.5rem;
-  }
 }
 
 /* =============================================================
@@ -846,6 +837,17 @@ input.cv-qty__input {
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s, border-color 0.2s;
 }
 
+/* Details grid: top-rule on mobile — after desktop rule so it wins */
+@media (max-width: 767px) {
+  .cv-detail-item {
+    background: transparent;
+    border: none;
+    border-top: 2px solid rgba(40,45,82,0.12);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0.5rem 0.5rem;
+  }
+}
 </style>
 
 {%- comment -%} ====================================================
