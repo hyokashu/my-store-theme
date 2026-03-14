@@ -313,7 +313,7 @@
 .cv-installment strong { color: var(--cv-fg); font-weight: 600; }
 
 /* Details Grid */
-.cv-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.cv-details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
 .cv-detail-item {
   display: flex; flex-direction: column; gap: 0.125rem;
   padding: 0.625rem 0.875rem;
@@ -585,7 +585,7 @@ input.cv-qty__input {
 .cv-pull-item__label { font-size: 0.75rem; color: var(--cv-muted-fg); }
 .cv-pull-item__value { font-size: 0.75rem; font-weight: 600; }
 
-.cv-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.cv-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
 .cv-meta-card {
   display: flex; flex-direction: column; gap: 0.25rem;
   padding: 1rem;
