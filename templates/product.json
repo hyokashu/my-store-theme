@@ -18,8 +18,7 @@
         "show_recent_sales": true,
         "tab_description_label": "Description",
         "tab_contents_label": "Box Contents",
-        "tab_reviews_label": "Reviews",
-        "viewers_count": 18
+        "tab_reviews_label": "Shipping"
       }
     }
   },
