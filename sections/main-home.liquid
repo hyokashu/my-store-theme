@@ -235,7 +235,8 @@
    ============================================================= */
 .cvh-featured { padding: 4rem 0 1.5rem; }
 .cvh-featured__tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
-.cvh-featured__tab { font-family: var(--cv-font-sans); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.5rem 1.25rem; border: 1px solid var(--cv-border); border-radius: 9999px; background: var(--cv-card); color: var(--cv-muted-fg); cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s; -webkit-appearance: none; }
+.cvh-featured__tab { display: inline-flex; align-items: center; gap: 0.375rem; font-family: var(--cv-font-sans); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.5rem 1.25rem; border: 1px solid var(--cv-border); border-radius: 9999px; background: var(--cv-card); color: var(--cv-muted-fg); cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s; -webkit-appearance: none; }
+.cvh-featured__tab svg { width: 0.875rem; height: 0.875rem; flex-shrink: 0; }
 .cvh-featured__tab.is-active, .cvh-featured__tab:hover { background: var(--cv-primary); color: var(--cv-primary-fg); border-color: var(--cv-primary); }
 
 .cvh-featured__scroll-wrap { position: relative; }
@@ -562,10 +563,16 @@
       {%- assign tab2_id = tab2_label | handle -%}
       {%- assign tab3_id = tab3_label | handle -%}
 
+      {%- assign _icon_svgs = 'star|<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>|clock|<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>|bolt|<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>|heart|<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>|tag|<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>|package|<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>|trophy|<polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a1 1 0 0 0-1 1v3a4 4 0 0 0 4 4h.5"/><path d="M17 4h3a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4h-.5"/><rect x="7" y="2" width="10" height="9" rx="2"/>' -%}
+
+      {%- capture tab1_icon -%}{%- case section.settings.tab1_icon -%}{%- when 'star' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>{%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{%- when 'bolt' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>{%- when 'heart' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>{%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>{%- when 'package' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>{%- when 'trophy' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a1 1 0 0 0-1 1v3a4 4 0 0 0 4 4h.5"/><path d="M17 4h3a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4h-.5"/><rect x="7" y="2" width="10" height="9" rx="2"/></svg>{%- endcase -%}{%- endcapture -%}
+      {%- capture tab2_icon -%}{%- case section.settings.tab2_icon -%}{%- when 'star' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>{%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{%- when 'bolt' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>{%- when 'heart' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>{%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>{%- when 'package' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>{%- when 'trophy' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a1 1 0 0 0-1 1v3a4 4 0 0 0 4 4h.5"/><path d="M17 4h3a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4h-.5"/><rect x="7" y="2" width="10" height="9" rx="2"/></svg>{%- endcase -%}{%- endcapture -%}
+      {%- capture tab3_icon -%}{%- case section.settings.tab3_icon -%}{%- when 'star' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>{%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{%- when 'bolt' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>{%- when 'heart' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>{%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>{%- when 'package' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>{%- when 'trophy' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a1 1 0 0 0-1 1v3a4 4 0 0 0 4 4h.5"/><path d="M17 4h3a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4h-.5"/><rect x="7" y="2" width="10" height="9" rx="2"/></svg>{%- endcase -%}{%- endcapture -%}
+
       <div class="cvh-featured__tabs" role="tablist" aria-label="Product filter">
-        <button class="cvh-featured__tab is-active" data-panel="{{ tab1_id }}" role="tab" aria-selected="true" aria-controls="cvh-panel-{{ tab1_id }}" type="button">{{ tab1_label }}</button>
-        <button class="cvh-featured__tab" data-panel="{{ tab2_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab2_id }}" type="button">{{ tab2_label }}</button>
-        <button class="cvh-featured__tab" data-panel="{{ tab3_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab3_id }}" type="button">{{ tab3_label }}</button>
+        <button class="cvh-featured__tab is-active" data-panel="{{ tab1_id }}" role="tab" aria-selected="true" aria-controls="cvh-panel-{{ tab1_id }}" type="button">{{ tab1_icon }}{{ tab1_label }}</button>
+        <button class="cvh-featured__tab" data-panel="{{ tab2_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab2_id }}" type="button">{{ tab2_icon }}{{ tab2_label }}</button>
+        <button class="cvh-featured__tab" data-panel="{{ tab3_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab3_id }}" type="button">{{ tab3_icon }}{{ tab3_label }}</button>
       </div>
 
       {%- comment -%} Tab 1 Panel {%- endcomment -%}
@@ -1217,6 +1224,45 @@
     { "type": "collection", "id": "tab2_collection",   "label": "Tab 2 collection" },
     { "type": "text",       "id": "tab3_label",        "label": "Tab 3 label",      "default": "Best Sellers" },
     { "type": "collection", "id": "tab3_collection",   "label": "Tab 3 collection" },
+    {
+      "type": "select", "id": "tab1_icon", "label": "Tab 1 icon", "default": "none",
+      "options": [
+        { "value": "none",    "label": "None" },
+        { "value": "clock",   "label": "Clock" },
+        { "value": "star",    "label": "Star" },
+        { "value": "bolt",    "label": "Bolt / Lightning" },
+        { "value": "heart",   "label": "Heart" },
+        { "value": "tag",     "label": "Tag" },
+        { "value": "package", "label": "Package" },
+        { "value": "trophy",  "label": "Trophy" }
+      ]
+    },
+    {
+      "type": "select", "id": "tab2_icon", "label": "Tab 2 icon", "default": "none",
+      "options": [
+        { "value": "none",    "label": "None" },
+        { "value": "clock",   "label": "Clock" },
+        { "value": "star",    "label": "Star" },
+        { "value": "bolt",    "label": "Bolt / Lightning" },
+        { "value": "heart",   "label": "Heart" },
+        { "value": "tag",     "label": "Tag" },
+        { "value": "package", "label": "Package" },
+        { "value": "trophy",  "label": "Trophy" }
+      ]
+    },
+    {
+      "type": "select", "id": "tab3_icon", "label": "Tab 3 icon", "default": "none",
+      "options": [
+        { "value": "none",    "label": "None" },
+        { "value": "clock",   "label": "Clock" },
+        { "value": "star",    "label": "Star" },
+        { "value": "bolt",    "label": "Bolt / Lightning" },
+        { "value": "heart",   "label": "Heart" },
+        { "value": "tag",     "label": "Tag" },
+        { "value": "package", "label": "Package" },
+        { "value": "trophy",  "label": "Trophy" }
+      ]
+    },
 
     { "type": "header", "content": "Browse by Category" },
     { "type": "text", "id": "cat_title",    "label": "Section title",    "default": "Browse by Category" },
