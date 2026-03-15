@@ -12,13 +12,24 @@
     "main": {
       "type": "main-product",
       "settings": {
+        "show_payment_icons": true,
         "show_afterpay": false,
         "show_trust_signals": true,
         "show_similar": true,
         "show_recent_sales": true,
         "tab_description_label": "Description",
         "tab_contents_label": "Box Contents",
-        "tab_reviews_label": "Reviews"
+        "tab_reviews_label": "Reviews",
+        "contents_heading": "What's Inside",
+        "contents_item1_label": "Booster Packs",
+        "contents_item1_suffix": "packs",
+        "contents_item1_desc": "Each pack contains randomly assorted cards",
+        "contents_item2_label": "Cards Per Pack",
+        "contents_item2_suffix": "cards",
+        "contents_item2_desc": "Look for chase cards, art rares, and alternate arts",
+        "contents_item3_label": "Total Cards",
+        "contents_item3_suffix": "cards",
+        "contents_item3_desc": "Across all packs in the sealed box"
       }
     }
   },
