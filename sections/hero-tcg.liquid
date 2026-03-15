@@ -35,13 +35,13 @@
 <style>
   /* ── Design Tokens ── */
   .htcg-hero {
-    --cv-bg:                #f7f6f3;
-    --cv-fg:                #1c1f36;
-    --cv-primary:           #282d52;
+    --cv-bg:                #f0f5fb;
+    --cv-fg:                #1c2a3e;
+    --cv-primary:           #1e3a5f;
     --cv-card:              #ffffff;
-    --cv-secondary:         #eeecea;
-    --cv-muted-fg:          #76798c;
-    --cv-border:            #dedad5;
+    --cv-secondary:         #e0eaf5;
+    --cv-muted-fg:          #6b7fa8;
+    --cv-border:            #c5d8ee;
     --cv-radius:            0.5rem;
     --color-cta-primary:    #2e9963;
     --color-cta-primary-hv: #25834f;
@@ -83,15 +83,15 @@
     .htcg-hero__overlay {
       background: linear-gradient(
         105deg,
-        rgba(28, 31, 54, {{ opacity }}) 0%,
-        rgba(28, 31, 54, {{ opacity | times: 0.85 }}) 45%,
-        rgba(28, 31, 54, {{ opacity | times: 0.3 }}) 100%
+        rgba(28, 42, 62, {{ opacity }}) 0%,
+        rgba(28, 42, 62, {{ opacity | times: 0.85 }}) 45%,
+        rgba(28, 42, 62, {{ opacity | times: 0.3 }}) 100%
       );
     }
   {%- else -%}
     /* Center-aligned: uniform overlay */
     .htcg-hero__overlay {
-      background: rgba(28, 31, 54, {{ opacity }});
+      background: rgba(28, 42, 62, {{ opacity }});
     }
   {%- endif -%}
 
@@ -264,7 +264,7 @@
     >
   {%- else -%}
     {%- comment -%} Placeholder gradient when no image is set ── {%- endcomment -%}
-    <div class="htcg-hero__bg" style="background: linear-gradient(135deg, #1c1f36 0%, #282d52 60%, #2e9963 100%);"></div>
+    <div class="htcg-hero__bg" style="background: linear-gradient(135deg, #1c2a3e 0%, #1e3a5f 60%, #2e9963 100%);"></div>
   {%- endif -%}
 
   {%- comment -%} ── Overlay ── {%- endcomment -%}
