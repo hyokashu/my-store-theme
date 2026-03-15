@@ -553,12 +553,25 @@ input.cv-qty__input {
 .cv-contents { display: flex; flex-direction: column; gap: 1.25rem; }
 .cv-contents h3 { font-size: 1rem; font-weight: 600; }
 
+/* Mobile: keep box styling, update bg to match blue palette */
 .cv-content-item {
   display: flex; align-items: flex-start; gap: 0.75rem;
   padding: 0.875rem;
   border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
-  background: rgba(238,236,234,0.4);
+  background: rgba(30,58,95,0.04);
+}
+/* Desktop: clean separator rows */
+@media (min-width: 768px) {
+  .cv-content-item {
+    padding: 1.125rem 0;
+    border: none;
+    border-top: 1px solid var(--cv-border);
+    border-radius: 0;
+    background: none;
+  }
+  .cv-content-item:last-child { border-bottom: 1px solid var(--cv-border); }
+  .cv-content-item + .cv-content-item { margin-top: 0; }
 }
 .cv-content-item__icon {
   flex-shrink: 0; margin-top: 0.125rem;
