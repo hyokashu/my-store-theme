@@ -420,12 +420,16 @@
           <div class="cvh-hero__slide cvh__inner">
             <div class="cvh-hero__text">
               <span class="cvh-hero__eyebrow">
-                {%- case block.settings.eyebrow_icon -%}
-                  {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                  {%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  {%- when 'zap' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                  {%- else -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                {%- endcase -%}
+                {%- if block.settings.eyebrow_icon_custom != blank -%}
+                  {{ block.settings.eyebrow_icon_custom }}
+                {%- else -%}
+                  {%- case block.settings.eyebrow_icon -%}
+                    {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    {%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    {%- when 'zap' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    {%- else -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  {%- endcase -%}
+                {%- endif -%}
                 {{ block.settings.eyebrow }}
               </span>
               <h1 class="cvh-hero__title">
@@ -451,11 +455,15 @@
               {%- if block.settings.badge_value != blank -%}
                 <div class="cvh-hero__badge">
                   <div class="cvh-hero__badge-icon">
-                    {%- case block.settings.badge_icon -%}
-                      {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                      {%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                      {%- else -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    {%- endcase -%}
+                    {%- if block.settings.badge_icon_custom != blank -%}
+                      {{ block.settings.badge_icon_custom }}
+                    {%- else -%}
+                      {%- case block.settings.badge_icon -%}
+                        {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                        {%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        {%- else -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                      {%- endcase -%}
+                    {%- endif -%}
                   </div>
                   <div class="cvh-hero__badge-text">
                     <span class="cvh-hero__badge-val">{{ block.settings.badge_value }}</span>
@@ -1088,6 +1096,7 @@
             { "value": "clock", "label": "Clock" },
             { "value": "zap",   "label": "Zap / Lightning" }
           ], "default": "star" },
+        { "type": "html", "id": "eyebrow_icon_custom", "label": "Custom eyebrow icon (SVG)", "info": "Paste SVG code to override the icon above. Leave blank to use the selected icon." },
         { "type": "text",     "id": "eyebrow",    "label": "Eyebrow text",         "default": "New Season Drops" },
         { "type": "text",     "id": "title_line1","label": "Title (line 1)",        "default": "Premium TCG" },
         { "type": "text",     "id": "title_em",   "label": "Title accent (highlighted)", "default": "Sealed Products" },
@@ -1107,6 +1116,7 @@
             { "value": "tag",    "label": "Tag" },
             { "value": "clock",  "label": "Clock" }
           ], "default": "shield" },
+        { "type": "html", "id": "badge_icon_custom", "label": "Custom badge icon (SVG)", "info": "Paste SVG code to override the icon above. Leave blank to use the selected icon." },
         { "type": "header", "content": "Style" },
         { "type": "select", "id": "color_scheme", "label": "Background colour (fallback)", "options": [
             { "value": "1", "label": "Purple (default)" },
