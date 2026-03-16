@@ -421,7 +421,7 @@
             <div class="cvh-hero__text">
               <span class="cvh-hero__eyebrow">
                 {%- if block.settings.eyebrow_icon_custom != blank -%}
-                  {{ block.settings.eyebrow_icon_custom }}
+                  <img src="{{ block.settings.eyebrow_icon_custom | image_url: width: 28 }}" alt="" width="14" height="14" style="width:0.875rem;height:0.875rem;object-fit:contain;">
                 {%- else -%}
                   {%- case block.settings.eyebrow_icon -%}
                     {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
@@ -456,7 +456,7 @@
                 <div class="cvh-hero__badge">
                   <div class="cvh-hero__badge-icon">
                     {%- if block.settings.badge_icon_custom != blank -%}
-                      {{ block.settings.badge_icon_custom }}
+                      <img src="{{ block.settings.badge_icon_custom | image_url: width: 40 }}" alt="" width="20" height="20" style="width:1.25rem;height:1.25rem;object-fit:contain;">
                     {%- else -%}
                       {%- case block.settings.badge_icon -%}
                         {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
@@ -1096,7 +1096,7 @@
             { "value": "clock", "label": "Clock" },
             { "value": "zap",   "label": "Zap / Lightning" }
           ], "default": "star" },
-        { "type": "html", "id": "eyebrow_icon_custom", "label": "Custom eyebrow icon (SVG)", "info": "Paste SVG code to override the icon above. Leave blank to use the selected icon." },
+        { "type": "image_picker", "id": "eyebrow_icon_custom", "label": "Custom eyebrow icon", "info": "Upload an image to override the icon above. Leave blank to use the selected icon." },
         { "type": "text",     "id": "eyebrow",    "label": "Eyebrow text",         "default": "New Season Drops" },
         { "type": "text",     "id": "title_line1","label": "Title (line 1)",        "default": "Premium TCG" },
         { "type": "text",     "id": "title_em",   "label": "Title accent (highlighted)", "default": "Sealed Products" },
@@ -1116,7 +1116,7 @@
             { "value": "tag",    "label": "Tag" },
             { "value": "clock",  "label": "Clock" }
           ], "default": "shield" },
-        { "type": "html", "id": "badge_icon_custom", "label": "Custom badge icon (SVG)", "info": "Paste SVG code to override the icon above. Leave blank to use the selected icon." },
+        { "type": "image_picker", "id": "badge_icon_custom", "label": "Custom badge icon", "info": "Upload an image to override the icon above. Leave blank to use the selected icon." },
         { "type": "header", "content": "Style" },
         { "type": "select", "id": "color_scheme", "label": "Background colour (fallback)", "options": [
             { "value": "1", "label": "Purple (default)" },
