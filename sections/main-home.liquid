@@ -152,8 +152,7 @@
 .cvh-hero__desc { font-size: 1rem; line-height: 1.65; color: var(--cv-muted-fg); max-width: 32rem; }
 .cvh-hero__ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: auto; }
 
-.cvh-hero__img-wrap { display: none; position: relative; padding: 1rem; }
-@media (min-width: 768px) { .cvh-hero__img-wrap { display: block; } }
+.cvh-hero__img-wrap { display: block; position: relative; padding: 1rem; }
 .cvh-hero__img-wrap img { 
   width: 100%; 
   aspect-ratio: 1 / 1; 
@@ -177,7 +176,7 @@
 .cvh-hero__slide-wrap.has-bg-image ~ .cvh-hero__controls .cvh-hero__dot { background: rgba(255,255,255,0.4); }
 .cvh-hero__slide-wrap.has-bg-image ~ .cvh-hero__controls .cvh-hero__dot.is-active { background: #fff; }
 
-.cvh-hero__arrow { display: none !important; position: absolute; top: 50%; transform: translateY(-50%); width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: rgba(255,255,255,0.9); border: 1px solid var(--cv-border); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--cv-shadow); z-index: 10; color: var(--cv-fg); transition: background 0.15s; -webkit-appearance: none; }
+.cvh-hero__arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: rgba(255,255,255,0.9); border: 1px solid var(--cv-border); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--cv-shadow); z-index: 10; color: var(--cv-fg); transition: background 0.15s; -webkit-appearance: none; }
 .cvh-hero__arrow:hover { background: #fff; }
 .cvh-hero__arrow svg { width: 1.25rem; height: 1.25rem; }
 .cvh-hero__arrow--prev { left: 1rem; }
@@ -397,6 +396,19 @@
   /* Browse by Category: wider cards for 2-card + peek swipe layout */
   .cvh-cat-grid { padding-bottom: 15px; }
   .cvh-cat-grid .cvh-cat-card { width: 40vw; min-width: 0; }
+
+  /* Hero: stack image below text on mobile */
+  .cvh-hero__slide { grid-template-columns: 1fr; }
+  .cvh-hero__img-wrap { width: 100%; }
+
+  /* Hero: hide arrows on mobile */
+  .cvh-hero__arrow { display: none; }
+
+  /* Fan Favourites: scroll fade affordance */
+  .cvh-featured__scroll-wrap {
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  }
 }
 
 
@@ -1147,7 +1159,7 @@
       "type": "marquee_item",
       "name": "Ticker Item",
       "settings": [
-        { "type": "text", "id": "text", "label": "Text", "default": "Free insured shipping on orders over $100" }
+        { "type": "text", "id": "text", "label": "Text", "default": "Factory Sealed • Same-Day Dispatch • Authentic Pokémon • Melbourne Based" }
       ]
     },
     {
@@ -1284,8 +1296,8 @@
     { "type": "header", "content": "About Section" },
     { "type": "checkbox",     "id": "show_about",      "label": "Show about section", "default": true },
     { "type": "image_picker", "id": "about_image",     "label": "About image" },
-    { "type": "text",         "id": "about_title",     "label": "Title",               "default": "About CardVault" },
-    { "type": "textarea",     "id": "about_desc",      "label": "Description",         "default": "We're passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all — and ship it fast with full insurance." },
+    { "type": "text",         "id": "about_title",     "label": "Title",               "default": "Australia's Home for Sealed Pokémon TCG" },
+    { "type": "textarea",     "id": "about_desc",      "label": "Description",         "default": "We're collectors, built by collectors. From booster packs to full sealed cases — Pokémon-first, plus One Piece and more. Fast dispatch, fully insured shipping, 100% authentic." },
     { "type": "text",         "id": "about_cta1_label","label": "Button 1 label",     "default": "Our Story" },
     { "type": "url",          "id": "about_cta1_url",  "label": "Button 1 URL" },
     { "type": "text",         "id": "about_cta2_label","label": "Button 2 label",     "default": "Contact Us" },
@@ -1296,8 +1308,8 @@
 
     { "type": "header", "content": "Newsletter" },
     { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter",   "default": true },
-    { "type": "text",     "id": "nl_title",        "label": "Title",             "default": "Stay in the Loop" },
-    { "type": "text",     "id": "nl_subtitle",     "label": "Subtitle",          "default": "New drops, restocks, and exclusive deals delivered straight to your inbox." },
+    { "type": "text",     "id": "nl_title",        "label": "Title",             "default": "Get Early Access to New Pokémon Drops" },
+    { "type": "text",     "id": "nl_subtitle",     "label": "Subtitle",          "default": "Be first to know about new set releases, restocks, and exclusive sealed deals." },
     { "type": "text",     "id": "nl_disclaimer",   "label": "Disclaimer text",   "default": "No spam, ever. Unsubscribe anytime." },
 
     { "type": "header", "content": "Display Options" },
