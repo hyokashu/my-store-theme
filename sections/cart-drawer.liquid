@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — sections/cart-drawer.liquid
+  Sprout — sections/cart-drawer.liquid
   AJAX Cart Drawer (Slide-out, right-side panel)
 
   Features:
@@ -13,7 +13,7 @@
   - Intercepts .sd-cart-btn clicks site-wide
   - Intercepts form[action="/cart/add"] submissions site-wide
   - Dispatches / listens to cart:open, cart:refresh custom events
-  - Inherits full Supply District design token system
+  - Inherits full Sprout design token system
 {% endcomment %}
 
 {%- liquid
@@ -22,7 +22,7 @@
 
 <style>
 /* ================================================================
-   Supply District Cart Drawer — scd-* namespace
+   Sprout Cart Drawer — scd-* namespace
    Design tokens defined here so the drawer works on every page,
    even pages that don't load main-cart.liquid / main-product.liquid
    ================================================================ */
@@ -763,7 +763,7 @@ window.__SCD__ = {
 
 <script>
 /* ================================================================
-   Supply District Cart Drawer — IIFE
+   Sprout Cart Drawer — IIFE
    All DOM queries scoped to the drawer; no global namespace pollution
    ================================================================ */
 (function () {

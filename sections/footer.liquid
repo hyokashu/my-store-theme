@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — sections/footer.liquid
+  Sprout — sections/footer.liquid
   Multi-column trust-anchor footer.
   Background: deep slate/purple · Text: cream/off-white
   Columns: Brand | Customer Care | Business Address | Community
@@ -39,8 +39,8 @@
             {%- comment -%} Email {%- endcomment -%}
             <li class="sd-footer__list-item">
               <svg class="sd-footer__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              <a href="mailto:{{ section.settings.support_email | default: 'support@supplydistrict.com' }}" class="sd-footer__link">
-                {{ section.settings.support_email | default: 'support@supplydistrict.com' }}
+              <a href="mailto:{{ section.settings.support_email | default: 'support@sprout.com' }}" class="sd-footer__link">
+                {{ section.settings.support_email | default: 'support@sprout.com' }}
               </a>
             </li>
 
@@ -92,7 +92,7 @@
               {%- if section.settings.address != blank -%}
                 {{ section.settings.address | newline_to_br }}
               {%- else -%}
-                Supply District Pty Ltd<br>
+                Sprout<br>
                 123 Collector Way<br>
                 Melbourne VIC 3000<br>
                 Australia
@@ -177,7 +177,7 @@
 
 <style>
 /* ============================================================
-   Supply District — Footer
+   Sprout — Footer
    Deep slate background (#1c1f36) · cream/off-white text
    ============================================================ */
 :root {
@@ -398,7 +398,7 @@
       "type": "text",
       "id": "support_email",
       "label": "Support email",
-      "default": "support@supplydistrict.com"
+      "default": "support@sprout.com"
     },
     {
       "type": "text",
@@ -467,7 +467,7 @@
       "type": "textarea",
       "id": "address",
       "label": "Business address",
-      "default": "Supply District Pty Ltd\n123 Collector Way\nMelbourne VIC 3000\nAustralia"
+      "default": "Sprout\n123 Collector Way\nMelbourne VIC 3000\nAustralia"
     },
     {
       "type": "text",
