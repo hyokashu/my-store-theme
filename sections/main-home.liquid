@@ -397,9 +397,10 @@
   .cvh-cat-grid { padding-bottom: 15px; }
   .cvh-cat-grid .cvh-cat-card { width: 40vw; min-width: 0; }
 
-  /* Hero: stack image below text on mobile */
+  /* Hero: hide image/badge on mobile so section ends after CTAs */
   .cvh-hero__slide { grid-template-columns: 1fr; }
-  .cvh-hero__img-wrap { width: 100%; }
+  .cvh-hero__img-wrap { display: none; }
+  .cvh-hero__text { min-height: 0; }
 
   /* Hero: hide arrows on mobile */
   .cvh-hero__arrow { display: none; }
