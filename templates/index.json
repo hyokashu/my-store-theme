@@ -151,7 +151,7 @@
           "settings": {
             "label": "Sale",
             "url": "shopify://collections/on-sale",
-            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-10_14-23-16-Photoroom.png",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-34_1.png",
             "icon": "shopping-bag",
             "is_sale": false
           }
@@ -161,7 +161,7 @@
           "settings": {
             "label": "Booster Boxes",
             "url": "",
-            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-10_14-38-04-Photoroom.png",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-23-23_1.png",
             "icon": "package",
             "is_sale": false
           }
@@ -182,7 +182,7 @@
           "settings": {
             "label": "Cases",
             "url": "",
-            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_e5q440e5q440e5q4-Photoroom.png",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-13_1.png",
             "icon": "layers",
             "is_sale": false
           }
@@ -192,7 +192,7 @@
           "settings": {
             "label": "Singles",
             "url": "",
-            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_tw66ketw66ketw66-Photoroom.png",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-18.png",
             "icon": "tag",
             "is_sale": false
           }
