@@ -12,27 +12,6 @@
     "main_home_faAae4": {
       "type": "main-home",
       "blocks": {
-        "hero_slide_pj8jtq": {
-          "type": "hero_slide",
-          "settings": {
-            "eyebrow_icon": "star",
-            "eyebrow_icon_custom": "shopify://shop_images/Gemini_Generated_Image_39fmot39fmot39fm-Photoroom.png",
-            "eyebrow": "FRESH BOUNTY",
-            "title_line1": "One Piece TCG",
-            "title_em": "Booster Boxes & Sealed Products",
-            "description": "Hunt for your chase cards with total confidence. Shop 100% authentic, unweighed booster boxes sourced straight from official distributors and shipped with collector-grade care.",
-            "cta1_label": "Shop Booster Boxes",
-            "cta1_url": "shopify://collections/one-piece",
-            "cta2_label": "Shop All",
-            "cta2_url": "shopify://collections/one-piece-all",
-            "bg_image": "shopify://shop_images/thumb-1920-996396.png",
-            "image": "shopify://shop_images/OP1JP.webp",
-            "badge_value": "100% Authentic",
-            "badge_label": "Verified sealed product",
-            "badge_icon": "shield",
-            "color_scheme": "1"
-          }
-        },
         "hero_slide_qJtCnY": {
           "type": "hero_slide",
           "settings": {
@@ -51,6 +30,28 @@
             "badge_label": "Ships within 24 hours",
             "badge_icon": "clock",
             "color_scheme": "2"
+          }
+        },
+        "hero_slide_pj8jtq": {
+          "type": "hero_slide",
+          "disabled": true,
+          "settings": {
+            "eyebrow_icon": "star",
+            "eyebrow_icon_custom": "shopify://shop_images/Gemini_Generated_Image_39fmot39fmot39fm-Photoroom.png",
+            "eyebrow": "FRESH BOUNTY",
+            "title_line1": "One Piece TCG",
+            "title_em": "Booster Boxes & Sealed Products",
+            "description": "Hunt for your chase cards with total confidence. Shop 100% authentic, unweighed booster boxes sourced straight from official distributors and shipped with collector-grade care.",
+            "cta1_label": "Shop Booster Boxes",
+            "cta1_url": "shopify://collections/one-piece",
+            "cta2_label": "Shop All",
+            "cta2_url": "shopify://collections/one-piece-all",
+            "bg_image": "shopify://shop_images/thumb-1920-996396.png",
+            "image": "shopify://shop_images/OP1JP.webp",
+            "badge_value": "100% Authentic",
+            "badge_label": "Verified sealed product",
+            "badge_icon": "shield",
+            "color_scheme": "1"
           }
         },
         "hero_slide_KR9c4n": {
@@ -337,8 +338,8 @@
         }
       },
       "block_order": [
-        "hero_slide_pj8jtq",
         "hero_slide_qJtCnY",
+        "hero_slide_pj8jtq",
         "hero_slide_KR9c4n",
         "trust_item_VgmMdE",
         "trust_item_nw3tnX",
@@ -378,14 +379,14 @@
         "hero_autoplay_ms": 5000,
         "featured_title": "Fan Favourites",
         "featured_subtitle": "Whether you're building your collection or buying your first box — these are going fast.",
-        "tab1_label": "One Piece",
-        "tab1_collection": "one-piece-all",
+        "tab1_label": "Hot Booster boxes",
+        "tab1_collection": "pokemon-collection",
         "tab2_label": "Pokemon",
-        "tab2_collection": "pokemon-collection",
-        "tab3_label": "Best Sellers",
+        "tab2_collection": "one-piece-all",
+        "tab3_label": "One Piece",
         "tab3_collection": "",
         "tab1_icon": "none",
-        "tab1_custom_icon": "shopify://shop_images/Gemini_Generated_Image_bccrjmbccrjmbccr-Photoroom.png",
+        "tab1_custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-32-25_1.png",
         "tab2_icon": "none",
         "tab2_custom_icon": "shopify://shop_images/Gemini_Generated_Image_c37fogc37fogc37f-Photoroom.png",
         "tab3_icon": "none",
