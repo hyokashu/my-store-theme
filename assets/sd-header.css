@@ -158,7 +158,7 @@
 
 .sd-header__inner {
   display:         grid;
-  grid-template-columns: 1fr 2fr 1fr;  /* logo | search | icons */
+  grid-template-columns: auto 1fr auto;  /* logo | search | icons */
   align-items:     center;
   max-width:       90rem;
   margin:          0 auto;
