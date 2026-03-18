@@ -213,7 +213,7 @@
           "settings": {
             "label": "Pokemon",
             "url": "",
-            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_c37fogc37fogc37f-Photoroom.png"
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-32-25_1.png"
           }
         },
         "brand_link_k4wXFB": {
@@ -379,16 +379,14 @@
         "hero_autoplay_ms": 5000,
         "featured_title": "Fan Favourites",
         "featured_subtitle": "Whether you're building your collection or buying your first box — these are going fast.",
-        "tab1_label": "Hot Booster boxes",
+        "tab1_label": "Booster boxes",
         "tab1_collection": "pokemon-collection",
         "tab2_label": "Pokemon",
         "tab2_collection": "one-piece-all",
         "tab3_label": "One Piece",
         "tab3_collection": "",
         "tab1_icon": "none",
-        "tab1_custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-32-25_1.png",
         "tab2_icon": "none",
-        "tab2_custom_icon": "shopify://shop_images/Gemini_Generated_Image_c37fogc37fogc37f-Photoroom.png",
         "tab3_icon": "none",
         "cat_title": "Browse by Category",
         "cat_subtitle": "Booster boxes, ETBs, cases, singles & more.",
