@@ -33,7 +33,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 /* ── Design tokens (mirror main-product.liquid) ── */
 :root {
-  --cv-bg:                   #f0f5fb;
+  --cv-bg:                   #eef5fc;
   --cv-fg:                   #1c2a3e;
   --cv-card:                 #ffffff;
   --cv-primary:              #1e3a5f;
@@ -46,9 +46,9 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   --cv-shadow:               0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
   --cv-font-sans:            'Inter', system-ui, -apple-system, sans-serif;
   --cv-font-head:            'Space Grotesk', system-ui, sans-serif;
-  --color-cta-primary:       #2e9963;
+  --color-cta-primary:       #16a34a;
   --color-cta-primary-fg:    #ffffff;
-  --color-cta-primary-hover: #25834f;
+  --color-cta-primary-hover: #15803d;
 }
 
 /* =============================================================
@@ -286,9 +286,10 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
     scrollbar-width: thin;
     scrollbar-color: var(--cv-border) transparent;
     padding: 1rem 1rem 2rem;
-    background: #e0eaf5;
+    background: #ffffff;
     border-radius: 0.75rem;
     border: 1px solid var(--cv-border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   }
   body.sd-sticky-active .sdcl-sidebar {
     top: calc(var(--sd-header-height, 64px) + 1rem);
@@ -605,14 +606,14 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   gap: 0.3rem;
   font-size: 0.75rem; font-weight: 600;
   color: var(--color-cta-primary);
-  background: rgba(46,153,99,0.10);
-  border: 1px solid rgba(46,153,99,0.28);
+  background: rgba(22,163,74,0.10);
+  border: 1px solid rgba(22,163,74,0.28);
   border-radius: 999px;
   padding: 0.25rem 0.65rem;
   text-decoration: none;
   transition: background 0.15s;
 }
-.sdcf-pill:hover { background: rgba(46,153,99,0.18); }
+.sdcf-pill:hover { background: rgba(22,163,74,0.18); }
 
 .sdcf-pill__remove {
   display: flex; align-items: center; opacity: 0.7;
@@ -835,7 +836,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 }
 
 @media (min-width: 1024px) {
-  .sdcpg__grid { grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+  .sdcpg__grid { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
 }
 
 /* With sidebar — override to 3-col at 1024px (narrower grid area) */

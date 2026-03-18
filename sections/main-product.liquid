@@ -40,7 +40,7 @@
    CardVault Design Tokens
    ============================================================= */
 :root {
-  --cv-bg:          #f0f5fb;
+  --cv-bg:          #eef5fc;
   --cv-fg:          #1c2a3e;
   --cv-card:        #ffffff;
   --cv-primary:     #1e3a5f;
@@ -49,7 +49,7 @@
   --cv-muted-fg:    #6b7fa8;
   --cv-border:      #c5d8ee;
   --cv-destructive: #c94030;
-  --cv-success:     #2e9963;
+  --cv-success:     #16a34a;
   --cv-success-fg:  #f8f7f5;
   --cv-star:        #d4783a;
   --cv-radius:      0.5rem;
@@ -59,9 +59,9 @@
   --cv-font-head:   'Space Grotesk', system-ui, sans-serif;
 
   /* ── Von Restorff accent: ONLY used on Add to Cart / Buy Now / Checkout ── */
-  --color-cta-primary:    #2e9963;   /* bold green — matches Authentic badge, high contrast on cream + slate */
+  --color-cta-primary:    #16a34a;   /* bold green — matches Authentic badge, high contrast on cream + slate */
   --color-cta-primary-fg: #ffffff;
-  --color-cta-primary-hover: #25834f;
+  --color-cta-primary-hover: #15803d;
 }
 
 /* =============================================================
@@ -135,7 +135,7 @@
 }
 @media (min-width: 768px)  {
   .cv-hero {
-    grid-template-columns: 55fr 45fr;
+    grid-template-columns: 60fr 40fr;
     gap: 2rem;
     align-items: start;
     padding: 2rem;
@@ -173,7 +173,7 @@
 
 .cv-gallery__main {
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   width: 100%;
   overflow: hidden;
   border-radius: calc(var(--cv-radius) * 2);
@@ -239,7 +239,7 @@
 .cv-gallery__thumbs { display: flex; gap: 0.625rem; }
 .cv-gallery__thumb {
   position: relative;
-  width: 6.25rem; height: 6.25rem; flex-shrink: 0;
+  width: 5rem; height: 5rem; flex-shrink: 0;
   border-radius: var(--cv-radius);
   overflow: hidden;
   border: 2px solid transparent;
@@ -288,7 +288,7 @@
 }
 .cv-badge svg { width: 0.75rem; height: 0.75rem; }
 .cv-badge--sealed   { background: rgba(30,58,95,0.07);   color: var(--cv-primary);     border-color: rgba(30,58,95,0.18); }
-.cv-badge--auth     { background: #E6F4EA;                color: var(--cv-success);     border-color: rgba(46,153,99,0.3); }
+.cv-badge--auth     { background: #E6F4EA;                color: var(--cv-success);     border-color: rgba(22,163,74,0.3); }
 .cv-badge--stock    { background: rgba(201,64,48,0.08);  color: var(--cv-destructive); border-color: rgba(201,64,48,0.2); }
 .cv-badge--oos      { background: #FEE2E2;                color: #DC2626;               border-color: rgba(220,38,38,0.3); }
 
@@ -437,15 +437,28 @@ input.cv-qty__input {
 /* Buy Now inherits CTA colour */
 .cv-btn--outline-primary {
   width: 100%;
-  background: transparent;
-  border-color: var(--color-cta-primary);
-  color: var(--color-cta-primary);
+  background: var(--cv-primary);
+  border-color: var(--cv-primary);
+  color: #ffffff;
 }
 .cv-btn--outline-primary:hover {
-  background: rgba(46,153,99,0.06);
-  border-color: var(--color-cta-primary-hover);
-  color: var(--color-cta-primary-hover);
+  background: #162f4d;
+  border-color: #162f4d;
+  color: #ffffff;
+  opacity: 1;
 }
+
+/* ── Stock Urgency Alert ── */
+.cv-stock-urgency {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.8125rem; font-weight: 600;
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: var(--cv-radius);
+  padding: 0.4rem 0.75rem;
+}
+.cv-stock-urgency svg { width: 0.9rem; height: 0.9rem; flex-shrink: 0; }
 
 /* ── Dispatch Countdown ── */
 .cv-dispatch-timer {
@@ -1147,6 +1160,12 @@ input.cv-qty__input {
       {% form 'product', product, id: 'cv-product-form', class: 'cv-actions', novalidate: 'novalidate' %}
         <input type="hidden" name="id" value="{{ current_variant.id }}" id="cv-variant-id">
 
+        {%- if low_stock -%}
+          <div class="cv-stock-urgency" aria-live="polite">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Only {{ stock_qty }} left in stock — order soon
+          </div>
+        {%- endif -%}
         <div class="cv-qty-row">
           <label class="cv-qty-label" for="cv-qty-input">Qty</label>
           <div class="cv-qty" role="group" aria-label="Quantity selector">
