@@ -30,14 +30,14 @@
    CardVault Design Tokens (shared with product page)
    ============================================================= */
 :root {
-  --cv-bg:         #f7f6f3;
-  --cv-fg:         #1c1f36;
+  --cv-bg:         #f0f5fb;
+  --cv-fg:         #1c2a3e;
   --cv-card:       #ffffff;
-  --cv-primary:    #282d52;
-  --cv-primary-fg: #f8f7f5;
-  --cv-secondary:  #eeecea;
-  --cv-muted-fg:   #76798c;
-  --cv-border:     #dedad5;
+  --cv-primary:    #1e3a5f;
+  --cv-primary-fg: #eef5fc;
+  --cv-secondary:  #e0eaf5;
+  --cv-muted-fg:   #6b7fa8;
+  --cv-border:     #c5d8ee;
   --cv-destructive:#c94030;
   --cv-success:    #2e9963;
   --cv-success-fg: #f8f7f5;
@@ -83,7 +83,7 @@
 .cvh-btn--primary { background: var(--color-cta-primary); color: var(--color-cta-primary-fg); border-color: var(--color-cta-primary); }
 .cvh-btn--primary:hover { background: var(--color-cta-primary-hover); border-color: var(--color-cta-primary-hover); opacity: 1; }
 .cvh-btn--outline { background: transparent; border-color: var(--cv-primary); color: var(--cv-primary); }
-.cvh-btn--outline:hover { background: rgba(40,45,82,0.06); }
+.cvh-btn--outline:hover { background: rgba(30,58,95,0.06); }
 .cvh-btn--sm { height: 2.25rem; font-size: 0.8125rem; padding: 0 1rem; }
 
 /* Section headers */
@@ -111,9 +111,9 @@
 
 .cvh-hero__slide-wrap { min-width: 100%; position: relative; }
 .cvh-hero__slide-wrap::before { content: ''; position: absolute; inset: 0; z-index: 0; }
-.cvh-hero__slide-wrap--1::before { background: linear-gradient(135deg, #f7f6f3 0%, #ece8e2 100%); }
-.cvh-hero__slide-wrap--2::before { background: linear-gradient(135deg, #eaecf5 0%, #d8deee 100%); }
-.cvh-hero__slide-wrap--3::before { background: linear-gradient(135deg, #f2ede5 0%, #e5ded3 100%); }
+.cvh-hero__slide-wrap--1::before { background: linear-gradient(135deg, #f0f5fb 0%, #dceafa 100%); }
+.cvh-hero__slide-wrap--2::before { background: linear-gradient(135deg, #e0eaf5 0%, #c5d8ee 100%); }
+.cvh-hero__slide-wrap--3::before { background: linear-gradient(135deg, #dff0fb 0%, #c8dff5 100%); }
 
 .cvh-hero__bg-img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
@@ -141,10 +141,10 @@
 .cvh-hero__text { display: flex; flex-direction: column; gap: 1.25rem; min-height: 24rem; }
 @media (min-width: 768px) { .cvh-hero__text { min-height: 18rem; } }
 .cvh-hero__eyebrow {
-  display: inline-flex; align-items: center; gap: 0.375rem; background: rgba(40,45,82,0.08); color: var(--cv-primary);
+  display: inline-flex; align-items: center; gap: 0.375rem; background: rgba(30,58,95,0.08); color: var(--cv-primary);
   font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.375rem 0.75rem; border-radius: 9999px; width: fit-content;
 }
-.cvh-hero__eyebrow svg { width: 0.875rem; height: 0.875rem; }
+.cvh-hero__eyebrow svg { width: 1.25rem; height: 1.25rem; }
 .cvh-hero__title { font-family: var(--cv-font-head); font-size: 2.5rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; color: var(--cv-fg); }
 @media (min-width: 768px)  { .cvh-hero__title { font-size: 3rem; } }
 @media (min-width: 1024px) { .cvh-hero__title { font-size: 3.5rem; } }
@@ -152,8 +152,7 @@
 .cvh-hero__desc { font-size: 1rem; line-height: 1.65; color: var(--cv-muted-fg); max-width: 32rem; }
 .cvh-hero__ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: auto; }
 
-.cvh-hero__img-wrap { display: none; position: relative; padding: 1rem; }
-@media (min-width: 768px) { .cvh-hero__img-wrap { display: block; } }
+.cvh-hero__img-wrap { display: block; position: relative; padding: 1rem; }
 .cvh-hero__img-wrap img { 
   width: 100%; 
   aspect-ratio: 1 / 1; 
@@ -172,12 +171,12 @@
 .cvh-hero__badge-label { font-size: 0.75rem; color: var(--cv-muted-fg); }
 
 .cvh-hero__controls { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 0.75rem; z-index: 10; }
-.cvh-hero__dot { width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: rgba(40,45,82,0.25); border: none; cursor: pointer; padding: 0; transition: background 0.2s, width 0.2s; }
+.cvh-hero__dot { width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: rgba(30,58,95,0.25); border: none; cursor: pointer; padding: 0; transition: background 0.2s, width 0.2s; }
 .cvh-hero__dot.is-active { background: var(--cv-primary); width: 1.5rem; }
 .cvh-hero__slide-wrap.has-bg-image ~ .cvh-hero__controls .cvh-hero__dot { background: rgba(255,255,255,0.4); }
 .cvh-hero__slide-wrap.has-bg-image ~ .cvh-hero__controls .cvh-hero__dot.is-active { background: #fff; }
 
-.cvh-hero__arrow { display: none !important; position: absolute; top: 50%; transform: translateY(-50%); width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: rgba(255,255,255,0.9); border: 1px solid var(--cv-border); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--cv-shadow); z-index: 10; color: var(--cv-fg); transition: background 0.15s; -webkit-appearance: none; }
+.cvh-hero__arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: rgba(255,255,255,0.9); border: 1px solid var(--cv-border); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--cv-shadow); z-index: 10; color: var(--cv-fg); transition: background 0.15s; -webkit-appearance: none; }
 .cvh-hero__arrow:hover { background: #fff; }
 .cvh-hero__arrow svg { width: 1.25rem; height: 1.25rem; }
 .cvh-hero__arrow--prev { left: 1rem; }
@@ -235,7 +234,8 @@
    ============================================================= */
 .cvh-featured { padding: 4rem 0 1.5rem; }
 .cvh-featured__tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
-.cvh-featured__tab { font-family: var(--cv-font-sans); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.5rem 1.25rem; border: 1px solid var(--cv-border); border-radius: 9999px; background: var(--cv-card); color: var(--cv-muted-fg); cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s; -webkit-appearance: none; }
+.cvh-featured__tab { display: inline-flex; align-items: center; gap: 0.375rem; font-family: var(--cv-font-sans); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.5rem 1.25rem; border: 1px solid var(--cv-border); border-radius: 9999px; background: var(--cv-card); color: var(--cv-muted-fg); cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s; -webkit-appearance: none; }
+.cvh-featured__tab svg, .cvh-featured__tab img { width: 0.875rem; height: 0.875rem; flex-shrink: 0; object-fit: contain; }
 .cvh-featured__tab.is-active, .cvh-featured__tab:hover { background: var(--cv-primary); color: var(--cv-primary-fg); border-color: var(--cv-primary); }
 
 .cvh-featured__scroll-wrap { position: relative; }
@@ -244,10 +244,10 @@
 .cvh-featured__panel { display: none; }
 .cvh-featured__panel.is-active { display: block; }
 
-.cvh-prod-card { scroll-snap-align: start; flex-shrink: 0; width: calc(50vw - 1.5rem); max-width: 14rem; display: flex; flex-direction: column; gap: 0.75rem; border: 1px solid #E5E7EB; border-radius: 8px; background: var(--cv-card); padding: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit; }
+.cvh-prod-card { scroll-snap-align: start; flex-shrink: 0; width: calc(50vw - 1.5rem); max-width: 14rem; display: flex; flex-direction: column; gap: 0.75rem; border: 1px solid #c5d8ee; border-radius: 8px; background: var(--cv-card); padding: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; text-decoration: none; color: inherit; }
 @media (min-width: 640px)  { .cvh-prod-card { width: 13rem; max-width: 13rem; } }
 @media (min-width: 1024px) { .cvh-prod-card { width: 14.5rem; max-width: 14.5rem; } }
-.cvh-prod-card:hover { border-color: rgba(40,45,82,0.25); box-shadow: 0 6px 20px rgba(0,0,0,0.09); transform: translateY(-2px); }
+.cvh-prod-card:hover { border-color: rgba(30,58,95,0.25); box-shadow: 0 6px 20px rgba(0,0,0,0.09); transform: translateY(-2px); }
 .cvh-prod-card__img { position: relative; aspect-ratio: 1 / 1; overflow: hidden; border-radius: var(--cv-radius); background: var(--cv-secondary); }
 .cvh-prod-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.35s; }
 .cvh-prod-card:hover .cvh-prod-card__img img { transform: scale(1.06); }
@@ -292,7 +292,7 @@
 }
 
 .cvh-cat-card { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 0.5rem 0.5rem; border: 1px solid var(--cv-border); border-radius: calc(var(--cv-radius) * 2); background: var(--cv-card); box-shadow: var(--cv-shadow-sm); text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; text-align: center; }
-.cvh-cat-card:hover { border-color: var(--cv-primary); box-shadow: 0 4px 16px rgba(40,45,82,0.12); transform: translateY(-3px); }
+.cvh-cat-card:hover { border-color: var(--cv-primary); box-shadow: 0 4px 16px rgba(30,58,95,0.12); transform: translateY(-3px); }
 .cvh-cat-card__icon { width: 4rem; height: 4rem; background: transparent; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease; position: relative; }
 .cvh-cat-card:hover .cvh-cat-card__icon { transform: scale(1.08); /* Makes the icon pop up on hover */ }
 
@@ -350,7 +350,7 @@
 /* =============================================================
    10. REVIEWS
    ============================================================= */
-.cvh-reviews { padding: 4.5rem 0; background-color: #F8F9FA; }
+.cvh-reviews { padding: 4.5rem 0; background-color: #f0f5fb; }
 .cvh-reviews__title-wrap { text-align: center; margin-bottom: 3rem; }
 .cvh-reviews__mega { font-family: var(--cv-font-head); font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; }
 .cvh-reviews__scroll { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 0.5rem; }
@@ -361,7 +361,7 @@
 .cvh-review-card__stars svg { width: 1rem; height: 1rem; fill: var(--cv-star); color: var(--cv-star); }
 .cvh-review-card__text { font-size: 0.9375rem; line-height: 1.65; color: var(--cv-muted-fg); margin-bottom: 1.25rem; }
 .cvh-review-card__author { display: flex; align-items: center; gap: 0.625rem; }
-.cvh-review-card__avatar { width: 2.25rem; height: 2.25rem; border-radius: 9999px; background: rgba(40,45,82,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; font-weight: 700; color: var(--cv-primary); flex-shrink: 0; }
+.cvh-review-card__avatar { width: 2.25rem; height: 2.25rem; border-radius: 9999px; background: rgba(30,58,95,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; font-weight: 700; color: var(--cv-primary); flex-shrink: 0; }
 .cvh-review-card__name { font-size: 0.875rem; font-weight: 600; }
 .cvh-review-card__meta { font-size: 0.75rem; color: var(--cv-muted-fg); }
 
@@ -396,6 +396,19 @@
   /* Browse by Category: wider cards for 2-card + peek swipe layout */
   .cvh-cat-grid { padding-bottom: 15px; }
   .cvh-cat-grid .cvh-cat-card { width: 40vw; min-width: 0; }
+
+  /* Hero: stack image below text on mobile */
+  .cvh-hero__slide { grid-template-columns: 1fr; }
+  .cvh-hero__img-wrap { width: 100%; }
+
+  /* Hero: hide arrows on mobile */
+  .cvh-hero__arrow { display: none; }
+
+  /* Fan Favourites: scroll fade affordance */
+  .cvh-featured__scroll-wrap {
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  }
 }
 
 
@@ -419,12 +432,16 @@
           <div class="cvh-hero__slide cvh__inner">
             <div class="cvh-hero__text">
               <span class="cvh-hero__eyebrow">
-                {%- case block.settings.eyebrow_icon -%}
-                  {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                  {%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  {%- when 'zap' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                  {%- else -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                {%- endcase -%}
+                {%- if block.settings.eyebrow_icon_custom != blank -%}
+                  <img src="{{ block.settings.eyebrow_icon_custom | image_url: width: 40 }}" alt="" width="20" height="20" style="width:1.25rem;height:1.25rem;object-fit:contain;">
+                {%- else -%}
+                  {%- case block.settings.eyebrow_icon -%}
+                    {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    {%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    {%- when 'zap' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    {%- else -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  {%- endcase -%}
+                {%- endif -%}
                 {{ block.settings.eyebrow }}
               </span>
               <h1 class="cvh-hero__title">
@@ -450,11 +467,15 @@
               {%- if block.settings.badge_value != blank -%}
                 <div class="cvh-hero__badge">
                   <div class="cvh-hero__badge-icon">
-                    {%- case block.settings.badge_icon -%}
-                      {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                      {%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                      {%- else -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    {%- endcase -%}
+                    {%- if block.settings.badge_icon_custom != blank -%}
+                      <img src="{{ block.settings.badge_icon_custom | image_url: width: 40 }}" alt="" width="20" height="20" style="width:1.25rem;height:1.25rem;object-fit:contain;">
+                    {%- else -%}
+                      {%- case block.settings.badge_icon -%}
+                        {%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                        {%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        {%- else -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                      {%- endcase -%}
+                    {%- endif -%}
                   </div>
                   <div class="cvh-hero__badge-text">
                     <span class="cvh-hero__badge-val">{{ block.settings.badge_value }}</span>
@@ -562,10 +583,16 @@
       {%- assign tab2_id = tab2_label | handle -%}
       {%- assign tab3_id = tab3_label | handle -%}
 
+      {%- assign _icon_svgs = 'star|<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>|clock|<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>|bolt|<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>|heart|<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>|tag|<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>|package|<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>|trophy|<polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a1 1 0 0 0-1 1v3a4 4 0 0 0 4 4h.5"/><path d="M17 4h3a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4h-.5"/><rect x="7" y="2" width="10" height="9" rx="2"/>' -%}
+
+      {%- capture tab1_icon -%}{%- if section.settings.tab1_custom_icon -%}<img src="{{ section.settings.tab1_custom_icon | image_url: width: 32 }}" width="14" height="14" loading="eager" alt="" aria-hidden="true">{%- else -%}{%- case section.settings.tab1_icon -%}{%- when 'star' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>{%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{%- when 'bolt' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>{%- when 'heart' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>{%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>{%- when 'package' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>{%- when 'trophy' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a1 1 0 0 0-1 1v3a4 4 0 0 0 4 4h.5"/><path d="M17 4h3a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4h-.5"/><rect x="7" y="2" width="10" height="9" rx="2"/></svg>{%- endcase -%}{%- endif -%}{%- endcapture -%}
+      {%- capture tab2_icon -%}{%- if section.settings.tab2_custom_icon -%}<img src="{{ section.settings.tab2_custom_icon | image_url: width: 32 }}" width="14" height="14" loading="eager" alt="" aria-hidden="true">{%- else -%}{%- case section.settings.tab2_icon -%}{%- when 'star' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>{%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{%- when 'bolt' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>{%- when 'heart' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>{%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>{%- when 'package' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>{%- when 'trophy' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a1 1 0 0 0-1 1v3a4 4 0 0 0 4 4h.5"/><path d="M17 4h3a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4h-.5"/><rect x="7" y="2" width="10" height="9" rx="2"/></svg>{%- endcase -%}{%- endif -%}{%- endcapture -%}
+      {%- capture tab3_icon -%}{%- if section.settings.tab3_custom_icon -%}<img src="{{ section.settings.tab3_custom_icon | image_url: width: 32 }}" width="14" height="14" loading="eager" alt="" aria-hidden="true">{%- else -%}{%- case section.settings.tab3_icon -%}{%- when 'star' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>{%- when 'clock' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{%- when 'bolt' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>{%- when 'heart' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>{%- when 'tag' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>{%- when 'package' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>{%- when 'trophy' -%}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M7 4H4a1 1 0 0 0-1 1v3a4 4 0 0 0 4 4h.5"/><path d="M17 4h3a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4h-.5"/><rect x="7" y="2" width="10" height="9" rx="2"/></svg>{%- endcase -%}{%- endif -%}{%- endcapture -%}
+
       <div class="cvh-featured__tabs" role="tablist" aria-label="Product filter">
-        <button class="cvh-featured__tab is-active" data-panel="{{ tab1_id }}" role="tab" aria-selected="true" aria-controls="cvh-panel-{{ tab1_id }}" type="button">{{ tab1_label }}</button>
-        <button class="cvh-featured__tab" data-panel="{{ tab2_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab2_id }}" type="button">{{ tab2_label }}</button>
-        <button class="cvh-featured__tab" data-panel="{{ tab3_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab3_id }}" type="button">{{ tab3_label }}</button>
+        <button class="cvh-featured__tab is-active" data-panel="{{ tab1_id }}" role="tab" aria-selected="true" aria-controls="cvh-panel-{{ tab1_id }}" type="button">{{ tab1_icon }}{{ tab1_label }}</button>
+        <button class="cvh-featured__tab" data-panel="{{ tab2_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab2_id }}" type="button">{{ tab2_icon }}{{ tab2_label }}</button>
+        <button class="cvh-featured__tab" data-panel="{{ tab3_id }}" role="tab" aria-selected="false" aria-controls="cvh-panel-{{ tab3_id }}" type="button">{{ tab3_icon }}{{ tab3_label }}</button>
       </div>
 
       {%- comment -%} Tab 1 Panel {%- endcomment -%}
@@ -1081,6 +1108,7 @@
             { "value": "clock", "label": "Clock" },
             { "value": "zap",   "label": "Zap / Lightning" }
           ], "default": "star" },
+        { "type": "image_picker", "id": "eyebrow_icon_custom", "label": "Custom eyebrow icon", "info": "Upload an image to override the icon above. Leave blank to use the selected icon." },
         { "type": "text",     "id": "eyebrow",    "label": "Eyebrow text",         "default": "New Season Drops" },
         { "type": "text",     "id": "title_line1","label": "Title (line 1)",        "default": "Premium TCG" },
         { "type": "text",     "id": "title_em",   "label": "Title accent (highlighted)", "default": "Sealed Products" },
@@ -1100,6 +1128,7 @@
             { "value": "tag",    "label": "Tag" },
             { "value": "clock",  "label": "Clock" }
           ], "default": "shield" },
+        { "type": "image_picker", "id": "badge_icon_custom", "label": "Custom badge icon", "info": "Upload an image to override the icon above. Leave blank to use the selected icon." },
         { "type": "header", "content": "Style" },
         { "type": "select", "id": "color_scheme", "label": "Background colour (fallback)", "options": [
             { "value": "1", "label": "Purple (default)" },
@@ -1130,7 +1159,7 @@
       "type": "marquee_item",
       "name": "Ticker Item",
       "settings": [
-        { "type": "text", "id": "text", "label": "Text", "default": "Free insured shipping on orders over $100" }
+        { "type": "text", "id": "text", "label": "Text", "default": "Factory Sealed • Same-Day Dispatch • Authentic Pokémon • Melbourne Based" }
       ]
     },
     {
@@ -1217,6 +1246,48 @@
     { "type": "collection", "id": "tab2_collection",   "label": "Tab 2 collection" },
     { "type": "text",       "id": "tab3_label",        "label": "Tab 3 label",      "default": "Best Sellers" },
     { "type": "collection", "id": "tab3_collection",   "label": "Tab 3 collection" },
+    {
+      "type": "select", "id": "tab1_icon", "label": "Tab 1 icon (preset)", "default": "none",
+      "options": [
+        { "value": "none",    "label": "None" },
+        { "value": "clock",   "label": "Clock" },
+        { "value": "star",    "label": "Star" },
+        { "value": "bolt",    "label": "Bolt / Lightning" },
+        { "value": "heart",   "label": "Heart" },
+        { "value": "tag",     "label": "Tag" },
+        { "value": "package", "label": "Package" },
+        { "value": "trophy",  "label": "Trophy" }
+      ]
+    },
+    { "type": "image_picker", "id": "tab1_custom_icon", "label": "Tab 1 custom icon (overrides preset)" },
+    {
+      "type": "select", "id": "tab2_icon", "label": "Tab 2 icon (preset)", "default": "none",
+      "options": [
+        { "value": "none",    "label": "None" },
+        { "value": "clock",   "label": "Clock" },
+        { "value": "star",    "label": "Star" },
+        { "value": "bolt",    "label": "Bolt / Lightning" },
+        { "value": "heart",   "label": "Heart" },
+        { "value": "tag",     "label": "Tag" },
+        { "value": "package", "label": "Package" },
+        { "value": "trophy",  "label": "Trophy" }
+      ]
+    },
+    { "type": "image_picker", "id": "tab2_custom_icon", "label": "Tab 2 custom icon (overrides preset)" },
+    {
+      "type": "select", "id": "tab3_icon", "label": "Tab 3 icon (preset)", "default": "none",
+      "options": [
+        { "value": "none",    "label": "None" },
+        { "value": "clock",   "label": "Clock" },
+        { "value": "star",    "label": "Star" },
+        { "value": "bolt",    "label": "Bolt / Lightning" },
+        { "value": "heart",   "label": "Heart" },
+        { "value": "tag",     "label": "Tag" },
+        { "value": "package", "label": "Package" },
+        { "value": "trophy",  "label": "Trophy" }
+      ]
+    },
+    { "type": "image_picker", "id": "tab3_custom_icon", "label": "Tab 3 custom icon (overrides preset)" },
 
     { "type": "header", "content": "Browse by Category" },
     { "type": "text", "id": "cat_title",    "label": "Section title",    "default": "Browse by Category" },
@@ -1225,8 +1296,8 @@
     { "type": "header", "content": "About Section" },
     { "type": "checkbox",     "id": "show_about",      "label": "Show about section", "default": true },
     { "type": "image_picker", "id": "about_image",     "label": "About image" },
-    { "type": "text",         "id": "about_title",     "label": "Title",               "default": "About CardVault" },
-    { "type": "textarea",     "id": "about_desc",      "label": "Description",         "default": "We're passionate TCG players, built by collectors, for collectors. From your first booster pack to a full sealed case, we stock it all — and ship it fast with full insurance." },
+    { "type": "text",         "id": "about_title",     "label": "Title",               "default": "Australia's Home for Sealed Pokémon TCG" },
+    { "type": "textarea",     "id": "about_desc",      "label": "Description",         "default": "We're collectors, built by collectors. From booster packs to full sealed cases — Pokémon-first, plus One Piece and more. Fast dispatch, fully insured shipping, 100% authentic." },
     { "type": "text",         "id": "about_cta1_label","label": "Button 1 label",     "default": "Our Story" },
     { "type": "url",          "id": "about_cta1_url",  "label": "Button 1 URL" },
     { "type": "text",         "id": "about_cta2_label","label": "Button 2 label",     "default": "Contact Us" },
@@ -1237,8 +1308,8 @@
 
     { "type": "header", "content": "Newsletter" },
     { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter",   "default": true },
-    { "type": "text",     "id": "nl_title",        "label": "Title",             "default": "Stay in the Loop" },
-    { "type": "text",     "id": "nl_subtitle",     "label": "Subtitle",          "default": "New drops, restocks, and exclusive deals delivered straight to your inbox." },
+    { "type": "text",     "id": "nl_title",        "label": "Title",             "default": "Get Early Access to New Pokémon Drops" },
+    { "type": "text",     "id": "nl_subtitle",     "label": "Subtitle",          "default": "Be first to know about new set releases, restocks, and exclusive sealed deals." },
     { "type": "text",     "id": "nl_disclaimer",   "label": "Disclaimer text",   "default": "No spam, ever. Unsubscribe anytime." },
 
     { "type": "header", "content": "Display Options" },

@@ -35,18 +35,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap');
 /* =============================================================
    CardVault Design Tokens
    ============================================================= */
 :root {
-  --cv-bg:          #f7f6f3;
-  --cv-fg:          #1c1f36;
+  --cv-bg:          #f0f5fb;
+  --cv-fg:          #1c2a3e;
   --cv-card:        #ffffff;
-  --cv-primary:     #282d52;
-  --cv-primary-fg:  #f8f7f5;
-  --cv-secondary:   #eeecea;
-  --cv-muted-fg:    #76798c;
-  --cv-border:      #dedad5;
+  --cv-primary:     #1e3a5f;
+  --cv-primary-fg:  #eef5fc;
+  --cv-secondary:   #e0eaf5;
+  --cv-muted-fg:    #6b7fa8;
+  --cv-border:      #c5d8ee;
   --cv-destructive: #c94030;
   --cv-success:     #2e9963;
   --cv-success-fg:  #f8f7f5;
@@ -54,8 +55,8 @@
   --cv-radius:      0.5rem;
   --cv-shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
   --cv-shadow:      0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
-  --cv-font-sans:   'DM Sans', system-ui, -apple-system, sans-serif;
-  --cv-font-head:   'Cormorant Garamond', Georgia, serif;
+  --cv-font-sans:   'Inter', system-ui, -apple-system, sans-serif;
+  --cv-font-head:   'Space Grotesk', system-ui, sans-serif;
 
   /* ── Von Restorff accent: ONLY used on Add to Cart / Buy Now / Checkout ── */
   --color-cta-primary:    #2e9963;   /* bold green — matches Authentic badge, high contrast on cream + slate */
@@ -71,21 +72,24 @@
 .cv-wrap {
   font-family: var(--cv-font-sans);
   color: var(--cv-fg);
-  background: #FFFFFF;
+  background: var(--cv-bg);
+  width: 100%;
+}
+.cv-inner {
   max-width: 80rem;
   margin: 0 auto;
-  padding: 2rem 8px 5rem;
+  padding: 2rem max(1rem, 4vw) 5rem;
 }
-@media (min-width: 768px)  { .cv-wrap { padding: 3rem 2rem 3rem; } }
-@media (min-width: 1024px) { .cv-wrap { padding: 3rem 2rem; } }
+@media (min-width: 768px)  { .cv-inner { padding: 3rem 2rem 3rem; } }
+@media (min-width: 1024px) { .cv-inner { padding: 3rem 2rem; } }
 
 #cv-tabs-section {
   max-width: 80rem;
   margin: 1.5rem auto 0;
-  padding: 1.5rem 8px;
+  padding: 1.5rem max(1rem, 4vw);
   background-color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-  border: 1px solid #E5E7EB;
+  box-shadow: 0 2px 8px rgba(30,58,95,0.07);
+  border: 1px solid var(--cv-border);
   border-radius: 8px;
 }
 @media (min-width: 768px) { #cv-tabs-section { margin-top: 2rem; padding: 2rem; } }
@@ -94,10 +98,19 @@
 @media (max-width: 767px) {
   main { padding-left: 0 !important; padding-right: 0 !important; }
 
+  /* Hero card: bleed edge-to-edge on mobile */
+  .cv-hero {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    padding: 1rem;
+  }
+
   /* Remove visible borders on mobile for a clean, borderless look */
   .cv-gallery__main,
   .cv-gallery__thumbs li,
   .cv-similar__card { border: none !important; }
+
 }
 
 /* =============================================================
@@ -113,9 +126,23 @@
 /* =============================================================
    Product Hero Grid
    ============================================================= */
-.cv-hero { display: grid; gap: 2rem; }
-@media (min-width: 768px)  { .cv-hero { grid-template-columns: 55fr 45fr; gap: 2rem; align-items: start; } }
-@media (min-width: 1024px) { .cv-hero { gap: 2.5rem; } }
+.cv-hero {
+  display: grid; gap: 2rem;
+  background: var(--cv-card);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  padding: 1.5rem;
+}
+@media (min-width: 768px)  {
+  .cv-hero {
+    grid-template-columns: 55fr 45fr;
+    gap: 2rem;
+    align-items: start;
+    padding: 2rem;
+    border-radius: calc(var(--cv-radius) * 1.5);
+  }
+}
+@media (min-width: 1024px) { .cv-hero { gap: 2.5rem; padding: 2.5rem; } }
 
 
 /* =============================================================
@@ -158,6 +185,7 @@
   width: 100%; height: 100%;
   object-fit: cover; display: block;
   transition: transform 0.5s ease, opacity 0.22s ease;
+  max-width: 100%; height: auto;
 }
 .cv-gallery__main.is-zoomed img { transform: scale(1.5); }
 
@@ -211,7 +239,7 @@
 .cv-gallery__thumbs { display: flex; gap: 0.625rem; }
 .cv-gallery__thumb {
   position: relative;
-  width: 5rem; height: 5rem; flex-shrink: 0;
+  width: 6.25rem; height: 6.25rem; flex-shrink: 0;
   border-radius: var(--cv-radius);
   overflow: hidden;
   border: 2px solid transparent;
@@ -225,7 +253,7 @@
 .cv-gallery__thumb.is-active {
   border-color: var(--cv-primary);
   opacity: 1;
-  box-shadow: 0 0 0 3px rgba(40,45,82,0.12);
+  box-shadow: 0 0 0 3px rgba(30,58,95,0.12);
 }
 .cv-gallery__thumb:hover { opacity: 1; }
 
@@ -259,22 +287,19 @@
   line-height: 1.4;
 }
 .cv-badge svg { width: 0.75rem; height: 0.75rem; }
-.cv-badge--sealed   { background: rgba(40,45,82,0.07);   color: var(--cv-primary);     border-color: rgba(40,45,82,0.18); }
+.cv-badge--sealed   { background: rgba(30,58,95,0.07);   color: var(--cv-primary);     border-color: rgba(30,58,95,0.18); }
 .cv-badge--auth     { background: #E6F4EA;                color: var(--cv-success);     border-color: rgba(46,153,99,0.3); }
 .cv-badge--stock    { background: rgba(201,64,48,0.08);  color: var(--cv-destructive); border-color: rgba(201,64,48,0.2); }
-.cv-badge--oos      { background: rgba(0,0,0,0.06);      color: var(--cv-muted-fg);    border-color: rgba(0,0,0,0.15); }
+.cv-badge--oos      { background: #FEE2E2;                color: #DC2626;               border-color: rgba(220,38,38,0.3); }
 
 /* Title block */
 .cv-title-block { display: flex; flex-direction: column; gap: 1rem; }
 .cv-title {
   font-family: var(--cv-font-head);
-  font-size: 1.625rem; font-weight: 700;
+  font-size: clamp(1.625rem, 2.5vw + 0.75rem, 2.25rem); font-weight: 700;
   line-height: 1.2; letter-spacing: -0.02em;
   color: var(--cv-fg);
 }
-@media (min-width: 768px)  { .cv-title { font-size: 2rem; } }
-@media (min-width: 1024px) { .cv-title { font-size: 2.25rem; } }
-.cv-subtitle { font-size: 1rem; line-height: 1.6; color: var(--cv-muted-fg); }
 
 /* Rating */
 .cv-rating { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
@@ -315,20 +340,35 @@
 .cv-installment strong { color: var(--cv-fg); font-weight: 600; }
 
 /* Details Grid */
-.cv-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.cv-details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
 .cv-detail-item {
-  display: flex; flex-direction: column; gap: 0.125rem;
+  display: flex; flex-direction: column; gap: 0.25rem;
   padding: 0.625rem 0.875rem;
   border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
-  background: #F4F6F8;
+  background: #e0eaf5;
   box-shadow: var(--cv-shadow-sm);
 }
+@media (min-width: 768px) {
+  .cv-detail-item {
+    padding: 0.875rem 1rem 0.75rem;
+    border: none;
+    border-bottom: 2px solid var(--cv-primary);
+    border-radius: var(--cv-radius) var(--cv-radius) 0 0;
+    background: var(--cv-card);
+    box-shadow: var(--cv-shadow);
+  }
+}
+.cv-detail-item__leader { display: none; }
 .cv-detail-item__label { font-size: 0.75rem; color: var(--cv-muted-fg); }
 .cv-detail-item__value { font-size: 0.875rem; font-weight: 600; color: var(--cv-fg); }
+@media (min-width: 768px) {
+  .cv-detail-item__label { font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .cv-detail-item__value { font-size: 1rem; font-weight: 700; }
+}
 
 /* Quantity + Actions */
-.cv-actions { display: flex; flex-direction: column; gap: 1rem; }
+.cv-actions { display: flex; flex-direction: column; gap: 1rem; flex-wrap: wrap; }
 .cv-qty-row  { display: flex; align-items: center; gap: 0.75rem; }
 .cv-qty-label { font-size: 0.875rem; font-weight: 500; }
 .cv-qty {
@@ -392,7 +432,7 @@ input.cv-qty__input {
 }
 .cv-btn--primary:hover  { background: var(--color-cta-primary-hover); border-color: var(--color-cta-primary-hover); animation: none; }
 .cv-btn--primary:active { opacity: 0.85; }
-.cv-btn--primary:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; animation: none; }
+.cv-btn--primary:disabled { background: #c5d8ee; border-color: #c5d8ee; color: #9CA3AF; cursor: not-allowed; box-shadow: none; animation: none; opacity: 1; }
 
 /* Buy Now inherits CTA colour */
 .cv-btn--outline-primary {
@@ -428,28 +468,15 @@ input.cv-qty__input {
 }
 .cv-payment-badge {
   display: inline-flex; align-items: center; justify-content: center;
-  height: 1.625rem; padding: 0 0.5rem;
+  height: 2rem; padding: 0 0.625rem;
   border: 1px solid var(--cv-border);
   border-radius: calc(var(--cv-radius) - 2px);
   background: var(--cv-card);
   box-shadow: var(--cv-shadow-sm);
   opacity: 0.8;
 }
-.cv-payment-badge svg { display: block; }
+.cv-payment-badge svg { display: block; height: 1.25rem !important; width: auto !important; max-height: 1.25rem !important; }
 
-.cv-btn--icon {
-  width: 3rem; flex-shrink: 0; padding: 0;
-  background: var(--cv-card);
-  border-color: var(--cv-border);
-  color: var(--cv-fg);
-}
-.cv-btn--icon:hover { background: var(--cv-secondary); }
-.cv-btn--icon.is-wishlisted {
-  border-color: rgba(201,64,48,0.35);
-  color: var(--cv-destructive);
-  background: rgba(201,64,48,0.05);
-}
-.cv-btn--icon.is-wishlisted svg { fill: var(--cv-destructive); }
 
 .cv-btn-row { display: flex; gap: 0.75rem; }
 
@@ -476,7 +503,7 @@ input.cv-qty__input {
   .cv-trust-item:last-child { border-right: none; }
 }
 .cv-trust-item:last-child { border-bottom: none; }
-.cv-trust-item:hover { background: rgba(40,45,82,0.025); }
+.cv-trust-item:hover { background: rgba(30,58,95,0.025); }
 .cv-trust-item__icon { flex-shrink: 0; margin-top: 0.125rem; transition: transform 0.2s; }
 .cv-trust-item__icon svg { width: 1.25rem; height: 1.25rem; color: var(--cv-primary); }
 .cv-trust-item:hover .cv-trust-item__icon { transform: scale(1.12); }
@@ -526,7 +553,7 @@ input.cv-qty__input {
 }
 
 /* Description */
-.cv-description { font-size: 0.875rem; line-height: 1.7; color: var(--cv-muted-fg); }
+.cv-description { font-size: 0.875rem; line-height: 1.7; color: #4a4a4a; }
 .cv-description p  { margin-bottom: 1rem; }
 .cv-description p:last-child { margin-bottom: 0; }
 .cv-description h3 {
@@ -541,18 +568,31 @@ input.cv-qty__input {
 .cv-contents { display: flex; flex-direction: column; gap: 1.25rem; }
 .cv-contents h3 { font-size: 1rem; font-weight: 600; }
 
+/* Mobile: keep box styling, update bg to match blue palette */
 .cv-content-item {
   display: flex; align-items: flex-start; gap: 0.75rem;
   padding: 0.875rem;
   border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
-  background: rgba(238,236,234,0.4);
+  background: rgba(30,58,95,0.04);
+}
+/* Desktop: clean separator rows */
+@media (min-width: 768px) {
+  .cv-content-item {
+    padding: 1.125rem 0;
+    border: none;
+    border-top: 1px solid var(--cv-border);
+    border-radius: 0;
+    background: none;
+  }
+  .cv-content-item:last-child { border-bottom: 1px solid var(--cv-border); }
+  .cv-content-item + .cv-content-item { margin-top: 0; }
 }
 .cv-content-item__icon {
   flex-shrink: 0; margin-top: 0.125rem;
   width: 1.75rem; height: 1.75rem;
   border-radius: 9999px;
-  background: rgba(40,45,82,0.08);
+  background: rgba(30,58,95,0.08);
   display: flex; align-items: center; justify-content: center;
 }
 .cv-content-item__icon svg { width: 0.875rem; height: 0.875rem; color: var(--cv-primary); }
@@ -571,7 +611,11 @@ input.cv-qty__input {
 }
 .cv-pull-rates h4 { font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; }
 .cv-pull-rates p  { font-size: 0.875rem; line-height: 1.6; color: var(--cv-muted-fg); margin-bottom: 1rem; }
-.cv-pull-grid     { display: grid; grid-template-columns: 1fr 1fr; gap: 0.625rem; }
+.cv-pull-grid     { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.625rem; }
+@media (max-width: 749px) {
+  .cv-pull-grid   { grid-template-columns: 1fr; row-gap: 0.75rem; }
+  .cv-pull-item   { width: 100%; }
+}
 .cv-pull-item {
   display: flex; justify-content: space-between; align-items: center;
   padding: 0.625rem 0.875rem;
@@ -583,7 +627,7 @@ input.cv-qty__input {
 .cv-pull-item__label { font-size: 0.75rem; color: var(--cv-muted-fg); }
 .cv-pull-item__value { font-size: 0.75rem; font-weight: 600; }
 
-.cv-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.cv-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
 .cv-meta-card {
   display: flex; flex-direction: column; gap: 0.25rem;
   padding: 1rem;
@@ -630,7 +674,7 @@ input.cv-qty__input {
 .cv-reviewer__top { display: flex; align-items: center; gap: 0.5rem; }
 .cv-reviewer__avatar {
   width: 2rem; height: 2rem; border-radius: 9999px;
-  background: rgba(40,45,82,0.1);
+  background: rgba(30,58,95,0.1);
   display: flex; align-items: center; justify-content: center;
   font-size: 0.75rem; font-weight: 700; color: var(--cv-primary);
   flex-shrink: 0;
@@ -701,7 +745,7 @@ input.cv-qty__input {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .cv-product-card:hover {
-  border-color: rgba(40,45,82,0.25);
+  border-color: rgba(30,58,95,0.25);
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 .cv-product-card__img-wrap {
@@ -727,7 +771,7 @@ input.cv-qty__input {
 }
 
 .cv-product-card__info    { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; }
-.cv-product-card__name    { font-size: 0.875rem; font-weight: 600; line-height: 1.4; }
+.cv-product-card__name    { font-size: 0.875rem; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: calc(1.4em * 2); }
 .cv-product-card__type    { font-size: 0.75rem; color: var(--cv-muted-fg); }
 .cv-product-card__prices  { display: flex; align-items: baseline; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem; }
 
@@ -778,7 +822,7 @@ input.cv-qty__input {
   -webkit-backdrop-filter: blur(8px);
   display: flex;
   transform: translateY(0);
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, opacity 0.2s ease;
 }
 @media (min-width: 768px) { .cv-sticky-cart { display: none !important; } }
 
@@ -833,12 +877,74 @@ input.cv-qty__input {
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s, border-color 0.2s;
 }
 
+/* =============================================================
+   Trust Strip — navy accent band between hero and tabs
+   ============================================================= */
+.cv-trust-strip {
+  background: var(--cv-primary);
+  color: var(--cv-primary-fg);
+  border-radius: calc(var(--cv-radius) * 1.5);
+  padding: 0.875rem 1.5rem;
+  margin: 1.25rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.cv-trust-strip__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.cv-trust-strip__item svg {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+.cv-trust-strip__dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(248,247,245,0.4);
+  flex-shrink: 0;
+}
+@media (max-width: 767px) {
+  .cv-trust-strip {
+    border-radius: 0;
+    gap: 0.75rem 1.25rem;
+    padding: 0.75rem 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cv-trust-strip__dot { display: none; }
+}
+
+/* Details Grid — mobile: spec-sheet dotted leader (must be after desktop rules) */
+@media (max-width: 767px) {
+  .cv-details-grid { display: flex; flex-direction: column; gap: 0; }
+  .cv-detail-item {
+    display: flex; flex-direction: row; align-items: baseline; gap: 0.375rem;
+    padding: 0.5rem 0;
+    border: none; background: none; box-shadow: none; border-radius: 0;
+  }
+  .cv-detail-item__leader { display: block; flex: 1; border-bottom: 1px dotted var(--cv-muted-fg); margin-bottom: 0.2rem; min-width: 1rem; }
+  .cv-detail-item__label { font-size: 0.875rem; color: var(--cv-muted-fg); font-weight: 400; white-space: nowrap; flex-shrink: 0; }
+  .cv-detail-item__value { font-size: 0.875rem; font-weight: 700; color: var(--cv-fg); white-space: nowrap; flex-shrink: 0; }
+}
+
 </style>
 
 {%- comment -%} ====================================================
     MAIN PRODUCT SECTION
     ==================================================== {%- endcomment -%}
 <section class="cv-wrap" id="cv-product-section" aria-label="{{ product.title | escape }}">
+  <div class="cv-inner">
 
   {%- comment -%} ── Product Hero ── {%- endcomment -%}
   <div class="cv-hero">
@@ -959,11 +1065,6 @@ input.cv-qty__input {
       {%- comment -%} Title block {%- endcomment -%}
       <div class="cv-title-block">
         <h1 class="cv-title">{{ product.title }}</h1>
-        {%- if pack_count != blank -%}
-          <p class="cv-subtitle">{{ pack_count }} Booster Packs &middot; {{ cards_per_pack }} Cards Per Pack &middot; Factory Sealed</p>
-        {%- elsif product.type != blank -%}
-          <p class="cv-subtitle">{{ product.type }}</p>
-        {%- endif -%}
 
         {%- comment -%} Rating row — only shown when real review data exists {%- endcomment -%}
         {%- if rating_count > 0 -%}
@@ -982,12 +1083,6 @@ input.cv-qty__input {
           <span class="cv-rating__score">{{ rating_value }}</span>
           <span class="cv-rating__count">({{ rating_count }} reviews)</span>
           <span class="cv-rating__dot" aria-hidden="true">&middot;</span>
-          
-          {%- comment -%} 2. Intelligent Live Viewers Wrapper {%- endcomment -%}
-          <span class="cv-rating__viewers" id="cv-live-viewers" style="display: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span id="cv-viewers-count">0</span>&nbsp;people viewing
-          </span>
         </div>
         {%- endif -%}
       </div>
@@ -1016,26 +1111,32 @@ input.cv-qty__input {
       <div class="cv-details-grid">
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Product Type</span>
+          <span class="cv-detail-item__leader" aria-hidden="true"></span>
           <span class="cv-detail-item__value">{{ product.type | default: 'Booster Box' }}</span>
         </div>
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Set</span>
+          <span class="cv-detail-item__leader" aria-hidden="true"></span>
           <span class="cv-detail-item__value">{{ product.metafields.custom.set_name | default: product.vendor | default: '—' }}</span>
         </div>
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Series</span>
+          <span class="cv-detail-item__leader" aria-hidden="true"></span>
           <span class="cv-detail-item__value">{{ product.metafields.custom.series | default: '—' }}</span>
         </div>
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Packs</span>
+          <span class="cv-detail-item__leader" aria-hidden="true"></span>
           <span class="cv-detail-item__value">{{ pack_count }} Packs</span>
         </div>
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Cards Per Pack</span>
+          <span class="cv-detail-item__leader" aria-hidden="true"></span>
           <span class="cv-detail-item__value">{{ cards_per_pack }} Cards</span>
         </div>
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Language</span>
+          <span class="cv-detail-item__leader" aria-hidden="true"></span>
           <span class="cv-detail-item__value">{{ product.metafields.custom.language | default: 'Japanese' }}</span>
         </div>
       </div>
@@ -1077,49 +1178,19 @@ input.cv-qty__input {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             <span id="cv-atc-label">{% if available %}Add to Cart{% else %}Out of Stock{% endif %}</span>
           </button>
-          <button type="button" class="cv-btn cv-btn--icon" id="cv-wishlist-btn" aria-label="Add to wishlist" aria-pressed="false">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-          <button type="button" class="cv-btn cv-btn--icon" id="cv-share-btn" aria-label="Share product">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          </button>
         </div>
 
         {%- if available -%}
           <a href="/cart" class="cv-btn cv-btn--outline-primary" id="cv-buy-now">Buy Now</a>
         {%- endif -%}
 
-        {%- comment -%} 4. Cleaned up Payment Badges (Visa, MC, PayPal, Shop) {%- endcomment -%}
-        <div class="cv-payment-badges" aria-label="Accepted payment methods">
-
-          <span class="cv-payment-badge" title="Visa">
-            <svg xmlns="http://www.w3.org/2000/svg" width="38" height="12" viewBox="0 0 38 12" aria-hidden="true">
-              <text x="0" y="10" font-family="Arial,sans-serif" font-size="10" font-weight="900" fill="#1A1F71" letter-spacing="-0.5">VISA</text>
-            </svg>
-          </span>
-
-          <span class="cv-payment-badge" title="Mastercard" style="padding:0 0.375rem">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 30 18" aria-hidden="true">
-              <circle cx="11" cy="9" r="8" fill="#EB001B"/>
-              <circle cx="19" cy="9" r="8" fill="#F79E1B"/>
-              <path d="M15 3.5a8 8 0 0 1 0 11A8 8 0 0 1 15 3.5z" fill="#FF5F00"/>
-            </svg>
-          </span>
-
-          <span class="cv-payment-badge" title="PayPal">
-            <svg xmlns="http://www.w3.org/2000/svg" width="46" height="12" viewBox="0 0 46 12" aria-hidden="true">
-              <text x="0" y="9.5" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#003087">Pay</text>
-              <text x="14" y="9.5" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#009CDE">Pal</text>
-            </svg>
-          </span>
-
-          <span class="cv-payment-badge" title="Shop Pay" style="background:#5A31F4;border-color:#5A31F4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="12" viewBox="0 0 36 12" aria-hidden="true">
-              <text x="2" y="9.5" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9" font-weight="700" fill="#fff">Shop</text>
-            </svg>
-          </span>
-
-        </div>
+        {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+          <div class="cv-payment-badges" aria-label="Accepted payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              <span class="cv-payment-badge">{{ type | payment_type_svg_tag }}</span>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
 
       {% endform %}
 
@@ -1154,7 +1225,30 @@ input.cv-qty__input {
       </div>
       {%- endif -%}
 
-    </div></div><hr class="cv-sep">
+    </div></div>
+
+  {%- comment -%} ── Trust Strip ── {%- endcomment -%}
+  <div class="cv-trust-strip" aria-label="Store guarantees">
+    <div class="cv-trust-strip__item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      100% Authentic
+    </div>
+    <div class="cv-trust-strip__dot" aria-hidden="true"></div>
+    <div class="cv-trust-strip__item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      Same-Day Dispatch
+    </div>
+    <div class="cv-trust-strip__dot" aria-hidden="true"></div>
+    <div class="cv-trust-strip__item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      14-Day Returns
+    </div>
+    <div class="cv-trust-strip__dot" aria-hidden="true"></div>
+    <div class="cv-trust-strip__item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Secure Checkout
+    </div>
+  </div>
 
   {%- comment -%} ── Product Tabs ── {%- endcomment -%}
   <section aria-label="Product details" id="cv-tabs-section">
@@ -1171,19 +1265,8 @@ input.cv-qty__input {
           {%- if product.description != blank -%}
             {{ product.description }}
           {%- else -%}
-            <p>The Pokemon Scarlet &amp; Violet &mdash; Obsidian Flames booster box contains 36 booster packs, each with 10 cards. This set features over 190 cards including powerful Tera-type Pokemon ex, illustration rares, and special art rares that collectors are chasing.</p>
-            <p>Every booster box is factory sealed with original shrink wrap and The Pokemon Company International seal of authenticity. Our sealed products are sourced directly from authorized distributors to guarantee authenticity.</p>
-            <h3>Set Highlights</h3>
-            <ul>
-              <li>196 cards in the complete set</li>
-              <li>Features Charizard ex, Tyranitar ex, Enamorus ex and more</li>
-              <li>Tera-type Pokemon ex with unique artwork</li>
-              <li>Illustration Rare and Special Art Rare cards</li>
-              <li>New Trainer and Stadium cards</li>
-              <li>Reverse holo in every pack</li>
-            </ul>
-            <h3>Why Buy Sealed?</h3>
-            <p>Sealed booster boxes offer the best pull rate value and guarantee untampered packs. They also hold long-term investment value as sets go out of print and supply decreases.</p>
+            <p>This factory-sealed booster box is sourced directly from authorized distributors, ensuring every pack is untampered and 100% authentic. All sealed products ship exactly as received — original shrink wrap and manufacturer seals intact.</p>
+            <p>Buying sealed gives you the best pull rate value, guarantees pack integrity, and holds long-term collector value as print runs end and supply tightens.</p>
           {%- endif -%}
         </div>
       </div>
@@ -1193,53 +1276,56 @@ input.cv-qty__input {
     <div class="cv-tabs__panel" id="cv-tab-contents" role="tabpanel" aria-labelledby="cv-btn-contents">
       <div class="cv-tab-card">
         <div class="cv-contents">
-          <h3>What&rsquo;s Inside</h3>
+          <h3>{{ section.settings.contents_heading | default: "What's Inside" }}</h3>
 
           <div>
             <div class="cv-content-item">
               <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
               <div class="cv-content-item__main">
                 <div class="cv-content-item__row">
-                  <span class="cv-content-item__label">Booster Packs</span>
-                  <span class="cv-content-item__value">{{ pack_count }} packs</span>
+                  <span class="cv-content-item__label">{{ section.settings.contents_item1_label | default: 'Booster Packs' }}</span>
+                  <span class="cv-content-item__value">{{ pack_count }} {{ section.settings.contents_item1_suffix | default: 'packs' }}</span>
                 </div>
-                <span class="cv-content-item__desc">Each pack contains {{ cards_per_pack }} randomly assorted cards</span>
+                <span class="cv-content-item__desc">{{ section.settings.contents_item1_desc | default: 'Each pack contains randomly assorted cards' }}</span>
               </div>
             </div>
             <div class="cv-content-item">
               <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
               <div class="cv-content-item__main">
                 <div class="cv-content-item__row">
-                  <span class="cv-content-item__label">Cards Per Pack</span>
-                  <span class="cv-content-item__value">{{ cards_per_pack }} cards</span>
+                  <span class="cv-content-item__label">{{ section.settings.contents_item2_label | default: 'Cards Per Pack' }}</span>
+                  <span class="cv-content-item__value">{{ cards_per_pack }} {{ section.settings.contents_item2_suffix | default: 'cards' }}</span>
                 </div>
-                <span class="cv-content-item__desc">Including at least 1 guaranteed holo or reverse holo</span>
+                <span class="cv-content-item__desc">{{ section.settings.contents_item2_desc | default: 'Including at least 1 guaranteed holo or reverse holo' }}</span>
               </div>
             </div>
             <div class="cv-content-item">
               <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
               <div class="cv-content-item__main">
                 <div class="cv-content-item__row">
-                  <span class="cv-content-item__label">Total Cards</span>
-                  <span class="cv-content-item__value">{{ pack_count | times: cards_per_pack }} cards</span>
+                  <span class="cv-content-item__label">{{ section.settings.contents_item3_label | default: 'Total Cards' }}</span>
+                  <span class="cv-content-item__value">{{ pack_count | times: cards_per_pack }} {{ section.settings.contents_item3_suffix | default: 'cards' }}</span>
                 </div>
-                <span class="cv-content-item__desc">Across all packs in the sealed box</span>
+                <span class="cv-content-item__desc">{{ section.settings.contents_item3_desc | default: 'Across all packs in the sealed box' }}</span>
               </div>
             </div>
           </div>
 
-          <div class="cv-pull-rates">
-            <h4>Pull Rate Expectations</h4>
-            <p>While pull rates vary, a typical booster box from this set can yield the following on average:</p>
-            <div class="cv-pull-grid">
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Super Rare (SR)</span><span class="cv-pull-item__value">4&ndash;5 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Alternate Art (Parallel)</span><span class="cv-pull-item__value">1&ndash;2 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Secret Rare (SEC)</span><span class="cv-pull-item__value">0&ndash;1 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Special Card (SP)</span><span class="cv-pull-item__value">0&ndash;1 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">DON!! Card / Hyper Rare</span><span class="cv-pull-item__value">1 cards</span></div>
-              <div class="cv-pull-item"><span class="cv-pull-item__label">Manga Rare / Signed Card</span><span class="cv-pull-item__value">1 Case</span></div>
+          {%- assign pull_rates = product.metafields.custom.pull_rates.value -%}
+          {%- if pull_rates != blank and pull_rates.size > 0 -%}
+            <div class="cv-pull-rates">
+              <h4>Pull Rate Expectations</h4>
+              <p>While pull rates vary, a typical booster box from this set can yield the following on average:</p>
+              <div class="cv-pull-grid">
+                {%- for item in pull_rates -%}
+                  <div class="cv-pull-item">
+                    <span class="cv-pull-item__label">{{ item.label }}</span>
+                    <span class="cv-pull-item__value">{{ item.value }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
             </div>
-          </div>
+          {%- endif -%}
 
           <div class="cv-meta-grid">
             <div class="cv-meta-card">
@@ -1261,75 +1347,58 @@ input.cv-qty__input {
         <p style="font-size: 0.9375rem; line-height: 1.75; color: var(--cv-muted-fg);">We offer 14-day returns on all factory-sealed and unopened products. All orders are packed securely with bubble wrap and dispatched within 24 hours to ensure your items arrive in pristine condition.</p>
       </div>
     </div>
-  </section><hr class="cv-sep">
-
-  {%- comment -%} ── Similar Products ── {%- endcomment -%}
-  <section class="cv-similar" aria-label="Similar products">
-    {%- liquid
-      assign related_collection = blank
-      for c in product.collections
-        if c.handle != 'all' and c.handle != 'frontpage'
-          assign related_collection = c
-          break
-        endif
-      endfor
-    -%}
-    <div class="cv-similar__header">
-      <h2 class="cv-similar__title">You May Also Like</h2>
-      <a href="{% if related_collection %}{{ related_collection.url }}{% else %}/collections/all{% endif %}" class="cv-similar__all">View All</a>
-    </div>
-    <div class="cv-similar__grid">
-      {%- if related_collection and related_collection.products_count > 1 -%}
-        {%- assign rendered_count = 0 -%}
-        {%- for rec in related_collection.products limit: 10 -%}
-          {%- if rec.id != product.id and rendered_count < 4 -%}
-            {%- assign rendered_count = rendered_count | plus: 1 -%}
-            {%- assign rec_var    = rec.selected_or_first_available_variant -%}
-            {%- assign rec_sale   = false -%}
-            {%- if rec_var.compare_at_price > rec_var.price -%}{%- assign rec_sale = true -%}{%- endif -%}
-            <a href="{{ rec.url }}" class="cv-product-card">
-              <div class="cv-product-card__img-wrap">
-                {%- if rec.featured_image -%}
-                  <img src="{{ rec.featured_image | image_url: width: 400 }}" alt="{{ rec.featured_image.alt | default: rec.title | escape }}" width="400" height="400" loading="lazy">
-                {%- else -%}
-                  <img src="https://placehold.co/400x400/eeecea/76798c?text=Product" alt="{{ rec.title | escape }}" width="400" height="400" loading="lazy">
-                {%- endif -%}
-                {%- if rec_sale -%}<span class="cv-product-card__sale-badge">Sale</span>{%- endif -%}
-              </div>
-              <div class="cv-product-card__info">
-                <h3 class="cv-product-card__name">{{ rec.title }}</h3>
-                <p class="cv-product-card__type">{{ rec.type | default: '&nbsp;' }}</p>
-                <div class="cv-product-card__prices">
-                  <span class="cv-product-card__price">{{ rec_var.price | money }}</span>
-                  {%- if rec_sale -%}<span class="cv-product-card__compare">{{ rec_var.compare_at_price | money }}</span>{%- endif -%}
-                </div>
-              </div>
-            </a>
-          {%- endif -%}
-        {%- endfor -%}
-      {%- else -%}
-        <a href="#" class="cv-product-card">
-          <div class="cv-product-card__img-wrap"><img src="https://placehold.co/400x400/eeecea/76798c?text=Paldea+ETB" alt="Paldea Evolved ETB" width="400" height="400" loading="lazy"><span class="cv-product-card__sale-badge">Sale</span></div>
-          <div class="cv-product-card__info"><h3 class="cv-product-card__name">Paldea Evolved ETB</h3><p class="cv-product-card__type">Elite Trainer Box</p><div class="cv-product-card__prices"><span class="cv-product-card__price">$44.99</span><span class="cv-product-card__compare">$49.99</span></div></div>
-        </a>
-        <a href="#" class="cv-product-card">
-          <div class="cv-product-card__img-wrap"><img src="https://placehold.co/400x400/eeecea/76798c?text=OBF+Case" alt="Obsidian Flames Case" width="400" height="400" loading="lazy"><span class="cv-product-card__sale-badge">Sale</span></div>
-          <div class="cv-product-card__info"><h3 class="cv-product-card__name">Obsidian Flames Case</h3><p class="cv-product-card__type">Sealed Case (6 Boxes)</p><div class="cv-product-card__prices"><span class="cv-product-card__price">$824.99</span><span class="cv-product-card__compare">$899.99</span></div></div>
-        </a>
-        <a href="#" class="cv-product-card">
-          <div class="cv-product-card__img-wrap"><img src="https://placehold.co/400x400/eeecea/76798c?text=151+Bundle" alt="151 Booster Bundle" width="400" height="400" loading="lazy"></div>
-          <div class="cv-product-card__info"><h3 class="cv-product-card__name">151 Booster Bundle</h3><p class="cv-product-card__type">6 Booster Packs</p><div class="cv-product-card__prices"><span class="cv-product-card__price">$39.99</span></div></div>
-        </a>
-        <a href="#" class="cv-product-card">
-          <div class="cv-product-card__img-wrap"><img src="https://placehold.co/400x400/eeecea/76798c?text=Inf+Forbidden" alt="Infinite Forbidden" width="400" height="400" loading="lazy"><span class="cv-product-card__sale-badge">Sale</span></div>
-          <div class="cv-product-card__info"><h3 class="cv-product-card__name">Infinite Forbidden</h3><p class="cv-product-card__type">Booster Box (24 Packs)</p><div class="cv-product-card__prices"><span class="cv-product-card__price">$79.99</span><span class="cv-product-card__compare">$89.99</span></div></div>
-        </a>
-      {%- endif -%}
-    </div>
   </section>
 
-  {%- comment -%} 5. Intelligent Recent Sales Ticker — disabled {%- endcomment -%}
-  {%- comment -%}
+  {%- comment -%} ── Similar Products ── {%- endcomment -%}
+  {%- liquid
+    assign related_collection = blank
+    for c in product.collections
+      if c.handle != 'all' and c.handle != 'frontpage'
+        assign related_collection = c
+        break
+      endif
+    endfor
+  -%}
+  {%- if related_collection and related_collection.products_count > 1 -%}
+  <hr class="cv-sep">
+  <section class="cv-similar" aria-label="Similar products">
+    <div class="cv-similar__header">
+      <h2 class="cv-similar__title">You May Also Like</h2>
+      <a href="{{ related_collection.url }}" class="cv-similar__all">View All</a>
+    </div>
+    <div class="cv-similar__grid">
+      {%- assign rendered_count = 0 -%}
+      {%- for rec in related_collection.products limit: 10 -%}
+        {%- if rec.id != product.id and rendered_count < 4 -%}
+          {%- assign rendered_count = rendered_count | plus: 1 -%}
+          {%- assign rec_var    = rec.selected_or_first_available_variant -%}
+          {%- assign rec_sale   = false -%}
+          {%- if rec_var.compare_at_price > rec_var.price -%}{%- assign rec_sale = true -%}{%- endif -%}
+          <a href="{{ rec.url }}" class="cv-product-card">
+            <div class="cv-product-card__img-wrap">
+              {%- if rec.featured_image -%}
+                <img src="{{ rec.featured_image | image_url: width: 400 }}" alt="{{ rec.featured_image.alt | default: rec.title | escape }}" width="400" height="400" loading="lazy">
+              {%- else -%}
+                <img src="https://placehold.co/400x400/eeecea/76798c?text=Product" alt="{{ rec.title | escape }}" width="400" height="400" loading="lazy">
+              {%- endif -%}
+              {%- if rec_sale -%}<span class="cv-product-card__sale-badge">Sale</span>{%- endif -%}
+            </div>
+            <div class="cv-product-card__info">
+              <h3 class="cv-product-card__name">{{ rec.title }}</h3>
+              <p class="cv-product-card__type">{{ rec.type | default: '&nbsp;' }}</p>
+              <div class="cv-product-card__prices">
+                <span class="cv-product-card__price">{{ rec_var.price | money }}</span>
+                {%- if rec_sale -%}<span class="cv-product-card__compare">{{ rec_var.compare_at_price | money }}</span>{%- endif -%}
+              </div>
+            </div>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+  {%- endif -%}
+
+  {%- comment -%} 5. Intelligent Recent Sales Ticker {%- endcomment -%}
   <div class="cv-recent-sales" id="cv-recent-sales-container">
     <p class="cv-recent-sales__title">Recent Sales</p>
     <div class="cv-recent-sales__list" id="cv-recent-sales-list">
@@ -1353,8 +1422,8 @@ input.cv-qty__input {
       {%- endif -%}
     ]
   </script>
-  {%- endcomment -%}
 
+  </div>{%- comment -%} /.cv-inner {%- endcomment -%}
 </section>{%- comment -%} ── Sticky Mobile Cart Bar ── {%- endcomment -%}
 <div class="cv-sticky-cart" id="cv-sticky-cart" role="region" aria-label="Quick add to cart">
   <div class="cv-sticky-cart__inner">
@@ -1385,19 +1454,6 @@ input.cv-qty__input {
 <script>
 (function () {
   'use strict';
-
-  /* ── 2. Random Live Viewers ── */
-  var viewersEl = document.getElementById('cv-live-viewers');
-  var viewersCount = document.getElementById('cv-viewers-count');
-  if (viewersEl && viewersCount) {
-    var viewers = Math.floor(Math.random() * 21); // 0 to 20
-    if (viewers > 0) {
-      viewersCount.textContent = viewers;
-      viewersEl.style.display = 'inline-flex'; 
-    } else {
-      viewersEl.style.display = 'none';
-    }
-  }
 
 /* ── 5. Dynamic Recent Sales (with Session Storage) ── */
   var recentDataEl = document.getElementById('cv-recent-products-data');
@@ -1572,32 +1628,6 @@ input.cv-qty__input {
     });
   }
 
-  /* ── Wishlist Toggle ── */
-  var wishBtn = document.getElementById('cv-wishlist-btn');
-  if (wishBtn) {
-    wishBtn.addEventListener('click', function () {
-      var pressed = this.getAttribute('aria-pressed') === 'true';
-      this.setAttribute('aria-pressed', String(!pressed));
-      this.classList.toggle('is-wishlisted', !pressed);
-      this.setAttribute('aria-label', !pressed ? 'Remove from wishlist' : 'Add to wishlist');
-    });
-  }
-
-  /* ── Share Button ── */
-  var shareBtn = document.getElementById('cv-share-btn');
-  if (shareBtn) {
-    shareBtn.addEventListener('click', function () {
-      if (navigator.share) {
-        navigator.share({ title: document.title, url: window.location.href });
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(window.location.href).then(function () {
-          var orig = shareBtn.getAttribute('aria-label');
-          shareBtn.setAttribute('aria-label', 'Link copied!');
-          setTimeout(function () { shareBtn.setAttribute('aria-label', orig); }, 2000);
-        });
-      }
-    });
-  }
 
   /* ── Tabs ── */
   var triggers = Array.prototype.slice.call(document.querySelectorAll('.cv-tabs__trigger'));
@@ -1837,6 +1867,12 @@ input.cv-qty__input {
     },
     {
       "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
       "id": "show_afterpay",
       "label": "Show Afterpay installment text",
       "default": true
@@ -1880,6 +1916,70 @@ input.cv-qty__input {
       "id": "tab_reviews_label",
       "label": "Tab 3 label",
       "default": "Reviews"
+    },
+    {
+      "type": "header",
+      "content": "Box Contents Tab"
+    },
+    {
+      "type": "text",
+      "id": "contents_heading",
+      "label": "Heading",
+      "default": "What's Inside"
+    },
+    {
+      "type": "text",
+      "id": "contents_item1_label",
+      "label": "Row 1 — Label",
+      "default": "Booster Packs"
+    },
+    {
+      "type": "text",
+      "id": "contents_item1_suffix",
+      "label": "Row 1 — Unit (after number)",
+      "default": "packs"
+    },
+    {
+      "type": "text",
+      "id": "contents_item1_desc",
+      "label": "Row 1 — Description",
+      "default": "Each pack contains randomly assorted cards"
+    },
+    {
+      "type": "text",
+      "id": "contents_item2_label",
+      "label": "Row 2 — Label",
+      "default": "Cards Per Pack"
+    },
+    {
+      "type": "text",
+      "id": "contents_item2_suffix",
+      "label": "Row 2 — Unit (after number)",
+      "default": "cards"
+    },
+    {
+      "type": "text",
+      "id": "contents_item2_desc",
+      "label": "Row 2 — Description",
+      "default": "Including at least 1 guaranteed holo or reverse holo"
+    },
+    {
+      "type": "text",
+      "id": "contents_item3_label",
+      "label": "Row 3 — Label",
+      "default": "Total Cards"
+    },
+    {
+      "type": "text",
+      "id": "contents_item3_suffix",
+      "label": "Row 3 — Unit (after number)",
+      "default": "cards"
+    },
+    {
+      "type": "text",
+      "id": "contents_item3_desc",
+      "label": "Row 3 — Description",
+      "default": "Across all packs in the sealed box"
     }
   ],
   "presets": [

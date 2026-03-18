@@ -16,7 +16,8 @@
           "type": "hero_slide",
           "settings": {
             "eyebrow_icon": "star",
-            "eyebrow": "Now In Stock",
+            "eyebrow_icon_custom": "shopify://shop_images/Gemini_Generated_Image_39fmot39fmot39fm-Photoroom.png",
+            "eyebrow": "FRESH BOUNTY",
             "title_line1": "One Piece TCG",
             "title_em": "Booster Boxes & Sealed Products",
             "description": "Hunt for your chase cards with total confidence. Shop 100% authentic, unweighed booster boxes sourced straight from official distributors and shipped with collector-grade care.",
@@ -36,7 +37,7 @@
           "type": "hero_slide",
           "settings": {
             "eyebrow_icon": "tag",
-            "eyebrow": "Back In Stock",
+            "eyebrow": "ITEM OBTAINED",
             "title_line1": "Pokémon TCG",
             "title_em": "Booster Boxes",
             "description": "The sets you’ve been hunting for are finally back in the vault. Secure 100% authentic, factory-sealed booster boxes and ETBs, delivered to your door with premium packaging guarantees before they sell out.",
@@ -217,7 +218,7 @@
         "brand_link_k4wXFB": {
           "type": "brand_link",
           "settings": {
-            "label": "One Piece TCG",
+            "label": "One Piece",
             "url": "",
             "custom_icon": "shopify://shop_images/Gemini_Generated_Image_bccrjmbccrjmbccr-Photoroom.png"
           }
@@ -383,6 +384,11 @@
         "tab2_collection": "pokemon-collection",
         "tab3_label": "Best Sellers",
         "tab3_collection": "",
+        "tab1_icon": "none",
+        "tab1_custom_icon": "shopify://shop_images/Gemini_Generated_Image_bccrjmbccrjmbccr-Photoroom.png",
+        "tab2_icon": "none",
+        "tab2_custom_icon": "shopify://shop_images/Gemini_Generated_Image_c37fogc37fogc37f-Photoroom.png",
+        "tab3_icon": "none",
         "cat_title": "Browse by Category",
         "cat_subtitle": "Booster boxes, ETBs, cases, singles & more.",
         "show_about": true,

@@ -7,9 +7,9 @@
      Pagination · Cart Toast
 
    Design system:
-     --cv-bg         cream  #f7f6f3   page background
-     --cv-fg         slate  #1c1f36   all text
-     --cv-primary    indigo #282d52   headings, borders
+     --cv-bg         blue-tint  #f0f5fb   page background
+     --cv-fg         slate      #1c2a3e   all text
+     --cv-primary    navy       #1e3a5f   headings, borders
      --color-cta-primary  green  #2e9963   EXCLUSIVELY:
        active filter checkboxes · sale badges · Quick Add ·
        free-ship bar · Clear filters CTA
@@ -33,14 +33,14 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 /* ── Design tokens (mirror main-product.liquid) ── */
 :root {
-  --cv-bg:                   #f7f6f3;
-  --cv-fg:                   #1c1f36;
+  --cv-bg:                   #f0f5fb;
+  --cv-fg:                   #1c2a3e;
   --cv-card:                 #ffffff;
-  --cv-primary:              #282d52;
-  --cv-primary-fg:           #f8f7f5;
-  --cv-secondary:            #eeecea;
-  --cv-muted-fg:             #76798c;
-  --cv-border:               #dedad5;
+  --cv-primary:              #1e3a5f;
+  --cv-primary-fg:           #eef5fc;
+  --cv-secondary:            #e0eaf5;
+  --cv-muted-fg:             #6b7fa8;
+  --cv-border:               #c5d8ee;
   --cv-radius:               0.5rem;
   --cv-shadow-sm:            0 1px 2px rgba(0,0,0,0.05);
   --cv-shadow:               0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
@@ -110,7 +110,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 .sdcl-card:hover {
   border-color: var(--cv-primary);
-  box-shadow: 0 8px 32px rgba(28,31,54,0.14);
+  box-shadow: 0 8px 32px rgba(28,42,62,0.14);
   transform: translateY(-3px);
 }
 
@@ -136,7 +136,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 .sdcl-card__overlay {
   position: absolute; inset: 0;
   background: linear-gradient(to bottom,
-    rgba(28,31,54,0) 35%, rgba(28,31,54,0.72) 75%, rgba(28,31,54,0.88) 100%);
+    rgba(28,42,62,0) 35%, rgba(28,42,62,0.72) 75%, rgba(28,42,62,0.88) 100%);
   display: flex; align-items: flex-end;
 }
 
@@ -145,25 +145,25 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 .sdcl-card__eyebrow {
   display: inline-block;
   font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
-  text-transform: uppercase; color: rgba(248,247,245,0.7);
+  text-transform: uppercase; color: rgba(238,245,252,0.7);
   margin-bottom: 0.35rem;
 }
 
 .sdcl-card__title {
   font-family: var(--cv-font-head);
   font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 800; color: #f8f7f5;
+  font-weight: 800; color: #eef5fc;
   letter-spacing: -0.02em; margin: 0 0 0.5rem; line-height: 1.15;
 }
 
 .sdcl-card__desc {
-  font-size: 0.85rem; color: rgba(248,247,245,0.75);
+  font-size: 0.85rem; color: rgba(238,245,252,0.75);
   margin: 0 0 1rem; line-height: 1.5;
 }
 
 .sdcl-card__cta {
   display: inline-flex; align-items: center; gap: 0.35rem;
-  font-size: 0.875rem; font-weight: 600; color: #f8f7f5;
+  font-size: 0.875rem; font-weight: 600; color: #eef5fc;
   background: var(--color-cta-primary);
   padding: 0.5rem 1rem; border-radius: 999px;
   transition: background 0.2s; text-decoration: none;
@@ -286,7 +286,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
     scrollbar-width: thin;
     scrollbar-color: var(--cv-border) transparent;
     padding: 1rem 1rem 2rem;
-    background: #efede8;
+    background: #e0eaf5;
     border-radius: 0.75rem;
     border: 1px solid var(--cv-border);
   }
@@ -570,7 +570,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   font-family: var(--cv-font-sans);
   transition: background 0.15s;
 }
-.sdcl-price-range__apply:hover { background: #1c1f36; }
+.sdcl-price-range__apply:hover { background: #1c2a3e; }
 
 .sdcl-price-range__reset {
   display: block;
@@ -714,7 +714,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   padding: 0.4rem 2.25rem 0.4rem 0.75rem;
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23282d52' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231e3a5f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.6rem center;
   transition: border-color 0.15s;
@@ -732,7 +732,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   display: none;
   width: 100%;
   background: #fff;
-  border: 1px solid #eee;
+  border: 1px solid #c5d8ee;
   border-radius: 8px;
   margin-bottom: 16px;
   overflow: hidden;
@@ -748,7 +748,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 .sdcl-mobile-sort {
   padding-bottom: 12px;
   margin-bottom: 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #c5d8ee;
 }
 .sdcl-mobile-sort__title {
   font-size: 0.875rem;
@@ -783,7 +783,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 /* Filter accordion groups */
 .sdcl-mobile-group {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #c5d8ee;
 }
 .sdcl-mobile-group__header {
   display: flex;
@@ -935,7 +935,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 .sdpc {
   background: #FFFFFF;
   border-radius: 8px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #c5d8ee;
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
   overflow: hidden;
   display: flex; flex-direction: column;
@@ -944,7 +944,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 }
 
 .sdpc:hover {
-  box-shadow: 0 8px 28px rgba(28,31,54,0.14);
+  box-shadow: 0 8px 28px rgba(28,42,62,0.14);
   border-color: #c8c4be;
   transform: translateY(-5px);
 }
@@ -1057,7 +1057,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 /* "Select Options" variant — slate (NOT green; navigates to PDP) */
 .sdpc__quick-add--goto { background: var(--cv-primary); }
-.sdpc__quick-add--goto:hover { background: #1c1f36; }
+.sdpc__quick-add--goto:hover { background: #1c2a3e; }
 
 /* ── Card body ── */
 .sdpc__body {
@@ -1127,7 +1127,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   padding: 0.75rem 1.25rem;
   border-radius: calc(var(--cv-radius) * 1.5);
   font-family: var(--cv-font-sans); font-size: 0.875rem; font-weight: 500;
-  box-shadow: 0 4px 20px rgba(28,31,54,0.25);
+  box-shadow: 0 4px 20px rgba(28,42,62,0.25);
   z-index: 9999;
   display: flex; align-items: center; gap: 0.6rem;
   opacity: 0; transform: translateY(8px);
@@ -1146,7 +1146,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 .sd-toast__close {
   margin-left: 0.5rem;
   background: none; border: none;
-  color: rgba(248,247,245,0.6); cursor: pointer;
+  color: rgba(238,245,252,0.6); cursor: pointer;
   padding: 0; line-height: 1; flex-shrink: 0;
   display: flex; align-items: center;
 }
