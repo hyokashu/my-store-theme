@@ -55,7 +55,7 @@
 /* ── Logo image — schema-driven max-width ─────────────────────── */
 .sd-header__logo-img {
   max-width: {{ logo_width }}px !important;
-  max-height: 4.25rem !important;
+  max-height: none !important; /* Removed height limit so width can scale */
   width: auto;
   height: auto;
   display: block;
@@ -101,7 +101,8 @@
     max-width: 90rem;
     margin: 0 auto;
     padding: 0 1.5rem;
-    height: 4.5rem;
+    min-height: 4.5rem;
+    height: auto; /* Allows header to grow with the larger logo */
     gap: 1.5rem;
   }
   .sdh-desktop-search {
@@ -127,7 +128,13 @@
 }
 
 @media (min-width: 768px) {
-  .sd-header__logo { justify-content: flex-start; }
+  .sd-header__logo { 
+    justify-content: flex-start; 
+    flex: 1; /* Pushes the logo container closer to the search bar */
+  }
+  .sd-header__icons {
+    flex: 1; /* Balances the layout on the right side */
+  }
 }
 
 .sd-header__logo-link {
@@ -1394,7 +1401,7 @@
       "id": "logo_max_width",
       "label": "Logo max width (px)",
       "min": 80,
-      "max": 400,
+      "max": 700,
       "step": 10,
       "default": 220
     },
