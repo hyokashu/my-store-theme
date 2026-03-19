@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — sections/footer.liquid
+  Sprout — sections/footer.liquid
   Multi-column trust-anchor footer.
   Background: deep slate/purple · Text: cream/off-white
   Columns: Brand | Customer Care | Business Address | Community
@@ -28,7 +28,7 @@
 
     {%- comment -%} ── 2. Customer Care column (mobile accordion) ── {%- endcomment -%}
     <div class="sd-footer__col">
-      <details class="sd-footer__accordion">
+      <details class="sd-footer__accordion" open>
         <summary class="sd-footer__summary" aria-label="Customer Care">
           Customer Care
           <svg class="sd-footer__chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -39,8 +39,8 @@
             {%- comment -%} Email {%- endcomment -%}
             <li class="sd-footer__list-item">
               <svg class="sd-footer__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              <a href="mailto:{{ section.settings.support_email | default: 'support@supplydistrict.com' }}" class="sd-footer__link">
-                {{ section.settings.support_email | default: 'support@supplydistrict.com' }}
+              <a href="mailto:{{ section.settings.support_email | default: 'support@sprout.com' }}" class="sd-footer__link">
+                {{ section.settings.support_email | default: 'support@sprout.com' }}
               </a>
             </li>
 
@@ -80,7 +80,7 @@
 
     {%- comment -%} ── 3. Business Address column (mobile accordion) ── {%- endcomment -%}
     <div class="sd-footer__col">
-      <details class="sd-footer__accordion">
+      <details class="sd-footer__accordion" open>
         <summary class="sd-footer__summary" aria-label="Our Location">
           Our Location
           <svg class="sd-footer__chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -92,7 +92,7 @@
               {%- if section.settings.address != blank -%}
                 {{ section.settings.address | newline_to_br }}
               {%- else -%}
-                Supply District Pty Ltd<br>
+                Sprout<br>
                 123 Collector Way<br>
                 Melbourne VIC 3000<br>
                 Australia
@@ -108,7 +108,7 @@
 
     {%- comment -%} ── 4. Community / Social column (mobile accordion) ── {%- endcomment -%}
     <div class="sd-footer__col">
-      <details class="sd-footer__accordion">
+      <details class="sd-footer__accordion" open>
         <summary class="sd-footer__summary" aria-label="Community">
           Community
           <svg class="sd-footer__chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -177,16 +177,16 @@
 
 <style>
 /* ============================================================
-   Supply District — Footer
-   Deep slate background (#1c1f36) · cream/off-white text
+   Enchanted Forest — Footer
+   Very dark green background (#0A160D) · aged parchment text · gilded gold accents
    ============================================================ */
 :root {
-  --sdf-bg:      #1c1f36;
-  --sdf-fg:      #f0eee8;
-  --sdf-muted:   rgba(240,238,232,0.65);
-  --sdf-border:  rgba(240,238,232,0.12);
-  --sdf-accent:  #7a9abf;
-  --sdf-radius:  0.5rem;
+  --sdf-bg:      #0A160D;
+  --sdf-fg:      #FDFBF2;
+  --sdf-muted:   rgba(253,251,242,0.65);
+  --sdf-border:  rgba(253,251,242,0.12);
+  --sdf-accent:  #C59B43;
+  --sdf-radius:  1rem;
 }
 
 .sd-footer {
@@ -213,7 +213,7 @@
 .sd-footer__brand-link { text-decoration: none; display: inline-block; margin-bottom: 0.875rem; }
 .sd-footer__logo       { max-height: 2.5rem; width: auto; display: block; }
 .sd-footer__brand-name {
-  font-family:    var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-family:    var(--cv-font-head, 'Nunito', system-ui, sans-serif);
   font-size:      1.375rem; font-weight: 800;
   color:          var(--sdf-fg); letter-spacing: -0.02em;
   display:        block;
@@ -223,7 +223,7 @@
 
 /* ── Column heading ── */
 .sd-footer__col-title {
-  font-family:    var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-family:    var(--cv-font-head, 'Nunito', system-ui, sans-serif);
   font-size:      0.75rem; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase;
   color:          var(--sdf-muted);
@@ -299,7 +299,7 @@
   .sd-footer__summary {
     /* Inherit all col-title visual styles */
     display:        block;
-    font-family:    var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+    font-family:    var(--cv-font-head, 'Nunito', system-ui, sans-serif);
     font-size:      0.75rem;
     font-weight:    700;
     letter-spacing: 0.08em;
@@ -335,7 +335,7 @@
     width:           100%;
     padding:         0.875rem 0;
     cursor:          pointer;
-    font-family:     var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+    font-family:     var(--cv-font-head, 'Nunito', system-ui, sans-serif);
     font-size:       0.875rem;
     font-weight:     700;
     color:           var(--sdf-fg);
@@ -398,7 +398,7 @@
       "type": "text",
       "id": "support_email",
       "label": "Support email",
-      "default": "support@supplydistrict.com"
+      "default": "support@sprout.com"
     },
     {
       "type": "text",
@@ -467,7 +467,7 @@
       "type": "textarea",
       "id": "address",
       "label": "Business address",
-      "default": "Supply District Pty Ltd\n123 Collector Way\nMelbourne VIC 3000\nAustralia"
+      "default": "Sprout\n123 Collector Way\nMelbourne VIC 3000\nAustralia"
     },
     {
       "type": "text",

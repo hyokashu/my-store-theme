@@ -1,0 +1,6 @@
+{"type":"server-started","port":51533,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:51533","screen_dir":"/Users/nicholas/Desktop/my-store-theme/.superpowers/brainstorm/6453-1773484653"}
+{"type":"screen-added","file":"/Users/nicholas/Desktop/my-store-theme/.superpowers/brainstorm/6453-1773484653/approaches.html"}
+{"type":"screen-added","file":"/Users/nicholas/Desktop/my-store-theme/.superpowers/brainstorm/6453-1773484653/spec-cards-fix.html"}
+{"type":"screen-added","file":"/Users/nicholas/Desktop/my-store-theme/.superpowers/brainstorm/6453-1773484653/spec-cards-v2.html"}
+{"type":"screen-added","file":"/Users/nicholas/Desktop/my-store-theme/.superpowers/brainstorm/6453-1773484653/mobile-specs.html"}
+{"type":"server-stopped","reason":"idle timeout"}

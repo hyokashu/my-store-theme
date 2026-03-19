@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — sections/about-supply-district.liquid
+  Sprout — sections/about-supply-district.liquid
   ─────────────────────────────────────────────────────────
   50/50 brand story split-section for the homepage.
   · Image side: Shopify image_picker with optional floating badge
@@ -28,23 +28,23 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
   /* ── Design Tokens ── */
   .hasd-section {
-    --cv-bg:                #f0f5fb;
-    --cv-fg:                #1c2a3e;
-    --cv-primary:           #1e3a5f;
+    --cv-bg:                #FDFBF2;
+    --cv-fg:                #1C2B1F;
+    --cv-primary:           #2C4731;
     --cv-card:              #ffffff;
-    --cv-secondary:         #e0eaf5;
-    --cv-muted-fg:          #6b7fa8;
-    --cv-border:            #c5d8ee;
+    --cv-secondary:         #E8EBE3;
+    --cv-muted-fg:          #425E3B;
+    --cv-border:            #BDC9B6;
     --cv-radius:            0.5rem;
-    --color-cta-primary:    #2e9963;
-    --color-cta-primary-hv: #25834f;
+    --color-cta-primary:    #C59B43;
+    --color-cta-primary-hv: #A8832C;
     --cv-font-sans:         'Inter', sans-serif;
-    --cv-font-head:         'Space Grotesk', sans-serif;
+    --cv-font-head:         'Nunito', sans-serif;
   }
 
   /* ── Section shell ── */
@@ -284,7 +284,7 @@
           {%- comment -%} Placeholder when no image set ── {%- endcomment -%}
           <div style="
             width: 100%; height: 100%;
-            background: linear-gradient(135deg, #1e3a5f 0%, #1c2a3e 100%);
+            background: linear-gradient(135deg, #2C4731 0%, #1C2B1F 100%);
             display: flex; align-items: center; justify-content: center;
           ">
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none"
@@ -351,7 +351,7 @@
 
 {% schema %}
 {
-  "name": "About Supply District",
+  "name": "About Sprout",
   "tag": "div",
   "class": "sd-about-section",
   "settings": [
@@ -389,7 +389,7 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow",
-      "default": "About Supply District"
+      "default": "About Sprout"
     },
     {
       "type": "text",
@@ -401,7 +401,7 @@
       "type": "richtext",
       "id": "body",
       "label": "Body text",
-      "default": "<p>Supply District started as a passion project between two Melbourne-based collectors who were tired of paying inflated prices for sealed product — or worse, receiving damaged goods with no recourse.</p><p>We source <strong>directly from authorised Australian distributors</strong>, meaning every box, tin, and bundle you receive is 100% genuine, factory sealed, and handled with the care it deserves. No resealed packs. No grey-market imports. No shortcuts.</p><p>From our warehouse in Melbourne, we dispatch to collectors across Australia and New Zealand — fast, tracked, and packaged to survive the journey.</p>"
+      "default": "<p>Sprout started as a passion project between two Melbourne-based collectors who were tired of paying inflated prices for sealed product — or worse, receiving damaged goods with no recourse.</p><p>We source <strong>directly from authorised Australian distributors</strong>, meaning every box, tin, and bundle you receive is 100% genuine, factory sealed, and handled with the care it deserves. No resealed packs. No grey-market imports. No shortcuts.</p><p>From our warehouse in Melbourne, we dispatch to collectors across Australia and New Zealand — fast, tracked, and packaged to survive the journey.</p>"
     },
     {
       "type": "header",
@@ -421,7 +421,7 @@
   ],
   "presets": [
     {
-      "name": "About Supply District"
+      "name": "About Sprout"
     }
   ]
 }

@@ -1,0 +1,241 @@
+<style>
+  /* Theme colours from the actual store */
+  :root {
+    --cv-bg: #f7f6f3;
+    --cv-card: #ffffff;
+    --cv-primary: #282d52;
+    --cv-secondary: #eeecea;
+    --cv-border: #dedad5;
+    --cv-fg: #1c1f36;
+    --cv-muted: #76798c;
+    --cv-detail: #F4F6F8;
+  }
+
+  .approach-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .approach-card {
+    border: 2px solid var(--cv-border);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fff;
+  }
+  .approach-card:hover { border-color: var(--cv-primary); box-shadow: 0 4px 16px rgba(40,45,82,0.12); }
+  .approach-card.selected { border-color: var(--cv-primary); box-shadow: 0 0 0 3px rgba(40,45,82,0.15); }
+
+  .approach-label {
+    background: var(--cv-primary);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+  }
+
+  .approach-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--cv-fg);
+    padding: 10px 12px 2px;
+  }
+  .approach-desc {
+    font-size: 12px;
+    color: var(--cv-muted);
+    padding: 0 12px 10px;
+    line-height: 1.5;
+  }
+
+  /* ===== MOCKUP STYLES ===== */
+  .mockup-wrap {
+    padding: 8px;
+    background: #e8e6e0;
+  }
+
+  /* ---- APPROACH A: Subtle 2-tone ---- */
+  .a-page { background: var(--cv-bg); padding: 8px; border-radius: 4px; }
+  .a-hero {
+    background: var(--cv-card);
+    border: 1px solid var(--cv-border);
+    border-radius: 6px;
+    padding: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .a-gallery { background: #f0ede8; border-radius: 4px; height: 80px; display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--cv-muted); }
+  .a-info { display:flex;flex-direction:column;gap:4px; }
+  .a-badge { background: var(--cv-primary); color:#fff; border-radius:3px; font-size:8px; padding:2px 5px; width:fit-content; }
+  .a-title { font-size:11px;font-weight:700;color:var(--cv-fg); }
+  .a-price { font-size:13px;font-weight:800;color:var(--cv-primary); }
+  .a-specs { display:grid;grid-template-columns:1fr 1fr;gap:3px; }
+  .a-spec { background:var(--cv-detail);border-top:2px solid var(--cv-border);padding:3px 4px;font-size:8px;color:var(--cv-muted);border-radius:2px; }
+  .a-btn { background:var(--cv-primary);color:#fff;border-radius:4px;padding:5px;text-align:center;font-size:9px;font-weight:700;margin-top:2px; }
+  .a-tabs { background:var(--cv-card);border:1px solid var(--cv-border);border-radius:6px;padding:8px; }
+  .a-tab-nav { display:flex;gap:6px;border-bottom:1px solid var(--cv-border);padding-bottom:4px;margin-bottom:6px; }
+  .a-tab-item { font-size:9px;color:var(--cv-muted);padding:2px 4px; }
+  .a-tab-item.active { color:var(--cv-primary);border-bottom:2px solid var(--cv-primary);font-weight:700; }
+  .a-tab-content { font-size:9px;color:var(--cv-muted);line-height:1.6; }
+
+  /* ---- APPROACH B: Banded ---- */
+  .b-page { background: var(--cv-bg); border-radius: 4px; overflow: hidden; }
+  .b-hero { background: var(--cv-card); padding: 8px; display:grid;grid-template-columns:1fr 1fr;gap:6px; }
+  .b-gallery { background: #f0ede8; border-radius: 4px; height: 80px; display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--cv-muted); }
+  .b-info { display:flex;flex-direction:column;gap:4px; }
+  .b-badge { background:var(--cv-primary);color:#fff;border-radius:3px;font-size:8px;padding:2px 5px;width:fit-content; }
+  .b-title { font-size:11px;font-weight:700;color:var(--cv-fg); }
+  .b-price { font-size:13px;font-weight:800;color:var(--cv-primary); }
+  .b-navy-band { background:var(--cv-primary);padding:6px 8px;display:flex;gap:8px;align-items:center; }
+  .b-trust-item { color:#f8f7f5;font-size:8px;display:flex;align-items:center;gap:3px; }
+  .b-trust-dot { width:6px;height:6px;border-radius:50%;background:#a5b4fc;flex-shrink:0; }
+  .b-specs-band { background:var(--cv-secondary);padding:8px;border-bottom:1px solid var(--cv-border); }
+  .b-specs-label { font-size:9px;font-weight:700;color:var(--cv-primary);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px; }
+  .b-specs { display:grid;grid-template-columns:repeat(3,1fr);gap:3px; }
+  .b-spec { background:var(--cv-card);border:1px solid var(--cv-border);padding:4px;border-radius:3px;font-size:8px;color:var(--cv-muted); }
+  .b-tabs { background:var(--cv-card);padding:8px; }
+  .b-tab-nav { display:flex;gap:6px;border-bottom:1px solid var(--cv-border);padding-bottom:4px;margin-bottom:6px; }
+  .b-tab-item { font-size:9px;color:var(--cv-muted);padding:2px 4px; }
+  .b-tab-item.active { color:var(--cv-primary);border-bottom:2px solid var(--cv-primary);font-weight:700; }
+  .b-tab-content { font-size:9px;color:var(--cv-muted);line-height:1.6; }
+
+  /* ---- APPROACH C: Floating cards ---- */
+  .c-page { background: var(--cv-bg); padding: 8px; border-radius: 4px; }
+  .c-hero { background:var(--cv-card);border:1px solid var(--cv-border);border-radius:6px;padding:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;box-shadow:0 2px 8px rgba(40,45,82,0.07); }
+  .c-gallery { background:#f0ede8;border-radius:4px;height:70px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--cv-muted); }
+  .c-info { display:flex;flex-direction:column;gap:3px; }
+  .c-badge { background:var(--cv-primary);color:#fff;border-radius:3px;font-size:8px;padding:2px 5px;width:fit-content; }
+  .c-title { font-size:11px;font-weight:700;color:var(--cv-fg); }
+  .c-price { font-size:13px;font-weight:800;color:var(--cv-primary); }
+  .c-btn { background:var(--cv-primary);color:#fff;border-radius:4px;padding:4px;text-align:center;font-size:9px;font-weight:700; }
+  .c-specs-card { background:var(--cv-card);border:1px solid var(--cv-border);border-radius:6px;padding:8px;margin-bottom:6px;box-shadow:0 2px 8px rgba(40,45,82,0.07); }
+  .c-section-label { font-size:9px;font-weight:700;color:var(--cv-primary);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px;padding-bottom:3px;border-bottom:2px solid var(--cv-primary); }
+  .c-specs { display:grid;grid-template-columns:repeat(3,1fr);gap:3px; }
+  .c-spec { background:var(--cv-secondary);border-top:2px solid var(--cv-border);padding:3px 4px;font-size:8px;color:var(--cv-muted);border-radius:2px; }
+  .c-tabs-card { background:var(--cv-card);border:1px solid var(--cv-border);border-radius:6px;padding:8px;box-shadow:0 2px 8px rgba(40,45,82,0.07); }
+  .c-tab-nav { display:flex;gap:6px;border-bottom:1px solid var(--cv-border);padding-bottom:4px;margin-bottom:5px; }
+  .c-tab-item { font-size:9px;color:var(--cv-muted);padding:2px 4px; }
+  .c-tab-item.active { color:var(--cv-primary);border-bottom:2px solid var(--cv-primary);font-weight:700; }
+  .c-tab-content { font-size:9px;color:var(--cv-muted);line-height:1.6; }
+</style>
+
+<h2>Product Page — 2-Tone Design Approach</h2>
+<p class="subtitle">Three ways to bring the home page's warm, premium feel to the product page. Click your preference.</p>
+
+<div class="approach-grid">
+
+  <!-- APPROACH A -->
+  <div class="approach-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="approach-label">Option A</div>
+    <div class="mockup-wrap">
+      <div class="a-page">
+        <div class="a-hero">
+          <div class="a-gallery">Gallery</div>
+          <div class="a-info">
+            <div class="a-badge">NEW</div>
+            <div class="a-title">Charizard ex SAR</div>
+            <div class="a-price">$289.99</div>
+            <div class="a-specs">
+              <div class="a-spec">Set: SV</div>
+              <div class="a-spec">Grade: PSA 10</div>
+            </div>
+            <div class="a-btn">Add to Cart</div>
+          </div>
+        </div>
+        <div class="a-tabs">
+          <div class="a-tab-nav">
+            <div class="a-tab-item active">Description</div>
+            <div class="a-tab-item">Contents</div>
+            <div class="a-tab-item">Shipping</div>
+          </div>
+          <div class="a-tab-content">Full product description text with card details, set info, and condition notes…</div>
+        </div>
+      </div>
+    </div>
+    <div class="approach-title">Subtle 2-Tone</div>
+    <div class="approach-desc">Cream page background (#f7f6f3) with white card containers — exactly how the home page works. Minimal but instantly premium.</div>
+  </div>
+
+  <!-- APPROACH B -->
+  <div class="approach-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="approach-label">Option B</div>
+    <div class="mockup-wrap">
+      <div class="b-page">
+        <div class="b-hero">
+          <div class="b-gallery">Gallery</div>
+          <div class="b-info">
+            <div class="b-badge">NEW</div>
+            <div class="b-title">Charizard ex SAR</div>
+            <div class="b-price">$289.99</div>
+          </div>
+        </div>
+        <div class="b-navy-band">
+          <div class="b-trust-item"><div class="b-trust-dot"></div>Secure Checkout</div>
+          <div class="b-trust-item"><div class="b-trust-dot"></div>Authentic Guarantee</div>
+          <div class="b-trust-item"><div class="b-trust-dot"></div>Free Returns</div>
+        </div>
+        <div class="b-specs-band">
+          <div class="b-specs-label">Specifications</div>
+          <div class="b-specs">
+            <div class="b-spec">Set: Stellar Crown</div>
+            <div class="b-spec">Grade: PSA 10</div>
+            <div class="b-spec">Rarity: SAR</div>
+          </div>
+        </div>
+        <div class="b-tabs">
+          <div class="b-tab-nav">
+            <div class="b-tab-item active">Description</div>
+            <div class="b-tab-item">Contents</div>
+            <div class="b-tab-item">Shipping</div>
+          </div>
+          <div class="b-tab-content">Full product description text with card details, set info…</div>
+        </div>
+      </div>
+    </div>
+    <div class="approach-title">Banded Sections</div>
+    <div class="approach-desc">Distinct horizontal bands: white hero → navy trust strip → taupe specs zone → white tabs. Bold structure with clear visual hierarchy.</div>
+  </div>
+
+  <!-- APPROACH C -->
+  <div class="approach-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="approach-label">Option C</div>
+    <div class="mockup-wrap">
+      <div class="c-page">
+        <div class="c-hero">
+          <div class="c-gallery">Gallery</div>
+          <div class="c-info">
+            <div class="c-badge">NEW</div>
+            <div class="c-title">Charizard ex SAR</div>
+            <div class="c-price">$289.99</div>
+            <div class="c-btn">Add to Cart</div>
+          </div>
+        </div>
+        <div class="c-specs-card">
+          <div class="c-section-label">Specifications</div>
+          <div class="c-specs">
+            <div class="c-spec">Set: SV</div>
+            <div class="c-spec">Grade: PSA 10</div>
+            <div class="c-spec">Rarity: SAR</div>
+          </div>
+        </div>
+        <div class="c-tabs-card">
+          <div class="c-tab-nav">
+            <div class="c-tab-item active">Description</div>
+            <div class="c-tab-item">Contents</div>
+            <div class="c-tab-item">Shipping</div>
+          </div>
+          <div class="c-tab-content">Full product description text with card details, set info…</div>
+        </div>
+      </div>
+    </div>
+    <div class="approach-title">Floating Cards</div>
+    <div class="approach-desc">Cream background throughout, with each section (hero, specs, tabs) as a distinct floating white card with subtle shadow. Most structured and premium-feeling.</div>
+  </div>
+
+</div>

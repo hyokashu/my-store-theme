@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — announcement-bar.liquid
+  Sprout — announcement-bar.liquid
   Dark announcement bar with centred promo text + right-aligned
   region/currency selector.  Fully editable via theme editor.
 {% endcomment %}
@@ -33,7 +33,6 @@
       {%- if localization.available_currencies.size > 1 -%}
         {%- form 'localization', id: 'sd-currency-form', class: 'sd-currency-form' -%}
           <div class="sd-currency-wrap">
-            <svg class="sd-currency-globe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             <select
               name="currency_code"
               id="sd-currency-select"
@@ -56,7 +55,6 @@
       {%- else -%}
         {%- comment -%} Fallback: show current currency as static text {%- endcomment -%}
         <span class="sd-currency-static">
-          <svg class="sd-currency-globe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           {{ localization.currency.iso_code }} {{ localization.currency.symbol }}
         </span>
       {%- endif -%}

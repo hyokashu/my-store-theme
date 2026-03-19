@@ -1,0 +1,172 @@
+<h2>Product page — current vs improved</h2>
+<p class="subtitle">Two fixes: ① Gallery gets more real estate (60/40 split + taller image) ② Social proof and trust signals move directly under the title, above the buy button.</p>
+
+<div class="split">
+
+  <!-- CURRENT -->
+  <div class="mockup">
+    <div class="mockup-header">Current</div>
+    <div class="mockup-body" style="padding:0;font-family:'Inter',system-ui,sans-serif;font-size:10px;background:#f0f5fb;">
+
+      <div style="background:#fff;padding:1rem;">
+        <!-- 55/45 grid -->
+        <div style="display:grid;grid-template-columns:55fr 45fr;gap:1rem;">
+
+          <!-- Gallery — 1:1 aspect ratio, feels square and small -->
+          <div>
+            <div style="background:#dbeafe;aspect-ratio:1/1;border-radius:6px;border:1px solid #c5d8ee;margin-bottom:0.4rem;display:flex;align-items:center;justify-content:center;">
+              <div style="font-size:8px;color:#6b7fa8;">1:1 image</div>
+            </div>
+            <!-- Thumbnails — small -->
+            <div style="display:flex;gap:0.3rem;">
+              <div style="width:36px;height:36px;background:#dbeafe;border-radius:4px;border:1px solid #c5d8ee;"></div>
+              <div style="width:36px;height:36px;background:#dbeafe;border-radius:4px;border:2px solid #1e3a5f;"></div>
+              <div style="width:36px;height:36px;background:#dbeafe;border-radius:4px;border:1px solid #c5d8ee;"></div>
+              <div style="width:36px;height:36px;background:#dbeafe;border-radius:4px;border:1px solid #c5d8ee;"></div>
+            </div>
+          </div>
+
+          <!-- Info panel -->
+          <div style="padding-left:0.25rem;">
+            <!-- No ratings above title -->
+            <div style="height:5px;background:#94a3b8;border-radius:3px;width:40%;margin-bottom:0.3rem;"></div>
+            <div style="height:9px;background:#1e3a5f;border-radius:3px;width:95%;margin-bottom:0.25rem;"></div>
+            <div style="height:9px;background:#1e3a5f;border-radius:3px;width:70%;margin-bottom:0.75rem;"></div>
+
+            <!-- Price -->
+            <div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.75rem;">
+              <div style="height:10px;background:#1e3a5f;border-radius:3px;width:35%;"></div>
+              <div style="height:7px;background:#c5d8ee;border-radius:3px;width:22%;"></div>
+              <div style="background:#16a34a;color:#fff;font-size:7px;padding:1px 4px;border-radius:3px;font-weight:700;">-20%</div>
+            </div>
+
+            <!-- Details grid -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem;margin-bottom:0.75rem;">
+              <div style="background:#eef5fc;border-radius:4px;padding:0.3rem;"><div style="height:3.5px;background:#94a3b8;border-radius:2px;width:55%;margin-bottom:2px;"></div><div style="height:3.5px;background:#1e3a5f;border-radius:2px;width:80%;"></div></div>
+              <div style="background:#eef5fc;border-radius:4px;padding:0.3rem;"><div style="height:3.5px;background:#94a3b8;border-radius:2px;width:45%;margin-bottom:2px;"></div><div style="height:3.5px;background:#1e3a5f;border-radius:2px;width:70%;"></div></div>
+              <div style="background:#eef5fc;border-radius:4px;padding:0.3rem;"><div style="height:3.5px;background:#94a3b8;border-radius:2px;width:55%;margin-bottom:2px;"></div><div style="height:3.5px;background:#1e3a5f;border-radius:2px;width:65%;"></div></div>
+              <div style="background:#eef5fc;border-radius:4px;padding:0.3rem;"><div style="height:3.5px;background:#94a3b8;border-radius:2px;width:40%;margin-bottom:2px;"></div><div style="height:3.5px;background:#1e3a5f;border-radius:2px;width:75%;"></div></div>
+            </div>
+
+            <!-- Qty + button -->
+            <div style="display:flex;gap:0.35rem;margin-bottom:0.4rem;">
+              <div style="background:#eef5fc;border:1px solid #c5d8ee;border-radius:4px;width:60px;height:26px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#1e3a5f;">− 1 +</div>
+              <div style="flex:1;background:#16a34a;color:#fff;border-radius:4px;height:26px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;">Add to Cart</div>
+            </div>
+            <div style="background:#fff;border:2px solid #1e3a5f;color:#1e3a5f;border-radius:4px;height:22px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;margin-bottom:0.75rem;">Buy Now</div>
+
+            <!-- Trust badges — small, at the bottom -->
+            <div style="display:flex;gap:0.3rem;flex-wrap:wrap;">
+              <div style="background:#eef5fc;border:1px solid #c5d8ee;border-radius:3px;padding:2px 5px;font-size:7px;color:#1e3a5f;">🛡 Sealed</div>
+              <div style="background:#eef5fc;border:1px solid #c5d8ee;border-radius:3px;padding:2px 5px;font-size:7px;color:#1e3a5f;">✓ Authentic</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#f0f5fb;padding:0.75rem 1rem;font-size:8px;color:#6b7fa8;border-top:1px solid #c5d8ee;">Product description / specs tabs below fold...</div>
+    </div>
+  </div>
+
+  <!-- IMPROVED -->
+  <div class="mockup">
+    <div class="mockup-header" style="background:#1e3a5f;color:#fff;">Improved</div>
+    <div class="mockup-body" style="padding:0;font-family:'Inter',system-ui,sans-serif;font-size:10px;background:#eef5fc;">
+
+      <div style="background:#fff;padding:1rem;">
+        <!-- 60/40 grid -->
+        <div style="display:grid;grid-template-columns:60fr 40fr;gap:1rem;">
+
+          <!-- Gallery — taller aspect ratio, larger thumbnails -->
+          <div>
+            <div style="background:#dbeafe;aspect-ratio:3/4;border-radius:8px;border:1px solid #c5d8ee;margin-bottom:0.5rem;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+              <div style="font-size:8px;color:#6b7fa8;">3:4 image — taller</div>
+              <!-- Zoom hint -->
+              <div style="position:absolute;bottom:6px;right:6px;background:rgba(255,255,255,0.9);border-radius:3px;padding:2px 5px;font-size:7px;color:#1e3a5f;border:1px solid #c5d8ee;">⤢ Zoom</div>
+            </div>
+            <!-- Thumbnails — larger -->
+            <div style="display:flex;gap:0.35rem;">
+              <div style="width:42px;height:42px;background:#dbeafe;border-radius:5px;border:1px solid #c5d8ee;box-shadow:0 1px 3px rgba(0,0,0,0.05);"></div>
+              <div style="width:42px;height:42px;background:#dbeafe;border-radius:5px;border:2px solid #1e3a5f;box-shadow:0 1px 3px rgba(0,0,0,0.05);"></div>
+              <div style="width:42px;height:42px;background:#dbeafe;border-radius:5px;border:1px solid #c5d8ee;box-shadow:0 1px 3px rgba(0,0,0,0.05);"></div>
+              <div style="width:42px;height:42px;background:#dbeafe;border-radius:5px;border:1px solid #c5d8ee;box-shadow:0 1px 3px rgba(0,0,0,0.05);"></div>
+              <div style="width:42px;height:42px;background:#dbeafe;border-radius:5px;border:1px solid #c5d8ee;box-shadow:0 1px 3px rgba(0,0,0,0.05);"></div>
+            </div>
+          </div>
+
+          <!-- Info panel — social proof first -->
+          <div style="padding-left:0.25rem;">
+            <!-- Brand / type -->
+            <div style="font-size:7.5px;color:#6b7fa8;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.25rem;">Pokemon · Booster Box</div>
+
+            <!-- Title -->
+            <div style="height:9px;background:#1e3a5f;border-radius:3px;width:95%;margin-bottom:0.25rem;"></div>
+            <div style="height:9px;background:#1e3a5f;border-radius:3px;width:65%;margin-bottom:0.5rem;"></div>
+
+            <!-- ⭐ SOCIAL PROOF — directly under title -->
+            <div style="display:flex;align-items:center;gap:0.35rem;margin-bottom:0.5rem;padding:0.3rem 0.4rem;background:#fffbeb;border:1px solid #fde68a;border-radius:5px;">
+              <div style="font-size:8.5px;color:#d97706;">★★★★★</div>
+              <div style="font-size:7.5px;color:#92400e;font-weight:600;">4.9</div>
+              <div style="font-size:7px;color:#92400e;">(127 reviews)</div>
+            </div>
+
+            <!-- Price -->
+            <div style="display:flex;gap:0.35rem;align-items:center;margin-bottom:0.5rem;">
+              <div style="height:11px;background:#1e3a5f;border-radius:3px;width:32%;"></div>
+              <div style="height:7px;background:#c5d8ee;border-radius:3px;width:20%;"></div>
+              <div style="background:#16a34a;color:#fff;font-size:7px;padding:1px 4px;border-radius:3px;font-weight:700;">-20%</div>
+            </div>
+
+            <!-- Afterpay hint -->
+            <div style="font-size:7px;color:#6b7fa8;margin-bottom:0.6rem;">4 × $24.99 with Afterpay</div>
+
+            <!-- Details grid — compact -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.25rem;margin-bottom:0.6rem;">
+              <div style="background:#eef5fc;border-radius:4px;padding:0.28rem 0.35rem;"><div style="height:3px;background:#94a3b8;border-radius:2px;width:50%;margin-bottom:2px;"></div><div style="height:3.5px;background:#1e3a5f;border-radius:2px;width:75%;"></div></div>
+              <div style="background:#eef5fc;border-radius:4px;padding:0.28rem 0.35rem;"><div style="height:3px;background:#94a3b8;border-radius:2px;width:40%;margin-bottom:2px;"></div><div style="height:3.5px;background:#1e3a5f;border-radius:2px;width:65%;"></div></div>
+              <div style="background:#eef5fc;border-radius:4px;padding:0.28rem 0.35rem;"><div style="height:3px;background:#94a3b8;border-radius:2px;width:50%;margin-bottom:2px;"></div><div style="height:3.5px;background:#1e3a5f;border-radius:2px;width:80%;"></div></div>
+              <div style="background:#eef5fc;border-radius:4px;padding:0.28rem 0.35rem;"><div style="height:3px;background:#94a3b8;border-radius:2px;width:40%;margin-bottom:2px;"></div><div style="height:3.5px;background:#1e3a5f;border-radius:2px;width:70%;"></div></div>
+            </div>
+
+            <!-- Stock urgency -->
+            <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:4px;padding:0.25rem 0.4rem;font-size:7px;color:#b91c1c;font-weight:600;margin-bottom:0.5rem;">⚠ Only 3 left in stock</div>
+
+            <!-- Qty + button -->
+            <div style="display:flex;gap:0.3rem;margin-bottom:0.35rem;">
+              <div style="background:#eef5fc;border:1px solid #c5d8ee;border-radius:5px;width:55px;height:27px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#1e3a5f;">− 1 +</div>
+              <div style="flex:1;background:#16a34a;color:#fff;border-radius:5px;height:27px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;box-shadow:0 2px 4px rgba(22,163,74,0.25);">🛒 Add to Cart</div>
+            </div>
+            <div style="background:#1e3a5f;color:#fff;border-radius:5px;height:23px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;margin-bottom:0.5rem;">⚡ Buy Now</div>
+
+            <!-- Trust strip — compact row -->
+            <div style="display:flex;gap:0.25rem;padding:0.35rem 0.4rem;background:#eef5fc;border-radius:5px;border:1px solid #c5d8ee;">
+              <div style="flex:1;text-align:center;font-size:6.5px;color:#1e3a5f;font-weight:600;">🛡<br>Sealed</div>
+              <div style="width:1px;background:#c5d8ee;"></div>
+              <div style="flex:1;text-align:center;font-size:6.5px;color:#1e3a5f;font-weight:600;">✓<br>Authentic</div>
+              <div style="width:1px;background:#c5d8ee;"></div>
+              <div style="flex:1;text-align:center;font-size:6.5px;color:#1e3a5f;font-weight:600;">🚚<br>Fast Ship</div>
+              <div style="width:1px;background:#c5d8ee;"></div>
+              <div style="flex:1;text-align:center;font-size:6.5px;color:#1e3a5f;font-weight:600;">↩<br>Returns</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs below fold -->
+      <div style="background:#eef5fc;padding:0.6rem 1rem;border-top:1px solid #c5d8ee;">
+        <div style="display:flex;gap:0.4rem;margin-bottom:0.5rem;">
+          <div style="background:#1e3a5f;color:#fff;font-size:7.5px;padding:3px 8px;border-radius:4px;font-weight:600;">Description</div>
+          <div style="background:#fff;border:1px solid #c5d8ee;color:#1e3a5f;font-size:7.5px;padding:3px 8px;border-radius:4px;font-weight:500;">Specs</div>
+          <div style="background:#fff;border:1px solid #c5d8ee;color:#1e3a5f;font-size:7.5px;padding:3px 8px;border-radius:4px;font-weight:500;">Reviews (127)</div>
+        </div>
+        <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:90%;margin-bottom:2px;"></div>
+        <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:75%;margin-bottom:2px;"></div>
+        <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:60%;"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem;text-align:center;">Changes: ① 60/40 split + 3:4 portrait image (cards are portrait — this fits naturally) &nbsp;② ★ Rating badge directly under title &nbsp;③ Stock urgency label above button &nbsp;④ 4-icon trust strip replaces scattered badges &nbsp;⑤ Larger thumbnails</p>

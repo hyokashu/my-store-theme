@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — sections/cart-drawer.liquid
+  Sprout — sections/cart-drawer.liquid
   AJAX Cart Drawer (Slide-out, right-side panel)
 
   Features:
@@ -13,37 +13,37 @@
   - Intercepts .sd-cart-btn clicks site-wide
   - Intercepts form[action="/cart/add"] submissions site-wide
   - Dispatches / listens to cart:open, cart:refresh custom events
-  - Inherits full Supply District design token system
+  - Inherits full Sprout design token system
 {% endcomment %}
 
 {%- liquid
-  assign ship_threshold = section.settings.free_ship_threshold | default: 20000
+  assign ship_threshold = section.settings.free_ship_threshold | default: 25000
 -%}
 
 <style>
 /* ================================================================
-   Supply District Cart Drawer — scd-* namespace
+   Sprout Cart Drawer — scd-* namespace
    Design tokens defined here so the drawer works on every page,
    even pages that don't load main-cart.liquid / main-product.liquid
    ================================================================ */
 :root {
-  --cv-bg:                  #f0f5fb;
-  --cv-fg:                  #1c2a3e;
+  --cv-bg:                  #FDFBF2;
+  --cv-fg:                  #1C2B1F;
   --cv-card:                #ffffff;
-  --cv-primary:             #1e3a5f;
-  --cv-primary-fg:          #eef5fc;
-  --cv-secondary:           #e0eaf5;
-  --cv-muted-fg:            #6b7fa8;
-  --cv-border:              #c5d8ee;
+  --cv-primary:             #2C4731;
+  --cv-primary-fg:          #FDFBF2;
+  --cv-secondary:           #E8EBE3;
+  --cv-muted-fg:            #425E3B;
+  --cv-border:              #BDC9B6;
   --cv-destructive:         #c94030;
   --cv-radius:              0.5rem;
   --cv-shadow-sm:           0 1px 2px rgba(0,0,0,0.05);
   --cv-shadow:              0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
   --cv-font-sans:           'Inter', system-ui, -apple-system, sans-serif;
-  --cv-font-head:           'Space Grotesk', system-ui, sans-serif;
-  --color-cta-primary:      #2e9963;
+  --cv-font-head:           'Nunito', system-ui, sans-serif;
+  --color-cta-primary:      #C59B43;
   --color-cta-primary-fg:   #ffffff;
-  --color-cta-primary-hover:#25834f;
+  --color-cta-primary-hover:#A8832C;
 }
 
 /* ── Overlay ── */
@@ -183,7 +183,7 @@
 .scd-ship.is-unlocked .scd-ship__track { display: none; }
 .scd-ship__fill {
   height: 100%;
-  background: var(--color-cta-primary);
+  background: var(--cv-primary);
   border-radius: 999px;
   transition: width 0.42s ease;
   max-width: 100%;
@@ -281,21 +281,19 @@
 }
 
 .scd-item__remove {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  color: var(--cv-muted-fg);
   background: none;
   border: none;
   cursor: pointer;
-  border-radius: var(--cv-radius);
-  transition: color 0.15s, background 0.15s;
-  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--cv-muted-fg);
+  padding: 0.25rem 0;
+  margin-top: 0.375rem;
+  align-self: flex-end;
+  transition: color 0.15s;
+  font-family: var(--cv-font-sans);
 }
-.scd-item__remove:hover { color: var(--cv-destructive); background: rgba(201,64,48,0.07); }
-.scd-item__remove svg { width: 1rem; height: 1rem; pointer-events: none; }
+.scd-item__remove:hover { color: var(--cv-destructive); text-decoration: underline; }
 
 /* ── Upsell Carousel ── */
 .scd-upsell { flex-shrink: 0; }
@@ -523,7 +521,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--cv-muted-fg);
 }
 .scd-footer__trust-item svg {
@@ -753,7 +751,7 @@
 <!-- Config object: threshold passed from schema to JS -->
 <script>
 window.__SCD__ = {
-  threshold: {{ section.settings.free_ship_threshold | default: 20000 }},
+  threshold: {{ section.settings.free_ship_threshold | default: 25000 }},
   routes: {
     cart:     '{{ routes.cart_url }}',
     checkout: '{{ routes.checkout }}'
@@ -763,14 +761,14 @@ window.__SCD__ = {
 
 <script>
 /* ================================================================
-   Supply District Cart Drawer — IIFE
+   Sprout Cart Drawer — IIFE
    All DOM queries scoped to the drawer; no global namespace pollution
    ================================================================ */
 (function () {
   'use strict';
 
   /* ── Config ── */
-  var THRESHOLD = (window.__SCD__ && window.__SCD__.threshold) || 20000;
+  var THRESHOLD = (window.__SCD__ && window.__SCD__.threshold) || 25000;
 
   /* ── Helpers ── */
   function $(sel, ctx) { return (ctx || document).querySelector(sel); }
@@ -933,15 +931,8 @@ window.__SCD__ = {
                 '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
               '</button>',
             '</div>',
-            '<button class="scd-item__remove" data-key="' + item.key + '" aria-label="Remove ' + escHtml(item.product_title) + '">',
-              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">',
-                '<polyline points="3 6 5 6 21 6"/>',
-                '<path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-                '<path d="M10 11v6"/><path d="M14 11v6"/>',
-                '<path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
-              '</svg>',
-            '</button>',
           '</div>',
+          '<button class="scd-item__remove" data-key="' + item.key + '" aria-label="Remove ' + escHtml(item.product_title) + '">Remove</button>',
         '</div>',
       '</div>'
     ].join('');
@@ -1213,8 +1204,8 @@ window.__SCD__ = {
       "type": "number",
       "id": "free_ship_threshold",
       "label": "Free shipping threshold (cents)",
-      "default": 20000,
-      "info": "Enter in cents — e.g. 20000 = $200.00. The progress bar fills as the customer adds items."
+      "default": 25000,
+      "info": "Enter in cents — e.g. 25000 = $250.00. The progress bar fills as the customer adds items."
     },
     {
       "type": "collection",

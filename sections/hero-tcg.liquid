@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — sections/hero-tcg.liquid
+  Sprout — sections/hero-tcg.liquid
   ──────────────────────────────────────────
   Full-width hero banner for the homepage.
   · Background: Shopify image_picker with CSS object-fit cover
@@ -30,23 +30,23 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
   /* ── Design Tokens ── */
   .htcg-hero {
-    --cv-bg:                #f0f5fb;
-    --cv-fg:                #1c2a3e;
-    --cv-primary:           #1e3a5f;
+    --cv-bg:                #FDFBF2;
+    --cv-fg:                #1C2B1F;
+    --cv-primary:           #2C4731;
     --cv-card:              #ffffff;
-    --cv-secondary:         #e0eaf5;
-    --cv-muted-fg:          #6b7fa8;
-    --cv-border:            #c5d8ee;
+    --cv-secondary:         #E8EBE3;
+    --cv-muted-fg:          #425E3B;
+    --cv-border:            #BDC9B6;
     --cv-radius:            0.5rem;
-    --color-cta-primary:    #2e9963;
-    --color-cta-primary-hv: #25834f;
+    --color-cta-primary:    #C59B43;
+    --color-cta-primary-hv: #A8832C;
     --cv-font-sans:         'Inter', sans-serif;
-    --cv-font-head:         'Space Grotesk', sans-serif;
+    --cv-font-head:         'Nunito', sans-serif;
   }
 
   /* ── Section wrapper ── */
@@ -229,6 +229,10 @@
 
   /* ── Responsive ── */
   @media (max-width: 640px) {
+    .htcg-hero {
+      min-height: 0;
+      height: auto;
+    }
     .htcg-hero__inner {
       padding: 4rem 1.25rem;
     }
@@ -264,7 +268,7 @@
     >
   {%- else -%}
     {%- comment -%} Placeholder gradient when no image is set ── {%- endcomment -%}
-    <div class="htcg-hero__bg" style="background: linear-gradient(135deg, #1c2a3e 0%, #1e3a5f 60%, #2e9963 100%);"></div>
+    <div class="htcg-hero__bg" style="background: linear-gradient(135deg, #1C2B1F 0%, #2C4731 60%, #C59B43 100%);"></div>
   {%- endif -%}
 
   {%- comment -%} ── Overlay ── {%- endcomment -%}
@@ -380,7 +384,7 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow text",
-      "default": "Supply District"
+      "default": "Sprout"
     },
     {
       "type": "textarea",

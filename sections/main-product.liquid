@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — main-product.liquid
+  Sprout — main-product.liquid
   Self-contained product page section.
   Fonts, design tokens, layout, interactivity — all scoped here.
 {% endcomment %}
@@ -35,33 +35,37 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@600;700;800&family=Playfair+Display:wght@400;700&display=swap');
 /* =============================================================
-   CardVault Design Tokens
+   Sprout Design Tokens
    ============================================================= */
 :root {
-  --cv-bg:          #f0f5fb;
-  --cv-fg:          #1c2a3e;
+  --cv-bg:          #FDFBF2;
+  --cv-fg:          #1C2B1F;
   --cv-card:        #ffffff;
-  --cv-primary:     #1e3a5f;
-  --cv-primary-fg:  #eef5fc;
-  --cv-secondary:   #e0eaf5;
-  --cv-muted-fg:    #6b7fa8;
-  --cv-border:      #c5d8ee;
+  --cv-primary:     #2C4731;
+  --cv-primary-fg:  #FDFBF2;
+  --cv-secondary:   #E8EBE3;
+  --cv-muted-fg:    #425E3B;
+  --cv-border:      #BDC9B6;
   --cv-destructive: #c94030;
-  --cv-success:     #2e9963;
-  --cv-success-fg:  #f8f7f5;
-  --cv-star:        #d4783a;
-  --cv-radius:      0.5rem;
+  --cv-success:     #3d7a1f;
+  --cv-success-fg:  #FDFBF2;
+  --cv-star:        #C59B43;
+  --cv-accent:      #C59B43;
+  --cv-accent-fg:   #1C2B1F;
+  --cv-accent-blue: #21496D;
+  --cv-radius:      1rem;
   --cv-shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
   --cv-shadow:      0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
   --cv-font-sans:   'Inter', system-ui, -apple-system, sans-serif;
-  --cv-font-head:   'Space Grotesk', system-ui, sans-serif;
+  --cv-font-head:   'Nunito', system-ui, sans-serif;
+  --cv-font-display: 'Playfair Display', Georgia, serif;
 
   /* ── Von Restorff accent: ONLY used on Add to Cart / Buy Now / Checkout ── */
-  --color-cta-primary:    #2e9963;   /* bold green — matches Authentic badge, high contrast on cream + slate */
-  --color-cta-primary-fg: #ffffff;
-  --color-cta-primary-hover: #25834f;
+  --color-cta-primary:    #C59B43;   /* Gilded gold — dark text on gold for WCAG AA */
+  --color-cta-primary-fg: #1a2510;
+  --color-cta-primary-hover: #A8832C;
 }
 
 /* =============================================================
@@ -88,7 +92,7 @@
   margin: 1.5rem auto 0;
   padding: 1.5rem max(1rem, 4vw);
   background-color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(30,58,95,0.07);
+  box-shadow: 0 2px 8px rgba(44,71,49,0.07);
   border: 1px solid var(--cv-border);
   border-radius: 8px;
 }
@@ -135,7 +139,7 @@
 }
 @media (min-width: 768px)  {
   .cv-hero {
-    grid-template-columns: 55fr 45fr;
+    grid-template-columns: 60fr 40fr;
     gap: 2rem;
     align-items: start;
     padding: 2rem;
@@ -173,7 +177,7 @@
 
 .cv-gallery__main {
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   width: 100%;
   overflow: hidden;
   border-radius: calc(var(--cv-radius) * 2);
@@ -239,7 +243,7 @@
 .cv-gallery__thumbs { display: flex; gap: 0.625rem; }
 .cv-gallery__thumb {
   position: relative;
-  width: 6.25rem; height: 6.25rem; flex-shrink: 0;
+  width: 5rem; height: 5rem; flex-shrink: 0;
   border-radius: var(--cv-radius);
   overflow: hidden;
   border: 2px solid transparent;
@@ -253,7 +257,7 @@
 .cv-gallery__thumb.is-active {
   border-color: var(--cv-primary);
   opacity: 1;
-  box-shadow: 0 0 0 3px rgba(30,58,95,0.12);
+  box-shadow: 0 0 0 3px rgba(33,73,109,0.12);
 }
 .cv-gallery__thumb:hover { opacity: 1; }
 
@@ -287,8 +291,8 @@
   line-height: 1.4;
 }
 .cv-badge svg { width: 0.75rem; height: 0.75rem; }
-.cv-badge--sealed   { background: rgba(30,58,95,0.07);   color: var(--cv-primary);     border-color: rgba(30,58,95,0.18); }
-.cv-badge--auth     { background: #E6F4EA;                color: var(--cv-success);     border-color: rgba(46,153,99,0.3); }
+.cv-badge--sealed   { background: rgba(44,71,49,0.07);   color: var(--cv-primary);     border-color: rgba(44,71,49,0.18); }
+.cv-badge--auth     { background: #E9EDE4;                color: var(--cv-success);     border-color: rgba(197,155,67,0.3); }
 .cv-badge--stock    { background: rgba(201,64,48,0.08);  color: var(--cv-destructive); border-color: rgba(201,64,48,0.2); }
 .cv-badge--oos      { background: #FEE2E2;                color: #DC2626;               border-color: rgba(220,38,38,0.3); }
 
@@ -346,7 +350,7 @@
   padding: 0.625rem 0.875rem;
   border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
-  background: #e0eaf5;
+  background: #E8EBE3;
   box-shadow: var(--cv-shadow-sm);
 }
 @media (min-width: 768px) {
@@ -432,20 +436,33 @@ input.cv-qty__input {
 }
 .cv-btn--primary:hover  { background: var(--color-cta-primary-hover); border-color: var(--color-cta-primary-hover); animation: none; }
 .cv-btn--primary:active { opacity: 0.85; }
-.cv-btn--primary:disabled { background: #c5d8ee; border-color: #c5d8ee; color: #9CA3AF; cursor: not-allowed; box-shadow: none; animation: none; opacity: 1; }
+.cv-btn--primary:disabled { background: #BDC9B6; border-color: #BDC9B6; color: #9CA3AF; cursor: not-allowed; box-shadow: none; animation: none; opacity: 1; }
 
 /* Buy Now inherits CTA colour */
 .cv-btn--outline-primary {
   width: 100%;
-  background: transparent;
-  border-color: var(--color-cta-primary);
-  color: var(--color-cta-primary);
+  background: var(--cv-primary);
+  border-color: var(--cv-primary);
+  color: #ffffff;
 }
 .cv-btn--outline-primary:hover {
-  background: rgba(46,153,99,0.06);
-  border-color: var(--color-cta-primary-hover);
-  color: var(--color-cta-primary-hover);
+  background: #162f4d;
+  border-color: #162f4d;
+  color: #ffffff;
+  opacity: 1;
 }
+
+/* ── Stock Urgency Alert ── */
+.cv-stock-urgency {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.8125rem; font-weight: 600;
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: var(--cv-radius);
+  padding: 0.4rem 0.75rem;
+}
+.cv-stock-urgency svg { width: 0.9rem; height: 0.9rem; flex-shrink: 0; }
 
 /* ── Dispatch Countdown ── */
 .cv-dispatch-timer {
@@ -503,7 +520,7 @@ input.cv-qty__input {
   .cv-trust-item:last-child { border-right: none; }
 }
 .cv-trust-item:last-child { border-bottom: none; }
-.cv-trust-item:hover { background: rgba(30,58,95,0.025); }
+.cv-trust-item:hover { background: rgba(44,71,49,0.025); }
 .cv-trust-item__icon { flex-shrink: 0; margin-top: 0.125rem; transition: transform 0.2s; }
 .cv-trust-item__icon svg { width: 1.25rem; height: 1.25rem; color: var(--cv-primary); }
 .cv-trust-item:hover .cv-trust-item__icon { transform: scale(1.12); }
@@ -574,7 +591,7 @@ input.cv-qty__input {
   padding: 0.875rem;
   border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
-  background: rgba(30,58,95,0.04);
+  background: rgba(44,71,49,0.04);
 }
 /* Desktop: clean separator rows */
 @media (min-width: 768px) {
@@ -592,7 +609,7 @@ input.cv-qty__input {
   flex-shrink: 0; margin-top: 0.125rem;
   width: 1.75rem; height: 1.75rem;
   border-radius: 9999px;
-  background: rgba(30,58,95,0.08);
+  background: rgba(44,71,49,0.08);
   display: flex; align-items: center; justify-content: center;
 }
 .cv-content-item__icon svg { width: 0.875rem; height: 0.875rem; color: var(--cv-primary); }
@@ -674,7 +691,7 @@ input.cv-qty__input {
 .cv-reviewer__top { display: flex; align-items: center; gap: 0.5rem; }
 .cv-reviewer__avatar {
   width: 2rem; height: 2rem; border-radius: 9999px;
-  background: rgba(30,58,95,0.1);
+  background: rgba(44,71,49,0.1);
   display: flex; align-items: center; justify-content: center;
   font-size: 0.75rem; font-weight: 700; color: var(--cv-primary);
   flex-shrink: 0;
@@ -745,7 +762,7 @@ input.cv-qty__input {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .cv-product-card:hover {
-  border-color: rgba(30,58,95,0.25);
+  border-color: rgba(44,71,49,0.25);
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 .cv-product-card__img-wrap {
@@ -1147,6 +1164,12 @@ input.cv-qty__input {
       {% form 'product', product, id: 'cv-product-form', class: 'cv-actions', novalidate: 'novalidate' %}
         <input type="hidden" name="id" value="{{ current_variant.id }}" id="cv-variant-id">
 
+        {%- if low_stock -%}
+          <div class="cv-stock-urgency" aria-live="polite">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Only {{ stock_qty }} left in stock — order soon
+          </div>
+        {%- endif -%}
         <div class="cv-qty-row">
           <label class="cv-qty-label" for="cv-qty-input">Qty</label>
           <div class="cv-qty" role="group" aria-label="Quantity selector">
@@ -1159,6 +1182,7 @@ input.cv-qty__input {
               id="cv-qty-input"
               name="quantity"
               value="1" min="1"
+              {% if current_variant.inventory_management == 'shopify' and stock_qty > 0 %}max="{{ stock_qty }}"{% endif %}
               aria-label="Quantity"
             >
             <button type="button" class="cv-qty__btn" id="cv-qty-plus" aria-label="Increase quantity">
@@ -1600,11 +1624,16 @@ input.cv-qty__input {
       if (v > 1) qtyInput.value = v - 1;
     });
     qtyPlus.addEventListener('click', function () {
-      qtyInput.value = (parseInt(qtyInput.value, 10) || 1) + 1;
+      var v = parseInt(qtyInput.value, 10) || 1;
+      var max = parseInt(qtyInput.getAttribute('max'), 10);
+      if (!isNaN(max) && v >= max) return;
+      qtyInput.value = v + 1;
     });
     qtyInput.addEventListener('change', function () {
       var v = parseInt(qtyInput.value, 10);
       if (isNaN(v) || v < 1) qtyInput.value = 1;
+      var max = parseInt(qtyInput.getAttribute('max'), 10);
+      if (!isNaN(max) && v > max) qtyInput.value = max;
       if (stickyQtyDisplay) stickyQtyDisplay.textContent = qtyInput.value;
     });
   }
@@ -1623,6 +1652,8 @@ input.cv-qty__input {
     });
     stickyQtyPlus.addEventListener('click', function () {
       var v = parseInt(stickyQtyDisplay.textContent, 10) || 1;
+      var max = qtyInput ? parseInt(qtyInput.getAttribute('max'), 10) : NaN;
+      if (!isNaN(max) && v >= max) return;
       stickyQtyDisplay.textContent = v + 1;
       if (qtyInput) qtyInput.value = v + 1;
     });

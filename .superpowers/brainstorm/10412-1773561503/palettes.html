@@ -1,0 +1,387 @@
+<style>
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .palette-card {
+    border: 2px solid #d1d5db;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fff;
+  }
+  .palette-card:hover { border-color: #1e3a5f; box-shadow: 0 4px 16px rgba(30,58,95,0.15); }
+  .palette-card.selected { border-color: #1e3a5f; box-shadow: 0 0 0 3px rgba(30,58,95,0.15); }
+
+  .palette-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+  }
+
+  .palette-title { font-size: 15px; font-weight: 700; padding: 10px 12px 2px; }
+  .palette-desc { font-size: 12px; color: #6b7280; padding: 0 12px 10px; line-height: 1.5; }
+
+  /* Colour swatches row */
+  .swatches { display: flex; gap: 4px; padding: 0 12px 10px; }
+  .swatch { width: 28px; height: 28px; border-radius: 5px; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; }
+  .swatch-label { font-size: 9px; color: #9ca3af; margin-top: 2px; text-align: center; }
+
+  /* ===== MINI STORE MOCKUP ===== */
+  .mockup-wrap { padding: 6px; }
+  .mini-store { border-radius: 6px; overflow: hidden; font-family: system-ui, sans-serif; }
+
+  /* announcement */
+  .mini-announce {
+    height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7px; font-weight: 600; letter-spacing: 0.05em;
+  }
+  /* header */
+  .mini-header {
+    height: 28px;
+    display: flex; align-items: center;
+    padding: 0 8px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+  }
+  .mini-logo { font-size: 9px; font-weight: 800; letter-spacing: -0.02em; }
+  .mini-nav { display: flex; gap: 5px; margin-left: 8px; }
+  .mini-nav span { font-size: 7px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .mini-icons { margin-left: auto; display: flex; gap: 4px; }
+  .mini-icon { width: 14px; height: 14px; border-radius: 3px; background: rgba(0,0,0,0.07); }
+
+  /* page */
+  .mini-page { padding: 8px; }
+
+  /* hero product card */
+  .mini-hero {
+    border-radius: 5px;
+    padding: 8px;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 6px;
+    margin-bottom: 6px;
+    border-width: 1px;
+    border-style: solid;
+  }
+  .mini-img { border-radius: 4px; background: rgba(0,0,0,0.06); }
+  .mini-info { display: flex; flex-direction: column; gap: 3px; }
+  .mini-badge { border-radius: 3px; font-size: 7px; font-weight: 700; padding: 1px 4px; width: fit-content; }
+  .mini-title { font-size: 9px; font-weight: 700; }
+  .mini-price { font-size: 11px; font-weight: 800; }
+  .mini-btn { border-radius: 4px; padding: 4px 6px; font-size: 8px; font-weight: 700; text-align: center; margin-top: 2px; color: #fff; background: #2e9963; }
+
+  /* trust strip */
+  .mini-trust {
+    border-radius: 4px;
+    padding: 5px 8px;
+    margin-bottom: 6px;
+    display: flex; gap: 8px; align-items: center; justify-content: center;
+  }
+  .mini-trust span { font-size: 7px; font-weight: 600; }
+
+  /* product grid */
+  .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .mini-pcard {
+    border-radius: 4px;
+    padding: 5px;
+    border-width: 1px;
+    border-style: solid;
+  }
+  .mini-pimg { border-radius: 3px; background: rgba(0,0,0,0.06); margin-bottom: 3px; }
+  .mini-pname { font-size: 7px; font-weight: 600; margin-bottom: 1px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .mini-pprice { font-size: 8px; font-weight: 800; }
+
+  /* ===== PALETTE A — Powder Blue ===== */
+  .a-announce { background: #1e3a5f; color: #e8f2fc; }
+  .a-header { background: #ffffff; border-color: #b8d4ef; color: #1e3a5f; }
+  .a-page { background: #f0f5fb; }
+  .a-hero { background: #ffffff; border-color: #c5d8ee; }
+  .a-title { color: #1e3a5f; }
+  .a-price { color: #1e3a5f; }
+  .a-badge { background: #2e9963; color: #fff; }
+  .a-trust { background: #1e3a5f; color: #e8f2fc; }
+  .a-pcard { background: #ffffff; border-color: #c5d8ee; }
+  .a-pname { color: #1e3a5f; }
+  .a-pprice { color: #1e3a5f; }
+  .a-muted { color: #6b7fa8; }
+  .a-nav { color: #1e3a5f; }
+
+  /* ===== PALETTE B — Icy White ===== */
+  .b-announce { background: #1d3461; color: #f0f8ff; }
+  .b-header { background: #f8fbff; border-color: #dceefa; color: #1d3461; }
+  .b-page { background: #f8fbff; }
+  .b-hero { background: #ffffff; border-color: #cce3f5; }
+  .b-title { color: #1d3461; }
+  .b-price { color: #1d3461; }
+  .b-badge { background: #2e9963; color: #fff; }
+  .b-trust { background: #1d3461; color: #e8f5ff; }
+  .b-pcard { background: #ffffff; border-color: #cce3f5; }
+  .b-pname { color: #1d3461; }
+  .b-pprice { color: #1d3461; }
+  .b-muted { color: #5a7299; }
+  .b-nav { color: #1d3461; }
+
+  /* ===== PALETTE C — Sky Blue ===== */
+  .c-announce { background: #155280; color: #e0f2fe; }
+  .c-header { background: #ffffff; border-color: #bae6fd; color: #0c4a6e; }
+  .c-page { background: #e0f2fe; }
+  .c-hero { background: #ffffff; border-color: #7dd3fc; }
+  .c-title { color: #0c4a6e; }
+  .c-price { color: #0c4a6e; }
+  .c-badge { background: #2e9963; color: #fff; }
+  .c-trust { background: #0c4a6e; color: #e0f2fe; }
+  .c-pcard { background: #ffffff; border-color: #bae6fd; }
+  .c-pname { color: #0c4a6e; }
+  .c-pprice { color: #0c4a6e; }
+  .c-muted { color: #0369a1; }
+  .c-nav { color: #0c4a6e; }
+</style>
+
+<h2>Light Blue & White — Palette Options</h2>
+<p class="subtitle">Three takes on soft & approachable, all with deep steel-blue anchor + green CTAs. Click your favourite.</p>
+
+<div class="palette-grid">
+
+  <!-- PALETTE A: Powder Blue -->
+  <div class="palette-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="palette-label" style="background:#1e3a5f;color:#e8f2fc;">Option A</div>
+    <div class="mockup-wrap">
+      <div class="mini-store">
+        <div class="mini-announce a-announce">✦ Authentic Cards · Free Shipping Over $100 ✦</div>
+        <div class="mini-header a-header">
+          <span class="mini-logo a-nav">Supply District</span>
+          <div class="mini-nav">
+            <span class="a-nav">Pokémon</span>
+            <span class="a-nav">One Piece</span>
+            <span class="a-nav">Sale</span>
+          </div>
+          <div class="mini-icons">
+            <div class="mini-icon"></div><div class="mini-icon"></div>
+          </div>
+        </div>
+        <div class="mini-page a-page">
+          <div class="mini-hero a-hero">
+            <div class="mini-img" style="height:52px;"></div>
+            <div class="mini-info">
+              <div class="mini-badge a-badge">NEW</div>
+              <div class="mini-title a-title">Charizard ex SAR</div>
+              <div class="mini-price a-price">$289.99</div>
+              <div class="mini-btn">Add to Cart</div>
+            </div>
+          </div>
+          <div class="mini-trust a-trust">
+            <span>🛡 100% Authentic</span>
+            <span>🚚 Same-Day Dispatch</span>
+            <span>↩ 14-Day Returns</span>
+          </div>
+          <div class="mini-grid">
+            <div class="mini-pcard a-pcard">
+              <div class="mini-pimg" style="height:36px;"></div>
+              <div class="mini-pname a-pname">Booster Box</div>
+              <div class="mini-pprice a-pprice">$149.99</div>
+            </div>
+            <div class="mini-pcard a-pcard">
+              <div class="mini-pimg" style="height:36px;"></div>
+              <div class="mini-pname a-pname">Elite Trainer</div>
+              <div class="mini-pprice a-pprice">$64.99</div>
+            </div>
+            <div class="mini-pcard a-pcard">
+              <div class="mini-pimg" style="height:36px;"></div>
+              <div class="mini-pname a-pname">Booster Pack</div>
+              <div class="mini-pprice a-pprice">$7.99</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="palette-title">Powder Blue</div>
+    <div class="swatches">
+      <div>
+        <div class="swatch" style="background:#f0f5fb;"></div>
+        <div class="swatch-label">BG</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#ffffff;border:1px solid #ddd;"></div>
+        <div class="swatch-label">Card</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#c5d8ee;"></div>
+        <div class="swatch-label">Border</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#1e3a5f;"></div>
+        <div class="swatch-label">Dark</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#2e9963;"></div>
+        <div class="swatch-label">CTA</div>
+      </div>
+    </div>
+    <div class="palette-desc">Warm-cool balance. Blue-tinted cream background, white cards, strong steel-blue anchors. Feels premium without being cold.</div>
+  </div>
+
+  <!-- PALETTE B: Icy White -->
+  <div class="palette-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="palette-label" style="background:#1d3461;color:#f0f8ff;">Option B</div>
+    <div class="mockup-wrap">
+      <div class="mini-store">
+        <div class="mini-announce b-announce">✦ Authentic Cards · Free Shipping Over $100 ✦</div>
+        <div class="mini-header b-header">
+          <span class="mini-logo b-nav">Supply District</span>
+          <div class="mini-nav">
+            <span class="b-nav">Pokémon</span>
+            <span class="b-nav">One Piece</span>
+            <span class="b-nav">Sale</span>
+          </div>
+          <div class="mini-icons">
+            <div class="mini-icon"></div><div class="mini-icon"></div>
+          </div>
+        </div>
+        <div class="mini-page b-page">
+          <div class="mini-hero b-hero">
+            <div class="mini-img" style="height:52px;"></div>
+            <div class="mini-info">
+              <div class="mini-badge b-badge">NEW</div>
+              <div class="mini-title b-title">Charizard ex SAR</div>
+              <div class="mini-price b-price">$289.99</div>
+              <div class="mini-btn">Add to Cart</div>
+            </div>
+          </div>
+          <div class="mini-trust b-trust">
+            <span>🛡 100% Authentic</span>
+            <span>🚚 Same-Day Dispatch</span>
+            <span>↩ 14-Day Returns</span>
+          </div>
+          <div class="mini-grid">
+            <div class="mini-pcard b-pcard">
+              <div class="mini-pimg" style="height:36px;"></div>
+              <div class="mini-pname b-pname">Booster Box</div>
+              <div class="mini-pprice b-pprice">$149.99</div>
+            </div>
+            <div class="mini-pcard b-pcard">
+              <div class="mini-pimg" style="height:36px;"></div>
+              <div class="mini-pname b-pname">Elite Trainer</div>
+              <div class="mini-pprice b-pprice">$64.99</div>
+            </div>
+            <div class="mini-pcard b-pcard">
+              <div class="mini-pimg" style="height:36px;"></div>
+              <div class="mini-pname b-pname">Booster Pack</div>
+              <div class="mini-pprice b-pprice">$7.99</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="palette-title">Icy White</div>
+    <div class="swatches">
+      <div>
+        <div class="swatch" style="background:#f8fbff;border:1px solid #ddd;"></div>
+        <div class="swatch-label">BG</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#ffffff;border:1px solid #ddd;"></div>
+        <div class="swatch-label">Card</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#cce3f5;"></div>
+        <div class="swatch-label">Border</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#1d3461;"></div>
+        <div class="swatch-label">Dark</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#2e9963;"></div>
+        <div class="swatch-label">CTA</div>
+      </div>
+    </div>
+    <div class="palette-desc">Near-white with subtle blue tint. Header and page background almost indistinguishable from white — very clean, very airy. Understated and modern.</div>
+  </div>
+
+  <!-- PALETTE C: Sky Blue -->
+  <div class="palette-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="palette-label" style="background:#0c4a6e;color:#e0f2fe;">Option C</div>
+    <div class="mockup-wrap">
+      <div class="mini-store">
+        <div class="mini-announce c-announce">✦ Authentic Cards · Free Shipping Over $100 ✦</div>
+        <div class="mini-header c-header">
+          <span class="mini-logo c-nav">Supply District</span>
+          <div class="mini-nav">
+            <span class="c-nav">Pokémon</span>
+            <span class="c-nav">One Piece</span>
+            <span class="c-nav">Sale</span>
+          </div>
+          <div class="mini-icons">
+            <div class="mini-icon"></div><div class="mini-icon"></div>
+          </div>
+        </div>
+        <div class="mini-page c-page">
+          <div class="mini-hero c-hero">
+            <div class="mini-img" style="height:52px;"></div>
+            <div class="mini-info">
+              <div class="mini-badge c-badge">NEW</div>
+              <div class="mini-title c-title">Charizard ex SAR</div>
+              <div class="mini-price c-price">$289.99</div>
+              <div class="mini-btn">Add to Cart</div>
+            </div>
+          </div>
+          <div class="mini-trust c-trust">
+            <span>🛡 100% Authentic</span>
+            <span>🚚 Same-Day Dispatch</span>
+            <span>↩ 14-Day Returns</span>
+          </div>
+          <div class="mini-grid">
+            <div class="mini-pcard c-pcard">
+              <div class="mini-pimg" style="height:36px;"></div>
+              <div class="mini-pname c-pname">Booster Box</div>
+              <div class="mini-pprice c-pprice">$149.99</div>
+            </div>
+            <div class="mini-pcard c-pcard">
+              <div class="mini-pimg" style="height:36px;"></div>
+              <div class="mini-pname c-pname">Elite Trainer</div>
+              <div class="mini-pprice c-pprice">$64.99</div>
+            </div>
+            <div class="mini-pcard c-pcard">
+              <div class="mini-pimg" style="height:36px;"></div>
+              <div class="mini-pname c-pname">Booster Pack</div>
+              <div class="mini-pprice c-pprice">$7.99</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="palette-title">Sky Blue</div>
+    <div class="swatches">
+      <div>
+        <div class="swatch" style="background:#e0f2fe;"></div>
+        <div class="swatch-label">BG</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#ffffff;border:1px solid #ddd;"></div>
+        <div class="swatch-label">Card</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#7dd3fc;"></div>
+        <div class="swatch-label">Border</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#0c4a6e;"></div>
+        <div class="swatch-label">Dark</div>
+      </div>
+      <div>
+        <div class="swatch" style="background:#2e9963;"></div>
+        <div class="swatch-label">CTA</div>
+      </div>
+    </div>
+    <div class="palette-desc">Sky blue page background — more noticeable, more expressive. White cards float visibly on the blue, creating a fresh, open feel. Closest to "light blue" in the literal sense.</div>
+  </div>
+
+</div>

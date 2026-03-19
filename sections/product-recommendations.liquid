@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — sections/product-recommendations.liquid
+  Sprout — sections/product-recommendations.liquid
   "Customers Also Bought" powered by Shopify's product recommendations API.
   Matches 2-tone cream/slate aesthetic.
   Add to templates/product.json alongside main-product to activate.
@@ -38,19 +38,19 @@
   display: flex; align-items: center; justify-content: space-between;
 }
 .cv-recs__title {
-  font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
-  font-size: 1.25rem; font-weight: 700; color: var(--cv-fg, #1c1f36);
+  font-family: var(--cv-font-head, 'Nunito', system-ui, sans-serif);
+  font-size: 1.25rem; font-weight: 700; color: var(--cv-fg, #0A160D);
 }
 .cv-recs__title::before {
   content: ''; display: block;
   width: 40px; height: 3px;
-  background-color: #2e9963;
+  background-color: #C59B43;
   margin-bottom: 12px;
 }
 @media (min-width: 768px) { .cv-recs__title { font-size: 1.5rem; } }
 .cv-recs__all {
   font-size: 0.875rem; font-weight: 500;
-  color: var(--cv-primary, #1e3a5f); text-decoration: none;
+  color: var(--cv-primary, #2C4731); text-decoration: none;
   transition: opacity 0.15s;
 }
 .cv-recs__all:hover { opacity: 0.7; }
@@ -67,7 +67,7 @@
 .cv-rec-card {
   display: flex; flex-direction: column; gap: 0.75rem;
   padding: 0.875rem;
-  border: 1px solid var(--cv-border, #c5d8ee);
+  border: 1px solid var(--cv-border, #BDC9B6);
   border-radius: 1rem;
   background: var(--cv-card, #ffffff);
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
@@ -75,13 +75,13 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .cv-rec-card:hover {
-  border-color: rgba(30,58,95,0.25);
+  border-color: rgba(44,71,49,0.25);
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 .cv-rec-card__img-wrap {
   position: relative; aspect-ratio: 1/1;
   overflow: hidden; border-radius: 0.5rem;
-  background: var(--cv-secondary, #e0eaf5);
+  background: var(--cv-secondary, #E8EBE3);
 }
 .cv-rec-card__img-wrap img {
   width: 100%; height: 100%; object-fit: cover; display: block;
@@ -90,29 +90,29 @@
 .cv-rec-card:hover .cv-rec-card__img-wrap img { transform: scale(1.05); }
 .cv-rec-card__sale {
   position: absolute; top: 0.5rem; left: 0.5rem;
-  background: var(--cv-success, #2e9963); color: #fff;
+  background: var(--cv-success, #C59B43); color: #fff;
   font-size: 0.625rem; font-weight: 700;
   padding: 0.125rem 0.375rem; border-radius: 4px;
 }
 .cv-rec-card__info    { display: flex; flex-direction: column; gap: 0.25rem; }
 .cv-rec-card__name    { font-size: 0.875rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cv-rec-card__type    { font-size: 0.75rem; color: var(--cv-muted-fg, #6b7fa8); }
+.cv-rec-card__type    { font-size: 0.75rem; color: var(--cv-muted-fg, #425E3B); }
 .cv-rec-card__prices  { display: flex; align-items: baseline; gap: 0.5rem; margin-top: 0.25rem; }
 .cv-rec-card__price   {
-  font-family: var(--cv-font-head, 'Space Grotesk', system-ui, sans-serif);
+  font-family: var(--cv-font-head, 'Nunito', system-ui, sans-serif);
   font-size: 1rem; font-weight: 700;
 }
-.cv-rec-card__compare { font-size: 0.75rem; color: var(--cv-muted-fg, #6b7fa8); text-decoration: line-through; }
+.cv-rec-card__compare { font-size: 0.75rem; color: var(--cv-muted-fg, #425E3B); text-decoration: line-through; }
 
 /* Skeleton loading */
 .cv-rec-skeleton {
   border-radius: 1rem; background: var(--cv-card, #fff);
-  border: 1px solid var(--cv-border, #c5d8ee); padding: 0.875rem;
+  border: 1px solid var(--cv-border, #BDC9B6); padding: 0.875rem;
   display: flex; flex-direction: column; gap: 0.75rem;
   animation: cv-rec-pulse 1.5s ease-in-out infinite;
 }
-.cv-rec-skeleton__img  { aspect-ratio:1/1; background:var(--cv-secondary,#e0eaf5); border-radius:0.5rem; }
-.cv-rec-skeleton__line { height: 0.75rem; border-radius: 9999px; background: var(--cv-secondary, #e0eaf5); }
+.cv-rec-skeleton__img  { aspect-ratio:1/1; background:var(--cv-secondary,#E8EBE3); border-radius:0.5rem; }
+.cv-rec-skeleton__line { height: 0.75rem; border-radius: 9999px; background: var(--cv-secondary, #E8EBE3); }
 .cv-rec-skeleton__line--short { width: 55%; }
 @keyframes cv-rec-pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
 

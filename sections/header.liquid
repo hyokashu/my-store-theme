@@ -1,5 +1,5 @@
 {% comment %}
-  Supply District — sections/header.liquid
+  Sprout — sections/header.liquid
   Full-featured two-row sticky header with mega menu and mobile slide-in.
 
   Desktop (≥ 768px):
@@ -31,11 +31,11 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 /* ================================================================
-   Supply District Header — sdh-* namespace
+   Sprout Header — sdh-* namespace
    Rendered inline; loads after sd-header.css so equal-specificity
    rules here win. !important used only where sd-header.css would
    otherwise override via a media-query rule.
@@ -55,7 +55,7 @@
 /* ── Logo image — schema-driven max-width ─────────────────────── */
 .sd-header__logo-img {
   max-width: {{ logo_width }}px !important;
-  max-height: 3.25rem !important;
+  max-height: none !important; /* Removed height limit so width can scale */
   width: auto;
   height: auto;
   display: block;
@@ -64,7 +64,7 @@
 
 /* ── Logo text fallback ───────────────────────────────────────── */
 .sd-header__logo-text {
-  font-family: var(--cv-font-head, 'Space Grotesk', sans-serif);
+  font-family: var(--cv-font-head, 'Nunito', sans-serif);
   font-size: 1.375rem;
   font-weight: 800;
   color: var(--sd-header-fg, #1a1a2e);
@@ -101,7 +101,8 @@
     max-width: 90rem;
     margin: 0 auto;
     padding: 0 1.5rem;
-    height: 4.5rem;
+    min-height: 4.5rem;
+    height: auto; /* Allows header to grow with the larger logo */
     gap: 1.5rem;
   }
   .sdh-desktop-search {
@@ -127,7 +128,13 @@
 }
 
 @media (min-width: 768px) {
-  .sd-header__logo { justify-content: flex-start; }
+  .sd-header__logo { 
+    justify-content: flex-start; 
+    flex: 1; /* Pushes the logo container closer to the search bar */
+  }
+  .sd-header__icons {
+    flex: 1; /* Balances the layout on the right side */
+  }
 }
 
 .sd-header__logo-link {
@@ -340,8 +347,8 @@
 }
 .sdh-nav__link:hover,
 .sdh-nav__item.is-open > .sdh-nav__link {
-  color: var(--cv-primary, #1e3a5f);
-  border-bottom-color: var(--color-cta-primary, #2e9963);
+  color: var(--cv-primary, #2C4731);
+  border-bottom-color: var(--color-cta-primary, #C59B43);
 }
 
 .sdh-nav__chevron {
@@ -349,7 +356,7 @@
   height: 0.75rem;
   transition: transform 0.2s ease;
   pointer-events: none;
-  color: var(--cv-muted-fg, #6b7fa8);
+  color: var(--cv-muted-fg, #425E3B);
   flex-shrink: 0;
 }
 .sdh-nav__item.is-open .sdh-nav__chevron { transform: rotate(180deg); }
@@ -381,7 +388,7 @@
   top: 100%;
   z-index: 200;
   background: #fff;
-  border-top: 2.5px solid var(--color-cta-primary, #2e9963);
+  border-top: 2.5px solid var(--color-cta-primary, #C59B43);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.13);
   /* Hidden state */
   visibility: hidden;
@@ -412,7 +419,7 @@
 /* ── L1 Sidebar ────────────────────────────────────── */
 .sdh-mega__sidebar {
   background: var(--cv-secondary, #f3f2ef);
-  border-right: 1px solid var(--cv-border, #c5d8ee);
+  border-right: 1px solid var(--cv-border, #BDC9B6);
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
@@ -433,18 +440,18 @@
   font-family: var(--cv-font-sans, 'Inter', sans-serif);
   font-size: 0.9375rem;
   font-weight: 500;
-  color: var(--cv-fg, #1c2a3e);
+  color: var(--cv-fg, #1C2B1F);
   transition: background 0.12s, color 0.12s;
   border-left: 3px solid transparent;
 }
 .sdh-mega__sidebar-item:hover {
   background: var(--cv-secondary-hover, #e8e6e2);
-  color: var(--cv-primary, #1e3a5f);
+  color: var(--cv-primary, #2C4731);
 }
 .sdh-mega__sidebar-item.is-active {
   background: #fff;
-  color: var(--color-cta-primary, #2e9963);
-  border-left-color: var(--color-cta-primary, #2e9963);
+  color: var(--color-cta-primary, #C59B43);
+  border-left-color: var(--color-cta-primary, #C59B43);
   font-weight: 600;
 }
 .sdh-mega__sidebar-item svg {
@@ -486,20 +493,20 @@
   padding: 0.5rem 0.625rem;
   border-radius: var(--cv-radius, 0.5rem);
   text-decoration: none;
-  color: var(--cv-fg, #1c2a3e);
+  color: var(--cv-fg, #1C2B1F);
   font-family: var(--cv-font-sans, 'Inter', sans-serif);
   font-size: 0.9375rem;
   font-weight: 500;
   transition: background 0.15s, color 0.15s;
 }
 .sdh-mega__col-link:hover {
-  background: var(--cv-secondary, #e0eaf5);
-  color: var(--cv-primary, #1e3a5f);
+  background: var(--cv-secondary, #E8EBE3);
+  color: var(--cv-primary, #2C4731);
 }
 .sdh-mega__col-link svg {
   width: 0.875rem;
   height: 0.875rem;
-  color: var(--cv-muted-fg, #6b7fa8);
+  color: var(--cv-muted-fg, #425E3B);
   flex-shrink: 0;
   pointer-events: none;
 }
@@ -509,7 +516,7 @@
   border-radius: calc(var(--cv-radius, 0.5rem) * 1.5);
   overflow: hidden;
   box-shadow: var(--cv-shadow, 0 1px 3px rgba(0,0,0,0.07));
-  border: 1px solid var(--cv-border, #c5d8ee);
+  border: 1px solid var(--cv-border, #BDC9B6);
 }
 
 .sdh-mega__promo-img {
@@ -522,7 +529,7 @@
 .sdh-mega__promo-placeholder {
   width: 100%;
   aspect-ratio: 4 / 3;
-  background: var(--cv-secondary, #e0eaf5);
+  background: var(--cv-secondary, #E8EBE3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -530,7 +537,7 @@
 .sdh-mega__promo-placeholder svg {
   width: 2.5rem;
   height: 2.5rem;
-  color: var(--cv-border, #c5d8ee);
+  color: var(--cv-border, #BDC9B6);
 }
 
 .sdh-mega__promo-body {
@@ -539,14 +546,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  border-top: 1px solid var(--cv-border, #c5d8ee);
+  border-top: 1px solid var(--cv-border, #BDC9B6);
 }
 
 .sdh-mega__promo-heading {
-  font-family: var(--cv-font-head, 'Space Grotesk', sans-serif);
+  font-family: var(--cv-font-head, 'Nunito', sans-serif);
   font-size: 0.9375rem;
   font-weight: 700;
-  color: var(--cv-primary, #1e3a5f);
+  color: var(--cv-primary, #2C4731);
   margin: 0;
   line-height: 1.35;
 }
@@ -556,7 +563,7 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.5rem 1rem;
-  background: var(--color-cta-primary, #2e9963);
+  background: var(--color-cta-primary, #C59B43);
   color: #fff;
   border-radius: var(--cv-radius, 0.5rem);
   text-decoration: none;
@@ -567,7 +574,7 @@
   white-space: nowrap;
   align-self: flex-start;
 }
-.sdh-mega__promo-btn:hover { background: var(--color-cta-primary-hover, #25834f); }
+.sdh-mega__promo-btn:hover { background: var(--color-cta-primary-hover, #A8832C); }
 .sdh-mega__promo-btn svg  { width: 0.875rem; height: 0.875rem; pointer-events: none; }
 
 /* ================================================================
@@ -595,7 +602,7 @@
   left: 0;
   bottom: 0;
   width: min(85vw, 360px);
-  background: var(--cv-bg, #f0f5fb);
+  background: var(--cv-bg, #FDFBF2);
   z-index: 901;
   display: flex;
   flex-direction: column;
@@ -612,16 +619,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.125rem 1.25rem;
-  border-bottom: 1px solid var(--cv-border, #c5d8ee);
+  border-bottom: 1px solid var(--cv-border, #BDC9B6);
   flex-shrink: 0;
   background: var(--cv-card, #fff);
 }
 
 .sdh-mob-menu__title {
-  font-family: var(--cv-font-head, 'Space Grotesk', sans-serif);
+  font-family: var(--cv-font-head, 'Nunito', sans-serif);
   font-size: 1.0625rem;
   font-weight: 800;
-  color: var(--cv-primary, #1e3a5f);
+  color: var(--cv-primary, #2C4731);
   letter-spacing: -0.01em;
 }
 
@@ -632,15 +639,15 @@
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 50%;
-  background: var(--cv-secondary, #e0eaf5);
+  background: var(--cv-secondary, #E8EBE3);
   border: none;
   cursor: pointer;
-  color: var(--cv-fg, #1c2a3e);
+  color: var(--cv-fg, #1C2B1F);
   transition: background 0.15s;
   padding: 0;
   flex-shrink: 0;
 }
-.sdh-mob-menu__close:hover { background: var(--cv-border, #c5d8ee); }
+.sdh-mob-menu__close:hover { background: var(--cv-border, #BDC9B6); }
 .sdh-mob-menu__close svg   { width: 1.125rem; height: 1.125rem; pointer-events: none; }
 
 /* Scrollable nav list */
@@ -652,7 +659,7 @@
 }
 
 .sdh-mob-nav__item {
-  border-bottom: 1px solid var(--cv-border, #c5d8ee);
+  border-bottom: 1px solid var(--cv-border, #BDC9B6);
 }
 .sdh-mob-nav__item:last-child { border-bottom: none; }
 
@@ -664,7 +671,7 @@
   width: 100%;
   padding: 1rem 1.25rem;
   text-decoration: none;
-  color: var(--cv-fg, #1c2a3e);
+  color: var(--cv-fg, #1C2B1F);
   font-family: var(--cv-font-sans, 'Inter', sans-serif);
   font-size: 1.0625rem;
   font-weight: 600;
@@ -675,8 +682,8 @@
   transition: color 0.15s, background 0.15s;
   line-height: 1.3;
 }
-.sdh-mob-nav__link:hover      { color: var(--cv-primary, #1e3a5f); background: rgba(30,58,95,0.03); }
-.sdh-mob-nav__link.is-open    { color: var(--cv-primary, #1e3a5f); }
+.sdh-mob-nav__link:hover      { color: var(--cv-primary, #2C4731); background: rgba(44,71,49,0.03); }
+.sdh-mob-nav__link.is-open    { color: var(--cv-primary, #2C4731); }
 
 .sdh-mob-nav__chevron {
   width: 1rem;
@@ -684,7 +691,7 @@
   flex-shrink: 0;
   transition: transform 0.25s ease;
   pointer-events: none;
-  color: var(--cv-muted-fg, #6b7fa8);
+  color: var(--cv-muted-fg, #425E3B);
 }
 .sdh-mob-nav__link.is-open .sdh-mob-nav__chevron { transform: rotate(180deg); }
 
@@ -706,21 +713,21 @@
   gap: 0.5rem;
   padding: 0.75rem 1.25rem 0.75rem 1.75rem;
   text-decoration: none;
-  color: var(--cv-muted-fg, #6b7fa8);
+  color: var(--cv-muted-fg, #425E3B);
   font-family: var(--cv-font-sans, 'Inter', sans-serif);
   font-size: 0.9375rem;
   font-weight: 500;
-  border-bottom: 1px solid var(--cv-border, #c5d8ee);
+  border-bottom: 1px solid var(--cv-border, #BDC9B6);
   transition: color 0.15s, background 0.15s;
 }
 .sdh-mob-nav__sub-link:last-child { border-bottom: none; }
-.sdh-mob-nav__sub-link:hover      { color: var(--cv-primary, #1e3a5f); background: var(--cv-secondary, #e0eaf5); }
-.sdh-mob-nav__sub-link::before    { content: '—'; font-size: 0.6875rem; color: var(--cv-border, #c5d8ee); flex-shrink: 0; }
+.sdh-mob-nav__sub-link:hover      { color: var(--cv-primary, #2C4731); background: var(--cv-secondary, #E8EBE3); }
+.sdh-mob-nav__sub-link::before    { content: '—'; font-size: 0.6875rem; color: var(--cv-border, #BDC9B6); flex-shrink: 0; }
 
 /* Footer CTA */
 .sdh-mob-menu__footer {
   padding: 1.25rem;
-  border-top: 1px solid var(--cv-border, #c5d8ee);
+  border-top: 1px solid var(--cv-border, #BDC9B6);
   flex-shrink: 0;
 }
 
@@ -731,8 +738,8 @@
   gap: 0.5rem;
   width: 100%;
   padding: 0.875rem 1rem;
-  background: var(--cv-primary, #1e3a5f);
-  color: var(--cv-primary-fg, #eef5fc);
+  background: var(--cv-primary, #2C4731);
+  color: var(--cv-primary-fg, #FDFBF2);
   border-radius: var(--cv-radius, 0.5rem);
   text-decoration: none;
   font-family: var(--cv-font-sans, 'Inter', sans-serif);
@@ -740,13 +747,13 @@
   font-weight: 700;
   transition: background 0.15s;
 }
-.sdh-mob-menu__footer-cta:hover { background: #1c1f36; }
+.sdh-mob-menu__footer-cta:hover { background: #0A160D; }
 .sdh-mob-menu__footer-cta svg   { width: 1.125rem; height: 1.125rem; pointer-events: none; }
 
 /* ── Mobile quick-link pills ── */
 .sdh-quick-links { display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 0.625rem 1rem 0.875rem; }
-.sdh-quick-link { font-size: 0.8125rem; font-weight: 600; padding: 0.375rem 0.875rem; border-radius: 9999px; background: var(--sdh-secondary, #f3f4f6); border: 1px solid var(--sdh-border, #dde3ed); color: var(--sdh-fg, #1c2a3e); text-decoration: none; white-space: nowrap; transition: background 0.15s, color 0.15s; }
-.sdh-quick-link:hover, .sdh-quick-link:focus { background: var(--sdh-primary, #1e3a5f); color: #fff; border-color: var(--sdh-primary, #1e3a5f); outline: none; }
+.sdh-quick-link { font-size: 0.8125rem; font-weight: 600; padding: 0.375rem 0.875rem; border-radius: 9999px; background: var(--sdh-secondary, #f3f4f6); border: 1px solid var(--sdh-border, #dde3ed); color: var(--sdh-fg, #1C2B1F); text-decoration: none; white-space: nowrap; transition: background 0.15s, color 0.15s; }
+.sdh-quick-link:hover, .sdh-quick-link:focus { background: var(--sdh-primary, #2C4731); color: #fff; border-color: var(--sdh-primary, #2C4731); outline: none; }
 @media (min-width: 768px) { .sdh-quick-links { display: none; } }
 </style>
 
@@ -1178,7 +1185,7 @@
 
 <script>
 /* ================================================================
-   Supply District Header JS — sdh-* namespace
+   Sprout Header JS — sdh-* namespace
    1. Desktop mega menu with 150ms hover-intent close delay
    2. Mobile menu open / close
    3. Mobile search toggle
@@ -1394,9 +1401,9 @@
       "id": "logo_max_width",
       "label": "Logo max width (px)",
       "min": 80,
-      "max": 300,
+      "max": 700,
       "step": 10,
-      "default": 160
+      "default": 220
     },
     {
       "type": "link_list",

@@ -1,0 +1,309 @@
+<style>
+  /* ── Palette preview banner ── */
+  .palette-bar {
+    display: flex; gap: 0; border-radius: 8px; overflow: hidden;
+    height: 40px; margin-bottom: 1.5rem; border: 1px solid rgba(0,0,0,0.08);
+  }
+  .palette-bar div { flex: 1; }
+
+  /* ── Token table ── */
+  .token-table {
+    width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 1.5rem;
+  }
+  .token-table th {
+    text-align: left; padding: 6px 10px; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.07em; color: #6b7280;
+    border-bottom: 2px solid #e5e7eb; background: #f9fafb;
+  }
+  .token-table td {
+    padding: 7px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: middle;
+  }
+  .token-table tr:last-child td { border-bottom: none; }
+  .token-name { font-family: monospace; font-size: 11px; color: #374151; font-weight: 600; }
+  .swatch-cell { display: flex; align-items: center; gap: 6px; }
+  .sw { width: 22px; height: 22px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; }
+  .hex { font-family: monospace; font-size: 11px; color: #6b7280; }
+  .arrow { color: #9ca3af; font-size: 14px; text-align: center; }
+  .changed { background: #f0f7ff; }
+  .unchanged { opacity: 0.6; }
+  .tag {
+    display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 5px;
+    border-radius: 3px; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .tag-new { background: #dbeafe; color: #1d4ed8; }
+  .tag-same { background: #f3f4f6; color: #6b7280; }
+
+  /* ── Section divider ── */
+  .section-head {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #9ca3af; padding: 10px 0 4px;
+    border-top: 1px solid #e5e7eb; margin-top: 0.5rem;
+  }
+
+  /* ── Mini preview ── */
+  .preview-wrap {
+    border: 1px solid #c5d8ee; border-radius: 10px; overflow: hidden;
+    max-width: 400px; margin: 0 auto 1.5rem; font-family: system-ui, sans-serif;
+  }
+  .prev-announce { background: #1e3a5f; color: #e8f2fc; padding: 5px 12px; font-size: 9px; font-weight: 600; letter-spacing: 0.05em; text-align: center; }
+  .prev-header { background: #fff; border-bottom: 1px solid #c5d8ee; padding: 8px 12px; display: flex; align-items: center; gap: 8px; }
+  .prev-logo { font-size: 12px; font-weight: 800; color: #1e3a5f; }
+  .prev-nav { display: flex; gap: 8px; margin-left: 4px; }
+  .prev-nav a { font-size: 9px; font-weight: 700; color: #1e3a5f; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none; }
+  .prev-body { background: #f0f5fb; padding: 12px; }
+  .prev-card { background: #fff; border: 1px solid #c5d8ee; border-radius: 8px; padding: 12px; display: flex; gap: 10px; margin-bottom: 8px; }
+  .prev-img { width: 70px; height: 70px; background: #e0eaf5; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .prev-info { flex: 1; }
+  .prev-badge { background: #2e9963; color: #fff; font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 3px; display: inline-block; margin-bottom: 4px; }
+  .prev-title { font-size: 13px; font-weight: 700; color: #1e3a5f; margin-bottom: 2px; }
+  .prev-price { font-size: 16px; font-weight: 800; color: #1e3a5f; margin-bottom: 6px; }
+  .prev-btn { background: #2e9963; color: #fff; border-radius: 5px; padding: 6px 12px; font-size: 10px; font-weight: 700; display: inline-block; }
+  .prev-trust { background: #1e3a5f; border-radius: 6px; padding: 7px 12px; margin-bottom: 8px; display: flex; gap: 12px; justify-content: center; }
+  .prev-trust span { color: #e8f2fc; font-size: 8px; font-weight: 600; }
+  .prev-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .prev-pcard { background: #fff; border: 1px solid #c5d8ee; border-radius: 6px; padding: 6px; }
+  .prev-pimg { height: 50px; background: #e0eaf5; border-radius: 4px; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .prev-pname { font-size: 9px; font-weight: 600; color: #1e3a5f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .prev-pprice { font-size: 10px; font-weight: 800; color: #1e3a5f; }
+
+  /* ── Files list ── */
+  .file-list { list-style: none; padding: 0; margin: 0; }
+  .file-list li {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 5px 0; border-bottom: 1px solid #f0f0f0; font-size: 12px;
+  }
+  .file-list li:last-child { border-bottom: none; }
+  .fname { font-family: monospace; font-size: 11px; color: #1d4ed8; }
+  .fdesc { color: #6b7280; }
+</style>
+
+<h2>Powder Blue Design — Full Spec</h2>
+<p class="subtitle">Complete token map and preview. Confirm this is right before I write the spec doc.</p>
+
+<!-- Palette strip -->
+<div class="palette-bar">
+  <div style="background:#f0f5fb;" title="--cv-bg page background"></div>
+  <div style="background:#ffffff;border-right:1px solid #c5d8ee;" title="--cv-card white cards"></div>
+  <div style="background:#e0eaf5;" title="--cv-secondary subtle sections"></div>
+  <div style="background:#c5d8ee;" title="--cv-border borders & dividers"></div>
+  <div style="background:#6b7fa8;" title="--cv-muted-fg secondary text"></div>
+  <div style="background:#1e3a5f;" title="--cv-primary dark anchor"></div>
+  <div style="background:#2e9963;" title="--color-cta-primary"></div>
+  <div style="background:#c94030;" title="--cv-destructive"></div>
+  <div style="background:#d4783a;" title="--cv-star"></div>
+</div>
+
+<!-- Preview -->
+<div class="preview-wrap">
+  <div class="prev-announce">✦ Authentic Cards · Free Shipping Over $100 · Same-Day Dispatch ✦</div>
+  <div class="prev-header">
+    <span class="prev-logo">Supply District</span>
+    <nav class="prev-nav">
+      <a>Pokémon</a><a>One Piece</a><a>Yu-Gi-Oh</a><a style="color:#c94030;">Sale</a>
+    </nav>
+  </div>
+  <div class="prev-body">
+    <div class="prev-card">
+      <div class="prev-img">🃏</div>
+      <div class="prev-info">
+        <div class="prev-badge">NEW · AUTHENTIC</div>
+        <div class="prev-title">Charizard ex SAR</div>
+        <div class="prev-price">$289.99</div>
+        <div class="prev-btn">Add to Cart</div>
+      </div>
+    </div>
+    <div class="prev-trust">
+      <span>🛡 100% Authentic</span>
+      <span>🚚 Same-Day Dispatch</span>
+      <span>↩ 14-Day Returns</span>
+      <span>🔒 Secure Checkout</span>
+    </div>
+    <div class="prev-grid">
+      <div class="prev-pcard"><div class="prev-pimg">📦</div><div class="prev-pname">Booster Box SV</div><div class="prev-pprice">$149.99</div></div>
+      <div class="prev-pcard"><div class="prev-pimg">🎴</div><div class="prev-pname">Elite Trainer</div><div class="prev-pprice">$64.99</div></div>
+      <div class="prev-pcard"><div class="prev-pimg">⭐</div><div class="prev-pname">Booster Pack</div><div class="prev-pprice">$7.99</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Token table -->
+<div class="section-head">Content System — CV Tokens</div>
+<table class="token-table">
+  <tr><th>Token</th><th>Before (Warm Cream)</th><th></th><th>After (Powder Blue)</th><th></th></tr>
+
+  <tr class="changed">
+    <td class="token-name">--cv-bg</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#f7f6f3;"></div><span class="hex">#f7f6f3</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#f0f5fb;"></div><span class="hex">#f0f5fb</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="unchanged">
+    <td class="token-name">--cv-fg</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#1c1f36;"></div><span class="hex">#1c1f36</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#1c2a3e;"></div><span class="hex">#1c2a3e</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="unchanged">
+    <td class="token-name">--cv-card</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#ffffff;border:1px solid #eee;"></div><span class="hex">#ffffff</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#ffffff;border:1px solid #eee;"></div><span class="hex">#ffffff</span></div></td>
+    <td><span class="tag tag-same">same</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--cv-primary</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#282d52;"></div><span class="hex">#282d52</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#1e3a5f;"></div><span class="hex">#1e3a5f</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--cv-primary-fg</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#f8f7f5;border:1px solid #eee;"></div><span class="hex">#f8f7f5</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#eef5fc;border:1px solid #c5d8ee;"></div><span class="hex">#eef5fc</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--cv-secondary</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#eeecea;"></div><span class="hex">#eeecea</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#e0eaf5;"></div><span class="hex">#e0eaf5</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--cv-muted-fg</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#76798c;"></div><span class="hex">#76798c</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#6b7fa8;"></div><span class="hex">#6b7fa8</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--cv-border</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#dedad5;"></div><span class="hex">#dedad5</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#c5d8ee;"></div><span class="hex">#c5d8ee</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="unchanged">
+    <td class="token-name">--cv-destructive</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#c94030;"></div><span class="hex">#c94030</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#c94030;"></div><span class="hex">#c94030</span></div></td>
+    <td><span class="tag tag-same">same</span></td>
+  </tr>
+  <tr class="unchanged">
+    <td class="token-name">--cv-success</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#2e9963;"></div><span class="hex">#2e9963</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#2e9963;"></div><span class="hex">#2e9963</span></div></td>
+    <td><span class="tag tag-same">same</span></td>
+  </tr>
+  <tr class="unchanged">
+    <td class="token-name">--cv-star</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#d4783a;"></div><span class="hex">#d4783a</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#d4783a;"></div><span class="hex">#d4783a</span></div></td>
+    <td><span class="tag tag-same">same</span></td>
+  </tr>
+  <tr class="unchanged">
+    <td class="token-name">--color-cta-primary</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#2e9963;"></div><span class="hex">#2e9963</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#2e9963;"></div><span class="hex">#2e9963</span></div></td>
+    <td><span class="tag tag-same">same</span></td>
+  </tr>
+</table>
+
+<div class="section-head">Header System — SD Tokens</div>
+<table class="token-table">
+  <tr><th>Token</th><th>Before</th><th></th><th>After</th><th></th></tr>
+  <tr class="changed">
+    <td class="token-name">--sd-announce-bg</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#12111a;"></div><span class="hex">#12111a</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#1e3a5f;"></div><span class="hex">#1e3a5f</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--sd-announce-fg</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#e8e6f0;border:1px solid #ddd;"></div><span class="hex">#e8e6f0</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#e8f2fc;border:1px solid #ddd;"></div><span class="hex">#e8f2fc</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--sd-announce-accent</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#a78bfa;"></div><span class="hex">#a78bfa (violet)</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#93c5fd;"></div><span class="hex">#93c5fd (sky blue)</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="unchanged">
+    <td class="token-name">--sd-header-bg</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#fff;border:1px solid #eee;"></div><span class="hex">#ffffff</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#fff;border:1px solid #eee;"></div><span class="hex">#ffffff</span></div></td>
+    <td><span class="tag tag-same">same</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--sd-header-fg</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#1a1a2e;"></div><span class="hex">#1a1a2e</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#1e3a5f;"></div><span class="hex">#1e3a5f</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--sd-header-border</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#e5e7eb;"></div><span class="hex">#e5e7eb</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#c5d8ee;"></div><span class="hex">#c5d8ee</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--sd-search-bg</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#f3f4f6;"></div><span class="hex">#f3f4f6</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#f0f5fb;"></div><span class="hex">#f0f5fb</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--sd-search-border</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#d1d5db;"></div><span class="hex">#d1d5db</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#c5d8ee;"></div><span class="hex">#c5d8ee</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+  <tr class="changed">
+    <td class="token-name">--sd-search-focus</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#282d52;"></div><span class="hex">#282d52</span></div></td>
+    <td class="arrow">→</td>
+    <td><div class="swatch-cell"><div class="sw" style="background:#1e3a5f;"></div><span class="hex">#1e3a5f</span></div></td>
+    <td><span class="tag tag-new">changed</span></td>
+  </tr>
+</table>
+
+<div class="section-head">Files to Update</div>
+<ul class="file-list">
+  <li><span class="fname">assets/sd-header.css</span><span class="fdesc">SD tokens + hardcoded rgba(40,45,82,…) instances</span></li>
+  <li><span class="fname">assets/sd-collection.css</span><span class="fdesc">CV tokens + hardcoded hex values throughout</span></li>
+  <li><span class="fname">sections/main-home.liquid</span><span class="fdesc">CV tokens + hero slide gradients + hardcoded values</span></li>
+  <li><span class="fname">sections/main-product.liquid</span><span class="fdesc">CV tokens + hardcoded hex values</span></li>
+  <li><span class="fname">sections/main-cart.liquid</span><span class="fdesc">CV tokens</span></li>
+  <li><span class="fname">sections/cart-drawer.liquid</span><span class="fdesc">CV tokens</span></li>
+  <li><span class="fname">sections/hero-tcg.liquid</span><span class="fdesc">CV tokens</span></li>
+  <li><span class="fname">sections/trust-anchors.liquid</span><span class="fdesc">CV tokens</span></li>
+  <li><span class="fname">sections/about-supply-district.liquid</span><span class="fdesc">CV tokens</span></li>
+  <li><span class="fname">sections/our-story.liquid</span><span class="fdesc">CV tokens</span></li>
+</ul>
+
+<p style="margin-top:1.5rem;font-size:13px;color:#374151;">
+  <strong>Strategy:</strong> Update token definitions in all files, then find-and-replace
+  hardcoded hex values that correspond to old tokens (<code>#282d52</code> → <code>#1e3a5f</code>,
+  <code>rgba(40,45,82,…)</code> → <code>rgba(30,58,95,…)</code>, <code>#f7f6f3</code> → <code>#f0f5fb</code>,
+  <code>#dedad5</code> → <code>#c5d8ee</code>, <code>#eeecea</code> → <code>#e0eaf5</code>).
+  Hero slide gradients updated to blue-tinted versions.
+  Warning colours (yellow tones in cart) kept as-is — they serve a semantic purpose.
+</p>

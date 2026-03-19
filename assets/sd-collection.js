@@ -1,5 +1,5 @@
 /* =============================================================
-   Supply District — sd-collection.js  v2
+   Sprout — sd-collection.js  v2
    ─────────────────────────────────────────────────────────────
    Handles:
      initSidebarAccordions()  — desktop sidebar filter group toggle

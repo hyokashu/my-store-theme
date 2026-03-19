@@ -1,0 +1,6 @@
+{"type":"server-started","port":55909,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:55909","screen_dir":"/Users/nicholas/Desktop/my-store-theme/.superpowers/brainstorm/2816-1773375701"}
+{"type":"screen-added","file":"/Users/nicholas/Desktop/my-store-theme/.superpowers/brainstorm/2816-1773375701/page-structure.html"}
+{"type":"screen-added","file":"/Users/nicholas/Desktop/my-store-theme/.superpowers/brainstorm/2816-1773375701/b-image-options.html"}
+{"source":"user-event","type":"click","text":"3\n    \n      Value pillars with photos\n      Each of the 3 value cards (Authentic, Protected, Fast) gets its own photo — product shots, packaging, warehouse. Richer than icon-only cards.\n      \n        \n          photo\n          Authentic\n        \n        \n          photo\n          Protected\n        \n        \n          photo\n          Fast","choice":"pillars-with-images","id":null,"timestamp":1773375983459}
+{"type":"screen-added","file":"/Users/nicholas/Desktop/my-store-theme/.superpowers/brainstorm/2816-1773375701/full-page-mockup.html"}
+{"type":"server-stopped","reason":"idle timeout"}

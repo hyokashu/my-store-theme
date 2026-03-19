@@ -1,24 +1,24 @@
 /* ============================================================
-   Supply District — sd-header.css
+   Sprout — sd-header.css
    Announcement bar + main header styles + sticky behaviour.
    All selectors are namespaced with sd- to avoid conflicts.
    ============================================================ */
 
 /* ── Design tokens ─────────────────────────────────────────── */
 :root {
-  --sd-announce-bg:     #1e3a5f;   /* near-black with a hint of purple */
-  --sd-announce-fg:     #e8f2fc;   /* off-white text */
-  --sd-announce-accent: #93c5fd;   /* soft violet for the icon/link hover */
+  --sd-announce-bg:     #2C4731;   /* forest canopy green — Enchanted Forest primary */
+  --sd-announce-fg:     #FDFBF2;   /* aged parchment text */
+  --sd-announce-accent: #C59B43;   /* gilded gold for icons/link hover */
   --sd-announce-height: 2.5rem;    /* used by sticky JS offset */
 
   --sd-header-bg:       #ffffff;
-  --sd-header-fg:       #1e3a5f;
-  --sd-header-border:   #c5d8ee;
-  --sd-header-height:   4.5rem;    /* comfortable desktop height */
+  --sd-header-fg:       #2C4731;
+  --sd-header-border:   #BDC9B6;
+  --sd-header-height:   5.5rem;    /* comfortable desktop height */
 
-  --sd-search-bg:       #f0f5fb;
-  --sd-search-border:   #c5d8ee;
-  --sd-search-focus:    #1e3a5f;   /* navy focus ring — matches store primary */
+  --sd-search-bg:       #FDFBF2;
+  --sd-search-border:   #BDC9B6;
+  --sd-search-focus:    #21496D;   /* deep river blue focus ring — Enchanted Forest accent */
   --sd-search-radius:   9999px;    /* fully pill-shaped */
 
   --sd-cart-badge-bg:   #dc2626;   /* red dot */
@@ -158,7 +158,7 @@
 
 .sd-header__inner {
   display:         grid;
-  grid-template-columns: 1fr 2fr 1fr;  /* logo | search | icons */
+  grid-template-columns: auto 1fr auto;  /* logo | search | icons */
   align-items:     center;
   max-width:       90rem;
   margin:          0 auto;
@@ -185,7 +185,7 @@
 }
 
 .sd-header__logo-img {
-  max-width:  200px;   /* overridden by JS from schema setting */
+  max-width:  260px;   /* overridden by JS from schema setting */
   max-height: calc(var(--sd-header-height) - 1.25rem);
   width:      auto;
   height:     auto;
@@ -252,7 +252,7 @@
 .sd-search-input::placeholder { color: #9ca3af; }
 .sd-search-input:focus {
   border-color: var(--sd-search-focus);
-  box-shadow:   0 0 0 3px rgba(30, 58, 95, 0.12);
+  box-shadow:   0 0 0 3px rgba(33, 73, 109, 0.12);
   background:   #ffffff;
 }
 /* Hide native clear button in WebKit */

@@ -12,6 +12,26 @@
     "main_home_faAae4": {
       "type": "main-home",
       "blocks": {
+        "hero_slide_qJtCnY": {
+          "type": "hero_slide",
+          "settings": {
+            "eyebrow_icon": "tag",
+            "eyebrow": "ITEM OBTAINED",
+            "title_line1": "Pokémon TCG",
+            "title_em": "Booster Boxes",
+            "description": "The sets you’ve been hunting for are finally back in the vault. Secure 100% authentic, factory-sealed booster boxes and ETBs, delivered to your door with premium packaging guarantees before they sell out.",
+            "cta1_label": "Shop Booster Boxes",
+            "cta1_url": "shopify://collections/pokemon-collection",
+            "cta2_label": "Shop All",
+            "cta2_url": "shopify://collections/pokemon-collection",
+            "bg_image": "shopify://shop_images/charizard-evolution-line-triple-art-extension-16-9-using-v0-tusizb7qpmwb1.webp",
+            "image": "shopify://shop_images/StoreCovers_1.png",
+            "badge_value": "Fast Dispatch",
+            "badge_label": "Ships within 24 hours",
+            "badge_icon": "clock",
+            "color_scheme": "2"
+          }
+        },
         "hero_slide_pj8jtq": {
           "type": "hero_slide",
           "settings": {
@@ -31,26 +51,6 @@
             "badge_label": "Verified sealed product",
             "badge_icon": "shield",
             "color_scheme": "1"
-          }
-        },
-        "hero_slide_qJtCnY": {
-          "type": "hero_slide",
-          "settings": {
-            "eyebrow_icon": "tag",
-            "eyebrow": "ITEM OBTAINED",
-            "title_line1": "Pokémon TCG",
-            "title_em": "Booster Boxes",
-            "description": "The sets you’ve been hunting for are finally back in the vault. Secure 100% authentic, factory-sealed booster boxes and ETBs, delivered to your door with premium packaging guarantees before they sell out.",
-            "cta1_label": "Shop Booster Boxes",
-            "cta1_url": "shopify://collections/pokemon-collection",
-            "cta2_label": "Shop All",
-            "cta2_url": "shopify://collections/pokemon-collection",
-            "bg_image": "shopify://shop_images/charizard-evolution-line-triple-art-extension-16-9-using-v0-tusizb7qpmwb1.webp",
-            "image": "shopify://shop_images/StoreCovers_1.png",
-            "badge_value": "Fast Dispatch",
-            "badge_label": "Ships within 24 hours",
-            "badge_icon": "clock",
-            "color_scheme": "2"
           }
         },
         "hero_slide_KR9c4n": {
@@ -151,7 +151,7 @@
           "settings": {
             "label": "Sale",
             "url": "shopify://collections/on-sale",
-            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-10_14-23-16-Photoroom.png",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-34_1.png",
             "icon": "shopping-bag",
             "is_sale": false
           }
@@ -161,7 +161,7 @@
           "settings": {
             "label": "Booster Boxes",
             "url": "",
-            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-10_14-38-04-Photoroom.png",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-23-23_1.png",
             "icon": "package",
             "is_sale": false
           }
@@ -182,7 +182,7 @@
           "settings": {
             "label": "Cases",
             "url": "",
-            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_e5q440e5q440e5q4-Photoroom.png",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-13_1.png",
             "icon": "layers",
             "is_sale": false
           }
@@ -192,7 +192,7 @@
           "settings": {
             "label": "Singles",
             "url": "",
-            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_tw66ketw66ketw66-Photoroom.png",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-18.png",
             "icon": "tag",
             "is_sale": false
           }
@@ -202,7 +202,7 @@
           "settings": {
             "label": "Promos",
             "url": "",
-            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_nyvlo1nyvlo1nyvl-Photoroom.png",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-41-28_1.png",
             "icon": "star",
             "is_sale": false
           }
@@ -212,7 +212,7 @@
           "settings": {
             "label": "Pokemon",
             "url": "",
-            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_c37fogc37fogc37f-Photoroom.png"
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-56-05_1.png"
           }
         },
         "brand_link_k4wXFB": {
@@ -220,7 +220,7 @@
           "settings": {
             "label": "One Piece",
             "url": "",
-            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_bccrjmbccrjmbccr-Photoroom.png"
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-49-21_1.png"
           }
         },
         "promo_banner_FqmJpP": {
@@ -337,8 +337,8 @@
         }
       },
       "block_order": [
-        "hero_slide_pj8jtq",
         "hero_slide_qJtCnY",
+        "hero_slide_pj8jtq",
         "hero_slide_KR9c4n",
         "trust_item_VgmMdE",
         "trust_item_nw3tnX",
@@ -378,27 +378,25 @@
         "hero_autoplay_ms": 5000,
         "featured_title": "Fan Favourites",
         "featured_subtitle": "Whether you're building your collection or buying your first box — these are going fast.",
-        "tab1_label": "One Piece",
-        "tab1_collection": "one-piece-all",
+        "tab1_label": "Booster boxes",
+        "tab1_collection": "pokemon-collection",
         "tab2_label": "Pokemon",
-        "tab2_collection": "pokemon-collection",
-        "tab3_label": "Best Sellers",
+        "tab2_collection": "one-piece-all",
+        "tab3_label": "One Piece",
         "tab3_collection": "",
         "tab1_icon": "none",
-        "tab1_custom_icon": "shopify://shop_images/Gemini_Generated_Image_bccrjmbccrjmbccr-Photoroom.png",
         "tab2_icon": "none",
-        "tab2_custom_icon": "shopify://shop_images/Gemini_Generated_Image_c37fogc37fogc37f-Photoroom.png",
         "tab3_icon": "none",
         "cat_title": "Browse by Category",
         "cat_subtitle": "Booster boxes, ETBs, cases, singles & more.",
         "show_about": true,
-        "about_title": "About CardVault",
+        "about_title": "About Sprout",
         "about_desc": "We got tired of crushed corners and sketchy reseals. Whether you're hunting the latest Japanese booster boxes or securing high-demand pre-orders, we deliver 100% authentic, factory-sealed product with the premium protection your pulls deserve.",
         "about_cta1_label": "Our Story",
         "about_cta1_url": "shopify://pages/about-us",
         "about_cta2_label": "Contact Us",
         "about_cta2_url": "",
-        "reviews_title": "Loved by Thousands of Players",
+        "reviews_title": "Loved by  Players",
         "show_newsletter": true,
         "nl_title": "Stay in the Loop",
         "nl_subtitle": "New drops, restocks, and exclusive deals delivered straight to your inbox.",

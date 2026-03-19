@@ -1,5 +1,5 @@
 /* ============================================================
-   Supply District — theme.js
+   Sprout — theme.js
    Global JS: sticky header shadow + cart badge live update.
    ============================================================ */
 

@@ -14,7 +14,7 @@
         "type": "announcement-bar",
         "settings": {
           "show_bar": true,
-          "promo_text": "Free Shipping on orders over $200",
+          "promo_text": "Free Shipping on orders over $250",
           "promo_url": "",
           "icon_show": true
         }
@@ -22,8 +22,8 @@
       "header": {
         "type": "header",
         "settings": {
-          "logo": "shopify://shop_images/hiroshima-box-cardbot-pokemon-center.webp",
-          "logo_max_width": 160,
+          "logo": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-37-09_1.png",
+          "logo_max_width": 280,
           "menu": "main-menu",
           "search_placeholder": "Search for sets, singles, or accessories...",
           "show_location": false,
@@ -34,18 +34,18 @@
         "type": "footer",
         "settings": {
           "tagline": "Your one-stop destination for sealed TCG products. Authentic. Affordable. Fast.",
-          "support_email": "support@supplydistrict.com",
-          "phone": "+61 3 0000 0000",
+          "support_email": "support@sprout.com",
+          "phone": "+61 425200785",
           "hours": "Mon–Fri: 9am – 5pm AEST",
           "quick_link_1_label": "FAQ",
-          "quick_link_1_url": "",
+          "quick_link_1_url": "shopify://pages/about-us",
           "quick_link_2_label": "Shipping & Returns",
-          "quick_link_2_url": "",
+          "quick_link_2_url": "shopify://blogs/news",
           "quick_link_3_label": "Track My Order",
-          "quick_link_3_url": "",
+          "quick_link_3_url": "shopify://products/eb-03-booster-box",
           "quick_link_4_label": "",
           "quick_link_4_url": "",
-          "address": "Supply District Pty Ltd\n123 Collector Way\nMelbourne VIC 3000\nAustralia",
+          "address": "Sprout\n123 Collector Way\nMelbourne VIC 3000\nAustralia",
           "abn": "",
           "social_intro": "Follow us for drops, pulls & community events.",
           "instagram_url": "",
