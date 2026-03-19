@@ -1,0 +1,604 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
+
+  .approaches-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 900px) {
+    .approaches-grid { grid-template-columns: 1fr; }
+  }
+
+  .approach-card {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fff;
+    position: relative;
+  }
+  .approach-card:hover {
+    border-color: #282d52;
+    box-shadow: 0 4px 20px rgba(40,45,82,0.12);
+  }
+  .approach-card.selected {
+    border-color: #2e9963;
+    box-shadow: 0 0 0 3px rgba(46,153,99,0.2);
+  }
+  .approach-card.selected::after {
+    content: "✓ Selected";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #2e9963;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .approach-label {
+    background: #282d52;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .approach-label span { opacity: 0.6; font-weight: 400; }
+
+  /* ── Shared Buy Box UI ── */
+  .bb {
+    font-family: 'DM Sans', sans-serif;
+    color: #1c1f36;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    font-size: 13px;
+  }
+
+  /* Badges */
+  .bb-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+  .bb-badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 8px; border-radius: 4px; border: 1px solid;
+  }
+  .bb-badge-sealed { background: rgba(40,45,82,0.07); color: #282d52; border-color: rgba(40,45,82,0.18); }
+  .bb-badge-auth   { background: #E6F4EA; color: #2e9963; border-color: rgba(46,153,99,0.3); }
+  .bb-badge-oos    { background: #FEE2E2; color: #DC2626; border-color: rgba(220,38,38,0.3); }
+  .bb-badge-future { background: #EEF2FF; color: #4F46E5; border-color: rgba(79,70,229,0.3); }
+
+  /* Title */
+  .bb-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22px; font-weight: 700; line-height: 1.2; color: #1c1f36; margin-bottom: 4px; }
+  .bb-subtitle { font-size: 12px; color: #76798c; margin-bottom: 10px; }
+
+  /* Sep */
+  .bb-sep { border: none; border-top: 1px solid #dedad5; margin: 10px 0; }
+
+  /* Price */
+  .bb-price { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 32px; font-weight: 700; color: #282d52; line-height: 1; }
+  .bb-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+  .bb-compare { font-size: 14px; color: #76798c; text-decoration: line-through; }
+  .bb-sale { background: #2e9963; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+  .bb-afterpay { font-size: 11px; color: #76798c; margin-bottom: 10px; }
+  .bb-afterpay strong { color: #1c1f36; }
+
+  /* Specs */
+  .bb-specs { display: flex; flex-direction: column; }
+  .bb-spec-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #dedad5; }
+  .bb-spec-row:last-child { border-bottom: none; }
+  .bb-spec-label { font-size: 11px; color: #76798c; }
+  .bb-spec-value { font-size: 12px; font-weight: 600; }
+
+  /* CTA Buttons */
+  .bb-btn-primary {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: #2e9963; color: #fff;
+    border: none; border-radius: 8px; height: 44px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; width: 100%; margin-bottom: 8px;
+  }
+  .bb-btn-oos {
+    background: #E5E7EB; color: #9CA3AF;
+    cursor: not-allowed;
+  }
+  .bb-btn-outline {
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; color: #2e9963;
+    border: 1.5px solid #2e9963; border-radius: 8px; height: 40px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; width: 100%; margin-bottom: 8px;
+  }
+  .bb-btn-notify {
+    background: #282d52; color: #fff;
+    border: none; border-radius: 8px; height: 44px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; width: 100%; margin-bottom: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .bb-btn-row { display: flex; gap: 8px; }
+  .bb-btn-icon {
+    width: 44px; height: 44px; border-radius: 8px; flex-shrink: 0;
+    border: 1px solid #dedad5; background: #fff; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #76798c;
+  }
+
+  /* Trust */
+  .bb-trust { display: flex; flex-direction: column; border: 1px solid #dedad5; border-radius: 8px; overflow: hidden; }
+  .bb-trust-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1px solid #dedad5; }
+  .bb-trust-item:last-child { border-bottom: none; }
+  .bb-trust-icon { width: 20px; height: 20px; color: #282d52; flex-shrink: 0; }
+  .bb-trust-title { font-size: 12px; font-weight: 600; }
+  .bb-trust-desc { font-size: 11px; color: #76798c; }
+
+  /* ── NEW: Demand Signal ── */
+  .bb-demand {
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(40,45,82,0.04); border: 1px solid rgba(40,45,82,0.1);
+    border-radius: 8px; padding: 8px 12px;
+  }
+  .bb-demand-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #76798c; }
+  .bb-demand-item strong { color: #1c1f36; font-size: 13px; }
+  .bb-demand-dot { width: 6px; height: 6px; background: #2e9963; border-radius: 50%; }
+  .bb-demand-dot-red { background: #DC2626; }
+
+  /* ── NEW: Social Proof Ticker ── */
+  .bb-ticker {
+    border: 1px solid #dedad5; border-radius: 8px; overflow: hidden;
+  }
+  .bb-ticker-header {
+    background: #f7f6f3; padding: 6px 12px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #76798c;
+    border-bottom: 1px solid #dedad5;
+  }
+  .bb-ticker-item { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-bottom: 1px solid #f0ede9; }
+  .bb-ticker-item:last-child { border-bottom: none; }
+  .bb-ticker-avatar {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(40,45,82,0.1); color: #282d52;
+    font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .bb-ticker-text { font-size: 11px; color: #1c1f36; }
+  .bb-ticker-time { font-size: 10px; color: #76798c; margin-left: auto; flex-shrink: 0; }
+
+  /* ── NEW: Hype Counter ── */
+  .bb-hype {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: #FFF7ED; border: 1px solid rgba(217,119,6,0.25); border-radius: 8px;
+  }
+  .bb-hype-icon { font-size: 20px; }
+  .bb-hype-text { font-size: 12px; color: #92400E; }
+  .bb-hype-text strong { display: block; font-size: 18px; color: #1c1f36; font-family: 'Cormorant Garamond', serif; font-weight: 700; line-height: 1; }
+
+  /* ── NEW: Notify Me Panel ── */
+  .bb-notify-panel {
+    background: #f7f6f3; border: 1px solid #dedad5; border-radius: 10px; padding: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .bb-notify-title { font-size: 13px; font-weight: 600; color: #1c1f36; }
+  .bb-notify-sub { font-size: 11px; color: #76798c; }
+  .bb-notify-input {
+    display: flex; gap: 6px;
+  }
+  .bb-notify-input-field {
+    flex: 1; border: 1px solid #dedad5; border-radius: 6px;
+    padding: 0 10px; height: 36px; font-size: 12px; font-family: 'DM Sans', sans-serif;
+    background: #fff; color: #76798c;
+  }
+  .bb-notify-input-btn {
+    background: #282d52; color: #fff; border: none; border-radius: 6px;
+    padding: 0 14px; height: 36px; font-size: 12px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif; cursor: pointer; white-space: nowrap;
+  }
+  .bb-notify-count { font-size: 11px; color: #76798c; }
+  .bb-notify-count strong { color: #282d52; }
+
+  /* ── NEW: Buy Box Card Wrapper (Approach B) ── */
+  .bb-card {
+    border: 1.5px solid #dedad5; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .bb-card-section {
+    padding: 14px 16px;
+    border-bottom: 1px solid #dedad5;
+  }
+  .bb-card-section:last-child { border-bottom: none; }
+
+  /* ── Qty ── */
+  .bb-qty-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .bb-qty-label { font-size: 12px; font-weight: 500; }
+  .bb-qty {
+    display: flex; align-items: center; border: 1px solid #dedad5; border-radius: 8px; overflow: hidden;
+    background: #fff;
+  }
+  .bb-qty-btn { padding: 6px 10px; background: none; border: none; cursor: pointer; color: #76798c; font-size: 16px; }
+  .bb-qty-num { padding: 6px 8px; font-size: 13px; font-weight: 600; min-width: 28px; text-align: center; }
+
+  /* Dispatch */
+  .bb-dispatch {
+    display: flex; align-items: center; gap: 6px; font-size: 11px; color: #76798c;
+    padding: 7px 10px; background: rgba(46,153,99,0.05); border: 1px solid rgba(46,153,99,0.15); border-radius: 6px;
+    margin-bottom: 10px;
+  }
+
+  /* Payment */
+  .bb-payment { display: flex; gap: 5px; flex-wrap: wrap; }
+  .bb-payment-badge {
+    border: 1px solid #dedad5; border-radius: 4px; padding: 2px 7px;
+    font-size: 10px; font-weight: 700; color: #76798c; background: #fff;
+  }
+
+  .approach-meta { padding: 12px 14px; border-top: 1px solid #f0ede9; background: #fafafa; }
+  .approach-meta h4 { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; color: #1c1f36; margin: 0 0 4px; }
+  .approach-meta p { font-family: 'DM Sans', sans-serif; font-size: 11px; color: #76798c; margin: 0; line-height: 1.5; }
+  .approach-meta .pros { color: #2e9963; font-size: 11px; margin-top: 5px; }
+  .approach-meta .cons { color: #c94030; font-size: 11px; }
+
+  .page-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; color: #1c1f36; margin-bottom: 4px; }
+  .page-sub { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #76798c; margin-bottom: 20px; }
+
+  .tab-row {
+    display: flex; gap: 8px; margin-bottom: 18px;
+  }
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 5px 12px; border-radius: 20px; border: 1.5px solid #dedad5;
+    background: #fff; cursor: pointer; color: #76798c;
+    transition: all 0.15s;
+  }
+  .tab-btn.active { background: #282d52; color: #fff; border-color: #282d52; }
+
+  .state-label {
+    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #76798c; margin-bottom: 8px;
+  }
+  .recommended-chip {
+    display: inline-block;
+    background: #2e9963; color: #fff;
+    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 10px; letter-spacing: 0.04em;
+    vertical-align: middle; margin-left: 6px;
+  }
+</style>
+
+<div class="page-title">Buy Box Redesign — 3 Approaches</div>
+<p class="page-sub">Showing the <strong>Available</strong> state by default. Toggle states above each column. Click a card to select your preferred approach.</p>
+
+<div class="approaches-grid">
+
+  <!-- ══════════════ APPROACH A ══════════════ -->
+  <div class="approach-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="approach-label">
+      Approach A — Demand Stack
+      <span>Signals-first</span>
+    </div>
+    <div class="bb" id="bb-a">
+
+      <!-- Badges -->
+      <div class="bb-badges">
+        <span class="bb-badge bb-badge-sealed">📦 Sealed</span>
+        <span class="bb-badge bb-badge-auth">✓ Authentic</span>
+      </div>
+
+      <!-- Title -->
+      <div class="bb-title">Pokémon SV Stellar Crown Booster Box</div>
+      <div class="bb-subtitle">30 Booster Packs · 10 Cards Per Pack · Factory Sealed</div>
+
+      <hr class="bb-sep">
+
+      <!-- Price -->
+      <div class="bb-price-row">
+        <span class="bb-price">$189.00</span>
+        <span class="bb-compare">$220.00</span>
+        <span class="bb-sale">14% OFF</span>
+      </div>
+      <div class="bb-afterpay">or 4 × <strong>$47.25</strong> with <strong>Afterpay</strong></div>
+
+      <!-- NEW: Demand Signal Bar (below price, high visibility) -->
+      <div class="bb-demand" style="margin-bottom:10px;">
+        <div class="bb-demand-item"><div class="bb-demand-dot"></div>&nbsp;<strong>23</strong>&nbsp;watching now</div>
+        <div class="bb-demand-item"><strong>41</strong>&nbsp;sold this month</div>
+        <div class="bb-demand-item"><div class="bb-demand-dot bb-demand-dot-red"></div>&nbsp;<strong>8</strong>&nbsp;left</div>
+      </div>
+
+      <hr class="bb-sep">
+
+      <!-- Specs -->
+      <div class="bb-specs" style="margin-bottom:10px;">
+        <div class="bb-spec-row"><span class="bb-spec-label">Language</span><span class="bb-spec-value">Japanese</span></div>
+        <div class="bb-spec-row"><span class="bb-spec-label">Series</span><span class="bb-spec-value">Scarlet &amp; Violet</span></div>
+        <div class="bb-spec-row"><span class="bb-spec-label">Release Date</span><span class="bb-spec-value">September 2024</span></div>
+      </div>
+
+      <hr class="bb-sep">
+
+      <!-- Qty + CTA -->
+      <div class="bb-qty-row">
+        <span class="bb-qty-label">Qty</span>
+        <div class="bb-qty">
+          <button class="bb-qty-btn">−</button>
+          <span class="bb-qty-num">1</span>
+          <button class="bb-qty-btn">+</button>
+        </div>
+      </div>
+      <div class="bb-dispatch">⏳ Order within <strong>2h 14m</strong> for same-day dispatch</div>
+      <div class="bb-btn-row">
+        <button class="bb-btn-primary" style="flex:1">🛒 Add to Cart</button>
+        <div class="bb-btn-icon">♡</div>
+        <div class="bb-btn-icon">↑</div>
+      </div>
+      <button class="bb-btn-outline">Buy Now</button>
+      <div class="bb-payment" style="margin-bottom:10px;">
+        <div class="bb-payment-badge">VISA</div>
+        <div class="bb-payment-badge">MC</div>
+        <div class="bb-payment-badge">PayPal</div>
+        <div class="bb-payment-badge" style="background:#5A31F4;color:#fff;border-color:#5A31F4">Shop</div>
+      </div>
+
+      <hr class="bb-sep">
+
+      <!-- Trust moved up into buy box -->
+      <div class="bb-trust" style="margin-bottom:10px;">
+        <div class="bb-trust-item">
+          <svg class="bb-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div><div class="bb-trust-title">100% Authentic</div><div class="bb-trust-desc">Sourced from authorised distributors</div></div>
+        </div>
+        <div class="bb-trust-item">
+          <svg class="bb-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <div><div class="bb-trust-title">Free Shipping $150+</div><div class="bb-trust-desc">Australia-wide, tracked &amp; insured</div></div>
+        </div>
+        <div class="bb-trust-item">
+          <svg class="bb-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.68"/></svg>
+          <div><div class="bb-trust-title">Easy Returns</div><div class="bb-trust-desc">30-day hassle-free returns</div></div>
+        </div>
+      </div>
+
+      <!-- NEW: Social Proof Ticker (bottom of buy box) -->
+      <div class="bb-ticker">
+        <div class="bb-ticker-header">Recent Purchases</div>
+        <div class="bb-ticker-item">
+          <div class="bb-ticker-avatar">JR</div>
+          <div class="bb-ticker-text"><strong>James R.</strong> from Sydney purchased 1×</div>
+          <div class="bb-ticker-time">2h ago</div>
+        </div>
+        <div class="bb-ticker-item">
+          <div class="bb-ticker-avatar">MT</div>
+          <div class="bb-ticker-text"><strong>Michael T.</strong> from Melbourne purchased 2×</div>
+          <div class="bb-ticker-time">5h ago</div>
+        </div>
+        <div class="bb-ticker-item">
+          <div class="bb-ticker-avatar">SL</div>
+          <div class="bb-ticker-text"><strong>Sophie L.</strong> from Brisbane purchased 1×</div>
+          <div class="bb-ticker-time">Yesterday</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="approach-meta">
+      <h4>Demand Stack <span class="recommended-chip">RECOMMENDED</span></h4>
+      <p>Fills the vacuum by stacking demand signals (live watchers, units sold, stock left) directly below the price, and placing the social proof ticker at the bottom.</p>
+      <div class="pros">✓ Social proof at eye-level · Ticker adds rich height · Trust signals moved up</div>
+      <div class="cons">⚠ More elements to maintain · Ticker requires real data</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ APPROACH B ══════════════ -->
+  <div class="approach-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="approach-label">
+      Approach B — Premium Card
+      <span>Container-first</span>
+    </div>
+    <div class="bb" style="padding:10px;">
+
+      <!-- Badges outside card -->
+      <div class="bb-badges" style="padding: 0 6px 8px;">
+        <span class="bb-badge bb-badge-sealed">📦 Sealed</span>
+        <span class="bb-badge bb-badge-auth">✓ Authentic</span>
+      </div>
+
+      <!-- Title outside card -->
+      <div class="bb-title" style="padding: 0 6px;">Pokémon SV Stellar Crown Booster Box</div>
+      <div class="bb-subtitle" style="padding: 0 6px; margin-bottom: 12px;">30 Booster Packs · 10 Cards Per Pack · Factory Sealed</div>
+
+      <!-- Everything else is inside a premium card -->
+      <div class="bb-card">
+
+        <!-- Price section -->
+        <div class="bb-card-section">
+          <div class="bb-price-row">
+            <span class="bb-price">$189.00</span>
+            <span class="bb-compare">$220.00</span>
+            <span class="bb-sale">14% OFF</span>
+          </div>
+          <div class="bb-afterpay">or 4 × <strong>$47.25</strong> with <strong>Afterpay</strong></div>
+          <!-- NEW: demand signal inline with price -->
+          <div class="bb-demand" style="margin-top:8px;">
+            <div class="bb-demand-item"><div class="bb-demand-dot"></div>&nbsp;<strong>23</strong>&nbsp;watching</div>
+            <div class="bb-demand-item"><strong>41</strong>&nbsp;sold this month</div>
+          </div>
+        </div>
+
+        <!-- Specs section -->
+        <div class="bb-card-section">
+          <div class="bb-specs">
+            <div class="bb-spec-row"><span class="bb-spec-label">Language</span><span class="bb-spec-value">Japanese</span></div>
+            <div class="bb-spec-row"><span class="bb-spec-label">Series</span><span class="bb-spec-value">Scarlet &amp; Violet</span></div>
+            <div class="bb-spec-row"><span class="bb-spec-label">Release Date</span><span class="bb-spec-value">September 2024</span></div>
+          </div>
+        </div>
+
+        <!-- CTA section -->
+        <div class="bb-card-section">
+          <div class="bb-qty-row">
+            <span class="bb-qty-label">Qty</span>
+            <div class="bb-qty">
+              <button class="bb-qty-btn">−</button>
+              <span class="bb-qty-num">1</span>
+              <button class="bb-qty-btn">+</button>
+            </div>
+          </div>
+          <div class="bb-dispatch" style="margin-bottom:10px;">⏳ Order within <strong>2h 14m</strong> for same-day dispatch</div>
+          <div class="bb-btn-row" style="margin-bottom:8px;">
+            <button class="bb-btn-primary" style="flex:1">🛒 Add to Cart</button>
+            <div class="bb-btn-icon">♡</div>
+            <div class="bb-btn-icon">↑</div>
+          </div>
+          <button class="bb-btn-outline">Buy Now</button>
+        </div>
+
+        <!-- Trust section (inside card) -->
+        <div class="bb-card-section" style="padding:0;">
+          <div class="bb-trust" style="border:none;border-radius:0;">
+            <div class="bb-trust-item">
+              <svg class="bb-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div><div class="bb-trust-title">100% Authentic</div><div class="bb-trust-desc">Sourced from authorised distributors</div></div>
+            </div>
+            <div class="bb-trust-item">
+              <svg class="bb-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <div><div class="bb-trust-title">Free Shipping $150+</div><div class="bb-trust-desc">Australia-wide, tracked &amp; insured</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment inside card -->
+        <div class="bb-card-section">
+          <div class="bb-payment">
+            <div class="bb-payment-badge">VISA</div>
+            <div class="bb-payment-badge">MC</div>
+            <div class="bb-payment-badge">PayPal</div>
+            <div class="bb-payment-badge" style="background:#5A31F4;color:#fff;border-color:#5A31F4">Shop</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social proof ticker below card -->
+      <div class="bb-ticker" style="margin-top:12px;">
+        <div class="bb-ticker-header">Recent Purchases</div>
+        <div class="bb-ticker-item">
+          <div class="bb-ticker-avatar">JR</div>
+          <div class="bb-ticker-text"><strong>James R.</strong> from Sydney purchased 1×</div>
+          <div class="bb-ticker-time">2h ago</div>
+        </div>
+        <div class="bb-ticker-item">
+          <div class="bb-ticker-avatar">MT</div>
+          <div class="bb-ticker-text"><strong>Michael T.</strong> from Melbourne purchased 2×</div>
+          <div class="bb-ticker-time">5h ago</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="approach-meta">
+      <h4>Premium Card</h4>
+      <p>Wraps pricing, specs, CTA and trust into a single bordered card — unifying the buy box as one visual object. Premium feel, structurally clean.</p>
+      <div class="pros">✓ Cohesive premium feel · Card adds instant visual weight · Clear containment</div>
+      <div class="cons">⚠ Title/badges float outside card — slightly disconnected · More CSS restructuring</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ APPROACH C ══════════════ -->
+  <div class="approach-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="approach-label">
+      Approach C — Future Release Focus
+      <span>State-driven design</span>
+    </div>
+    <div class="bb">
+
+      <!-- Badges -->
+      <div class="bb-badges">
+        <span class="bb-badge bb-badge-sealed">📦 Sealed</span>
+        <span class="bb-badge bb-badge-auth">✓ Authentic</span>
+        <span class="bb-badge bb-badge-future">🗓 Coming Soon</span>
+      </div>
+
+      <!-- Title -->
+      <div class="bb-title">Pokémon SV Prismatic Evolutions Booster Box</div>
+      <div class="bb-subtitle">30 Booster Packs · 10 Cards Per Pack · Factory Sealed</div>
+
+      <hr class="bb-sep">
+
+      <!-- Price: TBA state -->
+      <div class="bb-price-row">
+        <span class="bb-price" style="color:#76798c;font-size:22px;">Price TBA</span>
+      </div>
+      <div class="bb-afterpay" style="color:#76798c;">Pricing announced closer to release</div>
+
+      <!-- NEW: Hype Counter (highly prominent for pre-release) -->
+      <div class="bb-hype" style="margin-top:8px;margin-bottom:10px;">
+        <div class="bb-hype-icon">🔥</div>
+        <div class="bb-hype-text">
+          <strong>247</strong>
+          people have joined the waitlist
+        </div>
+      </div>
+
+      <hr class="bb-sep">
+
+      <!-- Specs -->
+      <div class="bb-specs" style="margin-bottom:10px;">
+        <div class="bb-spec-row"><span class="bb-spec-label">Language</span><span class="bb-spec-value">Japanese</span></div>
+        <div class="bb-spec-row"><span class="bb-spec-label">Series</span><span class="bb-spec-value">Scarlet &amp; Violet</span></div>
+        <div class="bb-spec-row"><span class="bb-spec-label">Release Date</span><span class="bb-spec-value">January 2025</span></div>
+      </div>
+
+      <hr class="bb-sep">
+
+      <!-- Notify Me (replaces CTA entirely) -->
+      <div class="bb-notify-panel">
+        <div class="bb-notify-title">🔔 Get notified when available</div>
+        <div class="bb-notify-sub">Be first in line. We'll email you the moment this goes live.</div>
+        <div class="bb-notify-input">
+          <input class="bb-notify-input-field" placeholder="your@email.com" readonly>
+          <button class="bb-notify-input-btn">Notify Me</button>
+        </div>
+        <div class="bb-notify-count"><strong>247 people</strong> are already waiting</div>
+      </div>
+
+      <hr class="bb-sep">
+
+      <!-- Trust -->
+      <div class="bb-trust">
+        <div class="bb-trust-item">
+          <svg class="bb-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div><div class="bb-trust-title">100% Authentic</div><div class="bb-trust-desc">Sourced from authorised distributors</div></div>
+        </div>
+        <div class="bb-trust-item">
+          <svg class="bb-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <div><div class="bb-trust-title">Free Shipping $150+</div><div class="bb-trust-desc">Australia-wide, tracked &amp; insured</div></div>
+        </div>
+        <div class="bb-trust-item">
+          <svg class="bb-trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.68"/></svg>
+          <div><div class="bb-trust-title">Easy Returns</div><div class="bb-trust-desc">30-day hassle-free returns</div></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="approach-meta">
+      <h4>Future Release Focus</h4>
+      <p>Designed around the most hollow state: pre-release products. Features a prominent Notify Me panel, live hype counter, and a "Coming Soon" badge variant. Shows the future release state as shown.</p>
+      <div class="pros">✓ Solve the worst-case empty state first · Hype counter is visually bold · Notify Me is polished</div>
+      <div class="cons">⚠ Available state still needs separate treatment · Demand signal less prominent than A</div>
+    </div>
+  </div>
+
+</div>
+
+<p style="font-family:'DM Sans',sans-serif; font-size:12px; color:#76798c; margin-top:16px; text-align:center;">
+  Note: Approach A shows the <em>Available</em> state · Approach C shows the <em>Future Release</em> state · All approaches include all states in the final design.
+  <br>Click to select your preferred overall direction.
+</p>

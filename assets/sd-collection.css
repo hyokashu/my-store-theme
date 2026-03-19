@@ -6,16 +6,17 @@
      Sidebar Filters · Mobile Panel · Product Grid · Product Cards ·
      Pagination · Cart Toast
 
-   Design system:
-     --cv-bg         warm cream  #f4f0e8  page background
-     --cv-fg         forest dark #1a2510  all text
-     --cv-primary    forest green #2d5016 headings, borders
-     --cv-accent     gold         #c9a227 stars, premium badges, highlights
-     --color-cta-primary  leaf-green #3d7a1f  EXCLUSIVELY:
+   Design system (Enchanted Forest):
+     --cv-bg              aged parchment #FDFBF2  page background
+     --cv-fg              forest dark    #1C2B1F  all text
+     --cv-primary         forest canopy  #2C4731  headings, borders
+     --cv-accent          gilded gold    #C59B43  stars, premium badges
+     --cv-accent-blue     deep river     #21496D  search focus, active states
+     --color-cta-primary  gilded gold    #C59B43  EXCLUSIVELY:
        active filter checkboxes · sale badges · Quick Add ·
-       free-ship bar · Clear filters CTA
+       free-ship bar · Clear filters CTA (dark text #1a2510 on gold)
 
-   Von Restorff enforced: leaf-green only on the elements above.
+   Von Restorff enforced: gold only on CTA elements above.
    ============================================================= */
 
 /* ── Page load animation ── */
@@ -34,30 +35,31 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 /* ── Design tokens (mirror main-product.liquid) ── */
 :root {
-  --cv-bg:                   #f4f0e8;
-  --cv-fg:                   #1a2510;
+  --cv-bg:                   #FDFBF2;
+  --cv-fg:                   #1C2B1F;
   --cv-card:                 #ffffff;
-  --cv-primary:              #2d5016;
-  --cv-primary-fg:           #f4f0e8;
-  --cv-secondary:            #e2ddd0;
-  --cv-muted-fg:             #6b7a5a;
-  --cv-border:               #d4cdb8;
-  --cv-radius:               0.75rem;
+  --cv-primary:              #2C4731;
+  --cv-primary-fg:           #FDFBF2;
+  --cv-secondary:            #E8EBE3;
+  --cv-muted-fg:             #425E3B;
+  --cv-border:               #BDC9B6;
+  --cv-radius:               1rem;
   --cv-shadow-sm:            0 1px 2px rgba(0,0,0,0.05);
   --cv-shadow:               0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
   --cv-font-sans:            'Inter', system-ui, -apple-system, sans-serif;
   --cv-font-head:            'Nunito', system-ui, sans-serif;
   --cv-font-display:         'Playfair Display', Georgia, serif;
-  --cv-accent:               #c9a227;
-  --cv-accent-fg:            #1a2510;
-  --cv-accent-hover:         #b8911f;
+  --cv-accent:               #C59B43;
+  --cv-accent-fg:            #1C2B1F;
+  --cv-accent-hover:         #A8832C;
+  --cv-accent-blue:          #21496D;
   --cv-success:              #3d7a1f;
-  --cv-success-fg:           #f4f0e8;
+  --cv-success-fg:           #FDFBF2;
   --cv-destructive:          #c94030;
-  --cv-star:                 #c9a227;
-  --color-cta-primary:       #3d7a1f;
-  --color-cta-primary-fg:    #ffffff;
-  --color-cta-primary-hover: #2d5a15;
+  --cv-star:                 #C59B43;
+  --color-cta-primary:       #C59B43;
+  --color-cta-primary-fg:    #1a2510;
+  --color-cta-primary-hover: #A8832C;
 }
 
 /* =============================================================
@@ -161,7 +163,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 .sdcl-card__title {
   font-family: var(--cv-font-head);
   font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 800; color: #f4f0e8;
+  font-weight: 800; color: #FDFBF2;
   letter-spacing: -0.02em; margin: 0 0 0.5rem; line-height: 1.15;
 }
 
@@ -172,7 +174,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 .sdcl-card__cta {
   display: inline-flex; align-items: center; gap: 0.35rem;
-  font-size: 0.875rem; font-weight: 600; color: #f4f0e8;
+  font-size: 0.875rem; font-weight: 600; color: var(--color-cta-primary-fg);
   background: var(--color-cta-primary);
   padding: 0.5rem 1rem; border-radius: 999px;
   transition: background 0.2s; text-decoration: none;
@@ -580,7 +582,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   font-family: var(--cv-font-sans);
   transition: background 0.15s;
 }
-.sdcl-price-range__apply:hover { background: #1a2510; }
+.sdcl-price-range__apply:hover { background: #1C2B1F; }
 
 .sdcl-price-range__reset {
   display: block;
@@ -742,7 +744,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   display: none;
   width: 100%;
   background: #fff;
-  border: 1px solid #d4cdb8;
+  border: 1px solid #BDC9B6;
   border-radius: 8px;
   margin-bottom: 16px;
   overflow: hidden;
@@ -758,7 +760,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 .sdcl-mobile-sort {
   padding-bottom: 12px;
   margin-bottom: 12px;
-  border-bottom: 1px solid #d4cdb8;
+  border-bottom: 1px solid #BDC9B6;
 }
 .sdcl-mobile-sort__title {
   font-size: 0.875rem;
@@ -793,7 +795,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 /* Filter accordion groups */
 .sdcl-mobile-group {
-  border-bottom: 1px solid #d4cdb8;
+  border-bottom: 1px solid #BDC9B6;
 }
 .sdcl-mobile-group__header {
   display: flex;
@@ -945,7 +947,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 .sdpc {
   background: #FFFFFF;
   border-radius: 8px;
-  border: 1px solid #d4cdb8;
+  border: 1px solid #BDC9B6;
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
   overflow: hidden;
   display: flex; flex-direction: column;
@@ -1067,7 +1069,7 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 /* "Select Options" variant — slate (NOT green; navigates to PDP) */
 .sdpc__quick-add--goto { background: var(--cv-primary); }
-.sdpc__quick-add--goto:hover { background: #1a2510; }
+.sdpc__quick-add--goto:hover { background: #1C2B1F; }
 
 /* ── Card body ── */
 .sdpc__body {

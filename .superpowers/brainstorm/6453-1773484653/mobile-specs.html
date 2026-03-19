@@ -1,0 +1,309 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+
+  body { background: #eeecea; }
+
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #1c1f36; margin-bottom: 4px; }
+
+  .phones {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 960px) { .phones { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .phones { grid-template-columns: 1fr; } }
+
+  /* Phone frame */
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+  .phone-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    color: #76798c; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .phone-label .rec { background: #2e9963; color: #fff; padding: 1px 5px; border-radius: 8px; font-size: 9px; }
+
+  .phone {
+    background: #fff;
+    border-radius: 18px;
+    border: 2.5px solid #e5e7eb;
+    overflow: hidden;
+    width: 100%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    position: relative;
+  }
+  .phone:hover { transform: translateY(-2px); border-color: #282d52; box-shadow: 0 8px 24px rgba(40,45,82,0.15); }
+  .phone.selected { border-color: #2e9963; box-shadow: 0 0 0 3px rgba(46,153,99,0.2); }
+  .phone.selected::after {
+    content: "✓";
+    position: absolute; top: 8px; right: 10px;
+    background: #2e9963; color: #fff;
+    font-size: 11px; font-weight: 700;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Shared phone chrome */
+  .phone-chrome {
+    background: #f7f6f3;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e8e4df;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px; color: #76798c;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .phone-chrome-dot { width: 5px; height: 5px; background: #dedad5; border-radius: 50%; }
+
+  /* Shared product context above spec area */
+  .phone-ctx {
+    padding: 10px 12px 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .phone-ctx-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 700; color: #282d52;
+    margin-bottom: 8px;
+  }
+  .phone-sep { border: none; border-top: 1px solid #ede9e4; margin: 0 0 10px; }
+
+  /* ─── Shared label/value typography ─── */
+  .spec-lbl { font-family: 'DM Sans', sans-serif; font-size: 10px; color: #76798c; }
+  .spec-val { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #1c1f36; }
+
+  /* ══════════ Option A: Icon List ══════════ */
+  .spec-icon-list { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 0; }
+  .spec-icon-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid #f0ede9;
+  }
+  .spec-icon-row:last-child { border-bottom: none; }
+  .spec-icon {
+    width: 26px; height: 26px; flex-shrink: 0;
+    background: rgba(40,45,82,0.06); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+  .spec-icon-text { display: flex; flex-direction: column; gap: 0; }
+  /* Val is single line combining label + value */
+  .spec-icon-inline { font-family: 'DM Sans', sans-serif; font-size: 12px; color: #1c1f36; }
+  .spec-icon-inline span { color: #76798c; font-weight: 400; }
+
+  /* ══════════ Option B: Dotted Spec Sheet ══════════ */
+  .spec-dotted { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 6px; }
+  .spec-dot-row {
+    display: flex; align-items: baseline;
+    font-family: 'DM Sans', sans-serif; font-size: 12px;
+  }
+  .spec-dot-label { color: #76798c; white-space: nowrap; }
+  .spec-dot-fill {
+    flex: 1; margin: 0 4px;
+    border-bottom: 1.5px dotted #d4cfc9;
+    position: relative; bottom: 3px;
+    min-width: 12px;
+  }
+  .spec-dot-value { font-weight: 600; color: #1c1f36; white-space: nowrap; }
+
+  /* ══════════ Option C: Inline Tag Strip ══════════ */
+  .spec-tag-strip { padding: 0 12px 12px; }
+  .spec-tag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .spec-tag {
+    background: transparent;
+    padding: 5px 8px;
+    border-top: 2px solid rgba(40,45,82,0.12);
+  }
+
+  /* ══════════ Option D: Zebra Table ══════════ */
+  .spec-table { padding: 0 0 12px; }
+  .spec-table-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    padding: 8px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+  }
+  .spec-table-row:nth-child(even) { background: rgba(40,45,82,0.03); }
+  .spec-table-lbl { color: #76798c; }
+  .spec-table-val { font-weight: 600; color: #1c1f36; text-align: right; }
+
+  /* Option meta */
+  .phone-meta {
+    padding: 8px 10px;
+    background: #f7f6f3;
+    border-top: 1px solid #ede9e4;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px; line-height: 1.5; color: #76798c;
+  }
+  .phone-meta strong { color: #1c1f36; display: block; margin-bottom: 1px; font-size: 11px; }
+</style>
+
+<h2>Mobile Spec Cards — 4 Directions</h2>
+<p class="subtitle" style="margin-bottom:16px;">All 6 fields, zero button ambiguity. Tap a phone to select.</p>
+
+<div class="phones">
+
+  <!-- ══════ A: Icon List ══════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">A — Icon List</div>
+    <div class="phone" data-choice="a" onclick="toggleSelect(this)">
+      <div class="phone-chrome"><div class="phone-chrome-dot"></div><div class="phone-chrome-dot"></div><div class="phone-chrome-dot"></div></div>
+      <div class="phone-ctx">
+        <div class="phone-ctx-price">$170.00</div>
+      </div>
+      <hr class="phone-sep" style="margin:0 12px 10px;">
+      <div class="spec-icon-list">
+        <div class="spec-icon-row">
+          <div class="spec-icon">📦</div>
+          <div class="spec-icon-text">
+            <div class="spec-lbl">Product Type</div>
+            <div class="spec-val">Booster Box</div>
+          </div>
+        </div>
+        <div class="spec-icon-row">
+          <div class="spec-icon">🃏</div>
+          <div class="spec-icon-text">
+            <div class="spec-lbl">Set</div>
+            <div class="spec-val">OP-06</div>
+          </div>
+        </div>
+        <div class="spec-icon-row">
+          <div class="spec-icon">📚</div>
+          <div class="spec-icon-text">
+            <div class="spec-lbl">Series</div>
+            <div class="spec-val">One Piece</div>
+          </div>
+        </div>
+        <div class="spec-icon-row">
+          <div class="spec-icon">🎁</div>
+          <div class="spec-icon-text">
+            <div class="spec-lbl">Packs</div>
+            <div class="spec-val">24 Packs</div>
+          </div>
+        </div>
+        <div class="spec-icon-row">
+          <div class="spec-icon">✨</div>
+          <div class="spec-icon-text">
+            <div class="spec-lbl">Cards Per Pack</div>
+            <div class="spec-val">6 Cards</div>
+          </div>
+        </div>
+        <div class="spec-icon-row">
+          <div class="spec-icon">🌐</div>
+          <div class="spec-icon-text">
+            <div class="spec-lbl">Language</div>
+            <div class="spec-val">Japanese</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-meta">
+        <strong>Icon + label + value rows</strong>
+        Single-column list with a small icon per field. Reads like a spec sheet, not a menu. No boxes, no confusion.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ B: Dotted Spec Sheet ══════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">B — Spec Sheet <span class="rec">REC</span></div>
+    <div class="phone" data-choice="b" onclick="toggleSelect(this)">
+      <div class="phone-chrome"><div class="phone-chrome-dot"></div><div class="phone-chrome-dot"></div><div class="phone-chrome-dot"></div></div>
+      <div class="phone-ctx">
+        <div class="phone-ctx-price">$170.00</div>
+      </div>
+      <hr class="phone-sep" style="margin:0 12px 10px;">
+      <div class="spec-dotted">
+        <div class="spec-dot-row">
+          <span class="spec-dot-label">Product Type</span>
+          <span class="spec-dot-fill"></span>
+          <span class="spec-dot-value">Booster Box</span>
+        </div>
+        <div class="spec-dot-row">
+          <span class="spec-dot-label">Set</span>
+          <span class="spec-dot-fill"></span>
+          <span class="spec-dot-value">OP-06</span>
+        </div>
+        <div class="spec-dot-row">
+          <span class="spec-dot-label">Series</span>
+          <span class="spec-dot-fill"></span>
+          <span class="spec-dot-value">One Piece</span>
+        </div>
+        <div class="spec-dot-row">
+          <span class="spec-dot-label">Packs</span>
+          <span class="spec-dot-fill"></span>
+          <span class="spec-dot-value">24 Packs</span>
+        </div>
+        <div class="spec-dot-row">
+          <span class="spec-dot-label">Cards Per Pack</span>
+          <span class="spec-dot-fill"></span>
+          <span class="spec-dot-value">6 Cards</span>
+        </div>
+        <div class="spec-dot-row">
+          <span class="spec-dot-label">Language</span>
+          <span class="spec-dot-fill"></span>
+          <span class="spec-dot-value">Japanese</span>
+        </div>
+      </div>
+      <div class="phone-meta">
+        <strong>Dotted spec sheet</strong>
+        Label on the left, dotted leader line, value flush right. Classic printed spec sheet / menu style. Zero ambiguity — nothing here is pressable.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ C: Top-border grid ══════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">C — Top-rule Grid</div>
+    <div class="phone" data-choice="c" onclick="toggleSelect(this)">
+      <div class="phone-chrome"><div class="phone-chrome-dot"></div><div class="phone-chrome-dot"></div><div class="phone-chrome-dot"></div></div>
+      <div class="phone-ctx">
+        <div class="phone-ctx-price">$170.00</div>
+      </div>
+      <hr class="phone-sep" style="margin:0 12px 10px;">
+      <div style="padding:0 12px 12px;">
+        <div class="spec-tag-grid">
+          <div class="spec-tag"><div class="spec-lbl">Product Type</div><div class="spec-val">Booster Box</div></div>
+          <div class="spec-tag"><div class="spec-lbl">Set</div><div class="spec-val">OP-06</div></div>
+          <div class="spec-tag"><div class="spec-lbl">Series</div><div class="spec-val">One Piece</div></div>
+          <div class="spec-tag"><div class="spec-lbl">Packs</div><div class="spec-val">24 Packs</div></div>
+          <div class="spec-tag"><div class="spec-lbl">Cards Per Pack</div><div class="spec-val">6 Cards</div></div>
+          <div class="spec-tag"><div class="spec-lbl">Language</div><div class="spec-val">Japanese</div></div>
+        </div>
+      </div>
+      <div class="phone-meta">
+        <strong>Top-rule 2-column grid</strong>
+        Keeps the 2-column layout you already have. Removes all box styling — only a top border rule per cell. No background, no shadow, no enclosure. Closest to current grid, minimal change.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ D: Zebra Table ══════ -->
+  <div class="phone-wrap">
+    <div class="phone-label">D — Zebra Table</div>
+    <div class="phone" data-choice="d" onclick="toggleSelect(this)">
+      <div class="phone-chrome"><div class="phone-chrome-dot"></div><div class="phone-chrome-dot"></div><div class="phone-chrome-dot"></div></div>
+      <div class="phone-ctx">
+        <div class="phone-ctx-price">$170.00</div>
+      </div>
+      <hr class="phone-sep" style="margin:0 12px 10px;">
+      <div class="spec-table">
+        <div class="spec-table-row"><span class="spec-table-lbl">Product Type</span><span class="spec-table-val">Booster Box</span></div>
+        <div class="spec-table-row"><span class="spec-table-lbl">Set</span><span class="spec-table-val">OP-06</span></div>
+        <div class="spec-table-row"><span class="spec-table-lbl">Series</span><span class="spec-table-val">One Piece</span></div>
+        <div class="spec-table-row"><span class="spec-table-lbl">Packs</span><span class="spec-table-val">24 Packs</span></div>
+        <div class="spec-table-row"><span class="spec-table-lbl">Cards Per Pack</span><span class="spec-table-val">6 Cards</span></div>
+        <div class="spec-table-row"><span class="spec-table-lbl">Language</span><span class="spec-table-val">Japanese</span></div>
+      </div>
+      <div class="phone-meta">
+        <strong>Zebra-striped table rows</strong>
+        Full-width rows with alternating pale tint. Label left, value right. The horizontal flow and alternating rows scream "data table", never "button".
+      </div>
+    </div>
+  </div>
+
+</div>

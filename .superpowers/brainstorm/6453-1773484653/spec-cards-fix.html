@@ -1,0 +1,134 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
+
+  body { background: #f7f6f3; }
+
+  .compare-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  @media (max-width: 700px) { .compare-wrap { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: #fff;
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .panel.selected {
+    border-color: #2e9963;
+    box-shadow: 0 0 0 3px rgba(46,153,99,0.18);
+  }
+  .panel.selected::after {
+    content: "✓ Selected";
+    display: block;
+    background: #2e9963; color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 0;
+    text-align: center;
+  }
+  .panel-header {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 8px 16px;
+    border-bottom: 1px solid #f0ede9;
+  }
+  .panel-header.bad  { background: #FFF1F0; color: #c94030; }
+  .panel-header.good { background: #F0FDF4; color: #2e9963; }
+  .panel-body { padding: 16px; }
+
+  /* ── Shared grid ── */
+  .cv-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* ── BEFORE: current (problematic) ── */
+  .cv-detail-item--before {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 10px 14px;
+    border: 1px solid #dedad5;
+    border-radius: 8px;
+    background: #F4F6F8;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    /* looks clickable ↑ */
+  }
+
+  /* ── AFTER: fix — left accent, no shadow ── */
+  .cv-detail-item--after {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 10px 14px;
+    border: none;
+    border-left: 3px solid rgba(40,45,82,0.18);
+    border-radius: 0;
+    background: rgba(40,45,82,0.03);
+    box-shadow: none;
+    /* clearly data ↑ */
+  }
+
+  .label { font-family: 'DM Sans', sans-serif; font-size: 11px; color: #76798c; }
+  .value { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #1c1f36; }
+
+  .why {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 11px; line-height: 1.6;
+  }
+  .why.bad  { background: #FFF1F0; color: #7f1d1d; }
+  .why.good { background: #F0FDF4; color: #14532d; }
+
+  h2 { font-family: 'Cormorant Garamond', serif; }
+</style>
+
+<h2>Spec Card Fix — Before vs. After</h2>
+<p class="subtitle">The <strong>left accent</strong> treatment signals "data field" rather than "clickable button". Click your preferred approach.</p>
+
+<div class="compare-wrap">
+
+  <!-- BEFORE -->
+  <div class="panel" data-choice="before" onclick="toggleSelect(this)">
+    <div class="panel-header bad">⚠ Before — Looks Clickable</div>
+    <div class="panel-body">
+      <div class="cv-details-grid">
+        <div class="cv-detail-item--before"><span class="label">Product Type</span><span class="value">Booster Box</span></div>
+        <div class="cv-detail-item--before"><span class="label">Set</span><span class="value">OP-06</span></div>
+        <div class="cv-detail-item--before"><span class="label">Series</span><span class="value">One Piece</span></div>
+        <div class="cv-detail-item--before"><span class="label">Packs</span><span class="value">24 Packs</span></div>
+        <div class="cv-detail-item--before"><span class="label">Cards Per Pack</span><span class="value">6 Cards</span></div>
+        <div class="cv-detail-item--before"><span class="label">Language</span><span class="value">Japanese</span></div>
+      </div>
+      <div class="why bad">
+        ❌ <strong>box-shadow</strong> gives perceived elevation — users expect it to respond to a click.<br>
+        ❌ The <strong>full border + radius</strong> combo mirrors how Shopify and iOS render interactive elements.<br>
+        ❌ No visual cue that this is static data.
+      </div>
+    </div>
+  </div>
+
+  <!-- AFTER -->
+  <div class="panel" data-choice="after" onclick="toggleSelect(this)">
+    <div class="panel-header good">✓ After — Clearly Informational</div>
+    <div class="panel-body">
+      <div class="cv-details-grid">
+        <div class="cv-detail-item--after"><span class="label">Product Type</span><span class="value">Booster Box</span></div>
+        <div class="cv-detail-item--after"><span class="label">Set</span><span class="value">OP-06</span></div>
+        <div class="cv-detail-item--after"><span class="label">Series</span><span class="value">One Piece</span></div>
+        <div class="cv-detail-item--after"><span class="label">Packs</span><span class="value">24 Packs</span></div>
+        <div class="cv-detail-item--after"><span class="label">Cards Per Pack</span><span class="value">6 Cards</span></div>
+        <div class="cv-detail-item--after"><span class="label">Language</span><span class="value">Japanese</span></div>
+      </div>
+      <div class="why good">
+        ✓ <strong>Left accent bar</strong> is a universal "data / definition list" pattern (used in documentation, dashboards, and specs).<br>
+        ✓ <strong>No shadow</strong> = flat, non-elevated, non-pressable.<br>
+        ✓ Keeps the 2-column grid layout you want restored.
+      </div>
+    </div>
+  </div>
+
+</div>

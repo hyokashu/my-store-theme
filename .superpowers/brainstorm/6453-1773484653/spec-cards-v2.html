@@ -1,0 +1,136 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
+
+  body { background: #f7f6f3; }
+
+  .options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  @media (max-width: 760px) { .options { grid-template-columns: 1fr; } }
+
+  .option {
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .option:hover { border-color: #282d52; box-shadow: 0 4px 16px rgba(40,45,82,0.1); }
+  .option.selected { border-color: #2e9963; box-shadow: 0 0 0 3px rgba(46,153,99,0.18); }
+  .option.selected .opt-label { background: #2e9963; color: #fff; }
+
+  .opt-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 7px 14px; background: #282d52; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .opt-label span { font-weight: 400; opacity: 0.7; }
+  .opt-body { padding: 16px; }
+
+  .label { font-family: 'DM Sans', sans-serif; font-size: 11px; color: #76798c; }
+  .value { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #1c1f36; }
+
+  /* ── Variant 1: No background, left accent only ── */
+  .grid-v1 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.625rem; }
+  .item-v1 {
+    padding: 8px 10px;
+    border-left: 3px solid rgba(40,45,82,0.2);
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* ── Variant 2: Top divider only, no box at all ── */
+  .grid-v2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+  .item-v2 {
+    padding: 10px 8px;
+    border-top: 1px solid #ede9e4;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  /* Make left column items have a right gap visually */
+  .item-v2:nth-child(odd)  { padding-right: 16px; }
+  .item-v2:nth-child(even) { padding-left: 16px; border-left: 1px solid #ede9e4; }
+
+  /* ── Variant 3: Filled tag/chip, clearly labelled, no elevation ── */
+  .grid-v3 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.625rem; }
+  .item-v3 {
+    padding: 8px 10px;
+    background: #F4F6F8;
+    border: none;
+    border-radius: 6px;
+    box-shadow: none;
+    position: relative;
+  }
+  /* Small "info" dot in corner to signal non-interactive */
+  .item-v3::before {
+    content: '';
+    position: absolute; top: 7px; right: 8px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: rgba(40,45,82,0.15);
+  }
+
+  .opt-desc {
+    margin-top: 12px; padding: 10px 12px;
+    background: #f7f6f3; border-radius: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 11px; color: #76798c; line-height: 1.55;
+  }
+  .opt-desc strong { color: #1c1f36; }
+</style>
+
+<h2 style="font-family:'Cormorant Garamond',serif;font-size:24px;color:#1c1f36;margin-bottom:4px;">Spec Cards — Push Further</h2>
+<p class="subtitle" style="margin-bottom:20px;">All three remove the "button" feeling. Pick your preferred treatment.</p>
+
+<div class="options">
+
+  <!-- V1: No background -->
+  <div class="option" data-choice="v1" onclick="toggleSelect(this)">
+    <div class="opt-label">Option 1 — Accent Only <span>No fill</span></div>
+    <div class="opt-body">
+      <div class="grid-v1">
+        <div class="item-v1"><div class="label">Product Type</div><div class="value">Booster Box</div></div>
+        <div class="item-v1"><div class="label">Set</div><div class="value">OP-06</div></div>
+        <div class="item-v1"><div class="label">Series</div><div class="value">One Piece</div></div>
+        <div class="item-v1"><div class="label">Packs</div><div class="value">24 Packs</div></div>
+        <div class="item-v1"><div class="label">Cards Per Pack</div><div class="value">6 Cards</div></div>
+        <div class="item-v1"><div class="label">Language</div><div class="value">Japanese</div></div>
+      </div>
+      <div class="opt-desc">Left accent bar only — <strong>zero fill, zero border, zero shadow.</strong> Floats cleanly on the page background. Most minimal, most data-forward.</div>
+    </div>
+  </div>
+
+  <!-- V2: Table rows -->
+  <div class="option" data-choice="v2" onclick="toggleSelect(this)">
+    <div class="opt-label">Option 2 — Table Rows <span>No boxes</span></div>
+    <div class="opt-body">
+      <div class="grid-v2">
+        <div class="item-v2"><div class="label">Product Type</div><div class="value">Booster Box</div></div>
+        <div class="item-v2"><div class="label">Set</div><div class="value">OP-06</div></div>
+        <div class="item-v2"><div class="label">Series</div><div class="value">One Piece</div></div>
+        <div class="item-v2"><div class="label">Packs</div><div class="value">24 Packs</div></div>
+        <div class="item-v2"><div class="label">Cards Per Pack</div><div class="value">6 Cards</div></div>
+        <div class="item-v2"><div class="label">Language</div><div class="value">Japanese</div></div>
+      </div>
+      <div class="opt-desc">No boxes at all — just <strong>horizontal divider lines</strong> between rows, like a table or spreadsheet. Zero chance of looking clickable.</div>
+    </div>
+  </div>
+
+  <!-- V3: Flat fill, no border, no shadow -->
+  <div class="option" data-choice="v3" onclick="toggleSelect(this)">
+    <div class="opt-label">Option 3 — Flat Fill <span>No elevation</span></div>
+    <div class="opt-body">
+      <div class="grid-v3">
+        <div class="item-v3"><div class="label">Product Type</div><div class="value">Booster Box</div></div>
+        <div class="item-v3"><div class="label">Set</div><div class="value">OP-06</div></div>
+        <div class="item-v3"><div class="label">Series</div><div class="value">One Piece</div></div>
+        <div class="item-v3"><div class="label">Packs</div><div class="value">24 Packs</div></div>
+        <div class="item-v3"><div class="label">Cards Per Pack</div><div class="value">6 Cards</div></div>
+        <div class="item-v3"><div class="label">Language</div><div class="value">Japanese</div></div>
+      </div>
+      <div class="opt-desc">Same grey fill as before but <strong>no border, no shadow, no radius</strong> — just a flat colour block. Closest to your original look, minimal change.</div>
+    </div>
+  </div>
+
+</div>

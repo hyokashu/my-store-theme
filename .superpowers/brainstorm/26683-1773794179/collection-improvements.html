@@ -1,0 +1,250 @@
+<h2>Collection page — current vs improved</h2>
+<p class="subtitle">Main fixes: ① Denser product grid with tighter gaps ② Richer collection banner ③ Better filter sidebar with clearer active states ④ Card shadow/border polish</p>
+
+<div class="split">
+
+  <!-- CURRENT -->
+  <div class="mockup">
+    <div class="mockup-header">Current</div>
+    <div class="mockup-body" style="padding:0;font-family:'Inter',system-ui,sans-serif;font-size:10px;background:#f0f5fb;">
+
+      <!-- Flat banner -->
+      <div style="background:#f0f5fb;padding:1.25rem 1rem;border-bottom:1px solid #c5d8ee;">
+        <div style="height:5px;background:#94a3b8;border-radius:3px;width:30%;margin-bottom:0.3rem;"></div>
+        <div style="height:11px;background:#1e3a5f;border-radius:3px;width:55%;margin-bottom:0.4rem;"></div>
+        <div style="height:4px;background:#94a3b8;border-radius:3px;width:70%;margin-bottom:0.25rem;"></div>
+        <div style="height:4px;background:#94a3b8;border-radius:3px;width:50%;margin-bottom:0.5rem;"></div>
+        <div style="height:4px;background:#94a3b8;border-radius:3px;width:25%;"></div>
+      </div>
+
+      <!-- Sort bar -->
+      <div style="background:#fff;padding:0.5rem 1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #c5d8ee;">
+        <div style="height:4px;background:#94a3b8;border-radius:3px;width:20%;"></div>
+        <div style="height:20px;background:#eef5fc;border:1px solid #c5d8ee;border-radius:4px;width:90px;"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:0.75rem;padding:0.75rem;">
+
+        <!-- Sidebar — plain -->
+        <div style="background:#e0eaf5;border-radius:6px;padding:0.5rem;">
+          <div style="height:5px;background:#1e3a5f;border-radius:3px;width:60%;margin-bottom:0.5rem;"></div>
+          <div style="display:flex;flex-direction:column;gap:0.35rem;">
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#fff;border:1px solid #c5d8ee;border-radius:2px;"></div>
+              <div style="height:4px;background:#94a3b8;border-radius:2px;flex:1;"></div>
+            </div>
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#16a34a;border-radius:2px;"></div>
+              <div style="height:4px;background:#1e3a5f;border-radius:2px;flex:1;"></div>
+            </div>
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#fff;border:1px solid #c5d8ee;border-radius:2px;"></div>
+              <div style="height:4px;background:#94a3b8;border-radius:2px;flex:1;"></div>
+            </div>
+            <div style="height:1px;background:#c5d8ee;margin:0.2rem 0;"></div>
+            <div style="height:5px;background:#1e3a5f;border-radius:3px;width:70%;margin-bottom:0.25rem;"></div>
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#fff;border:1px solid #c5d8ee;border-radius:2px;"></div>
+              <div style="height:4px;background:#94a3b8;border-radius:2px;flex:1;"></div>
+            </div>
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#fff;border:1px solid #c5d8ee;border-radius:2px;"></div>
+              <div style="height:4px;background:#94a3b8;border-radius:2px;flex:1;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product grid — wide gaps, flat cards -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;">
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:6px;overflow:hidden;">
+            <div style="background:#dbeafe;aspect-ratio:1/1;"></div>
+            <div style="padding:0.4rem;">
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:90%;margin-bottom:2px;"></div>
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:60%;margin-bottom:4px;"></div>
+              <div style="height:4px;background:#1e3a5f;border-radius:2px;width:35%;"></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:6px;overflow:hidden;">
+            <div style="background:#dbeafe;aspect-ratio:1/1;"></div>
+            <div style="padding:0.4rem;">
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:85%;margin-bottom:2px;"></div>
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:70%;margin-bottom:4px;"></div>
+              <div style="height:4px;background:#1e3a5f;border-radius:2px;width:35%;"></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:6px;overflow:hidden;">
+            <div style="background:#dbeafe;aspect-ratio:1/1;position:relative;">
+              <div style="position:absolute;top:3px;left:3px;background:#16a34a;color:#fff;font-size:6px;padding:1px 3px;border-radius:2px;font-weight:700;">SALE</div>
+            </div>
+            <div style="padding:0.4rem;">
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:75%;margin-bottom:2px;"></div>
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:50%;margin-bottom:4px;"></div>
+              <div style="display:flex;gap:3px;"><div style="height:4px;background:#1e3a5f;border-radius:2px;width:30%;"></div><div style="height:3px;background:#c5d8ee;border-radius:2px;width:22%;"></div></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:6px;overflow:hidden;">
+            <div style="background:#dbeafe;aspect-ratio:1/1;"></div>
+            <div style="padding:0.4rem;">
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:90%;margin-bottom:2px;"></div>
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:55%;margin-bottom:4px;"></div>
+              <div style="height:4px;background:#1e3a5f;border-radius:2px;width:35%;"></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:6px;overflow:hidden;">
+            <div style="background:#dbeafe;aspect-ratio:1/1;"></div>
+            <div style="padding:0.4rem;">
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:80%;margin-bottom:2px;"></div>
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:65%;margin-bottom:4px;"></div>
+              <div style="height:4px;background:#1e3a5f;border-radius:2px;width:35%;"></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:6px;overflow:hidden;">
+            <div style="background:#dbeafe;aspect-ratio:1/1;"></div>
+            <div style="padding:0.4rem;">
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:70%;margin-bottom:2px;"></div>
+              <div style="height:3.5px;background:#94a3b8;border-radius:2px;width:45%;margin-bottom:4px;"></div>
+              <div style="height:4px;background:#1e3a5f;border-radius:2px;width:35%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPROVED -->
+  <div class="mockup">
+    <div class="mockup-header" style="background:#1e3a5f;color:#fff;">Improved</div>
+    <div class="mockup-body" style="padding:0;font-family:'Inter',system-ui,sans-serif;font-size:10px;background:#eef5fc;">
+
+      <!-- Richer banner — navy bg, breadcrumb, count pill -->
+      <div style="background:linear-gradient(110deg,#1e3a5f 60%,#2a5298 100%);padding:1.25rem 1rem 1rem;">
+        <div style="font-size:7px;color:#93c5fd;margin-bottom:0.35rem;">Home › Pokemon › <span style="color:#fff;font-weight:600;">Booster Boxes</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+          <div>
+            <div style="height:12px;background:#fff;border-radius:3px;width:140px;margin-bottom:0.35rem;opacity:0.95;"></div>
+            <div style="height:4px;background:rgba(255,255,255,0.55);border-radius:3px;width:170px;margin-bottom:0.25rem;"></div>
+            <div style="height:4px;background:rgba(255,255,255,0.55);border-radius:3px;width:120px;"></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:7.5px;font-weight:600;padding:3px 8px;border-radius:20px;">48 products</div>
+        </div>
+      </div>
+
+      <!-- Sort bar — with active filter pills -->
+      <div style="background:#fff;padding:0.45rem 1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #c5d8ee;">
+        <div style="display:flex;gap:0.3rem;align-items:center;">
+          <div style="background:#1e3a5f;color:#fff;font-size:6.5px;padding:2px 6px;border-radius:20px;font-weight:600;">Pokemon ✕</div>
+          <div style="background:#eef5fc;border:1px solid #c5d8ee;color:#1e3a5f;font-size:6.5px;padding:2px 5px;border-radius:20px;">Clear all</div>
+        </div>
+        <div style="height:18px;background:#eef5fc;border:1px solid #c5d8ee;border-radius:4px;width:80px;"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:0.6rem;padding:0.6rem;">
+
+        <!-- Sidebar — cleaner, with section dividers -->
+        <div style="background:#fff;border:1px solid #c5d8ee;border-radius:6px;padding:0.5rem;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+          <div style="height:5.5px;background:#1e3a5f;border-radius:3px;width:65%;margin-bottom:0.5rem;"></div>
+          <div style="display:flex;flex-direction:column;gap:0.3rem;margin-bottom:0.4rem;">
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#1e3a5f;border-radius:2px;display:flex;align-items:center;justify-content:center;"><div style="width:5px;height:5px;background:#fff;border-radius:1px;"></div></div>
+              <div style="height:4px;background:#1e3a5f;border-radius:2px;flex:1;"></div>
+              <div style="background:#eef5fc;border-radius:10px;padding:1px 4px;font-size:6px;color:#6b7fa8;">12</div>
+            </div>
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#fff;border:1px solid #c5d8ee;border-radius:2px;"></div>
+              <div style="height:4px;background:#94a3b8;border-radius:2px;flex:1;"></div>
+              <div style="background:#eef5fc;border-radius:10px;padding:1px 4px;font-size:6px;color:#6b7fa8;">8</div>
+            </div>
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#fff;border:1px solid #c5d8ee;border-radius:2px;"></div>
+              <div style="height:4px;background:#94a3b8;border-radius:2px;flex:1;"></div>
+              <div style="background:#eef5fc;border-radius:10px;padding:1px 4px;font-size:6px;color:#6b7fa8;">5</div>
+            </div>
+          </div>
+          <div style="height:1px;background:#c5d8ee;margin:0.35rem 0;"></div>
+          <div style="height:5px;background:#1e3a5f;border-radius:3px;width:55%;margin-bottom:0.35rem;"></div>
+          <div style="display:flex;flex-direction:column;gap:0.3rem;">
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#fff;border:1px solid #c5d8ee;border-radius:2px;"></div>
+              <div style="height:4px;background:#94a3b8;border-radius:2px;flex:1;"></div>
+              <div style="background:#eef5fc;border-radius:10px;padding:1px 4px;font-size:6px;color:#6b7fa8;">24</div>
+            </div>
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#fff;border:1px solid #c5d8ee;border-radius:2px;"></div>
+              <div style="height:4px;background:#94a3b8;border-radius:2px;flex:1;"></div>
+              <div style="background:#eef5fc;border-radius:10px;padding:1px 4px;font-size:6px;color:#6b7fa8;">9</div>
+            </div>
+            <div style="display:flex;gap:0.3rem;align-items:center;">
+              <div style="width:10px;height:10px;background:#fff;border:1px solid #c5d8ee;border-radius:2px;"></div>
+              <div style="height:4px;background:#94a3b8;border-radius:2px;flex:1;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product grid — tighter gaps, polished cards with hover shadow -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;">
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:7px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+            <div style="background:#dbeafe;aspect-ratio:1/1;position:relative;">
+              <div style="position:absolute;top:4px;left:4px;background:#16a34a;color:#fff;font-size:6px;padding:1px 4px;border-radius:3px;font-weight:700;">-20%</div>
+            </div>
+            <div style="padding:0.35rem 0.4rem;">
+              <div style="height:3.5px;background:#334155;border-radius:2px;width:90%;margin-bottom:2px;"></div>
+              <div style="height:3px;background:#94a3b8;border-radius:2px;width:60%;margin-bottom:3px;"></div>
+              <div style="display:flex;gap:3px;align-items:center;">
+                <div style="height:4.5px;background:#1e3a5f;border-radius:2px;width:32%;"></div>
+                <div style="height:3px;background:#c5d8ee;border-radius:2px;width:22%;text-decoration:line-through;"></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:7px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+            <div style="background:#dbeafe;aspect-ratio:1/1;"></div>
+            <div style="padding:0.35rem 0.4rem;">
+              <div style="height:3.5px;background:#334155;border-radius:2px;width:85%;margin-bottom:2px;"></div>
+              <div style="height:3px;background:#94a3b8;border-radius:2px;width:65%;margin-bottom:3px;"></div>
+              <div style="height:4.5px;background:#1e3a5f;border-radius:2px;width:32%;"></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:7px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+            <div style="background:#dbeafe;aspect-ratio:1/1;position:relative;">
+              <div style="position:absolute;top:4px;right:4px;background:#64748b;color:#fff;font-size:6px;padding:1px 4px;border-radius:3px;font-weight:600;">SOLD</div>
+            </div>
+            <div style="padding:0.35rem 0.4rem;">
+              <div style="height:3.5px;background:#334155;border-radius:2px;width:75%;margin-bottom:2px;"></div>
+              <div style="height:3px;background:#94a3b8;border-radius:2px;width:50%;margin-bottom:3px;"></div>
+              <div style="height:4.5px;background:#94a3b8;border-radius:2px;width:32%;"></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:7px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+            <div style="background:#dbeafe;aspect-ratio:1/1;"></div>
+            <div style="padding:0.35rem 0.4rem;">
+              <div style="height:3.5px;background:#334155;border-radius:2px;width:90%;margin-bottom:2px;"></div>
+              <div style="height:3px;background:#94a3b8;border-radius:2px;width:55%;margin-bottom:3px;"></div>
+              <div style="height:4.5px;background:#1e3a5f;border-radius:2px;width:32%;"></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:7px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+            <div style="background:#dbeafe;aspect-ratio:1/1;position:relative;">
+              <div style="position:absolute;top:4px;left:4px;background:#1e3a5f;color:#fff;font-size:6px;padding:1px 4px;border-radius:3px;font-weight:700;">NEW</div>
+            </div>
+            <div style="padding:0.35rem 0.4rem;">
+              <div style="height:3.5px;background:#334155;border-radius:2px;width:80%;margin-bottom:2px;"></div>
+              <div style="height:3px;background:#94a3b8;border-radius:2px;width:60%;margin-bottom:3px;"></div>
+              <div style="height:4.5px;background:#1e3a5f;border-radius:2px;width:32%;"></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #c5d8ee;border-radius:7px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+            <div style="background:#dbeafe;aspect-ratio:1/1;"></div>
+            <div style="padding:0.35rem 0.4rem;">
+              <div style="height:3.5px;background:#334155;border-radius:2px;width:70%;margin-bottom:2px;"></div>
+              <div style="height:3px;background:#94a3b8;border-radius:2px;width:45%;margin-bottom:3px;"></div>
+              <div style="height:4.5px;background:#1e3a5f;border-radius:2px;width:32%;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem;text-align:center;">Changes: ① Navy gradient banner (vs flat light blue) ② Sidebar on white card (vs bare blue bg) ③ Active filter shows count badges ④ Grid gap 0.6rem→0.4rem = more products visible ⑤ Card title text darker (#334155 vs #94a3b8)</p>

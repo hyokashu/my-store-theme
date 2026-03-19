@@ -1,0 +1,78 @@
+<h2>B — Rich layout with more image space</h2>
+<p class="subtitle">Where do you want the extra images? You can pick multiple.</p>
+
+<div class="options" data-multiselect>
+
+  <div class="option" data-choice="hero-image" onclick="toggleSelect(this)">
+    <div class="letter">1</div>
+    <div class="content">
+      <h3>Full-width hero with background image</h3>
+      <p>The top hero section gets a full-bleed photo behind the navy overlay — like your homepage slides. Dramatic, sets the scene immediately.</p>
+      <div style="margin-top:10px;background:#282d52;border-radius:6px;padding:16px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=600&q=60') center/cover;opacity:0.25;"></div>
+        <div style="position:relative;color:#fff">
+          <div style="font-size:9px;letter-spacing:2px;opacity:0.7;margin-bottom:4px">OUR STORY</div>
+          <div style="font-size:14px;font-weight:700">Built by Collectors.</div>
+          <div style="font-size:14px;font-weight:700">Trusted by the Community.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="alternating-sections" onclick="toggleSelect(this)">
+    <div class="letter">2</div>
+    <div class="content">
+      <h3>Two alternating image + text rows</h3>
+      <p>Instead of one origin story block, split it into two 50/50 rows — image left for the first (the problem), image right for the second (the solution/today). Twice the visual real estate.</p>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;gap:6px;align-items:center;">
+          <div style="width:60px;height:42px;background:#eeecea;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:#76798c">IMG</div>
+          <div style="flex:1;background:#fff;border:1px solid #dedad5;border-radius:4px;padding:8px;font-size:9px;color:#76798c">"The problem we faced…"</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <div style="flex:1;background:#fff;border:1px solid #dedad5;border-radius:4px;padding:8px;font-size:9px;color:#76798c">"What we built instead…"</div>
+          <div style="width:60px;height:42px;background:#eeecea;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:#76798c">IMG</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="pillars-with-images" onclick="toggleSelect(this)">
+    <div class="letter">3</div>
+    <div class="content">
+      <h3>Value pillars with photos</h3>
+      <p>Each of the 3 value cards (Authentic, Protected, Fast) gets its own photo — product shots, packaging, warehouse. Richer than icon-only cards.</p>
+      <div style="margin-top:10px;display:flex;gap:6px;">
+        <div style="flex:1;background:#fff;border:1px solid #dedad5;border-radius:4px;overflow:hidden;">
+          <div style="height:30px;background:#eeecea;display:flex;align-items:center;justify-content:center;font-size:8px;color:#76798c">photo</div>
+          <div style="padding:6px;font-size:9px;font-weight:700;color:#282d52;text-align:center">Authentic</div>
+        </div>
+        <div style="flex:1;background:#fff;border:1px solid #dedad5;border-radius:4px;overflow:hidden;">
+          <div style="height:30px;background:#eeecea;display:flex;align-items:center;justify-content:center;font-size:8px;color:#76798c">photo</div>
+          <div style="padding:6px;font-size:9px;font-weight:700;color:#282d52;text-align:center">Protected</div>
+        </div>
+        <div style="flex:1;background:#fff;border:1px solid #dedad5;border-radius:4px;overflow:hidden;">
+          <div style="height:30px;background:#eeecea;display:flex;align-items:center;justify-content:center;font-size:8px;color:#76798c">photo</div>
+          <div style="padding:6px;font-size:9px;font-weight:700;color:#282d52;text-align:center">Fast</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="photo-gallery" onclick="toggleSelect(this)">
+    <div class="letter">4</div>
+    <div class="content">
+      <h3>Photo gallery strip</h3>
+      <p>A horizontal row of 3–4 photos between the values and the CTA — behind-the-scenes, product shots, the team. No text, purely visual atmosphere.</p>
+      <div style="margin-top:10px;display:flex;gap:5px;">
+        <div style="flex:1;height:40px;background:#eeecea;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#76798c">📷</div>
+        <div style="flex:1;height:40px;background:#dedad5;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#76798c">📷</div>
+        <div style="flex:1;height:40px;background:#eeecea;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#76798c">📷</div>
+        <div style="flex:1;height:40px;background:#dedad5;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#76798c">📷</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:24px">Select all that apply — or just tell me in the terminal which ones you want.</p>
