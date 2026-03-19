@@ -1178,6 +1178,7 @@ input.cv-qty__input {
               id="cv-qty-input"
               name="quantity"
               value="1" min="1"
+              {% if current_variant.inventory_management == 'shopify' and stock_qty > 0 %}max="{{ stock_qty }}"{% endif %}
               aria-label="Quantity"
             >
             <button type="button" class="cv-qty__btn" id="cv-qty-plus" aria-label="Increase quantity">
@@ -1619,11 +1620,16 @@ input.cv-qty__input {
       if (v > 1) qtyInput.value = v - 1;
     });
     qtyPlus.addEventListener('click', function () {
-      qtyInput.value = (parseInt(qtyInput.value, 10) || 1) + 1;
+      var v = parseInt(qtyInput.value, 10) || 1;
+      var max = parseInt(qtyInput.getAttribute('max'), 10);
+      if (!isNaN(max) && v >= max) return;
+      qtyInput.value = v + 1;
     });
     qtyInput.addEventListener('change', function () {
       var v = parseInt(qtyInput.value, 10);
       if (isNaN(v) || v < 1) qtyInput.value = 1;
+      var max = parseInt(qtyInput.getAttribute('max'), 10);
+      if (!isNaN(max) && v > max) qtyInput.value = max;
       if (stickyQtyDisplay) stickyQtyDisplay.textContent = qtyInput.value;
     });
   }
@@ -1642,6 +1648,8 @@ input.cv-qty__input {
     });
     stickyQtyPlus.addEventListener('click', function () {
       var v = parseInt(stickyQtyDisplay.textContent, 10) || 1;
+      var max = qtyInput ? parseInt(qtyInput.getAttribute('max'), 10) : NaN;
+      if (!isNaN(max) && v >= max) return;
       stickyQtyDisplay.textContent = v + 1;
       if (qtyInput) qtyInput.value = v + 1;
     });
