@@ -570,89 +570,7 @@
   </div>
   {%- endif -%}
 
-  {%- comment -%} 3. BROWSE BY CATEGORY {%- endcomment -%}
-  {%- if cat_cards.size > 0 or brand_links.size > 0 -%}
-  <section class="cvh-categories" aria-label="Browse by category">
-    <div class="cvh__inner">
-      <div class="cvh-section-hd cvh-section-hd--row">
-        <div>
-          <h2 class="cvh-section-title">{{ section.settings.cat_title | default: 'Browse by Category' }}</h2>
-          <p class="cvh-section-sub">{{ section.settings.cat_subtitle | default: 'Booster boxes, ETBs, cases, singles &amp; more — sorted to make your next pick easy.' }}</p>
-        </div>
-        <a href="/collections/all" class="cvh-btn cvh-btn--outline cvh-btn--sm" style="flex-shrink:0">Shop All</a>
-      </div>
-
-      {%- if cat_cards.size > 0 -%}
-      <div class="cvh-cat-grid">
-        {%- for block in cat_cards -%}
-          <a href="{{ block.settings.url | default: '/collections/all' }}" class="cvh-cat-card{% if block.settings.is_sale %} cvh-cat-card--sale{% endif %}" aria-label="Shop {{ block.settings.label }}" {{ block.shopify_attributes }}>
-            <div class="cvh-cat-card__icon">
-              {%- if block.settings.custom_icon != blank -%}
-                <img src="{{ block.settings.custom_icon | image_url: width: 100 }}" alt="{{ block.settings.label }} icon" loading="lazy">
-              {%- else -%}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  {%- case block.settings.icon -%}
-                    {%- when 'box' -%}<polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
-                    {%- when 'package' -%}<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
-                    {%- when 'briefcase' -%}<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                    {%- when 'layers' -%}<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
-                    {%- when 'tag' -%}<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
-                    {%- when 'star' -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    {%- when 'shopping-bag' -%}<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
-                    {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                  {%- endcase -%}
-                </svg>
-              {%- endif -%}
-            </div>
-            <span class="cvh-cat-card__label">{{ block.settings.label }}</span>
-          </a>
-        {%- endfor -%}
-      </div>
-      {%- endif -%}
-
-      {%- if brand_links.size > 0 -%}
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-top:0.75rem;">
-        {%- for block in brand_links -%}
-          <a href="{{ block.settings.url | default: '/collections/all' }}" class="cvh-cat-card cvh-cat-card--brand" style="flex-direction:row;justify-content:flex-start;padding:0.5rem 1.25rem;border-radius:var(--cv-radius);gap:0.75rem;" aria-label="Shop {{ block.settings.label }}" {{ block.shopify_attributes }}>
-          <div class="cvh-cat-card__icon" style="width:3.25rem;height:3.25rem;flex-shrink:0">
-              {%- if block.settings.custom_icon != blank -%}
-                <img src="{{ block.settings.custom_icon | image_url: width: 100 }}" alt="{{ block.settings.label }} icon" loading="lazy" style="width:100%; height:100%; object-fit:contain;">
-              {%- else -%}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-              {%- endif -%}
-            </div>
-            <span class="cvh-cat-card__label" style="font-size:0.9375rem">{{ block.settings.label }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1rem;height:1rem;margin-left:auto;color:var(--cv-muted-fg)"><polyline points="9 18 15 12 9 6"/></svg>
-          </a>
-        {%- endfor -%}
-      </div>
-      {%- endif -%}
-
-    </div>
-  </section>
-  {%- endif -%}
-
-  {%- comment -%} 4. MARQUEE {%- endcomment -%}
-  {%- if section.settings.show_marquee and marquee_items.size > 0 -%}
-  <div class="cvh-marquee" aria-hidden="true">
-    <div class="cvh-marquee__track" id="cvh-marquee">
-      {%- for block in marquee_items -%}
-        <span class="cvh-marquee__item" {{ block.shopify_attributes }}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          {{ block.settings.text }}
-        </span>
-      {%- endfor -%}
-      {%- for block in marquee_items -%}
-        <span class="cvh-marquee__item" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          {{ block.settings.text }}
-        </span>
-      {%- endfor -%}
-    </div>
-  </div>
-  {%- endif -%}
-
-  {%- comment -%} 5. FAN FAVOURITES {%- endcomment -%}
+  {%- comment -%} 3. FAN FAVOURITES {%- endcomment -%}
   <section class="cvh-featured" aria-label="Featured products">
     <div class="cvh__inner">
       <div class="cvh-section-hd cvh-section-hd--row">
@@ -842,6 +760,88 @@
       </div>
     </div>
   </section>
+
+  {%- comment -%} 4. MARQUEE {%- endcomment -%}
+  {%- if section.settings.show_marquee and marquee_items.size > 0 -%}
+  <div class="cvh-marquee" aria-hidden="true">
+    <div class="cvh-marquee__track" id="cvh-marquee">
+      {%- for block in marquee_items -%}
+        <span class="cvh-marquee__item" {{ block.shopify_attributes }}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          {{ block.settings.text }}
+        </span>
+      {%- endfor -%}
+      {%- for block in marquee_items -%}
+        <span class="cvh-marquee__item" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          {{ block.settings.text }}
+        </span>
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- comment -%} 5. BROWSE BY CATEGORY {%- endcomment -%}
+  {%- if cat_cards.size > 0 or brand_links.size > 0 -%}
+  <section class="cvh-categories" aria-label="Browse by category">
+    <div class="cvh__inner">
+      <div class="cvh-section-hd cvh-section-hd--row">
+        <div>
+          <h2 class="cvh-section-title">{{ section.settings.cat_title | default: 'Browse by Category' }}</h2>
+          <p class="cvh-section-sub">{{ section.settings.cat_subtitle | default: 'Booster boxes, ETBs, cases, singles &amp; more — sorted to make your next pick easy.' }}</p>
+        </div>
+        <a href="/collections/all" class="cvh-btn cvh-btn--outline cvh-btn--sm" style="flex-shrink:0">Shop All</a>
+      </div>
+
+      {%- if cat_cards.size > 0 -%}
+      <div class="cvh-cat-grid">
+        {%- for block in cat_cards -%}
+          <a href="{{ block.settings.url | default: '/collections/all' }}" class="cvh-cat-card{% if block.settings.is_sale %} cvh-cat-card--sale{% endif %}" aria-label="Shop {{ block.settings.label }}" {{ block.shopify_attributes }}>
+            <div class="cvh-cat-card__icon">
+              {%- if block.settings.custom_icon != blank -%}
+                <img src="{{ block.settings.custom_icon | image_url: width: 100 }}" alt="{{ block.settings.label }} icon" loading="lazy">
+              {%- else -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  {%- case block.settings.icon -%}
+                    {%- when 'box' -%}<polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/>
+                    {%- when 'package' -%}<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                    {%- when 'briefcase' -%}<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    {%- when 'layers' -%}<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+                    {%- when 'tag' -%}<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
+                    {%- when 'star' -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    {%- when 'shopping-bag' -%}<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                    {%- else -%}<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  {%- endcase -%}
+                </svg>
+              {%- endif -%}
+            </div>
+            <span class="cvh-cat-card__label">{{ block.settings.label }}</span>
+          </a>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+
+      {%- if brand_links.size > 0 -%}
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-top:0.75rem;">
+        {%- for block in brand_links -%}
+          <a href="{{ block.settings.url | default: '/collections/all' }}" class="cvh-cat-card cvh-cat-card--brand" style="flex-direction:row;justify-content:flex-start;padding:0.5rem 1.25rem;border-radius:var(--cv-radius);gap:0.75rem;" aria-label="Shop {{ block.settings.label }}" {{ block.shopify_attributes }}>
+          <div class="cvh-cat-card__icon" style="width:3.25rem;height:3.25rem;flex-shrink:0">
+              {%- if block.settings.custom_icon != blank -%}
+                <img src="{{ block.settings.custom_icon | image_url: width: 100 }}" alt="{{ block.settings.label }} icon" loading="lazy" style="width:100%; height:100%; object-fit:contain;">
+              {%- else -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              {%- endif -%}
+            </div>
+            <span class="cvh-cat-card__label" style="font-size:0.9375rem">{{ block.settings.label }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1rem;height:1rem;margin-left:auto;color:var(--cv-muted-fg)"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+
+    </div>
+  </section>
+  {%- endif -%}
 
   {%- comment -%} 6. PROMOTIONAL BANNERS {%- endcomment -%}
   {%- if promo_banners.size > 0 -%}
