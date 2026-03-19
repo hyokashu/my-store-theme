@@ -13,7 +13,7 @@
       "type": "main-cart",
       "settings": {
         "show_free_ship": true,
-        "free_ship_threshold": 15000,
+        "free_ship_threshold": 25000,
         "upsell_collection": "one-piece"
       }
     }
