@@ -211,7 +211,7 @@
           "type": "brand_link",
           "settings": {
             "label": "Pokemon",
-            "url": "",
+            "url": "shopify://collections/pokemon-collection",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-56-05_1.png"
           }
         },
