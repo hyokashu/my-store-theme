@@ -6,19 +6,19 @@
 
 /* ── Design tokens ─────────────────────────────────────────── */
 :root {
-  --sd-announce-bg:     #1e3a5f;   /* near-black with a hint of purple */
-  --sd-announce-fg:     #e8f2fc;   /* off-white text */
-  --sd-announce-accent: #93c5fd;   /* soft violet for the icon/link hover */
+  --sd-announce-bg:     #2d5016;   /* deep forest green — Sprout primary */
+  --sd-announce-fg:     #f4f0e8;   /* warm cream text */
+  --sd-announce-accent: #c9a227;   /* gold for icons/link hover */
   --sd-announce-height: 2.5rem;    /* used by sticky JS offset */
 
   --sd-header-bg:       #ffffff;
-  --sd-header-fg:       #1e3a5f;
-  --sd-header-border:   #c5d8ee;
+  --sd-header-fg:       #2d5016;
+  --sd-header-border:   #d4cdb8;
   --sd-header-height:   5.5rem;    /* comfortable desktop height */
 
-  --sd-search-bg:       #eef5fc;
-  --sd-search-border:   #c5d8ee;
-  --sd-search-focus:    #1e3a5f;   /* navy focus ring — matches store primary */
+  --sd-search-bg:       #f4f0e8;
+  --sd-search-border:   #d4cdb8;
+  --sd-search-focus:    #2d5016;   /* forest green focus ring — Sprout primary */
   --sd-search-radius:   9999px;    /* fully pill-shaped */
 
   --sd-cart-badge-bg:   #dc2626;   /* red dot */
@@ -252,7 +252,7 @@
 .sd-search-input::placeholder { color: #9ca3af; }
 .sd-search-input:focus {
   border-color: var(--sd-search-focus);
-  box-shadow:   0 0 0 3px rgba(30, 58, 95, 0.12);
+  box-shadow:   0 0 0 3px rgba(45, 80, 22, 0.12);
   background:   #ffffff;
 }
 /* Hide native clear button in WebKit */

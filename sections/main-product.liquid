@@ -35,33 +35,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@600;700;800&family=Playfair+Display:wght@400;700&display=swap');
 /* =============================================================
-   CardVault Design Tokens
+   Sprout Design Tokens
    ============================================================= */
 :root {
-  --cv-bg:          #eef5fc;
-  --cv-fg:          #1c2a3e;
+  --cv-bg:          #f4f0e8;
+  --cv-fg:          #1a2510;
   --cv-card:        #ffffff;
-  --cv-primary:     #1e3a5f;
-  --cv-primary-fg:  #eef5fc;
-  --cv-secondary:   #e0eaf5;
-  --cv-muted-fg:    #6b7fa8;
-  --cv-border:      #c5d8ee;
+  --cv-primary:     #2d5016;
+  --cv-primary-fg:  #f4f0e8;
+  --cv-secondary:   #e2ddd0;
+  --cv-muted-fg:    #6b7a5a;
+  --cv-border:      #d4cdb8;
   --cv-destructive: #c94030;
-  --cv-success:     #16a34a;
-  --cv-success-fg:  #f8f7f5;
-  --cv-star:        #d4783a;
-  --cv-radius:      0.5rem;
+  --cv-success:     #3d7a1f;
+  --cv-success-fg:  #f4f0e8;
+  --cv-star:        #c9a227;
+  --cv-accent:      #c9a227;
+  --cv-accent-fg:   #1a2510;
+  --cv-radius:      0.75rem;
   --cv-shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
   --cv-shadow:      0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
   --cv-font-sans:   'Inter', system-ui, -apple-system, sans-serif;
-  --cv-font-head:   'Space Grotesk', system-ui, sans-serif;
+  --cv-font-head:   'Nunito', system-ui, sans-serif;
+  --cv-font-display: 'Playfair Display', Georgia, serif;
 
   /* ── Von Restorff accent: ONLY used on Add to Cart / Buy Now / Checkout ── */
-  --color-cta-primary:    #16a34a;   /* bold green — matches Authentic badge, high contrast on cream + slate */
+  --color-cta-primary:    #3d7a1f;   /* Sprout leaf green — high contrast on cream + forest */
   --color-cta-primary-fg: #ffffff;
-  --color-cta-primary-hover: #15803d;
+  --color-cta-primary-hover: #2d5a15;
 }
 
 /* =============================================================
@@ -88,7 +91,7 @@
   margin: 1.5rem auto 0;
   padding: 1.5rem max(1rem, 4vw);
   background-color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(30,58,95,0.07);
+  box-shadow: 0 2px 8px rgba(45,80,22,0.07);
   border: 1px solid var(--cv-border);
   border-radius: 8px;
 }
@@ -253,7 +256,7 @@
 .cv-gallery__thumb.is-active {
   border-color: var(--cv-primary);
   opacity: 1;
-  box-shadow: 0 0 0 3px rgba(30,58,95,0.12);
+  box-shadow: 0 0 0 3px rgba(45,80,22,0.12);
 }
 .cv-gallery__thumb:hover { opacity: 1; }
 
@@ -287,8 +290,8 @@
   line-height: 1.4;
 }
 .cv-badge svg { width: 0.75rem; height: 0.75rem; }
-.cv-badge--sealed   { background: rgba(30,58,95,0.07);   color: var(--cv-primary);     border-color: rgba(30,58,95,0.18); }
-.cv-badge--auth     { background: #E6F4EA;                color: var(--cv-success);     border-color: rgba(22,163,74,0.3); }
+.cv-badge--sealed   { background: rgba(45,80,22,0.07);   color: var(--cv-primary);     border-color: rgba(45,80,22,0.18); }
+.cv-badge--auth     { background: #E8F0E2;                color: var(--cv-success);     border-color: rgba(61,122,31,0.3); }
 .cv-badge--stock    { background: rgba(201,64,48,0.08);  color: var(--cv-destructive); border-color: rgba(201,64,48,0.2); }
 .cv-badge--oos      { background: #FEE2E2;                color: #DC2626;               border-color: rgba(220,38,38,0.3); }
 
@@ -346,7 +349,7 @@
   padding: 0.625rem 0.875rem;
   border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
-  background: #e0eaf5;
+  background: #e2ddd0;
   box-shadow: var(--cv-shadow-sm);
 }
 @media (min-width: 768px) {
@@ -432,7 +435,7 @@ input.cv-qty__input {
 }
 .cv-btn--primary:hover  { background: var(--color-cta-primary-hover); border-color: var(--color-cta-primary-hover); animation: none; }
 .cv-btn--primary:active { opacity: 0.85; }
-.cv-btn--primary:disabled { background: #c5d8ee; border-color: #c5d8ee; color: #9CA3AF; cursor: not-allowed; box-shadow: none; animation: none; opacity: 1; }
+.cv-btn--primary:disabled { background: #d4cdb8; border-color: #d4cdb8; color: #9CA3AF; cursor: not-allowed; box-shadow: none; animation: none; opacity: 1; }
 
 /* Buy Now inherits CTA colour */
 .cv-btn--outline-primary {
@@ -516,7 +519,7 @@ input.cv-qty__input {
   .cv-trust-item:last-child { border-right: none; }
 }
 .cv-trust-item:last-child { border-bottom: none; }
-.cv-trust-item:hover { background: rgba(30,58,95,0.025); }
+.cv-trust-item:hover { background: rgba(45,80,22,0.025); }
 .cv-trust-item__icon { flex-shrink: 0; margin-top: 0.125rem; transition: transform 0.2s; }
 .cv-trust-item__icon svg { width: 1.25rem; height: 1.25rem; color: var(--cv-primary); }
 .cv-trust-item:hover .cv-trust-item__icon { transform: scale(1.12); }
@@ -587,7 +590,7 @@ input.cv-qty__input {
   padding: 0.875rem;
   border: 1px solid var(--cv-border);
   border-radius: var(--cv-radius);
-  background: rgba(30,58,95,0.04);
+  background: rgba(45,80,22,0.04);
 }
 /* Desktop: clean separator rows */
 @media (min-width: 768px) {
@@ -605,7 +608,7 @@ input.cv-qty__input {
   flex-shrink: 0; margin-top: 0.125rem;
   width: 1.75rem; height: 1.75rem;
   border-radius: 9999px;
-  background: rgba(30,58,95,0.08);
+  background: rgba(45,80,22,0.08);
   display: flex; align-items: center; justify-content: center;
 }
 .cv-content-item__icon svg { width: 0.875rem; height: 0.875rem; color: var(--cv-primary); }
@@ -687,7 +690,7 @@ input.cv-qty__input {
 .cv-reviewer__top { display: flex; align-items: center; gap: 0.5rem; }
 .cv-reviewer__avatar {
   width: 2rem; height: 2rem; border-radius: 9999px;
-  background: rgba(30,58,95,0.1);
+  background: rgba(45,80,22,0.1);
   display: flex; align-items: center; justify-content: center;
   font-size: 0.75rem; font-weight: 700; color: var(--cv-primary);
   flex-shrink: 0;
@@ -758,7 +761,7 @@ input.cv-qty__input {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .cv-product-card:hover {
-  border-color: rgba(30,58,95,0.25);
+  border-color: rgba(45,80,22,0.25);
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 .cv-product-card__img-wrap {
