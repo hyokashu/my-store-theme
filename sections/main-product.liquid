@@ -62,10 +62,10 @@
   --cv-font-head:   'Nunito', system-ui, sans-serif;
   --cv-font-display: 'Playfair Display', Georgia, serif;
 
-  /* ── Von Restorff accent: ONLY used on Add to Cart / Buy Now / Checkout ── */
-  --color-cta-primary:    #C59B43;   /* Gilded gold — dark text on gold for WCAG AA */
-  --color-cta-primary-fg: #1a2510;
-  --color-cta-primary-hover: #A8832C;
+  /* ── CTA buttons: forest green matching announcement bar & logo ── */
+  --color-cta-primary:    #2C4731;
+  --color-cta-primary-fg: #ffffff;
+  --color-cta-primary-hover: #1E3526;
 }
 
 /* =============================================================
@@ -416,23 +416,13 @@ input.cv-qty__input {
 }
 .cv-btn svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
 
-@keyframes cv-btn-shine {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
 
 .cv-btn--primary {
   flex: 1; border-color: var(--color-cta-primary);
   color: var(--color-cta-primary-fg);
-  box-shadow: 0 2px 8px rgba(46,153,99,0.30);
-  background: linear-gradient(
-    105deg,
-    var(--color-cta-primary) 40%,
-    #3dba7f 50%,
-    var(--color-cta-primary) 60%
-  );
-  background-size: 200% auto;
-  animation: cv-btn-shine 2.5s linear 0.8s 1;
+  box-shadow: 0 2px 8px rgba(44,71,49,0.30);
+  background: var(--color-cta-primary);
+  animation: none;
 }
 .cv-btn--primary:hover  { background: var(--color-cta-primary-hover); border-color: var(--color-cta-primary-hover); animation: none; }
 .cv-btn--primary:active { opacity: 0.85; }
@@ -976,7 +966,7 @@ input.cv-qty__input {
   transition: border-color 0.15s;
 }
 .cv-notify-email:focus { outline: none; border-color: var(--cv-primary); box-shadow: 0 0 0 3px rgba(44,71,49,0.12); }
-.cv-notify-btn { width: 100%; margin-top: 0.375rem; animation: none; background-size: auto; }
+.cv-notify-btn { width: 100%; margin-top: 0.375rem; }
 .cv-notify-privacy {
   font-size: 0.8rem; color: var(--cv-muted-fg);
   text-align: center; margin: 0.5rem 0 0; opacity: 0.75;
