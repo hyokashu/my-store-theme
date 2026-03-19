@@ -14,7 +14,7 @@
         "type": "announcement-bar",
         "settings": {
           "show_bar": true,
-          "promo_text": "Free Shipping on orders over $200",
+          "promo_text": "Free Shipping on orders over $250",
           "promo_url": "",
           "icon_show": true
         }
