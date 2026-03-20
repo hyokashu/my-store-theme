@@ -29,6 +29,7 @@
         "pillar3": {
           "type": "value_pillar",
           "settings": {
+            "pillar_image": "shopify://shop_images/aus_post_resume_delivers_US.jpg",
             "pillar_title": "Fast Australian Shipping",
             "pillar_desc": "Operating locally, we provide lightning-fast, fully insured dispatch Australia-wide. We track your highly sought-after sets every step of the way, with free shipping on all orders over $200."
           }
