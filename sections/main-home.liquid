@@ -14,7 +14,6 @@
   assign promo_banners = section.blocks | where: "type", "promo_banner"
   assign about_checks = section.blocks | where: "type", "about_check"
   assign reward_items = section.blocks | where: "type", "reward_item"
-  assign reviews = section.blocks | where: "type", "review"
 
   assign tab1_col = collections[section.settings.tab1_collection]
   assign tab2_col = collections[section.settings.tab2_collection]
@@ -352,24 +351,6 @@
 .cvh-about__ctas { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
 
 /* =============================================================
-   10. REVIEWS
-   ============================================================= */
-.cvh-reviews { padding: 2.5rem 0; background-color: var(--cv-card); border-bottom: 1px solid var(--cv-border); }
-.cvh-reviews__title-wrap { text-align: center; margin-bottom: 3rem; }
-.cvh-reviews__mega { font-family: var(--cv-font-head); font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; }
-.cvh-reviews__scroll { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 0.5rem; }
-.cvh-reviews__scroll::-webkit-scrollbar { display: none; }
-.cvh-review-card { scroll-snap-align: start; flex-shrink: 0; width: calc(100vw - 3rem); max-width: 22rem; border: 1px solid var(--cv-border); border-radius: calc(var(--cv-radius) * 2); background: var(--cv-card); padding: 1.5rem; box-shadow: var(--cv-shadow-sm); }
-@media (min-width: 768px) { .cvh-review-card { width: 22rem; } }
-.cvh-review-card__stars { display: flex; gap: 0.125rem; margin-bottom: 0.75rem; }
-.cvh-review-card__stars svg { width: 1rem; height: 1rem; fill: var(--cv-star); color: var(--cv-star); }
-.cvh-review-card__text { font-size: 0.9375rem; line-height: 1.65; color: var(--cv-muted-fg); margin-bottom: 1.25rem; }
-.cvh-review-card__author { display: flex; align-items: center; gap: 0.625rem; }
-.cvh-review-card__avatar { width: 2.25rem; height: 2.25rem; border-radius: 9999px; background: rgba(44,71,49,0.1); display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; font-weight: 700; color: var(--cv-primary); flex-shrink: 0; }
-.cvh-review-card__name { font-size: 0.875rem; font-weight: 600; }
-.cvh-review-card__meta { font-size: 0.75rem; color: var(--cv-muted-fg); }
-
-/* =============================================================
    11. NEWSLETTER
    ============================================================= */
 .cvh-newsletter { padding: 2.5rem 1rem; background: var(--cv-primary); border-top: none; border-bottom: none; }
@@ -386,7 +367,7 @@
 @media (max-width: 767px) {
   main { padding-left: 0 !important; padding-right: 0 !important; }
   .cvh__inner { padding-left: 8px !important; padding-right: 8px !important; }
-  .cvh-prod-card, .cvh-review-card { border: none !important; box-shadow: none !important; }
+  .cvh-prod-card { border: none !important; box-shadow: none !important; }
 
   /* Hero: darker overlay scrim for better contrast on small screens */
   .cvh-hero__overlay { background: rgba(10, 22, 13, 0.82); }
@@ -915,36 +896,6 @@
   </section>
   {%- endif -%}
 
-  {%- comment -%} 10. REVIEWS {%- endcomment -%}
-  {%- if reviews.size > 0 -%}
-  <section class="cvh-reviews" aria-label="Customer reviews">
-    <div class="cvh__inner">
-      <div class="cvh-reviews__title-wrap">
-        <h2 class="cvh-reviews__mega">{{ section.settings.reviews_title | default: 'Loved by Thousands of Players' }}</h2>
-      </div>
-      <div class="cvh-reviews__scroll" role="list">
-        {%- for block in reviews -%}
-          <div class="cvh-review-card" role="listitem" {{ block.shopify_attributes }}>
-            <div class="cvh-review-card__stars" aria-label="5 out of 5 stars">
-              {%- for i in (1..5) -%}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="var(--cv-star)"/></svg>
-              {%- endfor -%}
-            </div>
-            <p class="cvh-review-card__text">&ldquo;{{ block.settings.text }}&rdquo;</p>
-            <div class="cvh-review-card__author">
-              <div class="cvh-review-card__avatar" aria-hidden="true">{{ block.settings.author_name | slice: 0 }}</div>
-              <div>
-                <div class="cvh-review-card__name">{{ block.settings.author_name }}</div>
-                <div class="cvh-review-card__meta">{{ block.settings.author_role }}</div>
-              </div>
-            </div>
-          </div>
-        {%- endfor -%}
-      </div>
-    </div>
-  </section>
-  {%- endif -%}
-
   {%- comment -%} 11. NEWSLETTER {%- endcomment -%}
   {%- if section.settings.show_newsletter -%}
   <section class="cvh-newsletter" aria-label="Newsletter signup">
@@ -1228,15 +1179,6 @@
         { "type": "text", "id": "text", "label": "Text", "default": "1 Vault Coin for every $1 spent" }
       ]
     },
-    {
-      "type": "review",
-      "name": "Customer Review",
-      "settings": [
-        { "type": "textarea", "id": "text",        "label": "Review text",    "default": "Amazing service! My order arrived in perfect condition." },
-        { "type": "text",     "id": "author_name", "label": "Author name",    "default": "Alex M." },
-        { "type": "text",     "id": "author_role", "label": "Author role",    "default": "Pokemon Collector" }
-      ]
-    }
   ],
   "settings": [
     { "type": "header", "content": "Hero Slider" },
@@ -1307,9 +1249,6 @@
     { "type": "url",          "id": "about_cta1_url",  "label": "Button 1 URL" },
     { "type": "text",         "id": "about_cta2_label","label": "Button 2 label",     "default": "Contact Us" },
     { "type": "url",          "id": "about_cta2_url",  "label": "Button 2 URL" },
-
-    { "type": "header", "content": "Reviews" },
-    { "type": "text", "id": "reviews_title", "label": "Section heading", "default": "Loved by Thousands of Players" },
 
     { "type": "header", "content": "Newsletter" },
     { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter",   "default": true },
