@@ -595,3 +595,47 @@
   </div>{%- comment -%}/.sdsr-body{%- endcomment -%}
 
 </div>{%- comment -%}/.sdsr-wrap{%- endcomment -%}
+
+<script>
+(function () {
+  'use strict';
+
+  // ── Tab switching ──────────────────────────────────────────
+  var tabBtns = document.querySelectorAll('[data-sdsr-tab]');
+  tabBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = btn.getAttribute('data-sdsr-tab');
+
+      // Update tab buttons
+      tabBtns.forEach(function (b) {
+        b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+      });
+
+      // Update panes
+      document.querySelectorAll('.sdsr-pane').forEach(function (pane) {
+        var isTarget = pane.id === 'sdsr-pane-' + target;
+        pane.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
+      });
+    });
+  });
+
+  // ── Accordion (single-open per accordion group) ────────────
+  document.querySelectorAll('[data-sdsr-acc-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.closest('.sdsr-acc-item');
+      var accordion = item.closest('[data-sdsr-accordion]');
+      var isOpen = item.getAttribute('aria-expanded') === 'true';
+
+      // Close all items in this accordion
+      accordion.querySelectorAll('.sdsr-acc-item').forEach(function (i) {
+        i.setAttribute('aria-expanded', 'false');
+      });
+
+      // Open clicked item unless it was already open
+      if (!isOpen) {
+        item.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+})();
+</script>
