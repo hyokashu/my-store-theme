@@ -639,3 +639,80 @@
   });
 })();
 </script>
+
+{% schema %}
+{
+  "name": "Shipping & Returns",
+  "tag": "div",
+  "class": "sdsr-section-wrap",
+  "settings": [
+    { "type": "header",   "content": "Hero" },
+    { "type": "text",     "id": "hero_eyebrow",    "label": "Eyebrow",     "default": "Store Policies" },
+    { "type": "text",     "id": "hero_heading",    "label": "Heading",     "default": "Shipping & Returns" },
+    { "type": "textarea", "id": "hero_subheading", "label": "Subheading",  "default": "Everything you need to know about getting your order and hassle-free returns." },
+
+    { "type": "header",   "content": "Tab Labels" },
+    { "type": "text",     "id": "shipping_tab_label", "label": "Shipping tab",  "default": "Shipping" },
+    { "type": "text",     "id": "returns_tab_label",  "label": "Returns tab",   "default": "Returns" },
+
+    { "type": "header",   "content": "Shipping — Section" },
+    { "type": "text",     "id": "shipping_icon",    "label": "Icon (emoji)", "default": "🚚" },
+    { "type": "text",     "id": "shipping_heading", "label": "Heading",      "default": "Shipping Information" },
+    { "type": "textarea", "id": "shipping_subtext", "label": "Subtext",      "default": "We ship Australia-wide. All orders are carefully packed and dispatched from our warehouse." },
+
+    { "type": "header",   "content": "Shipping — Info Strip" },
+    { "type": "text",     "id": "shipping_chip_1_icon",  "label": "Chip 1 icon",  "default": "🎁" },
+    { "type": "text",     "id": "shipping_chip_1_label", "label": "Chip 1 label", "default": "Free shipping on orders over $250" },
+    { "type": "text",     "id": "shipping_chip_2_icon",  "label": "Chip 2 icon",  "default": "📦" },
+    { "type": "text",     "id": "shipping_chip_2_label", "label": "Chip 2 label", "default": "Australia only" },
+    { "type": "text",     "id": "shipping_chip_3_icon",  "label": "Chip 3 icon",  "default": "🔒" },
+    { "type": "text",     "id": "shipping_chip_3_label", "label": "Chip 3 label", "default": "Tracked & insured" },
+
+    { "type": "header",   "content": "Shipping — Contact CTA" },
+    { "type": "text",     "id": "shipping_cta_heading", "label": "Heading",      "default": "Still have shipping questions?" },
+    { "type": "textarea", "id": "shipping_cta_subtext", "label": "Subtext",      "default": "Our team is happy to help — usually within 1 business day." },
+    { "type": "text",     "id": "shipping_cta_label",   "label": "Button label", "default": "Contact Us" },
+    { "type": "url",      "id": "shipping_cta_url",     "label": "Button URL" },
+
+    { "type": "header",   "content": "Returns — Section" },
+    { "type": "text",     "id": "returns_icon",    "label": "Icon (emoji)", "default": "↩️" },
+    { "type": "text",     "id": "returns_heading", "label": "Heading",      "default": "Returns Policy" },
+    { "type": "textarea", "id": "returns_subtext", "label": "Subtext",      "default": "We want you to shop with confidence. If something isn't right, we'll do our best to make it easy." },
+
+    { "type": "header",   "content": "Returns — Info Strip" },
+    { "type": "text",     "id": "returns_chip_1_icon",  "label": "Chip 1 icon",  "default": "📅" },
+    { "type": "text",     "id": "returns_chip_1_label", "label": "Chip 1 label", "default": "14-day return window" },
+    { "type": "text",     "id": "returns_chip_2_icon",  "label": "Chip 2 icon",  "default": "🔒" },
+    { "type": "text",     "id": "returns_chip_2_label", "label": "Chip 2 label", "default": "Sealed products only" },
+    { "type": "text",     "id": "returns_chip_3_icon",  "label": "Chip 3 icon",  "default": "📧" },
+    { "type": "text",     "id": "returns_chip_3_label", "label": "Chip 3 label", "default": "Contact us first" },
+
+    { "type": "header",   "content": "Returns — Contact CTA" },
+    { "type": "text",     "id": "returns_cta_heading", "label": "Heading",      "default": "Need to start a return?" },
+    { "type": "textarea", "id": "returns_cta_subtext", "label": "Subtext",      "default": "Reach out and we'll guide you through the process." },
+    { "type": "text",     "id": "returns_cta_label",   "label": "Button label", "default": "Contact Us" },
+    { "type": "url",      "id": "returns_cta_url",     "label": "Button URL" }
+  ],
+  "blocks": [
+    {
+      "type": "shipping_faq",
+      "name": "Shipping FAQ",
+      "settings": [
+        { "type": "text",     "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer",   "label": "Answer" }
+      ]
+    },
+    {
+      "type": "returns_faq",
+      "name": "Returns FAQ",
+      "settings": [
+        { "type": "text",     "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer",   "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Shipping & Returns" }
+  ]
+}
+{% endschema %}
