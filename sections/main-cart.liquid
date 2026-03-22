@@ -497,20 +497,28 @@ function initCartLogic() {
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({ id: key, quantity: qty })
     })
-    .then(r => window.location.pathname)
-    .then(path => fetch(path)) // Fetch entire cart page to get new DOM
-    .then(r => r.text())
-    .then(html => {
+    .then(function(r) {
+      return r.json().then(function(data) {
+        if (!r.ok) { showError(data.description || 'Failed to update cart.'); throw data; }
+        return r;
+      });
+    })
+    .then(function() { return fetch(window.location.pathname); })
+    .then(function(r) { return r.text(); })
+    .then(function(html) {
       var doc = new DOMParser().parseFromString(html, 'text/html');
       var newCart = doc.getElementById('sdc-cart-wrap');
       if(newCart) {
         document.getElementById('sdc-cart-wrap').innerHTML = newCart.innerHTML;
-        initCartLogic(); // Re-bind events to new HTML
+        initCartLogic();
       } else {
         window.location.reload();
       }
     })
-    .catch(() => showError('Failed to update cart. Please refresh.'));
+    .catch(function(err) {
+      if (row) row.classList.remove('is-updating');
+      if (!err || !err.description) showError('Failed to update cart. Please refresh.');
+    });
   }
 
   /* Event Listeners for + / - / Remove */
