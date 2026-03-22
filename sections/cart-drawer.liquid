@@ -821,6 +821,10 @@ window.__SCD__ = {
   /* ── State ── */
   var isOpen = false;
 
+  /* ── Inventory Cache ── */
+  var inventoryCache = {};        // handle → { variantId: { qty, policy } }
+  var inventoryFetchInFlight = {}; // handle → Promise (deduplicates concurrent fetches)
+
   /* ════════════════════════════════════════
      OPEN / CLOSE
      ════════════════════════════════════════ */
@@ -845,6 +849,66 @@ window.__SCD__ = {
     drawer.classList.remove('is-open');
     drawer.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+  }
+
+  function fetchInventoryForCart(items) {
+    var handles = [];
+    (items || []).forEach(function(item) {
+      if (handles.indexOf(item.handle) === -1) handles.push(item.handle);
+    });
+
+    var promises = handles.map(function(handle) {
+      if (inventoryCache[handle]) return Promise.resolve();
+      if (inventoryFetchInFlight[handle]) return inventoryFetchInFlight[handle];
+
+      var p = fetch('/products/' + handle + '.js')
+        .then(function(r) { return r.json(); })
+        .then(function(product) {
+          inventoryCache[handle] = {};
+          (product.variants || []).forEach(function(v) {
+            inventoryCache[handle][v.id] = {
+              qty: v.inventory_quantity,
+              policy: v.inventory_policy
+            };
+          });
+          delete inventoryFetchInFlight[handle];
+        })
+        .catch(function() {
+          delete inventoryFetchInFlight[handle];
+        });
+
+      inventoryFetchInFlight[handle] = p;
+      return p;
+    });
+
+    return Promise.all(promises);
+  }
+
+  function applyDrawerStockLimits(items) {
+    (items || []).forEach(function(item) {
+      var cached = (inventoryCache[item.handle] || {})[item.variant_id];
+      if (!cached || cached.policy !== 'deny') return;
+
+      var itemEl = $('.scd-item[data-key="' + item.key + '"]');
+      if (!itemEl) return;
+
+      var plusBtn = itemEl.querySelector('.scd-qty-inc');
+      var badge = itemEl.querySelector('.scd-stock-badge');
+      if (!plusBtn || !badge) return;
+
+      var remaining = cached.qty - item.quantity;
+
+      if (remaining <= 0) {
+        plusBtn.disabled = true;
+        badge.textContent = 'Max quantity reached';
+      } else if (remaining <= 5) {
+        plusBtn.disabled = false;
+        badge.textContent = 'Only ' + remaining + ' left';
+      } else {
+        plusBtn.disabled = false;
+        badge.textContent = '';
+      }
+    });
   }
 
   /* ════════════════════════════════════════
