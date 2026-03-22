@@ -966,6 +966,9 @@ window.__SCD__ = {
       if (upsellEl) show(upsellEl);
       itemsEl.innerHTML = (cart.items || []).map(renderItem).join('');
       bindItemEvents();
+      fetchInventoryForCart(cart.items).then(function() {
+        applyDrawerStockLimits(cart.items);
+      });
     }
   }
 
