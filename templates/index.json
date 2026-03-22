@@ -179,6 +179,7 @@
         },
         "category_card_6473yk": {
           "type": "category_card",
+          "disabled": true,
           "settings": {
             "label": "Cases",
             "url": "",
