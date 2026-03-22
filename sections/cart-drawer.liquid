@@ -988,7 +988,7 @@ window.__SCD__ = {
     var priceHtml = '<span class="scd-item__price">' + money(item.price) + '</span>';
 
     return [
-      '<div class="scd-item" data-key="' + item.key + '">',
+      '<div class="scd-item" data-key="' + item.key + '" data-handle="' + item.handle + '" data-variant-id="' + item.variant_id + '">',
         '<div class="scd-item__img-wrap">',
           '<a href="' + item.url + '" tabindex="-1">' + imgHtml + '</a>',
         '</div>',
@@ -1005,6 +1005,7 @@ window.__SCD__ = {
               '<button class="cv-qty__btn scd-qty-inc" data-key="' + item.key + '" aria-label="Increase">',
                 '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
               '</button>',
+              '<span class="scd-stock-badge" aria-live="polite"></span>',
             '</div>',
           '</div>',
           '<button class="scd-item__remove" data-key="' + item.key + '" aria-label="Remove ' + escHtml(item.product_title) + '">Remove</button>',
