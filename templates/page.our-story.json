@@ -92,7 +92,7 @@
         "cta1_label": "Shop Collection",
         "cta1_url": "shopify://collections",
         "cta2_label": "Contact Us",
-        "cta2_url": ""
+        "cta2_url": "shopify://pages/contact"
       }
     }
   },
