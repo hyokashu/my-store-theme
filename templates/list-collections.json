@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-list-collections",
+      "settings": {
+        "heading": "Browse Collections",
+        "subheading": "Everything we carry — from sealed booster boxes to promos and specials.",
+        "padding_top": 48,
+        "padding_bottom": 64
+      }
+    }
+  },
+  "order": ["main"]
+}
