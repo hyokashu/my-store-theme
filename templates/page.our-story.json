@@ -15,6 +15,7 @@
         "pillar1": {
           "type": "value_pillar",
           "settings": {
+            "pillar_image": "shopify://shop_images/0aefadbe-f7d9-4b9c-bad0-1db3a84088da.jpg",
             "pillar_title": "Authenticity",
             "pillar_desc": "We source directly from official, verified distributors. No weighed packs, no resealed booster boxes, just legitimate TCG products you can trust to keep sealed or rip with confidence."
           }
@@ -22,6 +23,7 @@
         "pillar2": {
           "type": "value_pillar",
           "settings": {
+            "pillar_image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-22_00-59-04.png",
             "pillar_title": "Collector-Grade Packaging",
             "pillar_desc": "We understand the pain of dented corners on a chase item. Every order is heavily bubble-wrapped and secured in sturdy shipping boxes to ensure your sealed collection arrives in pristine condition."
           }
