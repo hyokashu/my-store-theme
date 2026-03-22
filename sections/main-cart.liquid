@@ -531,7 +531,13 @@ function initCartLogic() {
       var qty = input ? parseInt(input.value) : 1;
 
       if(btn.classList.contains('sdc-qty-minus')) updateCart(key, Math.max(0, qty - 1));
-      else if(btn.classList.contains('sdc-qty-plus')) updateCart(key, qty + 1);
+      else if(btn.classList.contains('sdc-qty-plus')) {
+        var ctrl = btn.closest('.cv-qty');
+        var maxQty = parseInt(ctrl.dataset.inventoryQty, 10);
+        var policy = ctrl.dataset.inventoryPolicy;
+        if (policy === 'deny' && qty >= maxQty) { applyStockLimits(); return; }
+        updateCart(key, qty + 1);
+      }
       else if(btn.classList.contains('sdc-remove-btn')) updateCart(key, 0);
     });
 
@@ -548,7 +554,14 @@ function initCartLogic() {
           return;
         }
         var qty = Math.max(0, parsed);
-        debounce = setTimeout(() => updateCart(key, qty), 500);
+        var ctrl = e.target.closest('.cv-qty');
+        var maxQty = parseInt(ctrl.dataset.inventoryQty, 10);
+        var policy = ctrl.dataset.inventoryPolicy;
+        if (policy === 'deny' && qty > maxQty) {
+          e.target.value = maxQty;
+          qty = maxQty;
+        }
+        debounce = setTimeout(function() { updateCart(key, qty); }, 500);
       }
     });
   }
