@@ -315,10 +315,13 @@ details.sdc-discount[open] .sdc-discount__chevron { transform: rotate(180deg); }
                   </div>
 
                   <div class="sdc-item__actions">
-                    <div class="cv-qty">
+                    <div class="cv-qty"
+                      data-inventory-qty="{% if item.variant.inventory_management == 'shopify' %}{{ item.variant.inventory_quantity }}{% else %}9999{% endif %}"
+                      data-inventory-policy="{{ item.variant.inventory_policy }}">
                       <button type="button" class="cv-qty__btn sdc-qty-minus" data-item-key="{{ item.key }}" {%- if item.quantity <= 1 %} disabled{%- endif -%}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
                       <input type="number" class="cv-qty__input sdc-qty-input" name="updates[]" value="{{ item.quantity }}" min="0" data-item-key="{{ item.key }}">
                       <button type="button" class="cv-qty__btn sdc-qty-plus" data-item-key="{{ item.key }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+                      <span class="sdc-stock-badge" aria-live="polite"></span>
                     </div>
                     <span class="sdc-item__line-total" id="sdc-line-{{ item.key | replace: ':', '-' }}">{{ item.final_line_price | money }}</span>
                   </div>
