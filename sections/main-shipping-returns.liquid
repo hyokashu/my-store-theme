@@ -495,3 +495,103 @@
         {%- endif -%}
 
       </div>
+
+      {%- comment -%} ── RETURNS PANE ── {%- endcomment -%}
+      <div
+        id="sdsr-pane-returns"
+        class="sdsr-pane"
+        role="tabpanel"
+        aria-labelledby="sdsr-tab-returns"
+        aria-hidden="true"
+      >
+
+        {%- comment -%} Section intro {%- endcomment -%}
+        <div class="sdsr-section-intro">
+          <div class="sdsr-section-icon" aria-hidden="true">{{ section.settings.returns_icon | default: '↩️' }}</div>
+          <div class="sdsr-section-intro__text">
+            <h2>{{ section.settings.returns_heading | default: 'Returns Policy' }}</h2>
+            {%- if section.settings.returns_subtext != blank -%}
+              <p>{{ section.settings.returns_subtext }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- comment -%} Info strip {%- endcomment -%}
+        {%- assign returns_has_chips = false -%}
+        {%- if section.settings.returns_chip_1_label != blank or section.settings.returns_chip_2_label != blank or section.settings.returns_chip_3_label != blank -%}
+          {%- assign returns_has_chips = true -%}
+        {%- endif -%}
+        {%- if returns_has_chips -%}
+          <div class="sdsr-info-strip">
+            {%- if section.settings.returns_chip_1_label != blank -%}
+              <div class="sdsr-chip sdsr-chip--gold">
+                <div class="sdsr-chip__icon" aria-hidden="true">{{ section.settings.returns_chip_1_icon | default: '📅' }}</div>
+                <span>{{ section.settings.returns_chip_1_label }}</span>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.returns_chip_2_label != blank -%}
+              <div class="sdsr-chip">
+                <div class="sdsr-chip__icon" aria-hidden="true">{{ section.settings.returns_chip_2_icon | default: '🔒' }}</div>
+                <span>{{ section.settings.returns_chip_2_label }}</span>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.returns_chip_3_label != blank -%}
+              <div class="sdsr-chip">
+                <div class="sdsr-chip__icon" aria-hidden="true">{{ section.settings.returns_chip_3_icon | default: '📧' }}</div>
+                <span>{{ section.settings.returns_chip_3_label }}</span>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Accordion — returns_faq blocks only {%- endcomment -%}
+        {%- assign returns_blocks = section.blocks | where: 'type', 'returns_faq' -%}
+        {%- if returns_blocks.size > 0 -%}
+          <div class="sdsr-accordion" data-sdsr-accordion>
+            {%- for block in returns_blocks -%}
+              {%- if block.settings.question != blank -%}
+                <div
+                  class="sdsr-acc-item"
+                  aria-expanded="{{ forloop.first | json }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <button class="sdsr-acc-header" data-sdsr-acc-toggle aria-label="{{ block.settings.question }}">
+                    <span class="sdsr-acc-question">{{ block.settings.question }}</span>
+                    <span class="sdsr-acc-chevron" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"/>
+                      </svg>
+                    </span>
+                  </button>
+                  <div class="sdsr-acc-body">
+                    <div class="sdsr-acc-body-inner">
+                      {{ block.settings.answer }}
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Contact CTA {%- endcomment -%}
+        {%- if section.settings.returns_cta_heading != blank -%}
+          <div class="sdsr-cta">
+            <div class="sdsr-cta__text">
+              <h4>{{ section.settings.returns_cta_heading }}</h4>
+              {%- if section.settings.returns_cta_subtext != blank -%}
+                <p>{{ section.settings.returns_cta_subtext }}</p>
+              {%- endif -%}
+            </div>
+            <a href="{{ section.settings.returns_cta_url | default: '/pages/contact' }}" class="sdsr-cta__btn">
+              {{ section.settings.returns_cta_label | default: 'Contact Us' }}
+            </a>
+          </div>
+        {%- endif -%}
+
+      </div>
+
+    </div>{%- comment -%}/.sdsr-inner{%- endcomment -%}
+  </div>{%- comment -%}/.sdsr-body{%- endcomment -%}
+
+</div>{%- comment -%}/.sdsr-wrap{%- endcomment -%}
