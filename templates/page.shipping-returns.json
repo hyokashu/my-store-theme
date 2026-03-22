@@ -1,0 +1,89 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-shipping-returns",
+      "settings": {},
+      "blocks": {
+        "sf1": {
+          "type": "shipping_faq",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Standard shipping typically takes <strong>3\u20137 business days</strong> for metro areas, and 5\u201310 business days for regional areas. Express options may be available at checkout depending on your postcode.</p>"
+          }
+        },
+        "sf2": {
+          "type": "shipping_faq",
+          "settings": {
+            "question": "How much does shipping cost?",
+            "answer": "<p>Shipping rates are calculated at checkout based on your location and order weight. Orders over <strong>$250 receive free standard shipping</strong> automatically applied at checkout.</p>"
+          }
+        },
+        "sf3": {
+          "type": "shipping_faq",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "<p>Once your order is dispatched, you\u2019ll receive a tracking number via email. You can use this to track your package directly on the carrier\u2019s website.</p>"
+          }
+        },
+        "sf4": {
+          "type": "shipping_faq",
+          "settings": {
+            "question": "What if my order arrives damaged?",
+            "answer": "<p>If your order arrives damaged, please take photos immediately and contact us within <strong>48 hours of delivery</strong>. We\u2019ll arrange a replacement or refund as quickly as possible.</p>"
+          }
+        },
+        "sf5": {
+          "type": "shipping_faq",
+          "settings": {
+            "question": "Do you offer click & collect?",
+            "answer": "<p>At this time we are an online-only store and do not offer click &amp; collect. All orders are shipped directly to your provided address.</p>"
+          }
+        },
+        "rf1": {
+          "type": "returns_faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within <strong>14 days of delivery</strong> for products that are <strong>factory sealed and in original, unopened condition</strong>. Due to the nature of trading card products, we cannot accept returns on opened items.</p>"
+          }
+        },
+        "rf2": {
+          "type": "returns_faq",
+          "settings": {
+            "question": "How do I start a return?",
+            "answer": "<p>To initiate a return, please contact us via our <a href=\"/pages/contact\">contact page</a> with your order number and reason for return. We\u2019ll respond within 1 business day with return instructions. Do not ship items back without prior authorisation.</p>"
+          }
+        },
+        "rf3": {
+          "type": "returns_faq",
+          "settings": {
+            "question": "Who pays for return shipping?",
+            "answer": "<p>Return shipping costs are the responsibility of the customer unless the item was received damaged or incorrect. We recommend using tracked shipping for your return as we cannot be held responsible for lost parcels.</p>"
+          }
+        },
+        "rf4": {
+          "type": "returns_faq",
+          "settings": {
+            "question": "When will I receive my refund?",
+            "answer": "<p>Once we receive and inspect the returned item, we\u2019ll process your refund within <strong>3\u20135 business days</strong>. Refunds are issued to the original payment method. Please allow additional time for your bank to process the transaction.</p>"
+          }
+        },
+        "rf5": {
+          "type": "returns_faq",
+          "settings": {
+            "question": "Are sale items returnable?",
+            "answer": "<p>Items purchased during a sale or promotional event are considered final sale and are <strong>not eligible for return</strong>, unless the item arrived damaged or was incorrectly sent.</p>"
+          }
+        },
+        "rf6": {
+          "type": "returns_faq",
+          "settings": {
+            "question": "What if I received the wrong item?",
+            "answer": "<p>We\u2019re sorry! Please contact us within <strong>48 hours of delivery</strong> with your order number and a photo of the item received. We\u2019ll arrange a replacement or full refund at no cost to you.</p>"
+          }
+        }
+      },
+      "block_order": ["sf1", "sf2", "sf3", "sf4", "sf5", "rf1", "rf2", "rf3", "rf4", "rf5", "rf6"]
+    }
+  },
+  "order": ["main"]
+}
