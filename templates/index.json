@@ -42,7 +42,7 @@
             "title_em": "Booster Boxes & Sealed Products",
             "description": "Hunt for your chase cards with total confidence. Shop 100% authentic, unweighed booster boxes sourced straight from official distributors and shipped with collector-grade care.",
             "cta1_label": "Shop Booster Boxes",
-            "cta1_url": "shopify://collections/one-piece",
+            "cta1_url": "shopify://collections/one-piece-booster",
             "cta2_label": "Shop All",
             "cta2_url": "shopify://collections/one-piece-all",
             "bg_image": "shopify://shop_images/thumb-1920-996396.png",
@@ -211,7 +211,7 @@
           "type": "brand_link",
           "settings": {
             "label": "Pokemon",
-            "url": "shopify://collections/pokemon-collection",
+            "url": "shopify://collections/pokemon",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-56-05_1.png"
           }
         },
@@ -219,7 +219,7 @@
           "type": "brand_link",
           "settings": {
             "label": "One Piece",
-            "url": "",
+            "url": "shopify://collections/one-piece-1",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-49-21_1.png"
           }
         },
