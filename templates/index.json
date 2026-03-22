@@ -21,7 +21,7 @@
             "title_em": "Booster Boxes",
             "description": "The sets you’ve been hunting for are finally back in the vault. Secure 100% authentic, factory-sealed booster boxes and ETBs, delivered to your door with premium packaging guarantees before they sell out.",
             "cta1_label": "Shop Booster Boxes",
-            "cta1_url": "shopify://collections/pokemon-collection",
+            "cta1_url": "shopify://collections/pokemon-booster-boxes",
             "cta2_label": "Shop All",
             "cta2_url": "shopify://collections/pokemon-collection",
             "bg_image": "shopify://shop_images/charizard-evolution-line-triple-art-extension-16-9-using-v0-tusizb7qpmwb1.webp",
@@ -294,46 +294,6 @@
             "icon": "users",
             "text": "Early access for loyal members"
           }
-        },
-        "review_iPJA6Y": {
-          "type": "review",
-          "settings": {
-            "text": "Amazing service! My booster boxes arrived double-boxed and in perfect condition. Factory seals intact. Will definitely be a repeat customer.",
-            "author_name": "Alex M.",
-            "author_role": "Pokemon Collector"
-          }
-        },
-        "review_KUHLAG": {
-          "type": "review",
-          "settings": {
-            "text": "Fastest shipping I've experienced. Ordered Monday morning and it arrived Tuesday. The price was unbeatable too — best in the market.",
-            "author_name": "Sarah K.",
-            "author_role": "Yu-Gi-Oh Player"
-          }
-        },
-        "review_3x84YE": {
-          "type": "review",
-          "settings": {
-            "text": "Got my Obsidian Flames case and every single box was sealed perfectly. The packaging was incredible. 10/10 experience.",
-            "author_name": "David R.",
-            "author_role": "MTG Enthusiast"
-          }
-        },
-        "review_HtWNHT": {
-          "type": "review",
-          "settings": {
-            "text": "The pre-order experience was smooth. They kept me updated and my box arrived exactly on release day. Top tier store.",
-            "author_name": "James T.",
-            "author_role": "TCG Investor"
-          }
-        },
-        "review_GrbgWh": {
-          "type": "review",
-          "settings": {
-            "text": "Incredible range — found products here I couldn't source anywhere else. Customer service was also super helpful when I had a question.",
-            "author_name": "Emma L.",
-            "author_role": "Card Collector"
-          }
         }
       },
       "block_order": [
@@ -366,12 +326,7 @@
         "about_check_W8mwDB",
         "reward_item_bhUGGP",
         "reward_item_3TmXQP",
-        "reward_item_BN7YQa",
-        "review_iPJA6Y",
-        "review_KUHLAG",
-        "review_3x84YE",
-        "review_HtWNHT",
-        "review_GrbgWh"
+        "reward_item_BN7YQa"
       ],
       "name": "Home",
       "settings": {
@@ -396,7 +351,6 @@
         "about_cta1_url": "shopify://pages/about-us",
         "about_cta2_label": "Contact Us",
         "about_cta2_url": "",
-        "reviews_title": "Loved by  Players",
         "show_newsletter": true,
         "nl_title": "Stay in the Loop",
         "nl_subtitle": "New drops, restocks, and exclusive deals delivered straight to your inbox.",
