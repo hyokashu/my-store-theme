@@ -400,3 +400,98 @@
   {%- comment -%} ── 3. PANES ── {%- endcomment -%}
   <div class="sdsr-body">
     <div class="sdsr-inner">
+
+      {%- comment -%} ── SHIPPING PANE ── {%- endcomment -%}
+      <div
+        id="sdsr-pane-shipping"
+        class="sdsr-pane"
+        role="tabpanel"
+        aria-labelledby="sdsr-tab-shipping"
+        aria-hidden="false"
+      >
+
+        {%- comment -%} Section intro {%- endcomment -%}
+        <div class="sdsr-section-intro">
+          <div class="sdsr-section-icon" aria-hidden="true">{{ section.settings.shipping_icon | default: '🚚' }}</div>
+          <div class="sdsr-section-intro__text">
+            <h2>{{ section.settings.shipping_heading | default: 'Shipping Information' }}</h2>
+            {%- if section.settings.shipping_subtext != blank -%}
+              <p>{{ section.settings.shipping_subtext }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- comment -%} Info strip — render each chip only when label is non-blank {%- endcomment -%}
+        {%- assign shipping_has_chips = false -%}
+        {%- if section.settings.shipping_chip_1_label != blank or section.settings.shipping_chip_2_label != blank or section.settings.shipping_chip_3_label != blank -%}
+          {%- assign shipping_has_chips = true -%}
+        {%- endif -%}
+        {%- if shipping_has_chips -%}
+          <div class="sdsr-info-strip">
+            {%- if section.settings.shipping_chip_1_label != blank -%}
+              <div class="sdsr-chip sdsr-chip--gold">
+                <div class="sdsr-chip__icon" aria-hidden="true">{{ section.settings.shipping_chip_1_icon | default: '🎁' }}</div>
+                <span>{{ section.settings.shipping_chip_1_label }}</span>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.shipping_chip_2_label != blank -%}
+              <div class="sdsr-chip">
+                <div class="sdsr-chip__icon" aria-hidden="true">{{ section.settings.shipping_chip_2_icon | default: '📦' }}</div>
+                <span>{{ section.settings.shipping_chip_2_label }}</span>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.shipping_chip_3_label != blank -%}
+              <div class="sdsr-chip">
+                <div class="sdsr-chip__icon" aria-hidden="true">{{ section.settings.shipping_chip_3_icon | default: '🔒' }}</div>
+                <span>{{ section.settings.shipping_chip_3_label }}</span>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Accordion — shipping_faq blocks only {%- endcomment -%}
+        {%- assign shipping_blocks = section.blocks | where: 'type', 'shipping_faq' -%}
+        {%- if shipping_blocks.size > 0 -%}
+          <div class="sdsr-accordion" data-sdsr-accordion>
+            {%- for block in shipping_blocks -%}
+              {%- if block.settings.question != blank -%}
+                <div
+                  class="sdsr-acc-item"
+                  aria-expanded="{{ forloop.first | json }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <button class="sdsr-acc-header" data-sdsr-acc-toggle aria-label="{{ block.settings.question }}">
+                    <span class="sdsr-acc-question">{{ block.settings.question }}</span>
+                    <span class="sdsr-acc-chevron" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"/>
+                      </svg>
+                    </span>
+                  </button>
+                  <div class="sdsr-acc-body">
+                    <div class="sdsr-acc-body-inner">
+                      {{ block.settings.answer }}
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Contact CTA {%- endcomment -%}
+        {%- if section.settings.shipping_cta_heading != blank -%}
+          <div class="sdsr-cta">
+            <div class="sdsr-cta__text">
+              <h4>{{ section.settings.shipping_cta_heading }}</h4>
+              {%- if section.settings.shipping_cta_subtext != blank -%}
+                <p>{{ section.settings.shipping_cta_subtext }}</p>
+              {%- endif -%}
+            </div>
+            <a href="{{ section.settings.shipping_cta_url | default: '/pages/contact' }}" class="sdsr-cta__btn">
+              {{ section.settings.shipping_cta_label | default: 'Contact Us' }}
+            </a>
+          </div>
+        {%- endif -%}
+
+      </div>
