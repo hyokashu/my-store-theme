@@ -1029,9 +1029,23 @@ window.__SCD__ = {
     $$('.scd-qty-inc', itemsEl).forEach(function (btn) {
       btn.addEventListener('click', function () {
         var key = btn.dataset.key;
-        var input = $('[data-key="' + key + '"]', itemsEl).closest('.scd-item').querySelector('.cv-qty__input');
-        var qty = parseInt(input.value) + 1;
-        changeQty(key, qty);
+        var itemEl = $('.scd-item[data-key="' + key + '"]');
+        var input = itemEl.querySelector('.cv-qty__input');
+        var currentQty = parseInt(input.value);
+
+        // Check cache for inventory cap (defense-in-depth before async disable takes effect)
+        var handle = itemEl.dataset.handle;
+        if (handle) {
+          var cached = (inventoryCache[handle] || {})[parseInt(itemEl.dataset.variantId, 10)];
+          if (cached && cached.policy === 'deny' && currentQty >= cached.qty) {
+            applyDrawerStockLimits(
+              [{ key: key, handle: handle, variant_id: parseInt(itemEl.dataset.variantId, 10), quantity: currentQty }]
+            );
+            return;
+          }
+        }
+
+        changeQty(key, currentQty + 1);
       });
     });
 
