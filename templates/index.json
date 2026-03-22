@@ -160,7 +160,7 @@
           "type": "category_card",
           "settings": {
             "label": "Booster Boxes",
-            "url": "",
+            "url": "shopify://collections/booster-boxes",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-23-23_1.png",
             "icon": "package",
             "is_sale": false
