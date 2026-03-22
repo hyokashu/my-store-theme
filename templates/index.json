@@ -225,6 +225,7 @@
         },
         "promo_banner_FqmJpP": {
           "type": "promo_banner",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_09-06-48.png",
             "eyebrow": "Limited Edition Pokemon",
@@ -235,6 +236,7 @@
         },
         "promo_banner_9RGRWE": {
           "type": "promo_banner",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_11-17-44.png",
             "eyebrow": "Limited Edition One Piece",
