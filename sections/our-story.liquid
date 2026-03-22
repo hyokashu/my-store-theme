@@ -568,6 +568,20 @@
   </div>
 </section>
 
+<script>
+  document.querySelectorAll('.cvh-os-slideshow').forEach(function(el) {
+    var slides = el.querySelectorAll('.cvh-os-slide');
+    if (slides.length <= 1) return;
+    var current = 0;
+    var interval = parseInt(el.dataset.interval, 10) || 5000;
+    setInterval(function() {
+      slides[current].classList.remove('is-active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('is-active');
+    }, interval);
+  });
+</script>
+
 {% schema %}
 {
   "name": "Our Story",
@@ -624,18 +638,4 @@
     { "type": "url",      "id": "cta2_url",    "label": "Button 2 URL" }
   ]
 }
-<script>
-  document.querySelectorAll('.cvh-os-slideshow').forEach(function(el) {
-    var slides = el.querySelectorAll('.cvh-os-slide');
-    if (slides.length <= 1) return;
-    var current = 0;
-    var interval = parseInt(el.dataset.interval, 10) || 5000;
-    setInterval(function() {
-      slides[current].classList.remove('is-active');
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('is-active');
-    }, interval);
-  });
-</script>
-
 {% endschema %}
