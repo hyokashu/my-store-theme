@@ -451,6 +451,38 @@ function initCartLogic() {
   var list = document.getElementById('sdc-items-list');
 
   function money(c) { return '$' + (c / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  function applyStockLimits() {
+    document.querySelectorAll('#sdc-items-list .cv-qty').forEach(function(ctrl) {
+      var inventoryQty = parseInt(ctrl.dataset.inventoryQty, 10);
+      var policy = ctrl.dataset.inventoryPolicy;
+      var plusBtn = ctrl.querySelector('.sdc-qty-plus');
+      var badge = ctrl.querySelector('.sdc-stock-badge');
+      var input = ctrl.querySelector('.sdc-qty-input');
+      var currentQty = input ? parseInt(input.value, 10) : 0;
+
+      if (!badge || !plusBtn) return;
+
+      if (policy !== 'deny' || isNaN(inventoryQty)) {
+        badge.textContent = '';
+        plusBtn.disabled = false;
+        return;
+      }
+
+      var remaining = inventoryQty - currentQty;
+
+      if (remaining <= 0) {
+        plusBtn.disabled = true;
+        badge.textContent = 'Max quantity reached';
+      } else if (remaining <= 5) {
+        plusBtn.disabled = false;
+        badge.textContent = 'Only ' + remaining + ' left';
+      } else {
+        plusBtn.disabled = false;
+        badge.textContent = '';
+      }
+    });
+  }
   function showError(m) { if(errorEl){ errorEl.textContent=m; errorEl.classList.add('is-visible'); } }
   function hideError() { if(errorEl){ errorEl.classList.remove('is-visible'); } }
 
@@ -542,6 +574,8 @@ function initCartLogic() {
       });
     });
   });
+
+  applyStockLimits();
 }
 
 document.addEventListener('DOMContentLoaded', initCartLogic);
