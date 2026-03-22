@@ -429,27 +429,25 @@
 <section class="cvh-os-story">
   <div class="cvh-os__inner">
     <div class="cvh-os-story__grid">
-      {%- assign story_images = '' | split: '' -%}
-      {%- for i in (1..5) -%}
-        {%- assign img_key = 'story_image_' | append: i -%}
-        {%- assign img = section.settings[img_key] -%}
-        {%- if img != blank -%}
-          {%- assign story_images = story_images | push: img -%}
-        {%- endif -%}
-      {%- endfor -%}
       <div class="cvh-os-story__img">
-        {%- if story_images.size > 0 -%}
+        {%- if section.settings.story_image_1 != blank -%}
           <div class="cvh-os-slideshow"
                data-interval="{{ section.settings.story_slide_interval | default: 5000 }}"
                id="story-slideshow-{{ section.id }}">
-            {%- for img in story_images -%}
-              <div class="cvh-os-slide{% if forloop.first %} is-active{% endif %}">
-                <img
-                  src="{{ img | image_url: width: 700 }}"
-                  alt="{{ img.alt | escape | default: shop.name }}"
-                  width="700"
-                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
-              </div>
+            {%- assign is_first = true -%}
+            {%- for i in (1..5) -%}
+              {%- assign img_key = 'story_image_' | append: i -%}
+              {%- assign img = section.settings[img_key] -%}
+              {%- if img != blank -%}
+                <div class="cvh-os-slide{% if is_first %} is-active{% endif %}">
+                  <img
+                    src="{{ img | image_url: width: 700 }}"
+                    alt="{{ img.alt | escape | default: shop.name }}"
+                    width="700"
+                    loading="{% if is_first %}eager{% else %}lazy{% endif %}">
+                </div>
+                {%- assign is_first = false -%}
+              {%- endif -%}
             {%- endfor -%}
           </div>
         {%- else -%}
