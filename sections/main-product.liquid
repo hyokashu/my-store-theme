@@ -1754,12 +1754,17 @@ input.cv-qty__input {
       headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
       body: formData
     })
-    .then(function (r) { return r.json(); })
+    .then(function(r) {
+      return r.json().then(function(data) {
+        if (!r.ok) throw data;
+        return data;
+      });
+    })
     .then(function () {
       // Success State: Button pop, green color, checkmark icon
       btnElement.classList.add('is-success');
       btnElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1.25rem;height:1.25rem;margin-right:0.5rem;"><polyline points="20 6 9 17 4 12"/></svg> Added to Cart';
-      
+
       // Update cart count badge if it exists on your theme
       fetch('/cart.js').then(function (r) { return r.json(); }).then(function (cart) {
         var badge = document.querySelector('[data-cart-count]');
@@ -1774,9 +1779,9 @@ input.cv-qty__input {
         btnElement.innerHTML = originalHtml;
       }, 2500);
     })
-    .catch(function () {
-      // Error State
-      btnElement.innerHTML = 'Error \u2013 Try Again';
+    .catch(function(err) {
+      var msg = (err && err.description) ? err.description : 'Error \u2013 Try Again';
+      btnElement.innerHTML = msg;
       btnElement.disabled = false;
       setTimeout(function () { btnElement.innerHTML = originalHtml; }, 3000);
     });
