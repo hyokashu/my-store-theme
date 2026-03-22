@@ -40,7 +40,7 @@
           "phone": "+61 468 877 421",
           "hours": "Mon–Fri: 9am – 5pm AEST",
           "quick_link_1_label": "Shipping & Returns",
-          "quick_link_1_url": "shopify://pages/about-us",
+          "quick_link_1_url": "shopify://pages/shipping-returns",
           "quick_link_2_label": "Track My Order",
           "quick_link_2_url": "https://auspost.com.au/mypost/track/search",
           "quick_link_3_label": "",
