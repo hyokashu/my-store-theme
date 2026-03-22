@@ -1055,11 +1055,16 @@ window.__SCD__ = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: key, quantity: qty })
     })
-      .then(function (r) { return r.json(); })
-      .then(function (cart) { renderCart(cart); return cart; })
-      .catch(function () {
+      .then(function(r) {
+        return r.json().then(function(data) {
+          if (!r.ok) { showError(data.description || 'Something went wrong.'); throw data; }
+          return data;
+        });
+      })
+      .then(function(cart) { renderCart(cart); return cart; })
+      .catch(function(err) {
         if (itemRow) itemRow.classList.remove('is-updating');
-        showError('Something went wrong. Please try again.');
+        if (!err || !err.description) showError('Something went wrong. Please try again.');
       });
   }
 
