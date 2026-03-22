@@ -355,3 +355,48 @@
   .sdsr-cta__btn { width: 100%; text-align: center; }
 }
 </style>
+
+<div class="sdsr-wrap sdsr-fade-up">
+
+  {%- comment -%} ── 1. HERO ── {%- endcomment -%}
+  <section class="sdsr-hero">
+    <div class="sdsr-inner">
+      {%- if section.settings.hero_eyebrow != blank -%}
+        <p class="sdsr-hero__eyebrow">{{ section.settings.hero_eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="sdsr-hero__heading">{{ section.settings.hero_heading }}</h1>
+      {%- if section.settings.hero_subheading != blank -%}
+        <p class="sdsr-hero__sub">{{ section.settings.hero_subheading }}</p>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} ── 2. TAB BAR ── {%- endcomment -%}
+  <div class="sdsr-tab-bar" role="tablist" aria-label="Policy sections">
+    <button
+      class="sdsr-tab-btn"
+      id="sdsr-tab-shipping"
+      role="tab"
+      aria-selected="true"
+      aria-controls="sdsr-pane-shipping"
+      data-sdsr-tab="shipping"
+    >
+      <span class="sdsr-tab-icon" aria-hidden="true">🚚</span>
+      {{ section.settings.shipping_tab_label | default: 'Shipping' }}
+    </button>
+    <button
+      class="sdsr-tab-btn"
+      id="sdsr-tab-returns"
+      role="tab"
+      aria-selected="false"
+      aria-controls="sdsr-pane-returns"
+      data-sdsr-tab="returns"
+    >
+      <span class="sdsr-tab-icon" aria-hidden="true">↩️</span>
+      {{ section.settings.returns_tab_label | default: 'Returns' }}
+    </button>
+  </div>
+
+  {%- comment -%} ── 3. PANES ── {%- endcomment -%}
+  <div class="sdsr-body">
+    <div class="sdsr-inner">
