@@ -38,19 +38,27 @@
         },
         "gallery1": {
           "type": "gallery_image",
-          "settings": {}
+          "settings": {
+            "gallery_img": "shopify://shop_images/image0000001.jpg"
+          }
         },
         "gallery2": {
           "type": "gallery_image",
-          "settings": {}
+          "settings": {
+            "gallery_img": "shopify://shop_images/IMG_4815.jpg"
+          }
         },
         "gallery3": {
           "type": "gallery_image",
-          "settings": {}
+          "settings": {
+            "gallery_img": "shopify://shop_images/IMG_6708.jpg"
+          }
         },
         "gallery4": {
           "type": "gallery_image",
-          "settings": {}
+          "settings": {
+            "gallery_img": "shopify://shop_images/IMG_0940.jpg"
+          }
         }
       },
       "block_order": [
