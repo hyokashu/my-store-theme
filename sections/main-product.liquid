@@ -785,36 +785,6 @@ input.cv-qty__input {
 .cv-product-card__price   { font-family: var(--cv-font-head); font-size: 1rem; font-weight: 700; }
 .cv-product-card__compare { font-size: 0.75rem; color: var(--cv-muted-fg); text-decoration: line-through; }
 
-/* =============================================================
-   Recent Sales Ticker
-   ============================================================= */
-.cv-recent-sales {
-  margin-top: 3rem;
-  border: 1px solid var(--cv-border);
-  border-radius: calc(var(--cv-radius) * 2);
-  background: var(--cv-card);
-  padding: 1.25rem;
-  box-shadow: var(--cv-shadow-sm);
-  display: none; /* Hidden by default until JS populates it */
-}
-.cv-recent-sales__title {
-  font-family: var(--cv-font-head);
-  font-size: 0.75rem; font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--cv-fg); margin-bottom: 1rem;
-}
-.cv-recent-sales__list { display: flex; flex-direction: column; gap: 0.625rem; }
-.cv-sale-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--cv-border);
-  border-radius: var(--cv-radius);
-  background: rgba(238,236,234,0.4);
-}
-.cv-sale-item__info  { display: flex; flex-direction: column; gap: 0.125rem; }
-.cv-sale-item__name  { font-size: 0.875rem; font-weight: 500; }
-.cv-sale-item__time  { font-size: 0.75rem; color: var(--cv-muted-fg); }
-.cv-sale-item__price { font-family: var(--cv-font-head); font-size: 0.875rem; font-weight: 700; }
 
 /* =============================================================
    Sticky Mobile Cart Bar
@@ -1481,30 +1451,6 @@ input.cv-qty__input {
   </section>
   {%- endif -%}
 
-  {%- comment -%} 5. Intelligent Recent Sales Ticker {%- endcomment -%}
-  <div class="cv-recent-sales" id="cv-recent-sales-container">
-    <p class="cv-recent-sales__title">Recent Sales</p>
-    <div class="cv-recent-sales__list" id="cv-recent-sales-list">
-      </div>
-  </div>
-
-  <script type="application/json" id="cv-recent-products-data">
-    [
-      {%- assign sale_items_count = 0 -%}
-      {%- if related_collection -%}
-        {%- for p in related_collection.products limit: 15 -%}
-          {%- if p.available and p.id != product.id -%}
-            {%- if sale_items_count > 0 -%},{%- endif -%}
-            {
-              "title": {{ p.title | json }},
-              "price": "{{ p.price | money }}"
-            }
-            {%- assign sale_items_count = sale_items_count | plus: 1 -%}
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
-    ]
-  </script>
 
   </div>{%- comment -%} /.cv-inner {%- endcomment -%}
 </section>{%- comment -%} ── Sticky Mobile Cart Bar ── {%- endcomment -%}
@@ -1538,79 +1484,6 @@ input.cv-qty__input {
 (function () {
   'use strict';
 
-/* ── 5. Dynamic Recent Sales (with Session Storage) ── */
-  var recentDataEl = document.getElementById('cv-recent-products-data');
-  if (recentDataEl) {
-    try {
-      var products = JSON.parse(recentDataEl.textContent);
-      if (products.length > 0) {
-        var listEl = document.getElementById('cv-recent-sales-list');
-        var container = document.getElementById('cv-recent-sales-container');
-        
-        var storedData = sessionStorage.getItem('cv_recent_sales');
-        var salesData = null;
-        var now = Date.now();
-
-        // 1. Check if we already have a generated list for this user session
-        if (storedData) {
-          try {
-            salesData = JSON.parse(storedData);
-          } catch(e) {}
-        }
-
-        // 2. If no list exists, generate one and save it to the browser
-        if (!salesData || !salesData.sales || salesData.sales.length === 0) {
-          products.sort(function() { return 0.5 - Math.random(); });
-          var count = Math.min(4, products.length);
-          var timeOffsetMins = Math.floor(Math.random() * 14) + 2; 
-          
-          var newSales = [];
-          for (var i = 0; i < count; i++) {
-            newSales.push({
-              title: products[i].title,
-              price: products[i].price,
-              baseMinsAgo: timeOffsetMins
-            });
-            // Add a random chunk of time (15 to 50 mins) for the next item down
-            timeOffsetMins += Math.floor(Math.random() * 36) + 15; 
-          }
-
-          salesData = {
-            generatedAt: now,
-            sales: newSales
-          };
-          sessionStorage.setItem('cv_recent_sales', JSON.stringify(salesData));
-        }
-
-        // 3. Render the list, calculating the true time elapsed since it was generated
-        var elapsedMins = Math.floor((now - salesData.generatedAt) / 60000);
-        
-        for (var j = 0; j < salesData.sales.length; j++) {
-          var sale = salesData.sales[j];
-          var totalMins = sale.baseMinsAgo + elapsedMins;
-          
-          var timeString = '';
-          if (totalMins < 60) {
-            timeString = totalMins + ' minutes ago';
-          } else {
-            var hrs = Math.floor(totalMins / 60);
-            timeString = hrs + (hrs === 1 ? ' hour ago' : ' hours ago');
-          }
-
-          var html = '<div class="cv-sale-item">' +
-                       '<div class="cv-sale-item__info">' +
-                         '<span class="cv-sale-item__name">' + sale.title + '</span>' +
-                         '<span class="cv-sale-item__time">' + timeString + '</span>' +
-                       '</div>' +
-                       '<span class="cv-sale-item__price">' + sale.price + '</span>' +
-                     '</div>';
-          listEl.insertAdjacentHTML('beforeend', html);
-        }
-        
-        container.style.display = 'block';
-      }
-    } catch(e) {}
-  }
 
   /* ── Gallery ── */
   var gallery  = document.getElementById('cv-gallery');
