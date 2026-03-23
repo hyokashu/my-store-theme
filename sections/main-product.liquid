@@ -28,6 +28,11 @@
 
   assign pack_count = product.metafields.custom.pack_count | default: 24
   assign cards_per_pack = product.metafields.custom.cards_per_pack | default: 6
+
+  assign promo_mode = false
+  if section.settings.box_contents_mode == 'promotional_box'
+    assign promo_mode = true
+  endif
 -%}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
