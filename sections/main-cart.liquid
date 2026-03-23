@@ -216,14 +216,6 @@ details.sdc-discount[open] .sdc-discount__chevron { transform: rotate(180deg); }
   .sdc-upsell-card__info { align-items: center; text-align: center; }
   .sdc-upsell-card__btn { width: 100%; margin-top: 0.5rem; }
 }
-.sdc-stock-badge {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #c0392b;
-  margin-top: 4px;
-  min-height: 1em;
-}
 </style>
 
 <div class="sdc-wrap" id="sdc-cart-wrap">
@@ -326,7 +318,6 @@ details.sdc-discount[open] .sdc-discount__chevron { transform: rotate(180deg); }
                       <button type="button" class="cv-qty__btn sdc-qty-minus" data-item-key="{{ item.key }}" {%- if item.quantity <= 1 %} disabled{%- endif -%}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
                       <input type="number" class="cv-qty__input sdc-qty-input" name="updates[]" value="{{ item.quantity }}" min="0" data-item-key="{{ item.key }}">
                       <button type="button" class="cv-qty__btn sdc-qty-plus" data-item-key="{{ item.key }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-                      <span class="sdc-stock-badge" aria-live="polite"></span>
                     </div>
                     <span class="sdc-item__line-total" id="sdc-line-{{ item.key | replace: ':', '-' }}">{{ item.final_line_price | money }}</span>
                   </div>
@@ -478,13 +469,8 @@ function initCartLogic() {
 
       if (remaining <= 0) {
         plusBtn.disabled = true;
-        badge.textContent = 'Max quantity reached';
-      } else if (remaining <= 5) {
-        plusBtn.disabled = false;
-        badge.textContent = 'Only ' + remaining + ' left';
       } else {
         plusBtn.disabled = false;
-        badge.textContent = '';
       }
     });
   }
