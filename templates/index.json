@@ -236,13 +236,12 @@
         },
         "promo_banner_9RGRWE": {
           "type": "promo_banner",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_11-17-44.png",
             "eyebrow": "Limited Edition One Piece",
             "title": "Anniversary & Promo Sets",
             "cta_label": "Shop Sets",
-            "cta_url": ""
+            "cta_url": "shopify://products/one-piece-3rd-anniversary-set"
           }
         },
         "about_check_i7Lq8f": {
