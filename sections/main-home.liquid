@@ -1283,6 +1283,7 @@
     featured.addEventListener('click', function (e) {
       var btn = e.target.closest('.cvh-prod-card__quick-add');
       if (!btn) return;
+      e.preventDefault();
       e.stopPropagation();
       handleQuickAdd(btn);
     });
