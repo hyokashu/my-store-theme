@@ -153,6 +153,19 @@
 }
 .scd-error.is-visible { display: block; }
 
+/* ── Notice Banner (stock corrections) ── */
+.scd-notice {
+  display: none;
+  background: rgba(40,45,82,0.06);
+  border: 1px solid rgba(40,45,82,0.2);
+  border-radius: var(--cv-radius);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  color: var(--cv-primary);
+  margin-top: 0.5rem;
+}
+.scd-notice.is-visible { display: block; }
+
 /* ── Shipping Bar ── */
 .scd-ship {
   background: var(--cv-card);
@@ -583,6 +596,9 @@
     <!-- Error -->
     <div class="scd-error" id="scd-error" role="alert" aria-live="polite"></div>
 
+    <!-- Notice (stock corrections) -->
+    <div class="scd-notice" id="scd-notice" role="status" aria-live="polite"></div>
+
     <!-- Free Shipping Bar -->
     <div class="scd-ship" id="scd-ship" aria-label="Free shipping progress">
       <p class="scd-ship__text" id="scd-ship-text">
@@ -799,6 +815,7 @@ window.__SCD__ = {
   var itemsEl    = $('#scd-items');
   var emptyEl    = $('#scd-empty');
   var errorEl    = $('#scd-error');
+  var noticeEl   = $('#scd-notice');
   var shipEl     = $('#scd-ship');
   var shipText   = $('#scd-ship-text');
   var shipFill   = $('#scd-ship-fill');
@@ -812,6 +829,10 @@ window.__SCD__ = {
 
   /* ── State ── */
   var isOpen = false;
+
+  /* ── Inventory Cache ── */
+  var inventoryCache = {};        // handle → { variantId: { qty, policy } }
+  var inventoryFetchInFlight = {}; // handle → Promise (deduplicates concurrent fetches)
 
   /* ════════════════════════════════════════
      OPEN / CLOSE
@@ -837,6 +858,86 @@ window.__SCD__ = {
     drawer.classList.remove('is-open');
     drawer.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+  }
+
+  function fetchInventoryForCart(items) {
+    var handles = [];
+    (items || []).forEach(function(item) {
+      if (handles.indexOf(item.handle) === -1) handles.push(item.handle);
+    });
+
+    var promises = handles.map(function(handle) {
+      if (inventoryCache[handle]) return Promise.resolve();
+      if (inventoryFetchInFlight[handle]) return inventoryFetchInFlight[handle];
+
+      var p = fetch('/products/' + handle + '.js')
+        .then(function(r) { return r.json(); })
+        .then(function(product) {
+          inventoryCache[handle] = {};
+          (product.variants || []).forEach(function(v) {
+            inventoryCache[handle][v.id] = {
+              qty: v.inventory_quantity,
+              policy: v.inventory_policy
+            };
+          });
+          delete inventoryFetchInFlight[handle];
+        })
+        .catch(function() {
+          delete inventoryFetchInFlight[handle];
+        });
+
+      inventoryFetchInFlight[handle] = p;
+      return p;
+    });
+
+    return Promise.all(promises);
+  }
+
+  function applyDrawerStockLimits(items) {
+    (items || []).forEach(function(item) {
+      var cached = (inventoryCache[item.handle] || {})[item.variant_id];
+      if (!cached || cached.policy !== 'deny') return;
+
+      var itemEl = $('.scd-item[data-key="' + item.key + '"]');
+      if (!itemEl) return;
+
+      var plusBtn = itemEl.querySelector('.scd-qty-inc');
+      if (!plusBtn) return;
+
+      var remaining = cached.qty - item.quantity;
+
+      if (remaining <= 0) {
+        plusBtn.disabled = true;
+      } else {
+        plusBtn.disabled = false;
+      }
+    });
+  }
+
+  function autoCorrectOverStock(items) {
+    var corrections = [];
+    (items || []).forEach(function (item) {
+      var cached = (inventoryCache[item.handle] || {})[item.variant_id];
+      if (!cached || cached.policy !== 'deny') return;
+      if (item.quantity > cached.qty && cached.qty >= 0) {
+        corrections.push({ key: item.key, qty: cached.qty });
+      }
+    });
+    if (corrections.length === 0) return;
+
+    Promise.all(corrections.map(function (c) {
+      return fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: c.key, quantity: c.qty })
+      }).then(function (r) { return r.json(); });
+    })).then(function () {
+      return fetchAndRender();
+    }).then(function () {
+      showNotice('Some item quantities were adjusted to match available stock.');
+    }).catch(function () {
+      showError('Could not verify cart quantities. Please refresh.');
+    });
   }
 
   /* ════════════════════════════════════════
@@ -894,6 +995,10 @@ window.__SCD__ = {
       if (upsellEl) show(upsellEl);
       itemsEl.innerHTML = (cart.items || []).map(renderItem).join('');
       bindItemEvents();
+      fetchInventoryForCart(cart.items).then(function() {
+        applyDrawerStockLimits(cart.items);
+        autoCorrectOverStock(cart.items);
+      });
     }
   }
 
@@ -913,7 +1018,7 @@ window.__SCD__ = {
     var priceHtml = '<span class="scd-item__price">' + money(item.price) + '</span>';
 
     return [
-      '<div class="scd-item" data-key="' + item.key + '">',
+      '<div class="scd-item" data-key="' + item.key + '" data-handle="' + item.handle + '" data-variant-id="' + item.variant_id + '">',
         '<div class="scd-item__img-wrap">',
           '<a href="' + item.url + '" tabindex="-1">' + imgHtml + '</a>',
         '</div>',
@@ -953,9 +1058,23 @@ window.__SCD__ = {
     $$('.scd-qty-inc', itemsEl).forEach(function (btn) {
       btn.addEventListener('click', function () {
         var key = btn.dataset.key;
-        var input = $('[data-key="' + key + '"]', itemsEl).closest('.scd-item').querySelector('.cv-qty__input');
-        var qty = parseInt(input.value) + 1;
-        changeQty(key, qty);
+        var itemEl = $('.scd-item[data-key="' + key + '"]');
+        var input = itemEl.querySelector('.cv-qty__input');
+        var currentQty = parseInt(input.value);
+
+        // Check cache for inventory cap (defense-in-depth before async disable takes effect)
+        var handle = itemEl.dataset.handle;
+        if (handle) {
+          var cached = (inventoryCache[handle] || {})[parseInt(itemEl.dataset.variantId, 10)];
+          if (cached && cached.policy === 'deny' && currentQty >= cached.qty) {
+            applyDrawerStockLimits(
+              [{ key: key, handle: handle, variant_id: parseInt(itemEl.dataset.variantId, 10), quantity: currentQty }]
+            );
+            return;
+          }
+        }
+
+        changeQty(key, currentQty + 1);
       });
     });
 
@@ -979,11 +1098,16 @@ window.__SCD__ = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: key, quantity: qty })
     })
-      .then(function (r) { return r.json(); })
-      .then(function (cart) { renderCart(cart); return cart; })
-      .catch(function () {
+      .then(function(r) {
+        return r.json().then(function(data) {
+          if (!r.ok) { showError(data.description || 'Something went wrong.'); throw data; }
+          return data;
+        });
+      })
+      .then(function(cart) { renderCart(cart); return cart; })
+      .catch(function(err) {
         if (itemRow) itemRow.classList.remove('is-updating');
-        showError('Something went wrong. Please try again.');
+        if (!err || !err.description) showError('Something went wrong. Please try again.');
       });
   }
 
@@ -1044,8 +1168,16 @@ window.__SCD__ = {
       body: JSON.stringify({ id: parseInt(variantId, 10), quantity: quantity })
     })
       .then(function (r) {
-        if (!r.ok) return r.json().then(function (e) { throw new Error(e.description || 'Error'); });
-        return r.json();
+        var status = r.status;
+        return r.json().then(function (data) {
+          if (status === 422) {
+            var err = new Error('Maximum quantity already in your cart.');
+            err.is422 = true;
+            throw err;
+          }
+          if (!r.ok) throw new Error(data.description || 'Could not add to cart.');
+          return data;
+        });
       })
       .then(function () {
         if (submitBtn) { submitBtn.textContent = 'Added!'; }
@@ -1056,7 +1188,11 @@ window.__SCD__ = {
       })
       .catch(function (err) {
         if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
-        showError(err.message || 'Could not add to cart.');
+        if (err && err.is422) {
+          showError('Maximum quantity already in your cart \u2014 check below.');
+        } else {
+          showError(err.message || 'Could not add to cart.');
+        }
         openDrawer();
       });
   }
@@ -1118,6 +1254,18 @@ window.__SCD__ = {
   function hideError() {
     errorEl.textContent = '';
     errorEl.classList.remove('is-visible');
+  }
+  function showNotice(msg) {
+    if (!noticeEl) return;
+    noticeEl.textContent = msg;
+    noticeEl.classList.add('is-visible');
+    clearTimeout(showNotice._t);
+    showNotice._t = setTimeout(hideNotice, 6000);
+  }
+  function hideNotice() {
+    if (!noticeEl) return;
+    noticeEl.textContent = '';
+    noticeEl.classList.remove('is-visible');
   }
 
   /* ── Visibility helpers ── */

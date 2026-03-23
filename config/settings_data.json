@@ -22,7 +22,7 @@
       "header": {
         "type": "header",
         "settings": {
-          "logo": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-37-09_1.png",
+          "logo": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-21_23-54-05_1.png",
           "logo_max_width": 280,
           "menu": "main-menu",
           "search_placeholder": "Search for sets, singles, or accessories...",
@@ -33,22 +33,24 @@
       "footer": {
         "type": "footer",
         "settings": {
+          "footer_logo": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-21_23-54-05_1.png",
+          "footer_logo_width": 300,
           "tagline": "Your one-stop destination for sealed TCG products. Authentic. Affordable. Fast.",
-          "support_email": "support@sprout.com",
-          "phone": "+61 425200785",
+          "support_email": "support@sproutclc.com",
+          "phone": "+61 468 877 421",
           "hours": "Mon–Fri: 9am – 5pm AEST",
-          "quick_link_1_label": "FAQ",
-          "quick_link_1_url": "shopify://pages/about-us",
-          "quick_link_2_label": "Shipping & Returns",
-          "quick_link_2_url": "shopify://blogs/news",
-          "quick_link_3_label": "Track My Order",
-          "quick_link_3_url": "shopify://products/eb-03-booster-box",
+          "quick_link_1_label": "Shipping & Returns",
+          "quick_link_1_url": "shopify://pages/shipping-returns",
+          "quick_link_2_label": "Track My Order",
+          "quick_link_2_url": "https://auspost.com.au/mypost/track/search",
+          "quick_link_3_label": "",
+          "quick_link_3_url": "",
           "quick_link_4_label": "",
           "quick_link_4_url": "",
-          "address": "Sprout\n123 Collector Way\nMelbourne VIC 3000\nAustralia",
+          "address": "100% Online Store\n\nProudly based in Australia\nShipping nationwide from Australia",
           "abn": "",
           "social_intro": "Follow us for drops, pulls & community events.",
-          "instagram_url": "",
+          "instagram_url": "https://www.instagram.com/sproutcollects?igsh=MWZva2pkdWZwbThxaQ%3D%3D&utm_source=qr",
           "discord_url": "",
           "youtube_url": "",
           "tiktok_url": "",
@@ -64,7 +66,7 @@
       "cart-drawer": {
         "type": "cart-drawer",
         "settings": {
-          "free_ship_threshold": 20000,
+          "free_ship_threshold": 25000,
           "upsell_collection": "pokemon-collection"
         }
       }

@@ -21,9 +21,9 @@
             "title_em": "Booster Boxes",
             "description": "The sets you’ve been hunting for are finally back in the vault. Secure 100% authentic, factory-sealed booster boxes and ETBs, delivered to your door with premium packaging guarantees before they sell out.",
             "cta1_label": "Shop Booster Boxes",
-            "cta1_url": "shopify://collections/pokemon-collection",
+            "cta1_url": "shopify://collections/pokemon-booster-boxes",
             "cta2_label": "Shop All",
-            "cta2_url": "shopify://collections/pokemon-collection",
+            "cta2_url": "shopify://collections/pokemon",
             "bg_image": "shopify://shop_images/charizard-evolution-line-triple-art-extension-16-9-using-v0-tusizb7qpmwb1.webp",
             "image": "shopify://shop_images/StoreCovers_1.png",
             "badge_value": "Fast Dispatch",
@@ -42,9 +42,9 @@
             "title_em": "Booster Boxes & Sealed Products",
             "description": "Hunt for your chase cards with total confidence. Shop 100% authentic, unweighed booster boxes sourced straight from official distributors and shipped with collector-grade care.",
             "cta1_label": "Shop Booster Boxes",
-            "cta1_url": "shopify://collections/one-piece",
+            "cta1_url": "shopify://collections/one-piece-booster",
             "cta2_label": "Shop All",
-            "cta2_url": "shopify://collections/one-piece-all",
+            "cta2_url": "shopify://collections/one-piece-1",
             "bg_image": "shopify://shop_images/thumb-1920-996396.png",
             "image": "shopify://shop_images/OP1JP.webp",
             "badge_value": "100% Authentic",
@@ -160,7 +160,7 @@
           "type": "category_card",
           "settings": {
             "label": "Booster Boxes",
-            "url": "",
+            "url": "shopify://collections/booster-boxes",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-23-23_1.png",
             "icon": "package",
             "is_sale": false
@@ -179,6 +179,7 @@
         },
         "category_card_6473yk": {
           "type": "category_card",
+          "disabled": true,
           "settings": {
             "label": "Cases",
             "url": "",
@@ -211,7 +212,7 @@
           "type": "brand_link",
           "settings": {
             "label": "Pokemon",
-            "url": "",
+            "url": "shopify://collections/pokemon",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-56-05_1.png"
           }
         },
@@ -219,12 +220,13 @@
           "type": "brand_link",
           "settings": {
             "label": "One Piece",
-            "url": "",
+            "url": "shopify://collections/one-piece-1",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-49-21_1.png"
           }
         },
         "promo_banner_FqmJpP": {
           "type": "promo_banner",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_09-06-48.png",
             "eyebrow": "Limited Edition Pokemon",
@@ -235,6 +237,7 @@
         },
         "promo_banner_9RGRWE": {
           "type": "promo_banner",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_11-17-44.png",
             "eyebrow": "Limited Edition One Piece",
@@ -294,46 +297,6 @@
             "icon": "users",
             "text": "Early access for loyal members"
           }
-        },
-        "review_iPJA6Y": {
-          "type": "review",
-          "settings": {
-            "text": "Amazing service! My booster boxes arrived double-boxed and in perfect condition. Factory seals intact. Will definitely be a repeat customer.",
-            "author_name": "Alex M.",
-            "author_role": "Pokemon Collector"
-          }
-        },
-        "review_KUHLAG": {
-          "type": "review",
-          "settings": {
-            "text": "Fastest shipping I've experienced. Ordered Monday morning and it arrived Tuesday. The price was unbeatable too — best in the market.",
-            "author_name": "Sarah K.",
-            "author_role": "Yu-Gi-Oh Player"
-          }
-        },
-        "review_3x84YE": {
-          "type": "review",
-          "settings": {
-            "text": "Got my Obsidian Flames case and every single box was sealed perfectly. The packaging was incredible. 10/10 experience.",
-            "author_name": "David R.",
-            "author_role": "MTG Enthusiast"
-          }
-        },
-        "review_HtWNHT": {
-          "type": "review",
-          "settings": {
-            "text": "The pre-order experience was smooth. They kept me updated and my box arrived exactly on release day. Top tier store.",
-            "author_name": "James T.",
-            "author_role": "TCG Investor"
-          }
-        },
-        "review_GrbgWh": {
-          "type": "review",
-          "settings": {
-            "text": "Incredible range — found products here I couldn't source anywhere else. Customer service was also super helpful when I had a question.",
-            "author_name": "Emma L.",
-            "author_role": "Card Collector"
-          }
         }
       },
       "block_order": [
@@ -366,12 +329,7 @@
         "about_check_W8mwDB",
         "reward_item_bhUGGP",
         "reward_item_3TmXQP",
-        "reward_item_BN7YQa",
-        "review_iPJA6Y",
-        "review_KUHLAG",
-        "review_3x84YE",
-        "review_HtWNHT",
-        "review_GrbgWh"
+        "reward_item_BN7YQa"
       ],
       "name": "Home",
       "settings": {
@@ -379,24 +337,24 @@
         "featured_title": "Fan Favourites",
         "featured_subtitle": "Whether you're building your collection or buying your first box — these are going fast.",
         "tab1_label": "Booster boxes",
-        "tab1_collection": "pokemon-collection",
+        "tab1_collection": "booster-boxes",
         "tab2_label": "Pokemon",
-        "tab2_collection": "one-piece-all",
+        "tab2_collection": "pokemon",
         "tab3_label": "One Piece",
-        "tab3_collection": "",
+        "tab3_collection": "one-piece-1",
         "tab1_icon": "none",
         "tab2_icon": "none",
         "tab3_icon": "none",
         "cat_title": "Browse by Category",
         "cat_subtitle": "Booster boxes, ETBs, cases, singles & more.",
         "show_about": true,
+        "about_image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-22_09-58-49.png",
         "about_title": "About Sprout",
         "about_desc": "We got tired of crushed corners and sketchy reseals. Whether you're hunting the latest Japanese booster boxes or securing high-demand pre-orders, we deliver 100% authentic, factory-sealed product with the premium protection your pulls deserve.",
         "about_cta1_label": "Our Story",
         "about_cta1_url": "shopify://pages/about-us",
         "about_cta2_label": "Contact Us",
-        "about_cta2_url": "",
-        "reviews_title": "Loved by  Players",
+        "about_cta2_url": "shopify://pages/contact",
         "show_newsletter": true,
         "nl_title": "Stay in the Loop",
         "nl_subtitle": "New drops, restocks, and exclusive deals delivered straight to your inbox.",

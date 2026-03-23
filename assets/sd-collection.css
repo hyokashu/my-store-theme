@@ -1331,3 +1331,88 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
 
 
 } /* end @media (max-width: 768px) */
+
+
+/* =============================================================
+   COLLECTION LIST PAGE — list-collections enhancements
+   Hero band · 3-column grid modifier · product count badges
+   ============================================================= */
+
+/* ── Hero header band ── */
+.sdcl-gateway__hero {
+  background: var(--cv-primary);
+  padding: 4rem 1.5rem 3.5rem;
+  text-align: center;
+}
+
+.sdcl-gateway__hero-inner {
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+.sdcl-gateway__hero-heading {
+  font-family: Nunito, sans-serif;
+  font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+  font-weight: 800;
+  color: var(--cv-primary-fg);
+  letter-spacing: -0.025em;
+  margin: 0 0 0.75rem;
+  line-height: 1.1;
+}
+
+.sdcl-gateway__hero-sub {
+  font-size: 1.05rem;
+  color: rgba(253, 251, 242, 0.78);
+  margin: 0 auto;
+  line-height: 1.65;
+  max-width: 40rem;
+}
+
+/* ── 3-column grid modifier ── */
+@media (min-width: 768px) {
+  .sdcl-gateway__grid--3col {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sdcl-gateway__grid--3col {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* ── Product count / Coming Soon badge ── */
+.sdcl-card__badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-cta-primary-fg);
+  background: var(--cv-accent);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  line-height: 1.4;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.sdcl-card__badge--soon {
+  background: var(--cv-muted-fg);
+  color: var(--cv-primary-fg);
+}
+
+/* ── Empty collection card — reduced visual weight ── */
+.sdcl-card--empty {
+  opacity: 0.72;
+}
+
+.sdcl-card--empty:hover {
+  transform: none;
+  border-color: var(--cv-border);
+  box-shadow: var(--cv-shadow);
+}

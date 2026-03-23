@@ -6,6 +6,7 @@
   All dynamic settings accessed by explicit ID (not bracket notation).
 {% endcomment %}
 
+{%- assign footer_logo_width = section.settings.footer_logo_width | default: 120 -%}
 <footer class="sd-footer" role="contentinfo" aria-label="Site footer">
   <div class="sd-footer__inner">
 
@@ -14,7 +15,7 @@
       <a href="{{ routes.root_url }}" class="sd-footer__brand-link" aria-label="{{ shop.name }}">
         {%- if section.settings.footer_logo != blank -%}
           <img
-            src="{{ section.settings.footer_logo | image_url: width: 240 }}"
+            src="{{ section.settings.footer_logo | image_url: width: 400 }}"
             alt="{{ shop.name }}"
             class="sd-footer__logo"
             loading="lazy"
@@ -173,6 +174,15 @@
     </div>
   </div>
 
+  <script>
+    (function () {
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        document.querySelectorAll('.sd-footer__accordion').forEach(function (el) {
+          el.removeAttribute('open');
+        });
+      }
+    })();
+  </script>
 </footer>
 
 <style>
@@ -211,7 +221,7 @@
 
 /* ── Brand ── */
 .sd-footer__brand-link { text-decoration: none; display: inline-block; margin-bottom: 0.875rem; }
-.sd-footer__logo       { max-height: 2.5rem; width: auto; display: block; }
+.sd-footer__logo       { max-width: {{ footer_logo_width }}px; width: 100%; height: auto; display: block; }
 .sd-footer__brand-name {
   font-family:    var(--cv-font-head, 'Nunito', system-ui, sans-serif);
   font-size:      1.375rem; font-weight: 800;
@@ -383,6 +393,16 @@
       "id": "footer_logo",
       "label": "Footer logo",
       "info": "Recommended: white/transparent PNG"
+    },
+    {
+      "type": "range",
+      "id": "footer_logo_width",
+      "label": "Logo size",
+      "min": 60,
+      "max": 300,
+      "step": 10,
+      "default": 120,
+      "unit": "px"
     },
     {
       "type": "text",

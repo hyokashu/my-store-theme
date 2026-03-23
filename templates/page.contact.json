@@ -1,0 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main-contact": {
+      "type": "main-contact",
+      "settings": {
+        "hero_eyebrow": "LET'S TALK CARDS",
+        "hero_heading": "Got a question? We're here to help.",
+        "hero_subheading": "Whether you're checking on a pre-order, asking about a specific product, or just need some support, drop us a line below.",
+        "contact_heading": "Drop Us A Line",
+        "reply_time": "We aim to reply within 24 hours (Mon-Fri)",
+        "store_email": "support@sproutclc.com",
+        "reassurance_text": "Run by collectors, for collectors. You'll always get a response from a real person who knows the hobby."
+      }
+    }
+  },
+  "order": [
+    "main-contact"
+  ]
+}

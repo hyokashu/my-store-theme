@@ -71,10 +71,55 @@
   /* ─────────────────────────────────────────────
      Quick Add to Cart
   ───────────────────────────────────────────── */
+  function capCartToInventory(variantId, handle) {
+    return Promise.all([
+      fetch('/products/' + handle + '.js').then(function (r) { return r.json(); }),
+      fetch('/cart.js').then(function (r) { return r.json(); })
+    ]).then(function (results) {
+      var product  = results[0];
+      var cart     = results[1];
+
+      var variant  = (product.variants || []).filter(function (v) { return v.id === variantId; })[0];
+      var maxQty   = variant ? variant.inventory_quantity : 0;
+      var managed  = variant ? variant.inventory_management : null;
+
+      var cartItem = (cart.items || []).filter(function (i) { return i.variant_id === variantId; })[0];
+
+      if (!cartItem) {
+        showToast('This item is out of stock.', 'error');
+        return null;
+      }
+
+      if (managed === 'shopify' && cartItem.quantity > maxQty) {
+        return fetch('/cart/change.js', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ id: cartItem.key, quantity: maxQty })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (updatedCart) {
+            showToast('Only ' + maxQty + ' available \u2014 cart updated.', 'success');
+            document.querySelectorAll('[data-cart-count]').forEach(function (el) {
+              el.textContent = updatedCart.item_count;
+              el.hidden = updatedCart.item_count === 0;
+            });
+            document.dispatchEvent(new CustomEvent('cart:updated', { detail: updatedCart }));
+            return updatedCart;
+          });
+      }
+
+      showToast('Maximum quantity already in your cart.', 'success');
+      return cart;
+    }).catch(function () {
+      showToast('Could not verify stock \u2014 please try again.', 'error');
+    });
+  }
+
   function handleQuickAdd(btn) {
     var variantId   = btn.dataset.variantId;
     var hasVariants = btn.dataset.hasVariants === 'true';
     var productUrl  = btn.dataset.productUrl;
+    var handle      = btn.dataset.handle;
 
     /* Multi-variant → navigate to PDP, preserving collection context */
     if (hasVariants) {
@@ -103,8 +148,16 @@
       body:    JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
     })
       .then(function (r) {
-        if (!r.ok) throw new Error('Cart error ' + r.status);
-        return r.json();
+        var status = r.status;
+        return r.json().then(function (data) {
+          if (status === 422) {
+            var err = new Error('inventory_exceeded');
+            err.is422 = true;
+            throw err;
+          }
+          if (status >= 400) throw new Error('Cart error ' + status);
+          return data;
+        });
       })
       .then(function (item) {
         showToast('Added to cart \u2014 ' + item.title, 'success');
@@ -119,8 +172,12 @@
         document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
       })
       .catch(function (err) {
-        console.error('Quick Add failed:', err);
-        showToast('Could not add to cart \u2014 please try again.', 'error');
+        if (err && err.is422 && handle) {
+          capCartToInventory(parseInt(variantId, 10), handle);
+        } else {
+          console.error('Quick Add failed:', err);
+          showToast('Could not add to cart \u2014 please try again.', 'error');
+        }
       })
       .finally(function () {
         btn.disabled = false;
