@@ -1336,6 +1336,8 @@ input.cv-qty__input {
         <div class="cv-contents">
           <h3>{{ section.settings.contents_heading | default: "What's Inside" }}</h3>
 
+          {%- unless promo_mode -%}
+
           <div>
             <div class="cv-content-item">
               <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
@@ -1395,6 +1397,70 @@ input.cv-qty__input {
               <span class="cv-meta-card__value">{{ product.metafields.custom.set_size | default: '—' }}</span>
             </div>
           </div>
+
+          {%- else -%}
+
+          <div>
+            <div class="cv-content-item">
+              <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+              <div class="cv-content-item__main">
+                <div class="cv-content-item__row">
+                  <span class="cv-content-item__label">{{ section.settings.promo_item1_label | default: 'Exclusive Promos:' }}</span>
+                  <span class="cv-content-item__value">{{ product.metafields.custom.promo_cards_included.value | default: '—' }}</span>
+                </div>
+                <span class="cv-content-item__desc">{{ section.settings.promo_item1_desc | default: 'Exclusive alternate-art promotional cards' }}</span>
+              </div>
+            </div>
+            <div class="cv-content-item">
+              <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
+              <div class="cv-content-item__main">
+                <div class="cv-content-item__row">
+                  <span class="cv-content-item__label">{{ section.settings.promo_item2_label | default: 'Booster Packs:' }}</span>
+                  <span class="cv-content-item__value">{{ product.metafields.custom.booster_packs_included.value | default: '—' }} {{ section.settings.promo_item2_suffix | default: 'packs' }}</span>
+                </div>
+                <span class="cv-content-item__desc">{{ section.settings.promo_item2_desc | default: 'Each pack contains randomly assorted cards' }}</span>
+              </div>
+            </div>
+            <div class="cv-content-item">
+              <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
+              <div class="cv-content-item__main">
+                <div class="cv-content-item__row">
+                  <span class="cv-content-item__label">{{ section.settings.promo_item3_label | default: 'Accessories:' }}</span>
+                  <span class="cv-content-item__value">{{ product.metafields.custom.accessories_included.value | default: '—' }}</span>
+                </div>
+                <span class="cv-content-item__desc">{{ section.settings.promo_item3_desc | default: 'Sleeves, deck boxes, and other collectible accessories' }}</span>
+              </div>
+            </div>
+          </div>
+
+          {%- assign promo_highlights = product.metafields.custom.promo_highlights.value -%}
+          {%- if promo_highlights != blank and promo_highlights.size > 0 -%}
+            <div class="cv-pull-rates">
+              <h4>Exclusive Highlights</h4>
+              <p>This set includes the following guaranteed exclusive items:</p>
+              <div class="cv-pull-grid">
+                {%- for item in promo_highlights -%}
+                  <div class="cv-pull-item">
+                    <span class="cv-pull-item__label">{{ item.title }}</span>
+                    <span class="cv-pull-item__value">{{ item.subtitle }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div class="cv-meta-grid">
+            <div class="cv-meta-card">
+              <span class="cv-meta-card__label">Release Date</span>
+              <span class="cv-meta-card__value">{{ product.metafields.custom.release_date | default: '—' }}</span>
+            </div>
+            <div class="cv-meta-card">
+              <span class="cv-meta-card__label">Product Type</span>
+              <span class="cv-meta-card__value">{{ product.metafields.custom.promo_product_type.value | default: '—' }}</span>
+            </div>
+          </div>
+
+          {%- endunless -%}
         </div>
       </div>
     </div>
