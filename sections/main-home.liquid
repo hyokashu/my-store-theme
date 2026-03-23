@@ -1190,11 +1190,50 @@
     if (_cvhToastEl) _cvhToastEl.classList.remove('is-visible');
   }
 
+  /* ── Inventory cap: called when /cart/add.js returns 422 ────── */
+  function capCartToInventory(variantId, handle) {
+    return Promise.all([
+      fetch('/products/' + handle + '.js').then(function (r) { return r.json(); }),
+      fetch('/cart.js').then(function (r) { return r.json(); })
+    ]).then(function (results) {
+      var product  = results[0];
+      var cart     = results[1];
+
+      var variant  = (product.variants || []).filter(function (v) { return v.id === variantId; })[0];
+      var maxQty   = variant ? variant.inventory_quantity : 0;
+      var managed  = variant ? variant.inventory_management : null;
+
+      var cartItem = (cart.items || []).filter(function (i) { return i.variant_id === variantId; })[0];
+
+      if (!cartItem) {
+        cvhShowToast('This item is out of stock.', 'error');
+        return null;
+      }
+
+      if (managed === 'shopify' && cartItem.quantity > maxQty) {
+        return fetch('/cart/change.js', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ id: cartItem.key, quantity: maxQty })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (updatedCart) {
+            cvhShowToast('Only ' + maxQty + ' available \u2014 cart updated.', 'success');
+            return updatedCart;
+          });
+      }
+
+      cvhShowToast('Maximum quantity already in your cart.', 'success');
+      return cart;
+    });
+  }
+
   /* ── Quick Add handler ──────────────────────────────────────── */
   function handleQuickAdd(btn) {
     var variantId   = btn.dataset.variantId;
     var hasVariants = btn.dataset.hasVariants === 'true';
     var productUrl  = btn.dataset.productUrl;
+    var handle      = btn.dataset.handle;
 
     /* Multi-variant → navigate to PDP, preserving return context */
     if (hasVariants) {
@@ -1217,22 +1256,26 @@
       ' Adding\u2026'
     ].join('');
 
+    var _resp;
     fetch('/cart/add.js', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body:    JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
     })
       .then(function (r) {
-        if (!r.ok) throw new Error('Cart error ' + r.status);
+        _resp = r;
         return r.json();
       })
-      .then(function (item) {
-        cvhShowToast('Added to cart \u2014 ' + item.title, 'success');
-        return fetch('/cart.js');
+      .then(function (data) {
+        if (_resp.status === 422) {
+          return capCartToInventory(parseInt(variantId, 10), handle);
+        }
+        if (!_resp.ok) throw new Error('error');
+        cvhShowToast('Added to cart \u2014 ' + data.title, 'success');
+        return fetch('/cart.js').then(function (r) { return r.json(); });
       })
-      .then(function (r) { return r.json(); })
       .then(function (cart) {
-        document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+        if (cart) document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
       })
       .catch(function () {
         cvhShowToast('Could not add to cart \u2014 please try again.', 'error');
