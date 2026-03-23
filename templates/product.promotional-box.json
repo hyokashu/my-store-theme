@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_payment_icons": true,
+        "show_afterpay": false,
+        "show_trust_signals": true,
+        "show_similar": true,
+        "show_recent_sales": false,
+        "tab_description_label": "Description",
+        "tab_contents_label": "Box Contents",
+        "box_contents_mode": "promotional_box",
+        "contents_heading": "What's Inside",
+        "promo_item1_label": "Exclusive Promos:",
+        "promo_item1_desc": "Exclusive alternate-art promotional cards",
+        "promo_item2_label": "Booster Packs:",
+        "promo_item2_suffix": "packs",
+        "promo_item2_desc": "Each pack contains randomly assorted cards",
+        "promo_item3_label": "Accessories:",
+        "promo_item3_desc": "Sleeves, deck boxes, and other collectible accessories"
+      }
+    }
+  },
+  "order": ["main"]
+}
