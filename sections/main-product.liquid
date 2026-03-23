@@ -1865,7 +1865,13 @@ input.cv-qty__input {
   /* ── Variant Availability + Back-in-Stock UI Switcher ── */
   var cvVariants  = {{ product.variants | json }};
   var variantMap  = {};
-  cvVariants.forEach(function (v) { variantMap[v.id] = v.available; });
+  cvVariants.forEach(function (v) {
+    variantMap[v.id] = {
+      available:           v.available,
+      inventoryQty:        v.inventory_quantity,
+      inventoryManagement: v.inventory_management
+    };
+  });
 
   var notifyWrap   = document.getElementById('cv-notify-wrap');
   var variantInput = document.getElementById('cv-variant-id');
@@ -1880,9 +1886,27 @@ input.cv-qty__input {
 
   if (variantInput) {
     variantInput.addEventListener('change', function () {
-      var vid = parseInt(this.value, 10);
-      if (variantMap.hasOwnProperty(vid)) {
-        updateAvailabilityUI(variantMap[vid]);
+      var vid  = parseInt(this.value, 10);
+      var data = variantMap[vid];
+      if (!data) return;
+
+      updateAvailabilityUI(data.available);
+
+      if (qtyInput) {
+        var managed = data.inventoryManagement === 'shopify';
+        var maxQty  = data.inventoryQty;
+
+        if (managed && maxQty > 0) {
+          qtyInput.setAttribute('max', maxQty);
+        } else {
+          qtyInput.removeAttribute('max');
+        }
+
+        var currentVal = parseInt(qtyInput.value, 10) || 1;
+        if (managed && maxQty > 0 && currentVal > maxQty) {
+          qtyInput.value = maxQty;
+          if (stickyQtyDisplay) stickyQtyDisplay.textContent = maxQty;
+        }
       }
     });
   }

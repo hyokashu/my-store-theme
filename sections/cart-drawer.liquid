@@ -153,6 +153,19 @@
 }
 .scd-error.is-visible { display: block; }
 
+/* ── Notice Banner (stock corrections) ── */
+.scd-notice {
+  display: none;
+  background: rgba(40,45,82,0.06);
+  border: 1px solid rgba(40,45,82,0.2);
+  border-radius: var(--cv-radius);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  color: var(--cv-primary);
+  margin-top: 0.5rem;
+}
+.scd-notice.is-visible { display: block; }
+
 /* ── Shipping Bar ── */
 .scd-ship {
   background: var(--cv-card);
@@ -591,6 +604,9 @@
     <!-- Error -->
     <div class="scd-error" id="scd-error" role="alert" aria-live="polite"></div>
 
+    <!-- Notice (stock corrections) -->
+    <div class="scd-notice" id="scd-notice" role="status" aria-live="polite"></div>
+
     <!-- Free Shipping Bar -->
     <div class="scd-ship" id="scd-ship" aria-label="Free shipping progress">
       <p class="scd-ship__text" id="scd-ship-text">
@@ -807,6 +823,7 @@ window.__SCD__ = {
   var itemsEl    = $('#scd-items');
   var emptyEl    = $('#scd-empty');
   var errorEl    = $('#scd-error');
+  var noticeEl   = $('#scd-notice');
   var shipEl     = $('#scd-ship');
   var shipText   = $('#scd-ship-text');
   var shipFill   = $('#scd-ship-fill');
@@ -911,6 +928,32 @@ window.__SCD__ = {
     });
   }
 
+  function autoCorrectOverStock(items) {
+    var corrections = [];
+    (items || []).forEach(function (item) {
+      var cached = (inventoryCache[item.handle] || {})[item.variant_id];
+      if (!cached || cached.policy !== 'deny') return;
+      if (item.quantity > cached.qty && cached.qty >= 0) {
+        corrections.push({ key: item.key, qty: cached.qty });
+      }
+    });
+    if (corrections.length === 0) return;
+
+    Promise.all(corrections.map(function (c) {
+      return fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: c.key, quantity: c.qty })
+      }).then(function (r) { return r.json(); });
+    })).then(function () {
+      return fetchAndRender();
+    }).then(function () {
+      showNotice('Some item quantities were adjusted to match available stock.');
+    }).catch(function () {
+      showError('Could not verify cart quantities. Please refresh.');
+    });
+  }
+
   /* ════════════════════════════════════════
      FETCH & RENDER
      ════════════════════════════════════════ */
@@ -968,6 +1011,7 @@ window.__SCD__ = {
       bindItemEvents();
       fetchInventoryForCart(cart.items).then(function() {
         applyDrawerStockLimits(cart.items);
+        autoCorrectOverStock(cart.items);
       });
     }
   }
@@ -1139,8 +1183,16 @@ window.__SCD__ = {
       body: JSON.stringify({ id: parseInt(variantId, 10), quantity: quantity })
     })
       .then(function (r) {
-        if (!r.ok) return r.json().then(function (e) { throw new Error(e.description || 'Error'); });
-        return r.json();
+        var status = r.status;
+        return r.json().then(function (data) {
+          if (status === 422) {
+            var err = new Error('Maximum quantity already in your cart.');
+            err.is422 = true;
+            throw err;
+          }
+          if (!r.ok) throw new Error(data.description || 'Could not add to cart.');
+          return data;
+        });
       })
       .then(function () {
         if (submitBtn) { submitBtn.textContent = 'Added!'; }
@@ -1151,7 +1203,11 @@ window.__SCD__ = {
       })
       .catch(function (err) {
         if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
-        showError(err.message || 'Could not add to cart.');
+        if (err && err.is422) {
+          showError('Maximum quantity already in your cart \u2014 check below.');
+        } else {
+          showError(err.message || 'Could not add to cart.');
+        }
         openDrawer();
       });
   }
@@ -1213,6 +1269,18 @@ window.__SCD__ = {
   function hideError() {
     errorEl.textContent = '';
     errorEl.classList.remove('is-visible');
+  }
+  function showNotice(msg) {
+    if (!noticeEl) return;
+    noticeEl.textContent = msg;
+    noticeEl.classList.add('is-visible');
+    clearTimeout(showNotice._t);
+    showNotice._t = setTimeout(hideNotice, 6000);
+  }
+  function hideNotice() {
+    if (!noticeEl) return;
+    noticeEl.textContent = '';
+    noticeEl.classList.remove('is-visible');
   }
 
   /* ── Visibility helpers ── */

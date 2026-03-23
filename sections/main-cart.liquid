@@ -162,6 +162,10 @@ input.cv-qty__input { width: 2.5rem; text-align: center; font-size: 0.875rem; fo
 .sdc-error { display: none; background: rgba(201,64,48,0.07); border: 1px solid rgba(201,64,48,0.25); border-radius: var(--cv-radius); padding: 0.75rem 1rem; font-size: 0.875rem; color: var(--cv-destructive); margin-bottom: 1.5rem; }
 .sdc-error.is-visible { display: block; }
 
+/* Notice styling (stock corrections) */
+.sdc-notice { display: none; background: rgba(40,45,82,0.06); border: 1px solid rgba(40,45,82,0.18); border-radius: var(--cv-radius); padding: 0.75rem 1rem; font-size: 0.875rem; color: var(--cv-primary); margin-bottom: 1.5rem; }
+.sdc-notice.is-visible { display: block; }
+
 /* ── Discount Code ── */
 .sdc-discount { margin: 0.75rem 0; border: 1px solid var(--cv-border); border-radius: var(--cv-radius); overflow: hidden; }
 summary.sdc-discount__toggle { list-style: none; width: 100%; display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.875rem; background: none; border: none; font-size: 0.875rem; font-weight: 500; color: var(--cv-muted-fg); cursor: pointer; font-family: var(--cv-font-sans); }
@@ -253,6 +257,7 @@ details.sdc-discount[open] .sdc-discount__chevron { transform: rotate(180deg); }
     <p class="sdc-heading-meta">{{ item_count }} item{%- if item_count != 1 -%}s{%- endif -%}</p>
 
     <div class="sdc-error" id="sdc-error" role="alert" aria-live="polite"></div>
+    <div class="sdc-notice" id="sdc-notice" role="status" aria-live="polite"></div>
 
     {%- comment -%} URGENCY BANNER {%- endcomment -%}
     <div class="sdc-urgency">
@@ -486,6 +491,48 @@ function initCartLogic() {
   function showError(m) { if(errorEl){ errorEl.textContent=m; errorEl.classList.add('is-visible'); } }
   function hideError() { if(errorEl){ errorEl.classList.remove('is-visible'); } }
 
+  var noticeEl = document.getElementById('sdc-notice');
+  function showNotice(m) { if(noticeEl){ noticeEl.textContent=m; noticeEl.classList.add('is-visible'); } }
+  function hideNotice() { if(noticeEl){ noticeEl.classList.remove('is-visible'); } }
+
+  function validateAndCorrectCart() {
+    var corrections = [];
+    document.querySelectorAll('#sdc-items-list .cv-qty').forEach(function(ctrl) {
+      var inventoryQty = parseInt(ctrl.dataset.inventoryQty, 10);
+      var policy       = ctrl.dataset.inventoryPolicy;
+      var input        = ctrl.querySelector('.sdc-qty-input');
+      var currentQty   = input ? parseInt(input.value, 10) : 0;
+      var key          = input ? input.dataset.itemKey : null;
+      if (!key || policy !== 'deny' || isNaN(inventoryQty)) return;
+      if (currentQty > inventoryQty) corrections.push({ key: key, qty: inventoryQty });
+    });
+    if (corrections.length === 0) return;
+
+    Promise.all(corrections.map(function(c) {
+      return fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: c.key, quantity: c.qty })
+      }).then(function(r) { return r.json(); });
+    })).then(function() {
+      return fetch(window.location.pathname);
+    }).then(function(r) { return r.text(); })
+    .then(function(html) {
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var newCart = doc.getElementById('sdc-cart-wrap');
+      if (newCart) {
+        document.getElementById('sdc-cart-wrap').innerHTML = newCart.innerHTML;
+        initCartLogic();
+        var n = document.getElementById('sdc-notice');
+        if (n) { n.textContent = 'Some item quantities were adjusted to match available stock.'; n.classList.add('is-visible'); }
+      } else {
+        window.location.reload();
+      }
+    }).catch(function() {
+      showError('Could not verify all cart quantities. Please review your cart.');
+    });
+  }
+
   /* Quantity Adjustments via AJAX */
   function updateCart(key, qty) {
     hideError();
@@ -596,7 +643,61 @@ function initCartLogic() {
     });
   });
 
+  validateAndCorrectCart();
   applyStockLimits();
+
+  /* ── Checkout Pre-flight ── */
+  var checkoutBtn = document.querySelector('.sdc-checkout-btn');
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', function(e) {
+      var overStocked = [];
+      document.querySelectorAll('#sdc-items-list .cv-qty').forEach(function(ctrl) {
+        var inventoryQty = parseInt(ctrl.dataset.inventoryQty, 10);
+        var policy       = ctrl.dataset.inventoryPolicy;
+        var input        = ctrl.querySelector('.sdc-qty-input');
+        var currentQty   = input ? parseInt(input.value, 10) : 0;
+        var key          = input ? input.dataset.itemKey : null;
+        if (!key || policy !== 'deny' || isNaN(inventoryQty)) return;
+        if (currentQty > inventoryQty) overStocked.push({ key: key, qty: inventoryQty });
+      });
+      if (overStocked.length === 0) return; // allow checkout
+
+      e.preventDefault();
+      e.stopPropagation();
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = 'Updating cart\u2026';
+
+      Promise.all(overStocked.map(function(c) {
+        return fetch('/cart/change.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ id: c.key, quantity: c.qty })
+        }).then(function(r) { return r.json(); });
+      })).then(function() {
+        return fetch(window.location.pathname);
+      }).then(function(r) { return r.text(); })
+      .then(function(html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var newCart = doc.getElementById('sdc-cart-wrap');
+        if (newCart) {
+          document.getElementById('sdc-cart-wrap').innerHTML = newCart.innerHTML;
+          initCartLogic();
+          var n = document.getElementById('sdc-notice');
+          if (n) {
+            n.textContent = 'Your cart was updated to match available stock \u2014 please review before checking out.';
+            n.classList.add('is-visible');
+            n.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        } else {
+          window.location.reload();
+        }
+      }).catch(function() {
+        checkoutBtn.disabled = false;
+        checkoutBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Checkout Securely';
+        showError('Could not verify stock. Please refresh and try again.');
+      });
+    });
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initCartLogic);
