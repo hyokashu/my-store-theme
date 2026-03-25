@@ -641,8 +641,8 @@ input.cv-qty__input {
   background: var(--cv-card);
   box-shadow: var(--cv-shadow-sm);
 }
-.cv-pull-item__label { font-size: 0.75rem; color: var(--cv-muted-fg); }
-.cv-pull-item__value { font-size: 0.75rem; font-weight: 600; }
+.cv-pull-item__label { font-size: 0.75rem; color: var(--cv-muted-fg); flex: 1; max-width: calc(100% - 110px); padding-right: 0.5rem; }
+.cv-pull-item__value { font-size: 0.75rem; font-weight: 600; min-width: 100px; text-align: right; white-space: nowrap; }
 
 .cv-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
 .cv-meta-card {
