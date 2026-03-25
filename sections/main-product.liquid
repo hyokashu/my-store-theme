@@ -1762,16 +1762,16 @@ input.cv-qty__input {
   var stickyAtc = document.getElementById('cv-sticky-atc');
 
   /* ── Sticky price updater ── */
-  var cvMoneyFormat   = {{ shop.money_format | json }};
-  var stickyPriceEl   = document.getElementById('cv-sticky-price');
-  var stickyBasePrice = stickyPriceEl ? parseInt(stickyPriceEl.dataset.unit, 10) : 0;
+  var stickyPriceEl       = document.getElementById('cv-sticky-price');
+  var stickyBasePrice     = stickyPriceEl ? parseInt(stickyPriceEl.dataset.unit, 10) : 0;
+  var stickyBaseFormatted = stickyPriceEl ? stickyPriceEl.textContent.trim() : '';
 
   function formatMoney(cents) {
     var amount = (cents / 100).toFixed(2);
-    return cvMoneyFormat
-      .replace('{{amount}}', amount)
-      .replace('{{amount_no_decimals}}', String(Math.round(cents / 100)))
-      .replace('{{amount_with_comma_separator}}', amount.replace('.', ','));
+    if (stickyBaseFormatted) {
+      return stickyBaseFormatted.replace(/[\d,]+\.\d{2}/, amount);
+    }
+    return '$' + amount;
   }
 
   function updateStickyPrice(qty) {
