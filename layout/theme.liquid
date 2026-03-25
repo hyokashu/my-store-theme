@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>{{ page_title }}</title>
+  {% if settings.favicon != blank %}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
+  {% endif %}
   {{ content_for_header }}
   {{ 'base.css' | asset_url | stylesheet_tag }}
   {{ 'sd-header.css' | asset_url | stylesheet_tag }}

@@ -1,0 +1,31 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_payment_icons": true,
+        "show_afterpay": false,
+        "show_trust_signals": true,
+        "show_similar": true,
+        "show_recent_sales": false,
+        "tab_description_label": "Description",
+        "tab_contents_label": "Card Details",
+        "box_contents_mode": "single_card",
+        "contents_heading": "Card Details",
+        "single_item1_desc": "Card grading and physical condition",
+        "single_item2_desc": "Card rarity tier from the set",
+        "single_item3_desc": "Foil, holo, or standard treatment"
+      }
+    }
+  },
+  "order": ["main"]
+}

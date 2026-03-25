@@ -28,6 +28,16 @@
 
   assign pack_count = product.metafields.custom.pack_count | default: 24
   assign cards_per_pack = product.metafields.custom.cards_per_pack | default: 6
+
+  assign promo_mode = false
+  if section.settings.box_contents_mode == 'promotional_box'
+    assign promo_mode = true
+  endif
+
+  assign single_card_mode = false
+  if section.settings.box_contents_mode == 'single_card'
+    assign single_card_mode = true
+  endif
 -%}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -631,8 +641,8 @@ input.cv-qty__input {
   background: var(--cv-card);
   box-shadow: var(--cv-shadow-sm);
 }
-.cv-pull-item__label { font-size: 0.75rem; color: var(--cv-muted-fg); }
-.cv-pull-item__value { font-size: 0.75rem; font-weight: 600; }
+.cv-pull-item__label { font-size: 0.75rem; color: var(--cv-muted-fg); flex: 1; max-width: calc(100% - 110px); padding-right: 0.5rem; }
+.cv-pull-item__value { font-size: 0.75rem; font-weight: 600; min-width: 100px; text-align: right; white-space: nowrap; }
 
 .cv-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
 .cv-meta-card {
@@ -785,36 +795,6 @@ input.cv-qty__input {
 .cv-product-card__price   { font-family: var(--cv-font-head); font-size: 1rem; font-weight: 700; }
 .cv-product-card__compare { font-size: 0.75rem; color: var(--cv-muted-fg); text-decoration: line-through; }
 
-/* =============================================================
-   Recent Sales Ticker
-   ============================================================= */
-.cv-recent-sales {
-  margin-top: 3rem;
-  border: 1px solid var(--cv-border);
-  border-radius: calc(var(--cv-radius) * 2);
-  background: var(--cv-card);
-  padding: 1.25rem;
-  box-shadow: var(--cv-shadow-sm);
-  display: none; /* Hidden by default until JS populates it */
-}
-.cv-recent-sales__title {
-  font-family: var(--cv-font-head);
-  font-size: 0.75rem; font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--cv-fg); margin-bottom: 1rem;
-}
-.cv-recent-sales__list { display: flex; flex-direction: column; gap: 0.625rem; }
-.cv-sale-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--cv-border);
-  border-radius: var(--cv-radius);
-  background: rgba(238,236,234,0.4);
-}
-.cv-sale-item__info  { display: flex; flex-direction: column; gap: 0.125rem; }
-.cv-sale-item__name  { font-size: 0.875rem; font-weight: 500; }
-.cv-sale-item__time  { font-size: 0.75rem; color: var(--cv-muted-fg); }
-.cv-sale-item__price { font-family: var(--cv-font-head); font-size: 0.875rem; font-weight: 700; }
 
 /* =============================================================
    Sticky Mobile Cart Bar
@@ -1361,6 +1341,141 @@ input.cv-qty__input {
         <div class="cv-contents">
           <h3>{{ section.settings.contents_heading | default: "What's Inside" }}</h3>
 
+          {%- if single_card_mode -%}
+
+          <div>
+            {%- if product.metafields.custom.card_condition != blank -%}
+            <div class="cv-content-item">
+              <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+              <div class="cv-content-item__main">
+                <div class="cv-content-item__row">
+                  <span class="cv-content-item__label">Condition:</span>
+                  <span class="cv-content-item__value">{{ product.metafields.custom.card_condition.value }}</span>
+                </div>
+                <span class="cv-content-item__desc">{{ section.settings.single_item1_desc | default: 'Card grading and physical condition' }}</span>
+              </div>
+            </div>
+            {%- endif -%}
+            {%- if product.metafields.custom.card_rarity != blank -%}
+            <div class="cv-content-item">
+              <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+              <div class="cv-content-item__main">
+                <div class="cv-content-item__row">
+                  <span class="cv-content-item__label">Rarity:</span>
+                  <span class="cv-content-item__value">{{ product.metafields.custom.card_rarity.value }}</span>
+                </div>
+                <span class="cv-content-item__desc">{{ section.settings.single_item2_desc | default: 'Card rarity tier from the set' }}</span>
+              </div>
+            </div>
+            {%- endif -%}
+            {%- if product.metafields.custom.card_finish != blank -%}
+            <div class="cv-content-item">
+              <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9"/><path d="M12 3c1.5 2.5 2 5 2 9"/><path d="M12 3C10.5 5.5 10 8 10 12"/><path d="M3 12h18"/></svg></div>
+              <div class="cv-content-item__main">
+                <div class="cv-content-item__row">
+                  <span class="cv-content-item__label">Finish:</span>
+                  <span class="cv-content-item__value">{{ product.metafields.custom.card_finish.value }}</span>
+                </div>
+                <span class="cv-content-item__desc">{{ section.settings.single_item3_desc | default: 'Foil, holo, or standard treatment' }}</span>
+              </div>
+            </div>
+            {%- endif -%}
+          </div>
+
+          {%- assign card_specs = product.metafields.custom.card_specs.value -%}
+          {%- if card_specs != blank and card_specs.size > 0 -%}
+            <div class="cv-pull-rates">
+              <h4>Card Specifications</h4>
+              <div class="cv-pull-grid">
+                {%- for item in card_specs -%}
+                  <div class="cv-pull-item">
+                    <span class="cv-pull-item__label">{{ item.title }}</span>
+                    <span class="cv-pull-item__value">{{ item.subtitle }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div class="cv-meta-grid">
+            {%- if product.metafields.custom.card_language != blank -%}
+              <div class="cv-meta-card">
+                <span class="cv-meta-card__label">Language</span>
+                <span class="cv-meta-card__value">{{ product.metafields.custom.card_language.value }}</span>
+              </div>
+            {%- endif -%}
+            {%- if product.metafields.custom.release_date != blank -%}
+              <div class="cv-meta-card">
+                <span class="cv-meta-card__label">Release Date</span>
+                <span class="cv-meta-card__value">{{ product.metafields.custom.release_date }}</span>
+              </div>
+            {%- endif -%}
+          </div>
+
+          {%- elsif promo_mode -%}
+
+          <div>
+            <div class="cv-content-item">
+              <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+              <div class="cv-content-item__main">
+                <div class="cv-content-item__row">
+                  <span class="cv-content-item__label">{{ section.settings.promo_item1_label | default: 'Exclusive Promos:' }}</span>
+                  <span class="cv-content-item__value">{{ product.metafields.custom.promo_cards_included.value | default: '—' }}</span>
+                </div>
+                <span class="cv-content-item__desc">{{ section.settings.promo_item1_desc | default: 'Exclusive alternate-art promotional cards' }}</span>
+              </div>
+            </div>
+            <div class="cv-content-item">
+              <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
+              <div class="cv-content-item__main">
+                <div class="cv-content-item__row">
+                  <span class="cv-content-item__label">{{ section.settings.promo_item2_label | default: 'Booster Packs:' }}</span>
+                  <span class="cv-content-item__value">{{ product.metafields.custom.booster_packs_included.value | default: '—' }} {{ section.settings.promo_item2_suffix | default: 'packs' }}</span>
+                </div>
+                <span class="cv-content-item__desc">{{ section.settings.promo_item2_desc | default: 'Each pack contains randomly assorted cards' }}</span>
+              </div>
+            </div>
+            <div class="cv-content-item">
+              <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
+              <div class="cv-content-item__main">
+                <div class="cv-content-item__row">
+                  <span class="cv-content-item__label">{{ section.settings.promo_item3_label | default: 'Accessories:' }}</span>
+                  <span class="cv-content-item__value">{{ product.metafields.custom.accessories_included.value | default: '—' }}</span>
+                </div>
+                <span class="cv-content-item__desc">{{ section.settings.promo_item3_desc | default: 'Sleeves, deck boxes, and other collectible accessories' }}</span>
+              </div>
+            </div>
+          </div>
+
+          {%- assign promo_highlights = product.metafields.custom.promo_highlights.value -%}
+          {%- if promo_highlights != blank and promo_highlights.size > 0 -%}
+            <div class="cv-pull-rates">
+              <h4>Exclusive Highlights</h4>
+              <p>This set includes the following guaranteed exclusive items:</p>
+              <div class="cv-pull-grid">
+                {%- for item in promo_highlights -%}
+                  <div class="cv-pull-item">
+                    <span class="cv-pull-item__label">{{ item.title }}</span>
+                    <span class="cv-pull-item__value">{{ item.subtitle }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div class="cv-meta-grid">
+            <div class="cv-meta-card">
+              <span class="cv-meta-card__label">Release Date</span>
+              <span class="cv-meta-card__value">{{ product.metafields.custom.release_date | default: '—' }}</span>
+            </div>
+            <div class="cv-meta-card">
+              <span class="cv-meta-card__label">Product Type</span>
+              <span class="cv-meta-card__value">{{ product.metafields.custom.promo_product_type.value | default: '—' }}</span>
+            </div>
+          </div>
+
+          {%- else -%}
+
           <div>
             <div class="cv-content-item">
               <div class="cv-content-item__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg></div>
@@ -1420,6 +1535,8 @@ input.cv-qty__input {
               <span class="cv-meta-card__value">{{ product.metafields.custom.set_size | default: '—' }}</span>
             </div>
           </div>
+
+          {%- endif -%}
         </div>
       </div>
     </div>
@@ -1481,37 +1598,13 @@ input.cv-qty__input {
   </section>
   {%- endif -%}
 
-  {%- comment -%} 5. Intelligent Recent Sales Ticker {%- endcomment -%}
-  <div class="cv-recent-sales" id="cv-recent-sales-container">
-    <p class="cv-recent-sales__title">Recent Sales</p>
-    <div class="cv-recent-sales__list" id="cv-recent-sales-list">
-      </div>
-  </div>
-
-  <script type="application/json" id="cv-recent-products-data">
-    [
-      {%- assign sale_items_count = 0 -%}
-      {%- if related_collection -%}
-        {%- for p in related_collection.products limit: 15 -%}
-          {%- if p.available and p.id != product.id -%}
-            {%- if sale_items_count > 0 -%},{%- endif -%}
-            {
-              "title": {{ p.title | json }},
-              "price": "{{ p.price | money }}"
-            }
-            {%- assign sale_items_count = sale_items_count | plus: 1 -%}
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
-    ]
-  </script>
 
   </div>{%- comment -%} /.cv-inner {%- endcomment -%}
 </section>{%- comment -%} ── Sticky Mobile Cart Bar ── {%- endcomment -%}
 <div class="cv-sticky-cart" id="cv-sticky-cart" role="region" aria-label="Quick add to cart">
   <div class="cv-sticky-cart__inner">
     <div class="cv-sticky-cart__prices">
-      <span class="cv-sticky-cart__price">{{ sale_price | money }}</span>
+      <span class="cv-sticky-cart__price" id="cv-sticky-price" data-unit="{{ sale_price }}">{{ sale_price | money }}</span>
       {%- if on_sale -%}
         <span class="cv-sticky-cart__was">{{ compare_price | money }}</span>
       {%- endif -%}
@@ -1538,79 +1631,6 @@ input.cv-qty__input {
 (function () {
   'use strict';
 
-/* ── 5. Dynamic Recent Sales (with Session Storage) ── */
-  var recentDataEl = document.getElementById('cv-recent-products-data');
-  if (recentDataEl) {
-    try {
-      var products = JSON.parse(recentDataEl.textContent);
-      if (products.length > 0) {
-        var listEl = document.getElementById('cv-recent-sales-list');
-        var container = document.getElementById('cv-recent-sales-container');
-        
-        var storedData = sessionStorage.getItem('cv_recent_sales');
-        var salesData = null;
-        var now = Date.now();
-
-        // 1. Check if we already have a generated list for this user session
-        if (storedData) {
-          try {
-            salesData = JSON.parse(storedData);
-          } catch(e) {}
-        }
-
-        // 2. If no list exists, generate one and save it to the browser
-        if (!salesData || !salesData.sales || salesData.sales.length === 0) {
-          products.sort(function() { return 0.5 - Math.random(); });
-          var count = Math.min(4, products.length);
-          var timeOffsetMins = Math.floor(Math.random() * 14) + 2; 
-          
-          var newSales = [];
-          for (var i = 0; i < count; i++) {
-            newSales.push({
-              title: products[i].title,
-              price: products[i].price,
-              baseMinsAgo: timeOffsetMins
-            });
-            // Add a random chunk of time (15 to 50 mins) for the next item down
-            timeOffsetMins += Math.floor(Math.random() * 36) + 15; 
-          }
-
-          salesData = {
-            generatedAt: now,
-            sales: newSales
-          };
-          sessionStorage.setItem('cv_recent_sales', JSON.stringify(salesData));
-        }
-
-        // 3. Render the list, calculating the true time elapsed since it was generated
-        var elapsedMins = Math.floor((now - salesData.generatedAt) / 60000);
-        
-        for (var j = 0; j < salesData.sales.length; j++) {
-          var sale = salesData.sales[j];
-          var totalMins = sale.baseMinsAgo + elapsedMins;
-          
-          var timeString = '';
-          if (totalMins < 60) {
-            timeString = totalMins + ' minutes ago';
-          } else {
-            var hrs = Math.floor(totalMins / 60);
-            timeString = hrs + (hrs === 1 ? ' hour ago' : ' hours ago');
-          }
-
-          var html = '<div class="cv-sale-item">' +
-                       '<div class="cv-sale-item__info">' +
-                         '<span class="cv-sale-item__name">' + sale.title + '</span>' +
-                         '<span class="cv-sale-item__time">' + timeString + '</span>' +
-                       '</div>' +
-                       '<span class="cv-sale-item__price">' + sale.price + '</span>' +
-                     '</div>';
-          listEl.insertAdjacentHTML('beforeend', html);
-        }
-        
-        container.style.display = 'block';
-      }
-    } catch(e) {}
-  }
 
   /* ── Gallery ── */
   var gallery  = document.getElementById('cv-gallery');
@@ -1694,6 +1714,7 @@ input.cv-qty__input {
       var max = parseInt(qtyInput.getAttribute('max'), 10);
       if (!isNaN(max) && v > max) qtyInput.value = max;
       if (stickyQtyDisplay) stickyQtyDisplay.textContent = qtyInput.value;
+      updateStickyPrice(parseInt(qtyInput.value, 10) || 1);
     });
   }
 
@@ -1707,6 +1728,7 @@ input.cv-qty__input {
       if (v > 1) {
         stickyQtyDisplay.textContent = v - 1;
         if (qtyInput) qtyInput.value = v - 1;
+        updateStickyPrice(v - 1);
       }
     });
     stickyQtyPlus.addEventListener('click', function () {
@@ -1715,6 +1737,7 @@ input.cv-qty__input {
       if (!isNaN(max) && v >= max) return;
       stickyQtyDisplay.textContent = v + 1;
       if (qtyInput) qtyInput.value = v + 1;
+      updateStickyPrice(v + 1);
     });
   }
 
@@ -1737,6 +1760,24 @@ input.cv-qty__input {
   var form      = document.getElementById('cv-product-form');
   var atcBtn    = document.getElementById('cv-add-to-cart');
   var stickyAtc = document.getElementById('cv-sticky-atc');
+
+  /* ── Sticky price updater ── */
+  var stickyPriceEl       = document.getElementById('cv-sticky-price');
+  var stickyBasePrice     = stickyPriceEl ? parseInt(stickyPriceEl.dataset.unit, 10) : 0;
+  var stickyBaseFormatted = stickyPriceEl ? stickyPriceEl.textContent.trim() : '';
+
+  function formatMoney(cents) {
+    var amount = (cents / 100).toFixed(2);
+    if (stickyBaseFormatted) {
+      return stickyBaseFormatted.replace(/[\d,]+\.\d{2}/, amount);
+    }
+    return '$' + amount;
+  }
+
+  function updateStickyPrice(qty) {
+    if (!stickyPriceEl) return;
+    stickyPriceEl.textContent = formatMoney(stickyBasePrice * qty);
+  }
 
   function submitCart(event, btnElement) {
     if (!form || !btnElement) return;
@@ -1764,6 +1805,9 @@ input.cv-qty__input {
       // Success State: Button pop, green color, checkmark icon
       btnElement.classList.add('is-success');
       btnElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1.25rem;height:1.25rem;margin-right:0.5rem;"><polyline points="20 6 9 17 4 12"/></svg> Added to Cart';
+
+      // Open cart drawer
+      document.dispatchEvent(new CustomEvent('cart:open'));
 
       // Update cart count badge if it exists on your theme
       fetch('/cart.js').then(function (r) { return r.json(); }).then(function (cart) {
@@ -2124,6 +2168,89 @@ input.cv-qty__input {
       "id": "contents_item3_desc",
       "label": "Row 3 — Description",
       "default": "Across all packs in the sealed box"
+    },
+    {
+      "type": "header",
+      "content": "Promotional Box Mode"
+    },
+    {
+      "type": "select",
+      "id": "box_contents_mode",
+      "label": "Box Contents Mode",
+      "default": "booster_box",
+      "options": [
+        { "value": "booster_box", "label": "Booster Box" },
+        { "value": "promotional_box", "label": "Promotional Box" },
+        { "value": "single_card", "label": "Single Card" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Promotional Box — Row Labels"
+    },
+    {
+      "type": "text",
+      "id": "promo_item1_label",
+      "label": "Row 1 — Label",
+      "default": "Exclusive Promos:"
+    },
+    {
+      "type": "text",
+      "id": "promo_item1_desc",
+      "label": "Row 1 — Description",
+      "default": "Exclusive alternate-art promotional cards"
+    },
+    {
+      "type": "text",
+      "id": "promo_item2_label",
+      "label": "Row 2 — Label",
+      "default": "Booster Packs:"
+    },
+    {
+      "type": "text",
+      "id": "promo_item2_suffix",
+      "label": "Row 2 — Unit (after number)",
+      "default": "packs"
+    },
+    {
+      "type": "text",
+      "id": "promo_item2_desc",
+      "label": "Row 2 — Description",
+      "default": "Each pack contains randomly assorted cards"
+    },
+    {
+      "type": "text",
+      "id": "promo_item3_label",
+      "label": "Row 3 — Label",
+      "default": "Accessories:"
+    },
+    {
+      "type": "text",
+      "id": "promo_item3_desc",
+      "label": "Row 3 — Description",
+      "default": "Sleeves, deck boxes, and other collectible accessories"
+    },
+    {
+      "type": "header",
+      "content": "Single Card Mode"
+    },
+    {
+      "type": "text",
+      "id": "single_item1_desc",
+      "label": "Condition — Description",
+      "default": "Card grading and physical condition"
+    },
+    {
+      "type": "text",
+      "id": "single_item2_desc",
+      "label": "Rarity — Description",
+      "default": "Card rarity tier from the set"
+    },
+    {
+      "type": "text",
+      "id": "single_item3_desc",
+      "label": "Finish — Description",
+      "default": "Foil, holo, or standard treatment"
     }
   ],
   "presets": [

@@ -1,1 +1,21 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Supply District",
+    "theme_version": "1.0.0",
+    "theme_author": "Supply District",
+    "theme_documentation_url": "https://supply-district-8763.myshopify.com",
+    "theme_support_url": "https://supply-district-8763.myshopify.com"
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "Will be scaled down to 32×32px"
+      }
+    ]
+  }
+]

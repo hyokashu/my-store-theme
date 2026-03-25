@@ -21,7 +21,7 @@
             "title_em": "Booster Boxes",
             "description": "The sets you’ve been hunting for are finally back in the vault. Secure 100% authentic, factory-sealed booster boxes and ETBs, delivered to your door with premium packaging guarantees before they sell out.",
             "cta1_label": "Shop Booster Boxes",
-            "cta1_url": "shopify://collections/pokemon-booster-boxes",
+            "cta1_url": "shopify://collections/pokemon-booster",
             "cta2_label": "Shop All",
             "cta2_url": "shopify://collections/pokemon",
             "bg_image": "shopify://shop_images/charizard-evolution-line-triple-art-extension-16-9-using-v0-tusizb7qpmwb1.webp",
@@ -226,7 +226,6 @@
         },
         "promo_banner_FqmJpP": {
           "type": "promo_banner",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_09-06-48.png",
             "eyebrow": "Limited Edition Pokemon",
@@ -237,13 +236,12 @@
         },
         "promo_banner_9RGRWE": {
           "type": "promo_banner",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_11-17-44.png",
             "eyebrow": "Limited Edition One Piece",
             "title": "Anniversary & Promo Sets",
             "cta_label": "Shop Sets",
-            "cta_url": ""
+            "cta_url": "shopify://products/one-piece-3rd-anniversary-set"
           }
         },
         "about_check_i7Lq8f": {
