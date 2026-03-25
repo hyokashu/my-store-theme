@@ -1604,7 +1604,7 @@ input.cv-qty__input {
 <div class="cv-sticky-cart" id="cv-sticky-cart" role="region" aria-label="Quick add to cart">
   <div class="cv-sticky-cart__inner">
     <div class="cv-sticky-cart__prices">
-      <span class="cv-sticky-cart__price">{{ sale_price | money }}</span>
+      <span class="cv-sticky-cart__price" id="cv-sticky-price" data-unit="{{ sale_price }}">{{ sale_price | money }}</span>
       {%- if on_sale -%}
         <span class="cv-sticky-cart__was">{{ compare_price | money }}</span>
       {%- endif -%}
@@ -1714,6 +1714,7 @@ input.cv-qty__input {
       var max = parseInt(qtyInput.getAttribute('max'), 10);
       if (!isNaN(max) && v > max) qtyInput.value = max;
       if (stickyQtyDisplay) stickyQtyDisplay.textContent = qtyInput.value;
+      updateStickyPrice(parseInt(qtyInput.value, 10) || 1);
     });
   }
 
@@ -1727,6 +1728,7 @@ input.cv-qty__input {
       if (v > 1) {
         stickyQtyDisplay.textContent = v - 1;
         if (qtyInput) qtyInput.value = v - 1;
+        updateStickyPrice(v - 1);
       }
     });
     stickyQtyPlus.addEventListener('click', function () {
@@ -1735,6 +1737,7 @@ input.cv-qty__input {
       if (!isNaN(max) && v >= max) return;
       stickyQtyDisplay.textContent = v + 1;
       if (qtyInput) qtyInput.value = v + 1;
+      updateStickyPrice(v + 1);
     });
   }
 
@@ -1757,6 +1760,24 @@ input.cv-qty__input {
   var form      = document.getElementById('cv-product-form');
   var atcBtn    = document.getElementById('cv-add-to-cart');
   var stickyAtc = document.getElementById('cv-sticky-atc');
+
+  /* ── Sticky price updater ── */
+  var cvMoneyFormat   = {{ shop.money_format | json }};
+  var stickyPriceEl   = document.getElementById('cv-sticky-price');
+  var stickyBasePrice = stickyPriceEl ? parseInt(stickyPriceEl.dataset.unit, 10) : 0;
+
+  function formatMoney(cents) {
+    var amount = (cents / 100).toFixed(2);
+    return cvMoneyFormat
+      .replace('{{amount}}', amount)
+      .replace('{{amount_no_decimals}}', String(Math.round(cents / 100)))
+      .replace('{{amount_with_comma_separator}}', amount.replace('.', ','));
+  }
+
+  function updateStickyPrice(qty) {
+    if (!stickyPriceEl) return;
+    stickyPriceEl.textContent = formatMoney(stickyBasePrice * qty);
+  }
 
   function submitCart(event, btnElement) {
     if (!form || !btnElement) return;
@@ -1784,6 +1805,9 @@ input.cv-qty__input {
       // Success State: Button pop, green color, checkmark icon
       btnElement.classList.add('is-success');
       btnElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1.25rem;height:1.25rem;margin-right:0.5rem;"><polyline points="20 6 9 17 4 12"/></svg> Added to Cart';
+
+      // Open cart drawer
+      document.dispatchEvent(new CustomEvent('cart:open'));
 
       // Update cart count badge if it exists on your theme
       fetch('/cart.js').then(function (r) { return r.json(); }).then(function (cart) {
