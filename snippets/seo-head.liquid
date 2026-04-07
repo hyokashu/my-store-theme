@@ -85,6 +85,7 @@
 </script>
 
 {%- if request.page_type == 'index' -%}
+{%- assign search_base_url = shop.url | append: '/search?q=' -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -95,7 +96,7 @@
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": {{ shop.url | append: '/search?q={search_term_string}' | json }}
+      "urlTemplate": "{{ search_base_url }}{search_term_string}"
     },
     "query-input": "required name=search_term_string"
   }
