@@ -121,7 +121,7 @@
               {%- for value in filter.values -%}
                 <li role="listitem">
                   <a
-                    href="{{ value.url_to_add | default: value.url_to_remove }}"
+                    href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
                     class="sdcf-option__label{% if value.active %} is-active{% endif %}{% if value.count == 0 %} sdcf-option__label--disabled{% endif %}"
                     aria-pressed="{{ value.active }}"
                   >
