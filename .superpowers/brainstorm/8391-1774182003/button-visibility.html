@@ -1,0 +1,175 @@
+<h2>Quick Add: Button Visibility</h2>
+<p class="subtitle">How should the "Add to Cart" button appear on home page product cards?</p>
+
+<style>
+  .mock-card {
+    background: #FDFBF2;
+    border: 1px solid #e0ddd0;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 170px;
+    font-family: sans-serif;
+    font-size: 12px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .mock-img {
+    background: #e8e4d8;
+    height: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mock-info {
+    padding: 10px;
+  }
+  .mock-title { font-weight: 700; color: #1C2B1F; margin-bottom: 3px; font-size: 12px; }
+  .mock-price { color: #2C4731; font-size: 13px; font-weight: 700; }
+  .mock-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #C59B43;
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Option A: Hover slide-up */
+  .slide-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #2C4731;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 9px;
+    text-align: center;
+    letter-spacing: 0.04em;
+    transform: translateY(100%);
+    transition: transform 0.22s ease;
+  }
+  .mock-card:hover .slide-btn {
+    transform: translateY(0);
+  }
+  .hover-hint {
+    font-size: 10px;
+    color: #aaa;
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  /* Option B: Always visible */
+  .always-btn {
+    display: block;
+    width: 100%;
+    padding: 8px 0;
+    background: #2C4731;
+    color: white;
+    border: none;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+
+  .demo-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .demo-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+    margin-bottom: 8px;
+  }
+</style>
+
+<div class="options">
+
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Hover to Reveal (slide-up)</h3>
+      <p>Button is hidden by default and slides up from the bottom of the product image on hover. Matches how the collection page cards work today.</p>
+      <div class="demo-row">
+        <div>
+          <div class="demo-label">Default state</div>
+          <div class="mock-card" style="cursor:default">
+            <div class="mock-img">
+              📦
+              <span class="mock-badge">NEW</span>
+            </div>
+            <div class="mock-info">
+              <div class="mock-title">Booster Pack</div>
+              <div class="mock-price">$14.99</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="demo-label">On hover →</div>
+          <div class="mock-card" style="cursor:default">
+            <div class="mock-img">
+              📦
+              <span class="mock-badge">NEW</span>
+              <div class="slide-btn" style="transform:translateY(0)">+ Quick Add</div>
+            </div>
+            <div class="mock-info">
+              <div class="mock-title">Booster Pack</div>
+              <div class="mock-price">$14.99</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>Clean, uncluttered cards</li><li>Consistent with collections</li><li>Elegant on desktop</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Not discoverable on mobile (no hover)</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Always Visible Button</h3>
+      <p>A persistent "Add to Cart" button sits below the product info at all times. Works on both desktop and mobile without needing hover.</p>
+      <div class="demo-row">
+        <div>
+          <div class="demo-label">Always shown</div>
+          <div class="mock-card">
+            <div class="mock-img">
+              📦
+              <span class="mock-badge">NEW</span>
+            </div>
+            <div class="mock-info">
+              <div class="mock-title">Booster Pack</div>
+              <div class="mock-price">$14.99</div>
+              <button class="always-btn">+ Quick Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons" style="margin-top:12px">
+        <div class="pros"><h4>Pros</h4><ul><li>Works on mobile</li><li>More discoverable</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Makes cards taller</li><li>More visually busy</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+</div>
