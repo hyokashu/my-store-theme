@@ -117,11 +117,17 @@
       to immediately fix the numbered list formatting bug 
     {%- endcomment -%}
     <nav aria-label="Breadcrumb">
-      <ul class="cv-breadcrumb">
-        <li><a href="{{ routes.root_url }}">Home</a></li>
+      <ol class="cv-breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="{{ routes.root_url }}" itemprop="item"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1">
+        </li>
         <li class="cv-breadcrumb__sep" aria-hidden="true">/</li>
-        <li><span class="cv-breadcrumb__current" aria-current="page">{{ collection.title | escape }}</span></li>
-      </ul>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span class="cv-breadcrumb__current" aria-current="page" itemprop="name">{{ collection.title | escape }}</span>
+          <meta itemprop="position" content="2">
+        </li>
+      </ol>
     </nav>
 
     <h1 class="sdcb-banner__title">{{ collection.title | escape }}</h1>
@@ -151,6 +157,13 @@
 ════════════════════════════════════════ {%- endcomment -%}
 
 {%- paginate collection.products by products_per_page -%}
+
+{%- if paginate.previous -%}
+  <link rel="prev" href="{{ paginate.previous.url }}">
+{%- endif -%}
+{%- if paginate.next -%}
+  <link rel="next" href="{{ paginate.next.url }}">
+{%- endif -%}
 
 <div class="sd-catalog" id="sd-catalog">
   <div class="sd-catalog__wrap{% if show_filters %} sd-catalog__wrap--sidebar{% endif %}">
@@ -275,7 +288,7 @@
                       {%- for value in filter.values -%}
                         <li role="listitem">
                           <a
-                            href="{{ value.url_to_add | default: value.url_to_remove }}"
+                            href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
                             class="sdcf-option__label{% if value.active %} is-active{% endif %}{% if value.count == 0 %} sdcf-option__label--disabled{% endif %}"
                             aria-pressed="{{ value.active }}"
                           >

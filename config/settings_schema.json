@@ -17,5 +17,75 @@
         "info": "Will be scaled down to 32×32px"
       }
     ]
+  },
+  {
+    "name": "SEO & Social",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Site Identity"
+      },
+      {
+        "type": "text",
+        "id": "seo_site_name",
+        "label": "Site name (for title suffix)",
+        "default": "Sprout Collects",
+        "info": "Appended to page titles as: Page Name | Sprout Collects"
+      },
+      {
+        "type": "textarea",
+        "id": "seo_site_description",
+        "label": "Default meta description",
+        "default": "Australia's home for authentic, factory-sealed Pokémon and One Piece TCG booster boxes, ETBs, singles and bundles. Fast dispatch, insured shipping.",
+        "info": "Used when a page has no specific description. Keep under 160 characters."
+      },
+      {
+        "type": "image_picker",
+        "id": "seo_og_default_image",
+        "label": "Default social sharing image",
+        "info": "Used for pages without a product or collection image. Recommended: 1200×630px."
+      },
+      {
+        "type": "header",
+        "content": "Social Profiles"
+      },
+      {
+        "type": "url",
+        "id": "seo_social_instagram",
+        "label": "Instagram URL",
+        "info": "e.g. https://www.instagram.com/sproutclc"
+      },
+      {
+        "type": "url",
+        "id": "seo_social_tiktok",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "url",
+        "id": "seo_social_youtube",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "url",
+        "id": "seo_social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "header",
+        "content": "Organisation Details"
+      },
+      {
+        "type": "image_picker",
+        "id": "seo_org_logo",
+        "label": "Organisation logo (for structured data)",
+        "info": "Square logo recommended. Used in Google's Knowledge Panel."
+      },
+      {
+        "type": "text",
+        "id": "seo_contact_email",
+        "label": "Contact email (for structured data)",
+        "default": "support@sproutclc.com"
+      }
+    ]
   }
 ]
