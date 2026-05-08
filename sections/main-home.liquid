@@ -343,6 +343,17 @@
 .cvh-promo-card__cta svg { width: 0.875rem; height: 0.875rem; }
 
 /* =============================================================
+   CN Explainer
+   ============================================================= */
+.cvh-cn-explainer { padding: 3rem 0; background: var(--cv-secondary); border-bottom: 1px solid var(--cv-border); }
+.cvh-cn-explainer__grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.75rem; }
+@media (min-width: 768px) { .cvh-cn-explainer__grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+.cvh-cn-explainer__item { background: var(--cv-card); border-radius: var(--cv-radius); padding: 1.5rem; border: 1px solid var(--cv-border); }
+.cvh-cn-explainer__icon { font-size: 1.75rem; margin-bottom: 0.875rem; }
+.cvh-cn-explainer__title { font-family: var(--cv-font-head); font-size: 1.0625rem; font-weight: 700; color: var(--cv-fg); margin-bottom: 0.625rem; }
+.cvh-cn-explainer__body { font-size: 0.9rem; color: var(--cv-muted-fg); line-height: 1.65; }
+
+/* =============================================================
    7. ABOUT SECTION
    ============================================================= */
 .cvh-about { padding: 3rem 0; background: var(--cv-bg); border-bottom: 1px solid var(--cv-border); }
@@ -954,6 +965,34 @@
   </section>
   {%- endif -%}
 
+  {%- if section.settings.show_cn_explainer -%}
+  <section class="cvh-cn-explainer" aria-label="Why Chinese Exclusives">
+    <div class="cvh-inner">
+      <div class="cvh-section-hd">
+        <h2 class="cvh-section-title">{{ section.settings.cn_explainer_title | default: 'Why Chinese-Market Cards Are Different' }}</h2>
+        <p class="cvh-section-sub">{{ section.settings.cn_explainer_sub | default: 'Not a translation. A completely different product.' }}</p>
+      </div>
+      <div class="cvh-cn-explainer__grid">
+        <div class="cvh-cn-explainer__item">
+          <div class="cvh-cn-explainer__icon">{{ section.settings.cn_col1_icon | default: '🎨' }}</div>
+          <div class="cvh-cn-explainer__title">{{ section.settings.cn_col1_title | default: 'CN-Exclusive Artwork' }}</div>
+          <div class="cvh-cn-explainer__body">{{ section.settings.cn_col1_body | default: 'Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set.' }}</div>
+        </div>
+        <div class="cvh-cn-explainer__item">
+          <div class="cvh-cn-explainer__icon">{{ section.settings.cn_col2_icon | default: '🎁' }}</div>
+          <div class="cvh-cn-explainer__title">{{ section.settings.cn_col2_title | default: 'Anniversary & Regional Sets' }}</div>
+          <div class="cvh-cn-explainer__body">{{ section.settings.cn_col2_body | default: 'China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market.' }}</div>
+        </div>
+        <div class="cvh-cn-explainer__item">
+          <div class="cvh-cn-explainer__icon">{{ section.settings.cn_col3_icon | default: '📈' }}</div>
+          <div class="cvh-cn-explainer__title">{{ section.settings.cn_col3_title | default: 'Higher Collector Value' }}</div>
+          <div class="cvh-cn-explainer__body">{{ section.settings.cn_col3_body | default: 'Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited.' }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {%- endif -%}
+
   {%- comment -%} 6. PROMOTIONAL BANNERS {%- endcomment -%}
   {%- if promo_banners.size > 0 -%}
   <section class="cvh-promo" aria-label="Promotions">
@@ -1543,6 +1582,20 @@
     { "type": "text",       "id": "just_landed_title",          "label": "Section title",            "default": "Just Landed" },
     { "type": "text",       "id": "just_landed_subtitle",       "label": "Section subtitle",         "default": "Latest Chinese-market imports — direct from our distributors" },
     { "type": "text",       "id": "just_landed_view_all_label", "label": "View all label",           "default": "View all new arrivals →" },
+
+    { "type": "header", "content": "CN Explainer" },
+    { "type": "checkbox", "id": "show_cn_explainer",   "label": "Show 'Why Chinese Exclusives?' section", "default": true },
+    { "type": "text",     "id": "cn_explainer_title",  "label": "Section title",  "default": "Why Chinese-Market Cards Are Different" },
+    { "type": "text",     "id": "cn_explainer_sub",    "label": "Section subtitle","default": "Not a translation. A completely different product." },
+    { "type": "text",     "id": "cn_col1_icon",        "label": "Column 1 icon (emoji)", "default": "🎨" },
+    { "type": "text",     "id": "cn_col1_title",       "label": "Column 1 title", "default": "CN-Exclusive Artwork" },
+    { "type": "textarea","id": "cn_col1_body",         "label": "Column 1 body",  "default": "Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set." },
+    { "type": "text",     "id": "cn_col2_icon",        "label": "Column 2 icon (emoji)", "default": "🎁" },
+    { "type": "text",     "id": "cn_col2_title",       "label": "Column 2 title", "default": "Anniversary & Regional Sets" },
+    { "type": "textarea","id": "cn_col2_body",         "label": "Column 2 body",  "default": "China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market." },
+    { "type": "text",     "id": "cn_col3_icon",        "label": "Column 3 icon (emoji)", "default": "📈" },
+    { "type": "text",     "id": "cn_col3_title",       "label": "Column 3 title", "default": "Higher Collector Value" },
+    { "type": "textarea","id": "cn_col3_body",         "label": "Column 3 body",  "default": "Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited." },
 
     { "type": "header", "content": "Display Options" },
     { "type": "checkbox", "id": "show_trust_bar", "label": "Show trust bar",      "default": true },

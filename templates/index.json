@@ -359,6 +359,18 @@
         "just_landed_title": "Just Landed",
         "just_landed_subtitle": "Latest Chinese-market imports — direct from our distributors",
         "just_landed_view_all_label": "View all new arrivals →",
+        "show_cn_explainer": true,
+        "cn_explainer_title": "Why Chinese-Market Cards Are Different",
+        "cn_explainer_sub": "Not a translation. A completely different product.",
+        "cn_col1_icon": "🎨",
+        "cn_col1_title": "CN-Exclusive Artwork",
+        "cn_col1_body": "Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set.",
+        "cn_col2_icon": "🎁",
+        "cn_col2_title": "Anniversary & Regional Sets",
+        "cn_col2_body": "China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market.",
+        "cn_col3_icon": "📈",
+        "cn_col3_title": "Higher Collector Value",
+        "cn_col3_body": "Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited.",
         "show_trust_bar": true,
         "show_marquee": true
       }
