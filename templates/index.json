@@ -167,23 +167,21 @@
         },
         "category_card_TmLA9c": {
           "type": "category_card",
-          "disabled": true,
           "settings": {
-            "label": "ETBs",
-            "url": "",
+            "label": "Anniversary Sets",
+            "url": "shopify://collections/anniversary-sets",
             "custom_icon": "shopify://shop_images/Gemini_Generated_Image_v8xzegv8xzegv8xz-Photoroom.png",
-            "icon": "briefcase",
+            "icon": "star",
             "is_sale": false
           }
         },
         "category_card_6473yk": {
           "type": "category_card",
-          "disabled": true,
           "settings": {
-            "label": "Cases",
-            "url": "",
+            "label": "Pre-Orders",
+            "url": "shopify://collections/pre-orders",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-13_1.png",
-            "icon": "layers",
+            "icon": "package",
             "is_sale": false
           }
         },
@@ -200,8 +198,8 @@
         "category_card_Rchcgy": {
           "type": "category_card",
           "settings": {
-            "label": "Promos",
-            "url": "",
+            "label": "CN Exclusives",
+            "url": "shopify://collections/cn-exclusives",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-41-28_1.png",
             "icon": "star",
             "is_sale": false
@@ -210,16 +208,16 @@
         "brand_link_C8KPGz": {
           "type": "brand_link",
           "settings": {
-            "label": "Pokemon",
-            "url": "shopify://collections/pokemon",
+            "label": "Pokémon CN",
+            "url": "shopify://collections/pokemon-cn",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-56-05_1.png"
           }
         },
         "brand_link_k4wXFB": {
           "type": "brand_link",
           "settings": {
-            "label": "One Piece",
-            "url": "shopify://collections/one-piece-1",
+            "label": "One Piece CN",
+            "url": "shopify://collections/one-piece-cn",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-49-21_1.png"
           }
         },
@@ -227,20 +225,20 @@
           "type": "promo_banner",
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_09-06-48.png",
-            "eyebrow": "Limited Edition Pokemon",
-            "title": "Regional Promotional Boxes",
-            "cta_label": "Shop Collection",
-            "cta_url": "shopify://collections/pokemon-regional-boxes"
+            "eyebrow": "🇨🇳 Just Arrived",
+            "title": "Chinese-Exclusive Pokémon Sets",
+            "cta_label": "Shop Now",
+            "cta_url": "shopify://collections/pokemon-cn"
           }
         },
         "promo_banner_9RGRWE": {
           "type": "promo_banner",
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_11-17-44.png",
-            "eyebrow": "Limited Edition One Piece",
-            "title": "Anniversary & Promo Sets",
-            "cta_label": "Shop Sets",
-            "cta_url": "shopify://products/one-piece-3rd-anniversary-set"
+            "eyebrow": "📅 Coming Soon",
+            "title": "Upcoming CN Drops — Join the Waitlist",
+            "cta_label": "Notify Me",
+            "cta_url": "shopify://pages/contact"
           }
         },
         "about_check_i7Lq8f": {
