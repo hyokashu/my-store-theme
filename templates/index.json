@@ -244,14 +244,14 @@
         "about_check_i7Lq8f": {
           "type": "about_check",
           "settings": {
-            "text": "Insured & protected packaging",
+            "text": "Direct from Chinese authorised distributors",
             "dimmed": false
           }
         },
         "about_check_mYFMhK": {
           "type": "about_check",
           "settings": {
-            "text": "100% authentic, authorized distributor sourced",
+            "text": "100% authentic, factory sealed",
             "dimmed": false
           }
         },
@@ -265,7 +265,7 @@
         "about_check_W8mwDB": {
           "type": "about_check",
           "settings": {
-            "text": "14-day returns on sealed & unopened products",
+            "text": "14-day returns on sealed & unopened",
             "dimmed": false
           }
         },
@@ -344,16 +344,16 @@
         "cat_subtitle": "Anniversary sets, booster boxes, singles & more.",
         "show_about": true,
         "about_image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-22_09-58-49.png",
-        "about_title": "About Sprout",
-        "about_desc": "We got tired of crushed corners and sketchy reseals. Whether you're hunting the latest Japanese booster boxes or securing high-demand pre-orders, we deliver 100% authentic, factory-sealed product with the premium protection your pulls deserve.",
+        "about_title": "About Sprout Collects",
+        "about_desc": "We got obsessed with the sets that never make it here. Chinese-market Pokémon, One Piece, and Riftbound products — anniversary editions, regional exclusives, CN-only artwork runs — imported directly and delivered to Australian collectors who know the difference.",
         "about_cta1_label": "Our Story",
         "about_cta1_url": "shopify://pages/about-us",
         "about_cta2_label": "Contact Us",
         "about_cta2_url": "shopify://pages/contact",
         "show_newsletter": true,
-        "nl_title": "Stay in the Loop",
-        "nl_subtitle": "New drops, restocks, and exclusive deals delivered straight to your inbox.",
-        "nl_disclaimer": "No spam, ever. Unsubscribe anytime.",
+        "nl_title": "Be First When CN Drops Land",
+        "nl_subtitle": "New Chinese-exclusive imports sell out fast. Get on the list and we'll tell you the moment new stock arrives — before it's gone.",
+        "nl_disclaimer": "No spam. Only CN drop alerts.",
         "show_trust_bar": true,
         "show_marquee": true
       }

@@ -36,7 +36,7 @@
         "type": "textarea",
         "id": "seo_site_description",
         "label": "Default meta description",
-        "default": "Australia's home for authentic, factory-sealed Pokémon and One Piece TCG booster boxes, ETBs, singles and bundles. Fast dispatch, insured shipping.",
+        "default": "Australia's source for Chinese-market exclusive TCG imports — Pokémon CN, One Piece CN, and Riftbound. Anniversary sets, regional exclusives, and CN-only products not sold in Australian retail. Authentic, fast dispatch, collector-grade.",
         "info": "Used when a page has no specific description. Keep under 160 characters."
       },
       {
