@@ -233,6 +233,17 @@
 
 
 /* =============================================================
+   Just Landed
+   ============================================================= */
+.cvh-just-landed { padding: 2rem 0; background: var(--cv-bg); border-bottom: 1px solid var(--cv-border); }
+.cvh-just-landed__hd { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; gap: 1rem; }
+.cvh-just-landed__view-all { font-size: 0.875rem; font-weight: 600; color: var(--cv-primary); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.cvh-just-landed__scroll { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 0.5rem; }
+.cvh-just-landed__scroll::-webkit-scrollbar { display: none; }
+.cvh-just-landed__item { flex: 0 0 220px; scroll-snap-align: start; }
+@media (min-width: 768px) { .cvh-just-landed__item { flex: 0 0 200px; } }
+
+/* =============================================================
    3. FAN FAVOURITES
    ============================================================= */
 .cvh-featured { padding: 2rem 0 1.5rem; background: var(--cv-bg); border-bottom: 1px solid var(--cv-border); }
@@ -621,6 +632,32 @@
       {%- endfor -%}
     </div>
   </div>
+  {%- endif -%}
+
+  {%- if section.settings.show_just_landed -%}
+    {%- assign jl_col = collections[section.settings.just_landed_collection] -%}
+    {%- if jl_col != blank and jl_col.products.size > 0 -%}
+      <section class="cvh-just-landed" aria-label="Just Landed">
+        <div class="cvh-inner">
+          <div class="cvh-just-landed__hd">
+            <div class="cvh-section-hd" style="margin-bottom:0;">
+              <h2 class="cvh-section-title">{{ section.settings.just_landed_title | default: 'Just Landed' }}</h2>
+              <p class="cvh-section-sub">{{ section.settings.just_landed_subtitle | default: 'Latest Chinese-market imports — direct from our distributors' }}</p>
+            </div>
+            {%- if jl_col.url != blank -%}
+              <a href="{{ jl_col.url }}" class="cvh-just-landed__view-all">{{ section.settings.just_landed_view_all_label | default: 'View all new arrivals →' }}</a>
+            {%- endif -%}
+          </div>
+          <div class="cvh-just-landed__scroll">
+            {%- for product in jl_col.products limit: 8 -%}
+              <div class="cvh-just-landed__item">
+                {%- render 'sd-product-card', product: product -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </section>
+    {%- endif -%}
   {%- endif -%}
 
   {%- comment -%} 3. FAN FAVOURITES {%- endcomment -%}
@@ -1499,6 +1536,13 @@
     { "type": "text",     "id": "nl_title",        "label": "Title",             "default": "Get Early Access to New Pokémon Drops" },
     { "type": "text",     "id": "nl_subtitle",     "label": "Subtitle",          "default": "Be first to know about new set releases, restocks, and exclusive sealed deals." },
     { "type": "text",     "id": "nl_disclaimer",   "label": "Disclaimer text",   "default": "No spam, ever. Unsubscribe anytime." },
+
+    { "type": "header", "content": "Just Landed" },
+    { "type": "checkbox",   "id": "show_just_landed",           "label": "Show Just Landed section", "default": true },
+    { "type": "collection", "id": "just_landed_collection",     "label": "Just Landed collection",   "info": "Tag new arrivals with 'just-landed' to populate this automatically." },
+    { "type": "text",       "id": "just_landed_title",          "label": "Section title",            "default": "Just Landed" },
+    { "type": "text",       "id": "just_landed_subtitle",       "label": "Section subtitle",         "default": "Latest Chinese-market imports — direct from our distributors" },
+    { "type": "text",       "id": "just_landed_view_all_label", "label": "View all label",           "default": "View all new arrivals →" },
 
     { "type": "header", "content": "Display Options" },
     { "type": "checkbox", "id": "show_trust_bar", "label": "Show trust bar",      "default": true },
