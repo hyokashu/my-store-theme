@@ -1024,6 +1024,64 @@ div.sdsr              { animation: sd-fade-up 0.5s ease both; animation-delay: 0
   color: var(--cv-muted-fg);
 }
 
+/* CN Exclusive badge */
+.sdpc__badge--cn {
+  background: #c94030;
+  color: #ffffff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Pre-Order badge */
+.sdpc__badge--preorder {
+  background: #21496D;
+  color: #ffffff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Stock scarcity signal */
+.sdpc__stock-signal {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #c94030;
+  margin: 0.25rem 0 0;
+  line-height: 1;
+}
+
+/* Notify Me CTA (replaces disabled Quick Add on sold-out) */
+.sdpc__quick-add--notify {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cv-primary);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius);
+  padding: 0 1rem;
+  height: 2rem;
+  text-decoration: none;
+  background: transparent;
+  transition: background 0.15s, border-color 0.15s;
+  width: 100%;
+}
+.sdpc__quick-add--notify:hover {
+  background: rgba(44, 71, 49, 0.06);
+  border-color: var(--cv-primary);
+}
+
 /* ── Quick Add (overlay on image) ── */
 .sdpc__quick-add-wrap {
   position: absolute; bottom: 0; left: 0; right: 0;
