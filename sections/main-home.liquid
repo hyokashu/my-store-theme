@@ -347,12 +347,38 @@
    CN Explainer
    ============================================================= */
 .cvh-cn-explainer { padding: 2.5rem 0; background: var(--cv-secondary); border-bottom: 1px solid var(--cv-border); }
-.cvh-cn-explainer__grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.75rem; }
-@media (min-width: 768px) { .cvh-cn-explainer__grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
-.cvh-cn-explainer__item { background: var(--cv-card); border-radius: var(--cv-radius); padding: 1.5rem; border: 1px solid var(--cv-border); }
-.cvh-cn-explainer__icon { font-size: 1.75rem; margin-bottom: 0.875rem; }
-.cvh-cn-explainer__title { font-family: var(--cv-font-head); font-size: 1rem; font-weight: 700; color: var(--cv-fg); margin-bottom: 0.625rem; }
-.cvh-cn-explainer__body { font-size: 0.9375rem; color: var(--cv-muted-fg); line-height: 1.65; }
+
+/* Grid */
+.cvh-cn-explainer__grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 1.75rem; }
+
+/* Mobile-first: horizontal split row */
+.cvh-cn-explainer__item { background: var(--cv-card); border: 1px solid var(--cv-border); border-radius: var(--cv-radius); overflow: hidden; display: grid; grid-template-columns: 80px 1fr; height: 80px; }
+.cvh-cn-explainer__item:nth-child(even) { grid-template-columns: 1fr 80px; }
+.cvh-cn-explainer__item:nth-child(even) .cvh-cn-explainer__img-wrap { order: 2; }
+.cvh-cn-explainer__item:nth-child(even) .cvh-cn-explainer__mobile-body { order: 1; }
+
+.cvh-cn-explainer__img-wrap { position: relative; height: 100%; }
+.cvh-cn-explainer__img-wrap img,
+.cvh-cn-explainer__img-placeholder { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cvh-cn-explainer__img-placeholder { background: var(--cv-border); }
+
+/* Overlay hidden on mobile */
+.cvh-cn-explainer__overlay { display: none; }
+
+.cvh-cn-explainer__mobile-body { display: flex; flex-direction: column; justify-content: center; padding: 0.6rem 0.75rem; }
+.cvh-cn-explainer__mobile-body .cvh-cn-explainer__title { font-family: var(--cv-font-head); font-size: 0.8rem; font-weight: 700; color: var(--cv-fg); line-height: 1.2; margin: 0 0 0.2rem; }
+.cvh-cn-explainer__caption { font-size: 0.72rem; color: var(--cv-muted-fg); line-height: 1.35; margin: 0; }
+
+/* Desktop (≥768px): flip to full-bleed overlay */
+@media (min-width: 768px) {
+  .cvh-cn-explainer__grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .cvh-cn-explainer__item { display: block; height: auto; background: transparent; border: none; }
+  .cvh-cn-explainer__img-wrap { height: 220px; }
+  .cvh-cn-explainer__overlay { display: flex; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 55%, transparent 100%); flex-direction: column; justify-content: flex-end; padding: 1.1rem; }
+  .cvh-cn-explainer__pill { display: inline-block; width: fit-content; margin-bottom: 0.4rem; font-size: 0.625rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--cv-primary-alt, #C59B43); border: 1px solid rgba(197,155,67,0.5); border-radius: 999px; padding: 2px 9px; }
+  .cvh-cn-explainer__overlay .cvh-cn-explainer__title { font-family: var(--cv-font-head); font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.2; margin: 0; }
+  .cvh-cn-explainer__mobile-body { display: none; }
+}
 
 /* =============================================================
    7. ABOUT SECTION
@@ -979,21 +1005,33 @@
         <p class="cvh-section-sub">{{ section.settings.cn_explainer_sub | default: 'Not a translation. A completely different product.' }}</p>
       </div>
       <div class="cvh-cn-explainer__grid">
-        <div class="cvh-cn-explainer__item">
-          <div class="cvh-cn-explainer__icon">{{ section.settings.cn_col1_icon | default: '🎨' }}</div>
-          <div class="cvh-cn-explainer__title">{{ section.settings.cn_col1_title | default: 'CN-Exclusive Artwork' }}</div>
-          <div class="cvh-cn-explainer__body">{{ section.settings.cn_col1_body | default: 'Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set.' }}</div>
-        </div>
-        <div class="cvh-cn-explainer__item">
-          <div class="cvh-cn-explainer__icon">{{ section.settings.cn_col2_icon | default: '🎁' }}</div>
-          <div class="cvh-cn-explainer__title">{{ section.settings.cn_col2_title | default: 'Anniversary & Regional Sets' }}</div>
-          <div class="cvh-cn-explainer__body">{{ section.settings.cn_col2_body | default: 'China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market.' }}</div>
-        </div>
-        <div class="cvh-cn-explainer__item">
-          <div class="cvh-cn-explainer__icon">{{ section.settings.cn_col3_icon | default: '📈' }}</div>
-          <div class="cvh-cn-explainer__title">{{ section.settings.cn_col3_title | default: 'Higher Collector Value' }}</div>
-          <div class="cvh-cn-explainer__body">{{ section.settings.cn_col3_body | default: 'Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited.' }}</div>
-        </div>
+        {%- for i in (1..3) -%}
+          {%- assign img_key     = 'cn_col' | append: i | append: '_image' -%}
+          {%- assign title_key   = 'cn_col' | append: i | append: '_title' -%}
+          {%- assign label_key   = 'cn_col' | append: i | append: '_label' -%}
+          {%- assign caption_key = 'cn_col' | append: i | append: '_caption' -%}
+          {%- assign img         = section.settings[img_key] -%}
+          <div class="cvh-cn-explainer__item">
+            <div class="cvh-cn-explainer__img-wrap">
+              {%- if img != blank -%}
+                <img src="{{ img | image_url: width: 700 }}"
+                     alt="{{ section.settings[title_key] }}"
+                     width="700" height="467"
+                     loading="lazy">
+              {%- else -%}
+                <div class="cvh-cn-explainer__img-placeholder"></div>
+              {%- endif -%}
+              <div class="cvh-cn-explainer__overlay">
+                <span class="cvh-cn-explainer__pill">{{ section.settings[label_key] }}</span>
+                <div class="cvh-cn-explainer__title">{{ section.settings[title_key] }}</div>
+              </div>
+            </div>
+            <div class="cvh-cn-explainer__mobile-body">
+              <div class="cvh-cn-explainer__title">{{ section.settings[title_key] }}</div>
+              <div class="cvh-cn-explainer__caption">{{ section.settings[caption_key] }}</div>
+            </div>
+          </div>
+        {%- endfor -%}
       </div>
     </div>
   </section>
@@ -1590,18 +1628,21 @@
     { "type": "text",       "id": "just_landed_view_all_label", "label": "View all label",           "default": "View all new arrivals →" },
 
     { "type": "header", "content": "CN Explainer" },
-    { "type": "checkbox", "id": "show_cn_explainer",   "label": "Show 'Why Chinese Exclusives?' section", "default": true },
-    { "type": "text",     "id": "cn_explainer_title",  "label": "Section title",  "default": "Why Chinese-Market Cards Are Different" },
-    { "type": "text",     "id": "cn_explainer_sub",    "label": "Section subtitle","default": "Not a translation. A completely different product." },
-    { "type": "text",     "id": "cn_col1_icon",        "label": "Column 1 icon (emoji)", "default": "🎨" },
-    { "type": "text",     "id": "cn_col1_title",       "label": "Column 1 title", "default": "CN-Exclusive Artwork" },
-    { "type": "textarea","id": "cn_col1_body",         "label": "Column 1 body",  "default": "CN sets include illustration rares and art variants you won't find in English or Japanese releases." },
-    { "type": "text",     "id": "cn_col2_icon",        "label": "Column 2 icon (emoji)", "default": "🎁" },
-    { "type": "text",     "id": "cn_col2_title",       "label": "Column 2 title", "default": "Anniversary & Regional Sets" },
-    { "type": "textarea","id": "cn_col2_body",         "label": "Column 2 body",  "default": "Anniversary boxes, New Year specials, and promos released only in China." },
-    { "type": "text",     "id": "cn_col3_icon",        "label": "Column 3 icon (emoji)", "default": "📈" },
-    { "type": "text",     "id": "cn_col3_title",       "label": "Column 3 title", "default": "Higher Collector Value" },
-    { "type": "textarea","id": "cn_col3_body",         "label": "Column 3 body",  "default": "Limited supply outside China keeps collector demand — and value — consistently high." },
+    { "type": "checkbox",     "id": "show_cn_explainer",  "label": "Show 'Why Chinese Exclusives?' section", "default": true },
+    { "type": "text",         "id": "cn_explainer_title", "label": "Section title",    "default": "Why Chinese-Market Cards Are Different" },
+    { "type": "text",         "id": "cn_explainer_sub",   "label": "Section subtitle", "default": "Not a translation. A completely different product." },
+    { "type": "image_picker", "id": "cn_col1_image",      "label": "Column 1 image" },
+    { "type": "text",         "id": "cn_col1_title",      "label": "Column 1 title",   "default": "CN-Exclusive Artwork" },
+    { "type": "text",         "id": "cn_col1_label",      "label": "Column 1 pill label", "default": "Unique to CN" },
+    { "type": "text",         "id": "cn_col1_caption",    "label": "Column 1 caption (mobile)", "default": "Art not in English or Japanese sets." },
+    { "type": "image_picker", "id": "cn_col2_image",      "label": "Column 2 image" },
+    { "type": "text",         "id": "cn_col2_title",      "label": "Column 2 title",   "default": "Anniversary & Regional Sets" },
+    { "type": "text",         "id": "cn_col2_label",      "label": "Column 2 pill label", "default": "Region-locked" },
+    { "type": "text",         "id": "cn_col2_caption",    "label": "Column 2 caption (mobile)", "default": "China-only boxes and New Year specials." },
+    { "type": "image_picker", "id": "cn_col3_image",      "label": "Column 3 image" },
+    { "type": "text",         "id": "cn_col3_title",      "label": "Column 3 title",   "default": "Higher Collector Value" },
+    { "type": "text",         "id": "cn_col3_label",      "label": "Column 3 pill label", "default": "Holds Value" },
+    { "type": "text",         "id": "cn_col3_caption",    "label": "Column 3 caption (mobile)", "default": "Limited supply keeps collector value high." },
 
     { "type": "header", "content": "Display Options" },
     { "type": "checkbox", "id": "show_trust_bar", "label": "Show trust bar",      "default": true },
