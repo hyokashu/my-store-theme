@@ -16,19 +16,19 @@
           "type": "hero_slide",
           "settings": {
             "eyebrow_icon": "tag",
-            "eyebrow": "ITEM OBTAINED",
-            "title_line1": "Pokémon TCG",
-            "title_em": "Booster Boxes",
-            "description": "The sets you’ve been hunting for are finally back in the vault. Secure 100% authentic, factory-sealed booster boxes and ETBs, delivered to your door with premium packaging guarantees before they sell out.",
-            "cta1_label": "Shop Booster Boxes",
-            "cta1_url": "shopify://collections/pokemon-booster",
+            "eyebrow": "🇨🇳 CN EXCLUSIVE",
+            "title_line1": "The Pokémon Sets",
+            "title_em": "Australia Never Gets",
+            "description": "Chinese-market exclusive booster boxes — anniversary editions, CN-only artwork, and regional sets that never reach Australian shelves. Directly imported, 100% authentic, shipped collector-grade.",
+            "cta1_label": "Shop CN Exclusives",
+            "cta1_url": "shopify://collections/cn-exclusives",
             "cta2_label": "Shop All",
-            "cta2_url": "shopify://collections/pokemon",
+            "cta2_url": "shopify://collections/pokemon-cn",
             "bg_image": "shopify://shop_images/charizard-evolution-line-triple-art-extension-16-9-using-v0-tusizb7qpmwb1.webp",
             "image": "shopify://shop_images/StoreCovers_1.png",
-            "badge_value": "Fast Dispatch",
-            "badge_label": "Ships within 24 hours",
-            "badge_icon": "clock",
+            "badge_value": "⚡ Import Exclusive",
+            "badge_label": "Not sold in Australian retail",
+            "badge_icon": "shield",
             "color_scheme": "2"
           }
         },
@@ -37,37 +37,36 @@
           "settings": {
             "eyebrow_icon": "star",
             "eyebrow_icon_custom": "shopify://shop_images/Gemini_Generated_Image_39fmot39fmot39fm-Photoroom.png",
-            "eyebrow": "FRESH BOUNTY",
-            "title_line1": "One Piece TCG",
-            "title_em": "Booster Boxes & Sealed Products",
-            "description": "Hunt for your chase cards with total confidence. Shop 100% authentic, unweighed booster boxes sourced straight from official distributors and shipped with collector-grade care.",
-            "cta1_label": "Shop Booster Boxes",
-            "cta1_url": "shopify://collections/one-piece-booster",
+            "eyebrow": "🇨🇳 CN EXCLUSIVE",
+            "title_line1": "One Piece Sets",
+            "title_em": "The West Never Sees",
+            "description": "Chinese anniversary editions, regional promo sets, and CN-only One Piece TCG products — imported directly and delivered to Australian collectors.",
+            "cta1_label": "Shop One Piece CN",
+            "cta1_url": "shopify://collections/one-piece-cn",
             "cta2_label": "Shop All",
-            "cta2_url": "shopify://collections/one-piece-1",
+            "cta2_url": "shopify://collections/cn-exclusives",
             "bg_image": "shopify://shop_images/thumb-1920-996396.png",
             "image": "shopify://shop_images/OP1JP.webp",
             "badge_value": "100% Authentic",
-            "badge_label": "Verified sealed product",
+            "badge_label": "Direct CN Distributor",
             "badge_icon": "shield",
             "color_scheme": "1"
           }
         },
         "hero_slide_KR9c4n": {
           "type": "hero_slide",
-          "disabled": true,
           "settings": {
             "eyebrow_icon": "zap",
-            "eyebrow": "Our Promise",
-            "title_line1": "Collector-Grade",
-            "title_em": "Shipping",
-            "description": "We hate crushed corners as much as you do. Every order is packed with extreme care, heavily protected, and shipped fully insured.",
-            "cta1_label": "Shop All Products",
-            "cta1_url": "",
-            "cta2_label": "Our Story",
+            "eyebrow": "🆕 NEW GAME",
+            "title_line1": "Riftbound —",
+            "title_em": "Get in Early",
+            "description": "Chinese-market launch edition of the newest TCG. CN-exclusive card treatments and launch sets — available now before the English market catches up.",
+            "cta1_label": "Shop Riftbound",
+            "cta1_url": "shopify://collections/riftbound",
+            "cta2_label": "",
             "cta2_url": "",
-            "badge_value": "Free Shipping",
-            "badge_label": "On all orders over $200",
+            "badge_value": "CN Launch Edition",
+            "badge_label": "Exclusive import",
             "badge_icon": "tag",
             "color_scheme": "3"
           }
@@ -75,33 +74,33 @@
         "trust_item_VgmMdE": {
           "type": "trust_item",
           "settings": {
-            "icon": "users",
-            "title": "Australian Owned & Operated",
-            "description": "Support local! Fast, reliable service from a team that loves the game."
+            "icon": "star",
+            "title": "Direct CN Source",
+            "description": "Imported from authorised Chinese distributors"
           }
         },
         "trust_item_nw3tnX": {
           "type": "trust_item",
           "settings": {
             "icon": "shield",
-            "title": "100% Factory Sealed",
-            "description": "Guaranteed authentic, unweighed, and untampered products."
+            "title": "Import Exclusive",
+            "description": "Products not sold in Australian retail"
           }
         },
         "trust_item_BET6FL": {
           "type": "trust_item",
           "settings": {
             "icon": "package",
-            "title": "Collector-Grade Packaging",
-            "description": "Packed with extreme care and bubble wrap to protect those corners."
+            "title": "Collector-Grade",
+            "description": "Factory sealed · premium protective packaging"
           }
         },
         "trust_item_yQfwnb": {
           "type": "trust_item",
           "settings": {
             "icon": "truck",
-            "title": "Fast, Insured Shipping",
-            "description": "Fully tracked and insured. Free on orders over $200."
+            "title": "Same-Day Dispatch",
+            "description": "Weekday orders ship from Melbourne"
           }
         },
         "marquee_item_hhJwwx": {
@@ -168,23 +167,21 @@
         },
         "category_card_TmLA9c": {
           "type": "category_card",
-          "disabled": true,
           "settings": {
-            "label": "ETBs",
-            "url": "",
+            "label": "Anniversary Sets",
+            "url": "shopify://collections/anniversary-sets",
             "custom_icon": "shopify://shop_images/Gemini_Generated_Image_v8xzegv8xzegv8xz-Photoroom.png",
-            "icon": "briefcase",
+            "icon": "star",
             "is_sale": false
           }
         },
         "category_card_6473yk": {
           "type": "category_card",
-          "disabled": true,
           "settings": {
-            "label": "Cases",
-            "url": "",
+            "label": "Pre-Orders",
+            "url": "shopify://collections/pre-orders",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-13_1.png",
-            "icon": "layers",
+            "icon": "package",
             "is_sale": false
           }
         },
@@ -201,8 +198,8 @@
         "category_card_Rchcgy": {
           "type": "category_card",
           "settings": {
-            "label": "Promos",
-            "url": "",
+            "label": "CN Exclusives",
+            "url": "shopify://collections/cn-exclusives",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-41-28_1.png",
             "icon": "star",
             "is_sale": false
@@ -211,16 +208,16 @@
         "brand_link_C8KPGz": {
           "type": "brand_link",
           "settings": {
-            "label": "Pokemon",
-            "url": "shopify://collections/pokemon",
+            "label": "Pokémon CN",
+            "url": "shopify://collections/pokemon-cn",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-56-05_1.png"
           }
         },
         "brand_link_k4wXFB": {
           "type": "brand_link",
           "settings": {
-            "label": "One Piece",
-            "url": "shopify://collections/one-piece-1",
+            "label": "One Piece CN",
+            "url": "shopify://collections/one-piece-cn",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-49-21_1.png"
           }
         },
@@ -228,33 +225,33 @@
           "type": "promo_banner",
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_09-06-48.png",
-            "eyebrow": "Limited Edition Pokemon",
-            "title": "Regional Promotional Boxes",
-            "cta_label": "Shop Collection",
-            "cta_url": "shopify://collections/pokemon-regional-boxes"
+            "eyebrow": "🇨🇳 Just Arrived",
+            "title": "Chinese-Exclusive Pokémon Sets",
+            "cta_label": "Shop Now",
+            "cta_url": "shopify://collections/pokemon-cn"
           }
         },
         "promo_banner_9RGRWE": {
           "type": "promo_banner",
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_11-17-44.png",
-            "eyebrow": "Limited Edition One Piece",
-            "title": "Anniversary & Promo Sets",
-            "cta_label": "Shop Sets",
-            "cta_url": "shopify://products/one-piece-3rd-anniversary-set"
+            "eyebrow": "📅 Coming Soon",
+            "title": "Upcoming CN Drops — Join the Waitlist",
+            "cta_label": "Notify Me",
+            "cta_url": "shopify://pages/contact"
           }
         },
         "about_check_i7Lq8f": {
           "type": "about_check",
           "settings": {
-            "text": "Insured & protected packaging",
+            "text": "Direct from Chinese authorised distributors",
             "dimmed": false
           }
         },
         "about_check_mYFMhK": {
           "type": "about_check",
           "settings": {
-            "text": "100% authentic, authorized distributor sourced",
+            "text": "100% authentic, factory sealed",
             "dimmed": false
           }
         },
@@ -268,7 +265,7 @@
         "about_check_W8mwDB": {
           "type": "about_check",
           "settings": {
-            "text": "14-day returns on sealed & unopened products",
+            "text": "14-day returns on sealed & unopened",
             "dimmed": false
           }
         },
@@ -333,30 +330,47 @@
       "settings": {
         "hero_autoplay_ms": 5000,
         "featured_title": "Fan Favourites",
-        "featured_subtitle": "Whether you're building your collection or buying your first box — these are going fast.",
-        "tab1_label": "Booster boxes",
-        "tab1_collection": "booster-boxes",
-        "tab2_label": "Pokemon",
-        "tab2_collection": "pokemon",
-        "tab3_label": "One Piece",
-        "tab3_collection": "one-piece-1",
+        "featured_subtitle": "Whether you're hunting CN exclusives or chasing rare pulls — these are going fast.",
+        "tab1_label": "Pokémon CN",
+        "tab1_collection": "pokemon-cn",
+        "tab2_label": "One Piece CN",
+        "tab2_collection": "one-piece-cn",
+        "tab3_label": "Riftbound",
+        "tab3_collection": "riftbound",
         "tab1_icon": "none",
         "tab2_icon": "none",
         "tab3_icon": "none",
         "cat_title": "Browse by Category",
-        "cat_subtitle": "Booster boxes, ETBs, cases, singles & more.",
+        "cat_subtitle": "Anniversary sets, booster boxes, singles & more.",
         "show_about": true,
         "about_image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-22_09-58-49.png",
-        "about_title": "About Sprout",
-        "about_desc": "We got tired of crushed corners and sketchy reseals. Whether you're hunting the latest Japanese booster boxes or securing high-demand pre-orders, we deliver 100% authentic, factory-sealed product with the premium protection your pulls deserve.",
+        "about_title": "About Sprout Collects",
+        "about_desc": "We got obsessed with the sets that never make it here. Chinese-market Pokémon, One Piece, and Riftbound products — anniversary editions, regional exclusives, CN-only artwork runs — imported directly and delivered to Australian collectors who know the difference.",
         "about_cta1_label": "Our Story",
         "about_cta1_url": "shopify://pages/about-us",
         "about_cta2_label": "Contact Us",
         "about_cta2_url": "shopify://pages/contact",
         "show_newsletter": true,
-        "nl_title": "Stay in the Loop",
-        "nl_subtitle": "New drops, restocks, and exclusive deals delivered straight to your inbox.",
-        "nl_disclaimer": "No spam, ever. Unsubscribe anytime.",
+        "nl_title": "Be First When CN Drops Land",
+        "nl_subtitle": "New Chinese-exclusive imports sell out fast. Get on the list and we'll tell you the moment new stock arrives — before it's gone.",
+        "nl_disclaimer": "No spam. Only CN drop alerts.",
+        "show_just_landed": true,
+        "just_landed_collection": "just-landed",
+        "just_landed_title": "Just Landed",
+        "just_landed_subtitle": "Latest Chinese-market imports — direct from our distributors",
+        "just_landed_view_all_label": "View all new arrivals →",
+        "show_cn_explainer": true,
+        "cn_explainer_title": "Why Chinese-Market Cards Are Different",
+        "cn_explainer_sub": "Not a translation. A completely different product.",
+        "cn_col1_icon": "🎨",
+        "cn_col1_title": "CN-Exclusive Artwork",
+        "cn_col1_body": "Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set.",
+        "cn_col2_icon": "🎁",
+        "cn_col2_title": "Anniversary & Regional Sets",
+        "cn_col2_body": "China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market.",
+        "cn_col3_icon": "📈",
+        "cn_col3_title": "Higher Collector Value",
+        "cn_col3_body": "Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited.",
         "show_trust_bar": true,
         "show_marquee": true
       }
