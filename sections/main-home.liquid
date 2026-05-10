@@ -12,7 +12,6 @@
   assign cat_cards = section.blocks | where: "type", "category_card"
   assign brand_links = section.blocks | where: "type", "brand_link"
   assign promo_banners = section.blocks | where: "type", "promo_banner"
-  assign about_checks = section.blocks | where: "type", "about_check"
   assign reward_items = section.blocks | where: "type", "reward_item"
 
   assign tab1_col = collections[section.settings.tab1_collection]
@@ -531,40 +530,61 @@
   </section>
   {%- endif -%}
 
-  {%- comment -%} 7. ABOUT SECTION {%- endcomment -%}
-  {%- if section.settings.show_about -%}
-  <section class="cvh-about" aria-label="About {{ shop.name }}">
+  {%- comment -%} 7. CN EXPLAINER SECTION {%- endcomment -%}
+  {%- if section.settings.show_cn_explainer -%}
+  <section class="cvh-cn" aria-label="Why Chinese-Market Cards Are Different">
     <div class="cvh__inner">
-      <div class="cvh-about__grid">
-        <div class="cvh-about__img">
-          {%- if section.settings.about_image != blank -%}
-            <img src="{{ section.settings.about_image | image_url: width: 700 }}" alt="{{ section.settings.about_image.alt | escape | default: section.settings.about_title }}" width="700" height="525" loading="lazy">
-          {%- else -%}
-            <img src="https://placehold.co/700x525/eeecea/76798c?text={{ shop.name | url_encode }}" alt="{{ shop.name }} store" width="700" height="525" loading="lazy">
-          {%- endif -%}
-        </div>
-        <div class="cvh-about__text">
-          <h2 class="cvh-about__title">{{ section.settings.about_title | default: 'About Us' }}</h2>
-          <p class="cvh-about__desc">{{ section.settings.about_desc }}</p>
-          {%- if about_checks.size > 0 -%}
-          <div class="cvh-about__checklist">
-            {%- for block in about_checks -%}
-              <div class="cvh-about__check{% if block.settings.dimmed %} cvh-about__check--dim{% endif %}" {{ block.shopify_attributes }}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                {{ block.settings.text }}
-              </div>
-            {%- endfor -%}
-          </div>
-          {%- endif -%}
-          <div class="cvh-about__ctas">
-            {%- if section.settings.about_cta1_label != blank -%}
-              <a href="{{ section.settings.about_cta1_url | default: '/pages/our-story' }}" class="cvh-btn cvh-btn--primary">{{ section.settings.about_cta1_label }}</a>
-            {%- endif -%}
-            {%- if section.settings.about_cta2_label != blank -%}
-              <a href="{{ section.settings.about_cta2_url | default: '/pages/contact' }}" class="cvh-btn cvh-btn--outline">{{ section.settings.about_cta2_label }}</a>
+      <div class="cvh-cn__header">
+        <h2 class="cvh-cn__title">{{ section.settings.cn_title | default: 'Why Chinese-Market Cards Are Different' }}</h2>
+        <p class="cvh-cn__subtitle">{{ section.settings.cn_subtitle | default: 'Not a translation. A completely different product.' }}</p>
+      </div>
+      <div class="cvh-cn__cards">
+
+        <div class="cvh-cn__card">
+          <div class="cvh-cn__card-bg">
+            {%- if section.settings.cn_img_artwork != blank -%}
+              <img src="{{ section.settings.cn_img_artwork | image_url: width: 600 }}" alt="{{ section.settings.cn_img_artwork.alt | escape | default: 'CN-Exclusive Artwork' }}" width="600" height="800" loading="lazy">
+            {%- else -%}
+              <div class="cvh-cn__card-placeholder"></div>
             {%- endif -%}
           </div>
+          <div class="cvh-cn__card-content">
+            <span class="cvh-cn__card-badge">{{ section.settings.cn_badge_artwork | default: 'Unique to CN' }}</span>
+            <h3 class="cvh-cn__card-title">{{ section.settings.cn_title_artwork | default: 'CN-Exclusive Artwork' }}</h3>
+            <p class="cvh-cn__card-desc">{{ section.settings.cn_desc_artwork | default: 'Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set.' }}</p>
+          </div>
         </div>
+
+        <div class="cvh-cn__card">
+          <div class="cvh-cn__card-bg">
+            {%- if section.settings.cn_img_sets != blank -%}
+              <img src="{{ section.settings.cn_img_sets | image_url: width: 600 }}" alt="{{ section.settings.cn_img_sets.alt | escape | default: 'Anniversary & Regional Sets' }}" width="600" height="800" loading="lazy">
+            {%- else -%}
+              <div class="cvh-cn__card-placeholder"></div>
+            {%- endif -%}
+          </div>
+          <div class="cvh-cn__card-content">
+            <span class="cvh-cn__card-badge">{{ section.settings.cn_badge_sets | default: 'Regional & Locked' }}</span>
+            <h3 class="cvh-cn__card-title">{{ section.settings.cn_title_sets | default: 'Anniversary & Regional Sets' }}</h3>
+            <p class="cvh-cn__card-desc">{{ section.settings.cn_desc_sets | default: 'China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market.' }}</p>
+          </div>
+        </div>
+
+        <div class="cvh-cn__card">
+          <div class="cvh-cn__card-bg">
+            {%- if section.settings.cn_img_value != blank -%}
+              <img src="{{ section.settings.cn_img_value | image_url: width: 600 }}" alt="{{ section.settings.cn_img_value.alt | escape | default: 'Higher Collector Value' }}" width="600" height="800" loading="lazy">
+            {%- else -%}
+              <div class="cvh-cn__card-placeholder"></div>
+            {%- endif -%}
+          </div>
+          <div class="cvh-cn__card-content">
+            <span class="cvh-cn__card-badge">{{ section.settings.cn_badge_value | default: 'Holds Value' }}</span>
+            <h3 class="cvh-cn__card-title">{{ section.settings.cn_title_value | default: 'Higher Collector Value' }}</h3>
+            <p class="cvh-cn__card-desc">{{ section.settings.cn_desc_value | default: 'Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited.' }}</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -983,14 +1003,6 @@
       ]
     },
     {
-      "type": "about_check",
-      "name": "About Checklist Item",
-      "settings": [
-        { "type": "text",     "id": "text",   "label": "Text",         "default": "100% authentic products" },
-        { "type": "checkbox", "id": "dimmed", "label": "Dimmed style", "default": false }
-      ]
-    },
-    {
       "type": "reward_item",
       "name": "Rewards List Item",
       "settings": [
@@ -1065,15 +1077,25 @@
     { "type": "text", "id": "cat_title",    "label": "Section title",    "default": "Browse by Category" },
     { "type": "text", "id": "cat_subtitle", "label": "Section subtitle", "default": "" },
 
-    { "type": "header", "content": "About Section" },
-    { "type": "checkbox",     "id": "show_about",      "label": "Show about section", "default": true },
-    { "type": "image_picker", "id": "about_image",     "label": "About image" },
-    { "type": "text",         "id": "about_title",     "label": "Title",               "default": "Australia's Home for Sealed Pokémon TCG" },
-    { "type": "textarea",     "id": "about_desc",      "label": "Description",         "default": "Collectors running a collector's store. Sealed Pokémon and One Piece — fast dispatch, fully insured, 100% authentic." },
-    { "type": "text",         "id": "about_cta1_label","label": "Button 1 label",     "default": "Our Story" },
-    { "type": "url",          "id": "about_cta1_url",  "label": "Button 1 URL" },
-    { "type": "text",         "id": "about_cta2_label","label": "Button 2 label",     "default": "Contact Us" },
-    { "type": "url",          "id": "about_cta2_url",  "label": "Button 2 URL" },
+    { "type": "header", "content": "CN Explainer Section" },
+    { "type": "checkbox", "id": "show_cn_explainer", "label": "Show CN explainer section", "default": true },
+    { "type": "text",     "id": "cn_title",          "label": "Section title",    "default": "Why Chinese-Market Cards Are Different" },
+    { "type": "text",     "id": "cn_subtitle",        "label": "Section subtitle", "default": "Not a translation. A completely different product." },
+    { "type": "header", "content": "Card 1 — CN Artwork" },
+    { "type": "image_picker", "id": "cn_img_artwork",   "label": "Card 1 image" },
+    { "type": "text",         "id": "cn_badge_artwork", "label": "Card 1 badge",        "default": "Unique to CN" },
+    { "type": "text",         "id": "cn_title_artwork", "label": "Card 1 title",        "default": "CN-Exclusive Artwork" },
+    { "type": "textarea",     "id": "cn_desc_artwork",  "label": "Card 1 description",  "default": "Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set." },
+    { "type": "header", "content": "Card 2 — Regional Sets" },
+    { "type": "image_picker", "id": "cn_img_sets",   "label": "Card 2 image" },
+    { "type": "text",         "id": "cn_badge_sets", "label": "Card 2 badge",        "default": "Regional & Locked" },
+    { "type": "text",         "id": "cn_title_sets", "label": "Card 2 title",        "default": "Anniversary & Regional Sets" },
+    { "type": "textarea",     "id": "cn_desc_sets",  "label": "Card 2 description",  "default": "China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market." },
+    { "type": "header", "content": "Card 3 — Collector Value" },
+    { "type": "image_picker", "id": "cn_img_value",   "label": "Card 3 image" },
+    { "type": "text",         "id": "cn_badge_value", "label": "Card 3 badge",        "default": "Holds Value" },
+    { "type": "text",         "id": "cn_title_value", "label": "Card 3 title",        "default": "Higher Collector Value" },
+    { "type": "textarea",     "id": "cn_desc_value",  "label": "Card 3 description",  "default": "Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited." },
 
     { "type": "header", "content": "Newsletter" },
     { "type": "checkbox", "id": "show_newsletter", "label": "Show newsletter",   "default": true },
