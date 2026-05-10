@@ -1,0 +1,124 @@
+<style>
+.sc-404 {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+  background: #f9f9f7;
+}
+.sc-404__inner {
+  max-width: 520px;
+}
+.sc-404__code {
+  font-size: 120px;
+  font-weight: 900;
+  line-height: 1;
+  color: #282d52;
+  opacity: 0.08;
+  letter-spacing: -4px;
+  margin-bottom: -24px;
+}
+.sc-404__icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+.sc-404__title {
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 800;
+  color: #282d52;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+.sc-404__body {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 0 32px;
+}
+.sc-404__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.sc-404__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 13px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s;
+  cursor: pointer;
+}
+.sc-404__btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.sc-404__btn--primary {
+  background: #282d52;
+  color: #fff;
+  border: none;
+}
+.sc-404__btn--secondary {
+  background: transparent;
+  color: #282d52;
+  border: 2px solid #282d52;
+}
+.sc-404__search {
+  margin-bottom: 32px;
+}
+.sc-404__search form {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.sc-404__search input {
+  flex: 1;
+  max-width: 280px;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.sc-404__search input:focus { border-color: #282d52; }
+</style>
+
+<div class="sc-404">
+  <div class="sc-404__inner">
+    <div class="sc-404__code" aria-hidden="true">404</div>
+    <span class="sc-404__icon">📦</span>
+    <h1 class="sc-404__title">This pack went missing</h1>
+    <p class="sc-404__body">
+      The page you're looking for doesn't exist — maybe it moved, or the link was wrong.
+      Try searching for what you need, or head back to the store.
+    </p>
+    <div class="sc-404__search">
+      <form action="{{ routes.search_url }}" method="get" role="search">
+        <input
+          type="search"
+          name="q"
+          placeholder="Search products…"
+          aria-label="Search"
+          value="{{ search.terms | escape }}"
+        >
+        <button type="submit" class="sc-404__btn sc-404__btn--primary">Search</button>
+      </form>
+    </div>
+    <div class="sc-404__actions">
+      <a href="{{ routes.root_url }}" class="sc-404__btn sc-404__btn--primary">← Back to Store</a>
+      <a href="{{ routes.collections_url }}" class="sc-404__btn sc-404__btn--secondary">Browse All</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "settings": []
+}
+{% endschema %}
