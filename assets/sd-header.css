@@ -55,22 +55,29 @@
   min-width: 7rem;          /* must stay ≥ selector width */
 }
 
-/* ── Promo text ── */
+/* ── Rotating promo messages ── */
 .sd-announce__text {
-  flex:        1 1 auto;
-  text-align:  center;
-  display:     flex;
-  align-items: center;
+  position:        relative;
+  flex:            1 1 auto;
+  height:          100%;
+  display:         flex;
+  align-items:     center;
   justify-content: center;
-  gap:         0.4rem;
-  margin:      0;
+  overflow:        hidden;
 }
 
-.sd-announce__icon {
-  width:        1rem;
-  height:       1rem;
-  flex-shrink:  0;
-  color:        var(--sd-announce-accent);
+.sd-announce__msg {
+  position:                absolute;
+  inset:                   0;
+  display:                 flex;
+  align-items:             center;
+  justify-content:         center;
+  white-space:             nowrap;
+  opacity:                 0;
+  animation-name:          sd-announce-rotate;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  padding:                 0 1rem;
 }
 
 .sd-announce__link {

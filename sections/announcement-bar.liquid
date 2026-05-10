@@ -1,8 +1,25 @@
 {% comment %}
   Sprout — announcement-bar.liquid
-  Dark announcement bar with centred promo text + right-aligned
-  region/currency selector.  Fully editable via theme editor.
+  Dark announcement bar with rotating centred promo messages + right-aligned
+  region/currency selector.  Messages are section blocks — editable via theme editor.
 {% endcomment %}
+
+{%- assign slot_s   = 5 -%}
+{%- assign count    = section.blocks.size | at_least: 1 -%}
+{%- assign total_s  = count | times: slot_s -%}
+{%- assign slot_pct = 100 | divided_by: count -%}
+{%- assign fade_pct = 2 -%}
+{%- assign hold_pct = slot_pct | minus: fade_pct -%}
+
+<style>
+  @keyframes sd-announce-rotate {
+    0%              { opacity: 0; transform: translateY(6px);  }
+    {{ fade_pct }}% { opacity: 1; transform: translateY(0);    }
+    {{ hold_pct }}% { opacity: 1; transform: translateY(0);    }
+    {{ slot_pct }}% { opacity: 0; transform: translateY(-6px); }
+    100%            { opacity: 0; transform: translateY(-6px); }
+  }
+</style>
 
 <div
   class="sd-announce"
@@ -16,17 +33,21 @@
     {%- comment -%} ── Left spacer (mirrors selector width so text stays centred) ── {%- endcomment -%}
     <div class="sd-announce__left" aria-hidden="true"></div>
 
-    {%- comment -%} ── Centre promo text ── {%- endcomment -%}
-    <p class="sd-announce__text">
-      {%- if section.settings.promo_url != blank -%}
-        <a href="{{ section.settings.promo_url }}" class="sd-announce__link">
-      {%- endif -%}
-      {%- if section.settings.icon_show -%}
-        <svg class="sd-announce__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-      {%- endif -%}
-      {{ section.settings.promo_text }}
-      {%- if section.settings.promo_url != blank -%}</a>{%- endif -%}
-    </p>
+    {%- comment -%} ── Rotating promo messages ── {%- endcomment -%}
+    <div class="sd-announce__text">
+      {%- for block in section.blocks -%}
+        {%- assign delay_s = forloop.index0 | times: slot_s -%}
+        <span class="sd-announce__msg"
+              style="animation-duration:{{ total_s }}s;animation-delay:{{ delay_s }}s"
+              {{ block.shopify_attributes }}>
+          {%- if block.settings.url != blank -%}
+            <a href="{{ block.settings.url }}" class="sd-announce__link">{{ block.settings.text }}</a>
+          {%- else -%}
+            {{ block.settings.text }}
+          {%- endif -%}
+        </span>
+      {%- endfor -%}
+    </div>
 
     {%- comment -%} ── Right: currency / region selector ── {%- endcomment -%}
     <div class="sd-announce__right">
@@ -66,34 +87,43 @@
 {% schema %}
 {
   "name": "Announcement Bar",
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Message text",
+          "default": "Free shipping on orders over $150 AUD"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link URL (optional)"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
   "settings": [
     {
       "type": "checkbox",
       "id": "show_bar",
       "label": "Show announcement bar",
       "default": true
-    },
-    {
-      "type": "text",
-      "id": "promo_text",
-      "label": "Promo message",
-      "default": "Free Shipping on orders over $150"
-    },
-    {
-      "type": "url",
-      "id": "promo_url",
-      "label": "Promo link URL (optional)"
-    },
-    {
-      "type": "checkbox",
-      "id": "icon_show",
-      "label": "Show shipping truck icon",
-      "default": true
     }
   ],
   "presets": [
     {
-      "name": "Announcement Bar"
+      "name": "Announcement Bar",
+      "blocks": [
+        { "type": "message", "settings": { "text": "Free shipping on orders over $150 AUD" } },
+        { "type": "message", "settings": { "text": "Cards you won't find in Australian stores — CN exclusives only" } },
+        { "type": "message", "settings": { "text": "Sydney-based · Fast dispatch · Tracked shipping" } },
+        { "type": "message", "settings": { "text": "Pokémon CN · One Piece CN · Riftbound — new drops weekly" } }
+      ]
     }
   ]
 }

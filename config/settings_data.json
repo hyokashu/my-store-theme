@@ -13,11 +13,15 @@
     "sections": {
       "announcement-bar": {
         "type": "announcement-bar",
+        "blocks": {
+          "cd2cb0440c24309b": { "type": "message", "settings": { "text": "Free shipping on orders over $150 AUD", "url": "" } },
+          "e99ae4fe1d070fa7": { "type": "message", "settings": { "text": "Cards you won't find in Australian stores — CN exclusives only", "url": "" } },
+          "bfd8feb83edeb557": { "type": "message", "settings": { "text": "Sydney-based · Fast dispatch · Tracked shipping", "url": "" } },
+          "c43d66a39cad5c50": { "type": "message", "settings": { "text": "Pokémon CN · One Piece CN · Riftbound — new drops weekly", "url": "" } }
+        },
+        "block_order": ["cd2cb0440c24309b", "e99ae4fe1d070fa7", "bfd8feb83edeb557", "c43d66a39cad5c50"],
         "settings": {
-          "show_bar": true,
-          "promo_text": "🇨🇳 Australia's source for Chinese-exclusive TCG imports — Pokémon CN · One Piece CN · Riftbound",
-          "promo_url": "",
-          "icon_show": true
+          "show_bar": true
         }
       },
       "header": {
