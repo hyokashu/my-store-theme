@@ -354,11 +354,6 @@
         "nl_title": "Be First When CN Drops Land",
         "nl_subtitle": "New Chinese-exclusive imports sell out fast. Get on the list and we'll tell you the moment new stock arrives — before it's gone.",
         "nl_disclaimer": "No spam. Only CN drop alerts.",
-        "show_just_landed": true,
-        "just_landed_collection": "just-landed",
-        "just_landed_title": "Just Landed",
-        "just_landed_subtitle": "Latest Chinese-market imports — direct from our distributors",
-        "just_landed_view_all_label": "View all new arrivals →",
         "show_trust_bar": true,
         "show_marquee": true
       }
