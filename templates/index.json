@@ -359,18 +359,6 @@
         "just_landed_title": "Just Landed",
         "just_landed_subtitle": "Latest Chinese-market imports — direct from our distributors",
         "just_landed_view_all_label": "View all new arrivals →",
-        "show_cn_explainer": true,
-        "cn_explainer_title": "Why Chinese-Market Cards Are Different",
-        "cn_explainer_sub": "Not a translation. A completely different product.",
-        "cn_col1_title": "CN-Exclusive Artwork",
-        "cn_col1_label": "Unique to CN",
-        "cn_col1_caption": "Art not in English or Japanese sets.",
-        "cn_col2_title": "Anniversary & Regional Sets",
-        "cn_col2_label": "Region-locked",
-        "cn_col2_caption": "China-only boxes and New Year specials.",
-        "cn_col3_title": "Higher Collector Value",
-        "cn_col3_label": "Holds Value",
-        "cn_col3_caption": "Limited supply keeps collector value high.",
         "show_trust_bar": true,
         "show_marquee": true
       }
