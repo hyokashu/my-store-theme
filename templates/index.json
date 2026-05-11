@@ -57,6 +57,7 @@
           "type": "hero_slide",
           "settings": {
             "eyebrow_icon": "zap",
+            "eyebrow_icon_custom": "shopify://shop_images/cb41933466027d720ffd8436c580e49ed4645e7b-2560x2560-Photoroom.png",
             "eyebrow": "🆕 NEW GAME",
             "title_line1": "Riftbound —",
             "title_em": "Get in Early",
@@ -65,6 +66,8 @@
             "cta1_url": "shopify://collections/riftbound",
             "cta2_label": "",
             "cta2_url": "",
+            "bg_image": "shopify://shop_images/03FR009-full.webp",
+            "image": "shopify://shop_images/Irelia_37-Photoroom.png",
             "badge_value": "CN Launch Edition",
             "badge_label": "Exclusive import",
             "badge_icon": "tag",
