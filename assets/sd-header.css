@@ -343,7 +343,8 @@
   .sd-announce        { height: auto; min-height: var(--sd-announce-height); }
   .sd-announce__inner { flex-wrap: wrap; gap: 0.25rem; padding: 0.35rem 1rem; }
   .sd-announce__left  { display: none; }
-  .sd-announce__text  { flex: 1 1 100%; justify-content: center; order: 1; min-height: var(--sd-announce-height); }
+  .sd-announce__text  { flex: 1 1 100%; justify-content: center; order: 1; min-height: 3.25rem; }
+  .sd-announce__msg   { white-space: normal; text-align: center; }
   .sd-announce__right { flex: 1 1 100%; justify-content: center; order: 2; }
 }
 
