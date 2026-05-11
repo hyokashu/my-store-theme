@@ -543,7 +543,12 @@
         <div class="cvh-cn__card">
           <div class="cvh-cn__card-bg">
             {%- if section.settings.cn_img_artwork != blank -%}
-              <img src="{{ section.settings.cn_img_artwork | image_url: width: 600 }}" alt="{{ section.settings.cn_img_artwork.alt | escape | default: 'CN-Exclusive Artwork' }}" width="600" height="800" loading="lazy">
+              <picture>
+                {%- if section.settings.cn_img_artwork_mobile != blank -%}
+                  <source media="(max-width: 767px)" srcset="{{ section.settings.cn_img_artwork_mobile | image_url: width: 800 }}">
+                {%- endif -%}
+                <img src="{{ section.settings.cn_img_artwork | image_url: width: 800 }}" alt="{{ section.settings.cn_img_artwork.alt | escape | default: 'CN-Exclusive Artwork' }}" loading="lazy">
+              </picture>
             {%- else -%}
               <div class="cvh-cn__card-placeholder"></div>
             {%- endif -%}
@@ -558,7 +563,12 @@
         <div class="cvh-cn__card">
           <div class="cvh-cn__card-bg">
             {%- if section.settings.cn_img_sets != blank -%}
-              <img src="{{ section.settings.cn_img_sets | image_url: width: 600 }}" alt="{{ section.settings.cn_img_sets.alt | escape | default: 'Anniversary & Regional Sets' }}" width="600" height="800" loading="lazy">
+              <picture>
+                {%- if section.settings.cn_img_sets_mobile != blank -%}
+                  <source media="(max-width: 767px)" srcset="{{ section.settings.cn_img_sets_mobile | image_url: width: 800 }}">
+                {%- endif -%}
+                <img src="{{ section.settings.cn_img_sets | image_url: width: 800 }}" alt="{{ section.settings.cn_img_sets.alt | escape | default: 'Anniversary & Regional Sets' }}" loading="lazy">
+              </picture>
             {%- else -%}
               <div class="cvh-cn__card-placeholder"></div>
             {%- endif -%}
@@ -573,7 +583,12 @@
         <div class="cvh-cn__card">
           <div class="cvh-cn__card-bg">
             {%- if section.settings.cn_img_value != blank -%}
-              <img src="{{ section.settings.cn_img_value | image_url: width: 600 }}" alt="{{ section.settings.cn_img_value.alt | escape | default: 'Higher Collector Value' }}" width="600" height="800" loading="lazy">
+              <picture>
+                {%- if section.settings.cn_img_value_mobile != blank -%}
+                  <source media="(max-width: 767px)" srcset="{{ section.settings.cn_img_value_mobile | image_url: width: 800 }}">
+                {%- endif -%}
+                <img src="{{ section.settings.cn_img_value | image_url: width: 800 }}" alt="{{ section.settings.cn_img_value.alt | escape | default: 'Higher Collector Value' }}" loading="lazy">
+              </picture>
             {%- else -%}
               <div class="cvh-cn__card-placeholder"></div>
             {%- endif -%}
@@ -1082,17 +1097,20 @@
     { "type": "text",     "id": "cn_title",          "label": "Section title",    "default": "Why Chinese-Market Cards Are Different" },
     { "type": "text",     "id": "cn_subtitle",        "label": "Section subtitle", "default": "Not a translation. A completely different product." },
     { "type": "header", "content": "Card 1 — CN Artwork" },
-    { "type": "image_picker", "id": "cn_img_artwork",   "label": "Card 1 image" },
+    { "type": "image_picker", "id": "cn_img_artwork",        "label": "Card 1 image (desktop)" },
+    { "type": "image_picker", "id": "cn_img_artwork_mobile", "label": "Card 1 mobile image (landscape, optional — falls back to desktop image)" },
     { "type": "text",         "id": "cn_badge_artwork", "label": "Card 1 badge",        "default": "Unique to CN" },
     { "type": "text",         "id": "cn_title_artwork", "label": "Card 1 title",        "default": "CN-Exclusive Artwork" },
     { "type": "textarea",     "id": "cn_desc_artwork",  "label": "Card 1 description",  "default": "Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set." },
     { "type": "header", "content": "Card 2 — Regional Sets" },
-    { "type": "image_picker", "id": "cn_img_sets",   "label": "Card 2 image" },
+    { "type": "image_picker", "id": "cn_img_sets",        "label": "Card 2 image (desktop)" },
+    { "type": "image_picker", "id": "cn_img_sets_mobile", "label": "Card 2 mobile image (landscape, optional — falls back to desktop image)" },
     { "type": "text",         "id": "cn_badge_sets", "label": "Card 2 badge",        "default": "Regional & Locked" },
     { "type": "text",         "id": "cn_title_sets", "label": "Card 2 title",        "default": "Anniversary & Regional Sets" },
     { "type": "textarea",     "id": "cn_desc_sets",  "label": "Card 2 description",  "default": "China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market." },
     { "type": "header", "content": "Card 3 — Collector Value" },
-    { "type": "image_picker", "id": "cn_img_value",   "label": "Card 3 image" },
+    { "type": "image_picker", "id": "cn_img_value",        "label": "Card 3 image (desktop)" },
+    { "type": "image_picker", "id": "cn_img_value_mobile", "label": "Card 3 mobile image (landscape, optional — falls back to desktop image)" },
     { "type": "text",         "id": "cn_badge_value", "label": "Card 3 badge",        "default": "Holds Value" },
     { "type": "text",         "id": "cn_title_value", "label": "Card 3 title",        "default": "Higher Collector Value" },
     { "type": "textarea",     "id": "cn_desc_value",  "label": "Card 3 description",  "default": "Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited." },
