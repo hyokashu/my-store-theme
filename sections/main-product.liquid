@@ -1975,7 +1975,7 @@ input.cv-qty__input {
   "offers": {
     "@type": "Offer",
     "url": {{ shop.url | append: product.url | json }},
-    "priceCurrency": "AUD",
+    "priceCurrency": {{ shop.currency | json }},
     "price": {{ product.selected_or_first_available_variant.price | divided_by: 100.0 }},
     "availability": {%- if product.available -%}"https://schema.org/InStock"{%- else -%}"https://schema.org/OutOfStock"{%- endif -%},
     "seller": { "@type": "Organization", "name": {{ shop.name | json }} }

@@ -62,7 +62,7 @@
   "@type": "Organization",
   "name": {{ site_name | json }},
   "url": {{ shop.url | json }},
-  "logo": {%- if settings.seo_org_logo != blank -%}{{ settings.seo_org_logo | image_url: width: 400 | prepend: 'https:' | json }}{%- else -%}null{%- endif -%},
+  "logo": {%- if settings.seo_org_logo != blank -%}{{ settings.seo_org_logo | image_url: width: 400 | prepend: 'https:' | json }}{%- elsif settings.logo != blank -%}{{ settings.logo | image_url: width: 400 | prepend: 'https:' | json }}{%- else -%}null{%- endif -%},
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "customer support",
@@ -71,15 +71,15 @@
     "availableLanguage": "English"
   },
   "sameAs": [
-    {%- assign social_urls = '' -%}
-    {%- if settings.seo_social_instagram != blank -%}{%- assign social_urls = social_urls | append: settings.seo_social_instagram | append: '||' -%}{%- endif -%}
-    {%- if settings.seo_social_tiktok != blank -%}{%- assign social_urls = social_urls | append: settings.seo_social_tiktok | append: '||' -%}{%- endif -%}
-    {%- if settings.seo_social_youtube != blank -%}{%- assign social_urls = social_urls | append: settings.seo_social_youtube | append: '||' -%}{%- endif -%}
-    {%- if settings.seo_social_facebook != blank -%}{%- assign social_urls = social_urls | append: settings.seo_social_facebook | append: '||' -%}{%- endif -%}
-    {%- assign social_array = social_urls | split: '||' -%}
-    {%- for url in social_array -%}
-      {%- if url != blank -%}{{ url | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endif -%}
-    {%- endfor -%}
+    {%- assign _socials = '' -%}
+    {%- if settings.seo_social_instagram != blank -%}{%- assign _socials = _socials | append: '||' | append: settings.seo_social_instagram -%}{%- endif -%}
+    {%- if settings.seo_social_tiktok != blank -%}{%- assign _socials = _socials | append: '||' | append: settings.seo_social_tiktok -%}{%- endif -%}
+    {%- if settings.seo_social_youtube != blank -%}{%- assign _socials = _socials | append: '||' | append: settings.seo_social_youtube -%}{%- endif -%}
+    {%- if settings.seo_social_facebook != blank -%}{%- assign _socials = _socials | append: '||' | append: settings.seo_social_facebook -%}{%- endif -%}
+    {%- unless _socials == '' -%}
+      {%- assign _social_arr = _socials | remove_first: '||' | split: '||' -%}
+      {%- for _url in _social_arr -%}{{ _url | json }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
+    {%- endunless -%}
   ]
 }
 </script>
