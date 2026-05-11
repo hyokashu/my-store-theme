@@ -241,34 +241,6 @@
             "cta_url": "shopify://pages/contact"
           }
         },
-        "about_check_i7Lq8f": {
-          "type": "about_check",
-          "settings": {
-            "text": "Direct from Chinese authorised distributors",
-            "dimmed": false
-          }
-        },
-        "about_check_mYFMhK": {
-          "type": "about_check",
-          "settings": {
-            "text": "100% authentic, factory sealed",
-            "dimmed": false
-          }
-        },
-        "about_check_HbfCbd": {
-          "type": "about_check",
-          "settings": {
-            "text": "Same-day dispatch on weekday orders",
-            "dimmed": false
-          }
-        },
-        "about_check_W8mwDB": {
-          "type": "about_check",
-          "settings": {
-            "text": "14-day returns on sealed & unopened",
-            "dimmed": false
-          }
-        },
         "reward_item_bhUGGP": {
           "type": "reward_item",
           "disabled": true,
@@ -318,10 +290,6 @@
         "brand_link_k4wXFB",
         "promo_banner_FqmJpP",
         "promo_banner_9RGRWE",
-        "about_check_i7Lq8f",
-        "about_check_mYFMhK",
-        "about_check_HbfCbd",
-        "about_check_W8mwDB",
         "reward_item_bhUGGP",
         "reward_item_3TmXQP",
         "reward_item_BN7YQa"
@@ -342,18 +310,30 @@
         "tab3_icon": "none",
         "cat_title": "Browse by Category",
         "cat_subtitle": "Anniversary sets, booster boxes, singles & more.",
-        "show_about": true,
-        "about_image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-22_09-58-49.png",
-        "about_title": "About Sprout Collects",
-        "about_desc": "We got obsessed with the sets that never make it here. Chinese-market Pokémon, One Piece, and Riftbound products — anniversary editions, regional exclusives, CN-only artwork runs — imported directly and delivered to Australian collectors who know the difference.",
-        "about_cta1_label": "Our Story",
-        "about_cta1_url": "shopify://pages/about-us",
-        "about_cta2_label": "Contact Us",
-        "about_cta2_url": "shopify://pages/contact",
+        "show_cn_explainer": true,
+        "cn_title": "Why Chinese-Market Cards Are Different",
+        "cn_subtitle": "Not a translation. A completely different product.",
+        "cn_img_artwork": "shopify://shop_images/Screenshot_2026-05-11_at_10.28.53_PM.png",
+        "cn_badge_artwork": "Unique to CN",
+        "cn_title_artwork": "CN-Exclusive Artwork",
+        "cn_desc_artwork": "Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set.",
+        "cn_img_sets": "shopify://shop_images/71znz2myweL._AC_UF894_1000_QL80.jpg",
+        "cn_badge_sets": "Regional & Locked",
+        "cn_title_sets": "Anniversary & Regional Sets",
+        "cn_desc_sets": "China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market.",
+        "cn_img_value": "shopify://shop_images/Screenshot_2026-05-11_at_10.42.54_PM.png",
+        "cn_badge_value": "Holds Value",
+        "cn_title_value": "Higher Collector Value",
+        "cn_desc_value": "Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited.",
         "show_newsletter": true,
         "nl_title": "Be First When CN Drops Land",
         "nl_subtitle": "New Chinese-exclusive imports sell out fast. Get on the list and we'll tell you the moment new stock arrives — before it's gone.",
         "nl_disclaimer": "No spam. Only CN drop alerts.",
+        "show_just_landed": true,
+        "just_landed_collection": "",
+        "just_landed_title": "Just Landed",
+        "just_landed_subtitle": "Fresh from our CN distributors.",
+        "just_landed_view_all_label": "View all new arrivals →",
         "show_trust_bar": true,
         "show_marquee": true
       }
