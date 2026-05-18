@@ -13,7 +13,7 @@
       "type": "main-cart",
       "settings": {
         "show_free_ship": true,
-        "free_ship_threshold": 25000,
+        "free_ship_threshold": 30000,
         "upsell_collection": "one-piece",
         "empty_btn1_label": "Shop Pokémon",
         "empty_btn1_url": "shopify://collections/pokemon-collection",

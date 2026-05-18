@@ -24,7 +24,7 @@
           "type": "shipping_faq",
           "settings": {
             "question": "How much does shipping cost?",
-            "answer": "<p>Shipping rates are calculated at checkout based on your location and order weight. Orders over <strong>$250 receive free standard shipping</strong> automatically applied at checkout.</p>"
+            "answer": "<p>Shipping rates are calculated at checkout based on your location and order weight. Orders over <strong>$300 receive free standard shipping</strong> automatically applied at checkout.</p>"
           }
         },
         "sf3": {
