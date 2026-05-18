@@ -96,6 +96,12 @@
           {%- if discount_pct > 0 -%}−{{ discount_pct }}%{%- else -%}Sale{%- endif -%}
         </span>
       {%- endif -%}
+      {%- if product.tags contains 'cn-exclusive' -%}
+        <span class="sdpc__badge sdpc__badge--cn">🇨🇳 CN Exclusive</span>
+      {%- endif -%}
+      {%- if product.tags contains 'pre-order' -%}
+        <span class="sdpc__badge sdpc__badge--preorder">🔔 Pre-Order</span>
+      {%- endif -%}
       {%- comment -%}
       {%- if is_new and sold_out == false and on_sale == false -%}
         <span class="sdpc__badge sdpc__badge--new">New</span>
@@ -106,14 +112,13 @@
     {%- comment -%} ── Quick Add button (overlay on image) ── {%- endcomment -%}
     <div class="sdpc__quick-add-wrap">
       {%- if sold_out -%}
-        <button
-          class="sdpc__quick-add"
-          disabled
-          aria-disabled="true"
-          aria-label="Sold out — {{ product.title | escape }}"
+        <a
+          href="/pages/contact?contact[body]=I%27d+like+to+be+notified+when+{{ product.title | url_encode }}+is+back+in+stock."
+          class="sdpc__quick-add sdpc__quick-add--notify"
+          aria-label="Notify me when {{ product.title | escape }} is back in stock"
         >
-          Sold Out
-        </button>
+          🔔 Notify Me
+        </a>
       {%- elsif has_variants -%}
         <button
           class="sdpc__quick-add sdpc__quick-add--goto"
@@ -180,6 +185,10 @@
         <span class="sdpc__price-compare">{{ first_variant.compare_at_price | money }}</span>
       {%- endif -%}
     </div>
+    {%- assign inv_qty = first_variant.inventory_quantity -%}
+    {%- if product.available and first_variant.inventory_management == 'shopify' and inv_qty > 0 and inv_qty <= 10 -%}
+      <p class="sdpc__stock-signal">⚡ {{ inv_qty }} left</p>
+    {%- endif -%}
 
   </div><!-- /.sdpc__body -->
 

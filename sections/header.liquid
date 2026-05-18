@@ -375,6 +375,61 @@
   border-bottom-color: var(--cv-destructive, #c94030);
 }
 
+/* ── CN Exclusives nav item highlight ── */
+.sdh-nav__item--cn .sdh-nav__link {
+  background: #fffbf0;
+  color: #a05c00;
+  border: 1.5px solid #e8c97a;
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
+  margin: auto 0.25rem;
+}
+.sdh-nav__item--cn .sdh-nav__link:hover {
+  background: #fff3cd;
+  color: #7a4500;
+  border-color: #c9a650;
+  border-bottom-color: #c9a650;
+}
+
+/* ── Mega menu sidebar CN/JP section labels ── */
+.sdh-mega__sidebar-item--cn { color: var(--cv-primary, #2C4731); font-weight: 600; }
+.sdh-mega__sidebar-item--cn.is-active {
+  border-left-color: var(--cv-primary, #2C4731);
+  color: var(--cv-primary, #2C4731);
+}
+.sdh-mega__sidebar-item--jp { color: #7a6a52; }
+.sdh-mega__sidebar-item--jp.is-active { border-left-color: #7a6a52; color: #7a6a52; }
+
+/* ── Mobile CN Exclusives item highlight ── */
+.sdh-mob-nav__item--cn > .sdh-mob-nav__link {
+  background: #fffbf0;
+  color: #a05c00;
+}
+.sdh-mob-nav__item--cn > .sdh-mob-nav__link:hover {
+  background: #fff3cd;
+  color: #7a4500;
+}
+
+/* ── Mobile sub-section labels (L2 headings inside accordion) ── */
+.sdh-mob-nav__sub-section { list-style: none; }
+.sdh-mob-nav__sub-label {
+  display: block;
+  padding: 0.625rem 1.25rem 0.25rem 1.75rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cv-muted-fg, #425E3B);
+}
+.sdh-mob-nav__sub-label--cn { color: #2C4731; }
+.sdh-mob-nav__sub-label--jp {
+  color: #7a6a52;
+  border-top: 1px solid var(--cv-border, #BDC9B6);
+  padding-top: 0.875rem;
+  margin-top: 0.25rem;
+}
+.sdh-mob-nav__sub-children { list-style: none; padding: 0; margin: 0; }
+
 /* ================================================================
    MEGA MENU
    Positioned absolute relative to .sd-header (sticky = containing block).
@@ -945,10 +1000,10 @@
         {%- for link in linklists[main_menu].links -%}
 
           {%- comment -%}── Find matching promo block (case-insensitive) ──{%- endcomment -%}
+          {%- assign link_title = link.title | downcase | strip -%}
           {%- assign matched_promo = nil -%}
           {%- for pb in promo_blocks -%}
             {%- assign pb_trigger = pb.settings.menu_item_trigger | downcase | strip -%}
-            {%- assign link_title = link.title | downcase | strip -%}
             {%- if pb_trigger == link_title -%}
               {%- assign matched_promo = pb -%}
               {%- break -%}
@@ -956,7 +1011,7 @@
           {%- endfor -%}
 
           <div
-            class="sdh-nav__item{% if link.links.size > 0 %} has-mega{% endif %}{% if link_title == 'sale' %} sdh-nav__item--sale{% endif %}"
+            class="sdh-nav__item{% if link.links.size > 0 %} has-mega{% endif %}{% if link_title == 'sale' %} sdh-nav__item--sale{% elsif link_title contains 'cn exclusives' %} sdh-nav__item--cn{% endif %}"
             data-mega-item
           >
             {%- if link.links.size > 0 -%}
@@ -980,8 +1035,9 @@
                   <!-- L1 Sidebar -->
                   <nav class="sdh-mega__sidebar" aria-label="{{ link.title }} categories">
                     {%- for child in link.links -%}
+                      {%- assign child_title_lc = child.title | downcase | strip -%}
                       <button
-                        class="sdh-mega__sidebar-item{% if forloop.first %} is-active{% endif %}"
+                        class="sdh-mega__sidebar-item{% if forloop.first %} is-active{% endif %}{% if child_title_lc contains 'chinese' or child_title_lc contains ' cn' or child_title_lc == 'cn' %} sdh-mega__sidebar-item--cn{% elsif child_title_lc contains 'japanese' or child_title_lc contains ' jp' or child_title_lc == 'jp' %} sdh-mega__sidebar-item--jp{% endif %}"
                         type="button"
                         data-panel="sdh-panel-{{ link.title | handleize }}-{{ forloop.index }}"
                         aria-controls="sdh-panel-{{ link.title | handleize }}-{{ forloop.index }}"
@@ -1131,7 +1187,8 @@
   <!-- Nav links (accordion) -->
   <nav class="sdh-mob-nav" aria-label="Mobile navigation">
     {%- for link in linklists[main_menu].links -%}
-      <div class="sdh-mob-nav__item">
+      {%- assign mob_link_lc = link.title | downcase | strip -%}
+      <div class="sdh-mob-nav__item{% if mob_link_lc contains 'cn exclusives' %} sdh-mob-nav__item--cn{% endif %}">
 
         {%- if link.links.size > 0 -%}
           <!-- Has children: accordion toggle button -->
@@ -1148,11 +1205,25 @@
           </button>
           <ul class="sdh-mob-nav__sub">
             {%- for child in link.links -%}
-              <li>
-                <a class="sdh-mob-nav__sub-link" href="{{ child.url }}">
-                  {{- child.title -}}
-                </a>
-              </li>
+              {%- assign child_lc = child.title | downcase | strip -%}
+              {%- if child.links.size > 0 -%}
+                <li class="sdh-mob-nav__sub-section">
+                  <span class="sdh-mob-nav__sub-label{% if child_lc contains 'chinese' or child_lc contains ' cn' or child_lc == 'cn' %} sdh-mob-nav__sub-label--cn{% elsif child_lc contains 'japanese' or child_lc contains ' jp' or child_lc == 'jp' %} sdh-mob-nav__sub-label--jp{% endif %}">{{ child.title }}</span>
+                  <ul class="sdh-mob-nav__sub-children">
+                    {%- for grandchild in child.links -%}
+                      <li>
+                        <a class="sdh-mob-nav__sub-link" href="{{ grandchild.url }}">{{ grandchild.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </li>
+              {%- else -%}
+                <li>
+                  <a class="sdh-mob-nav__sub-link" href="{{ child.url }}">
+                    {{- child.title -}}
+                  </a>
+                </li>
+              {%- endif -%}
             {%- endfor -%}
           </ul>
 
