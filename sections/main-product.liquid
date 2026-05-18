@@ -1150,17 +1150,17 @@ input.cv-qty__input {
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Packs</span>
           <span class="cv-detail-item__leader" aria-hidden="true"></span>
-          <span class="cv-detail-item__value">{{ pack_count }} Packs</span>
+          <span class="cv-detail-item__value">{% if product.metafields.custom.pack_count %}{{ pack_count }} Packs{% else %}—{% endif %}</span>
         </div>
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Cards Per Pack</span>
           <span class="cv-detail-item__leader" aria-hidden="true"></span>
-          <span class="cv-detail-item__value">{{ cards_per_pack }} Cards</span>
+          <span class="cv-detail-item__value">{% if product.metafields.custom.cards_per_pack %}{{ cards_per_pack }} Cards{% else %}—{% endif %}</span>
         </div>
         <div class="cv-detail-item">
           <span class="cv-detail-item__label">Language</span>
           <span class="cv-detail-item__leader" aria-hidden="true"></span>
-          <span class="cv-detail-item__value">{{ product.metafields.custom.language | default: 'Japanese' }}</span>
+          <span class="cv-detail-item__value">{{ product.metafields.custom.card_language.value | default: '—' }}</span>
         </div>
       </div>
 
