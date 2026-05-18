@@ -18,7 +18,7 @@
           "cd2cb0440c24309b": {
             "type": "message",
             "settings": {
-              "text": "Free shipping on orders over $150 AUD",
+              "text": "Free shipping on orders over $300 AUD",
               "url": ""
             }
           },
@@ -35,20 +35,12 @@
               "text": "Sydney-based · Fast dispatch · Tracked shipping",
               "url": ""
             }
-          },
-          "c43d66a39cad5c50": {
-            "type": "message",
-            "settings": {
-              "text": "Pokémon CN · One Piece CN · Riftbound — new drops weekly",
-              "url": ""
-            }
           }
         },
         "block_order": [
           "cd2cb0440c24309b",
           "e99ae4fe1d070fa7",
-          "bfd8feb83edeb557",
-          "c43d66a39cad5c50"
+          "bfd8feb83edeb557"
         ],
         "settings": {
           "show_bar": true
