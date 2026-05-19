@@ -1132,7 +1132,7 @@ input.cv-qty__input {
         </div>
         {%- if section.settings.show_afterpay != false -%}
           <p class="cv-installment">
-            or 4 interest-free payments of <strong>{{ sale_price | divided_by: 4 | money }}</strong> with <strong>Afterpay</strong>
+            or 4 interest-free payments of <strong>{{ sale_price | plus: 3 | divided_by: 4 | money }}</strong> with <strong>Afterpay</strong>
           </p>
         {%- endif -%}
       </div>
@@ -1439,7 +1439,7 @@ input.cv-qty__input {
               <div class="cv-content-item__main">
                 <div class="cv-content-item__row">
                   <span class="cv-content-item__label">{{ section.settings.promo_item2_label | default: 'Booster Packs:' }}</span>
-                  <span class="cv-content-item__value">{{ product.metafields.custom.booster_packs_included.value | default: '—' }} {{ section.settings.promo_item2_suffix | default: 'packs' }}</span>
+                  <span class="cv-content-item__value">{%- if product.metafields.custom.booster_packs_included != blank %}{{ product.metafields.custom.booster_packs_included.value }} {{ section.settings.promo_item2_suffix | default: 'packs' }}{%- else %}—{%- endif -%}</span>
                 </div>
                 <span class="cv-content-item__desc">{{ section.settings.promo_item2_desc | default: 'Each pack contains randomly assorted cards' }}</span>
               </div>
@@ -1553,7 +1553,7 @@ input.cv-qty__input {
     {%- comment -%} 3. Shipping & Returns tab {%- endcomment -%}
     <div class="cv-tabs__panel" id="cv-tab-reviews" role="tabpanel" aria-labelledby="cv-btn-reviews">
       <div class="cv-tab-card">
-        <p style="font-size: 0.9375rem; line-height: 1.75; color: var(--cv-muted-fg);">We offer 14-day returns on all factory-sealed and unopened products. All orders are packed securely with bubble wrap and dispatched within 24 hours to ensure your items arrive in pristine condition.</p>
+        <p style="font-size: 0.9375rem; line-height: 1.75; color: var(--cv-muted-fg);">{{ section.settings.shipping_returns_text | default: 'We offer 14-day returns on all factory-sealed and unopened products. All orders are packed securely with bubble wrap and dispatched within 24 hours to ensure your items arrive in pristine condition.' }}</p>
       </div>
     </div>
   </section>
@@ -1865,29 +1865,33 @@ input.cv-qty__input {
     });
   }
 
-  /* ── Dispatch Countdown Timer ── */
+  /* ── Dispatch Countdown Timer (Sydney / AEST time) ── */
   (function () {
     var timerEl = document.getElementById('cv-dispatch-timer');
     var textEl  = document.getElementById('cv-dispatch-text');
     if (!timerEl || !textEl) return;
 
-    var CUTOFF_HOUR   = 14;   /* 2:00 PM */
+    var CUTOFF_HOUR   = 14;   /* 2:00 PM Sydney time */
     var CUTOFF_MINUTE = 0;
 
+    var _fmt = new Intl.DateTimeFormat('en-AU', {
+      timeZone: 'Australia/Sydney',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+    });
+
+    function getSydneySeconds() {
+      var parts = _fmt.formatToParts(new Date());
+      var get = function (type) { return parseInt(parts.filter(function (p) { return p.type === type; })[0].value, 10); };
+      return get('hour') * 3600 + get('minute') * 60 + get('second');
+    }
+
     function update() {
-      var now     = new Date();
-      var cutoff  = new Date(now);
-      cutoff.setHours(CUTOFF_HOUR, CUTOFF_MINUTE, 0, 0);
+      var sydNow    = getSydneySeconds();
+      var cutoffSec = CUTOFF_HOUR * 3600 + CUTOFF_MINUTE * 60;
+      var diffSec   = sydNow < cutoffSec ? cutoffSec - sydNow : (86400 - sydNow) + cutoffSec;
 
-      /* If cutoff has already passed today, point to tomorrow */
-      if (now >= cutoff) {
-        cutoff.setDate(cutoff.getDate() + 1);
-      }
-
-      var diffMs  = cutoff - now;
-      var diffSec = Math.floor(diffMs / 1000);
-      var hrs     = Math.floor(diffSec / 3600);
-      var mins    = Math.floor((diffSec % 3600) / 60);
+      var hrs  = Math.floor(diffSec / 3600);
+      var mins = Math.floor((diffSec % 3600) / 60);
 
       if (hrs <= 0 && mins <= 0) {
         timerEl.classList.add('cv-dispatch-timer--expired');
@@ -2294,6 +2298,16 @@ input.cv-qty__input {
       "id": "single_item3_desc",
       "label": "Finish — Description",
       "default": "Foil, holo, or standard treatment"
+    },
+    {
+      "type": "header",
+      "content": "Shipping & Returns Tab"
+    },
+    {
+      "type": "textarea",
+      "id": "shipping_returns_text",
+      "label": "Shipping & Returns content",
+      "default": "We offer 14-day returns on all factory-sealed and unopened products. All orders are packed securely with bubble wrap and dispatched within 24 hours to ensure your items arrive in pristine condition."
     }
   ],
   "presets": [

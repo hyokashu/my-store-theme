@@ -55,9 +55,9 @@
                 {%- endif -%}
                 {{ block.settings.eyebrow }}
               </span>
-              <h1 class="cvh-hero__title">
+              {%- if forloop.first -%}<h1 class="cvh-hero__title">{%- else -%}<h2 class="cvh-hero__title">{%- endif -%}
                 {{ block.settings.title_line1 }}{%- if block.settings.title_em != blank -%}<br><em>{{ block.settings.title_em }}</em>{%- endif -%}
-              </h1>
+              {%- if forloop.first -%}</h1>{%- else -%}</h2>{%- endif -%}
               <p class="cvh-hero__desc">{{ block.settings.description }}</p>
               <div class="cvh-hero__ctas">
                 {%- if block.settings.cta1_label != blank -%}
@@ -253,7 +253,7 @@
                   {%- endif -%}
                 {%- endfor -%}
 
-                <a href="{{ p.url }}" class="cvh-prod-card">
+                <div class="cvh-prod-card" role="link" tabindex="0" data-url="{{ p.url }}">
                   <div class="cvh-prod-card__img">
                     {%- if p.featured_image -%}
                       <img src="{{ p.featured_image | image_url: width: 280 }}" alt="{{ p.featured_image.alt | escape }}" width="280" height="280" loading="lazy">
@@ -282,7 +282,7 @@
                       {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
                     </div>
                   </div>
-                </a>
+                </div>
               {%- endfor -%}
             {%- elsif request.design_mode -%}
               <p style="color:var(--cv-muted-fg);padding:2rem 0;font-size:0.9rem;">Select a collection for <strong>{{ tab1_label }}</strong> in the theme editor sidebar.</p>
@@ -313,7 +313,7 @@
                   {%- endif -%}
                 {%- endfor -%}
 
-                <a href="{{ p.url }}" class="cvh-prod-card">
+                <div class="cvh-prod-card" role="link" tabindex="0" data-url="{{ p.url }}">
                   <div class="cvh-prod-card__img">
                     {%- if p.featured_image -%}
                       <img src="{{ p.featured_image | image_url: width: 280 }}" alt="{{ p.featured_image.alt | escape }}" width="280" height="280" loading="lazy">
@@ -342,7 +342,7 @@
                       {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
                     </div>
                   </div>
-                </a>
+                </div>
               {%- endfor -%}
             {%- elsif request.design_mode -%}
               <p style="color:var(--cv-muted-fg);padding:2rem 0;font-size:0.9rem;">Select a collection for <strong>{{ tab2_label }}</strong> in the theme editor sidebar.</p>
@@ -373,7 +373,7 @@
                   {%- endif -%}
                 {%- endfor -%}
 
-                <a href="{{ p.url }}" class="cvh-prod-card">
+                <div class="cvh-prod-card" role="link" tabindex="0" data-url="{{ p.url }}">
                   <div class="cvh-prod-card__img">
                     {%- if p.featured_image -%}
                       <img src="{{ p.featured_image | image_url: width: 280 }}" alt="{{ p.featured_image.alt | escape }}" width="280" height="280" loading="lazy">
@@ -402,7 +402,7 @@
                       {%- if p_sale -%}<span class="cvh-prod-card__was">{{ pv.compare_at_price | money }}</span>{%- endif -%}
                     </div>
                   </div>
-                </a>
+                </div>
               {%- endfor -%}
             {%- elsif request.design_mode -%}
               <p style="color:var(--cv-muted-fg);padding:2rem 0;font-size:0.9rem;">Select a collection for <strong>{{ tab3_label }}</strong> in the theme editor sidebar.</p>
@@ -898,10 +898,19 @@
   if (featured) {
     featured.addEventListener('click', function (e) {
       var btn = e.target.closest('.cvh-prod-card__quick-add');
-      if (!btn) return;
-      e.preventDefault();
-      e.stopPropagation();
-      handleQuickAdd(btn);
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        handleQuickAdd(btn);
+        return;
+      }
+      var card = e.target.closest('.cvh-prod-card[data-url]');
+      if (card) window.location.href = card.dataset.url;
+    });
+    featured.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var card = e.target.closest('.cvh-prod-card[data-url]');
+      if (card) { e.preventDefault(); window.location.href = card.dataset.url; }
     });
   }
 }());
