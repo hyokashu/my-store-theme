@@ -134,8 +134,7 @@
             "url": "shopify://collections/on-sale",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-34_1.png",
             "icon": "shopping-bag",
-            "is_sale": true,
-            "show_new_badge": false
+            "is_sale": true
           }
         },
         "category_card_FxxDLJ": {
@@ -165,8 +164,7 @@
             "url": "shopify://collections/pre-orders",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-13_1.png",
             "icon": "package",
-            "is_sale": false,
-            "show_new_badge": false
+            "is_sale": false
           }
         },
         "category_card_rNVHMV": {
@@ -186,8 +184,7 @@
             "url": "shopify://collections/new-arrivals",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-41-28_1.png",
             "icon": "star",
-            "is_sale": false,
-            "show_new_badge": true
+            "is_sale": false
           }
         },
         "brand_link_C8KPGz": {
@@ -292,14 +289,6 @@
         "tab3_icon": "none",
         "cat_title": "Browse by Category",
         "cat_subtitle": "CN-exclusive drops — not available in Australian retail.",
-        "show_about": true,
-        "about_image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-22_09-58-49.png",
-        "about_title": "Australia's Home for Sealed TCG",
-        "about_desc": "We're collectors, built by collectors. From booster packs to full sealed cases — Pokémon-first, plus One Piece and more. Fast dispatch, fully insured shipping, 100% authentic.",
-        "about_cta1_label": "Our Story",
-        "about_cta1_url": "",
-        "about_cta2_label": "Contact Us",
-        "about_cta2_url": "",
         "show_newsletter": true,
         "nl_title": "Be First When CN Drops Land",
         "nl_subtitle": "New Chinese-exclusive imports sell out fast. Get on the list and we'll tell you the moment new stock arrives — before it's gone.",
