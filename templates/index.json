@@ -134,7 +134,8 @@
             "url": "shopify://collections/on-sale",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-34_1.png",
             "icon": "shopping-bag",
-            "is_sale": false
+            "is_sale": true,
+            "show_new_badge": false
           }
         },
         "category_card_FxxDLJ": {
@@ -160,11 +161,12 @@
         "category_card_6473yk": {
           "type": "category_card",
           "settings": {
-            "label": "Pre-Orders",
+            "label": "Restock",
             "url": "shopify://collections/pre-orders",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-13_1.png",
             "icon": "package",
-            "is_sale": false
+            "is_sale": false,
+            "show_new_badge": false
           }
         },
         "category_card_rNVHMV": {
@@ -180,11 +182,12 @@
         "category_card_Rchcgy": {
           "type": "category_card",
           "settings": {
-            "label": "CN Exclusives",
-            "url": "shopify://collections/cn-exclusives",
+            "label": "New Arrivals",
+            "url": "shopify://collections/new-arrivals",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-41-28_1.png",
             "icon": "star",
-            "is_sale": false
+            "is_sale": false,
+            "show_new_badge": true
           }
         },
         "brand_link_C8KPGz": {
@@ -261,14 +264,12 @@
         "marquee_item_yzQAFj",
         "marquee_item_X6cDQR",
         "marquee_item_wr9J7N",
-        "category_card_mcdDyt",
-        "category_card_FxxDLJ",
-        "category_card_TmLA9c",
-        "category_card_6473yk",
-        "category_card_rNVHMV",
-        "category_card_Rchcgy",
         "brand_link_C8KPGz",
         "brand_link_k4wXFB",
+        "category_card_Rchcgy",
+        "category_card_6473yk",
+        "category_card_FxxDLJ",
+        "category_card_mcdDyt",
         "promo_banner_FqmJpP",
         "promo_banner_9RGRWE",
         "reward_item_bhUGGP",
@@ -290,7 +291,7 @@
         "tab2_icon": "none",
         "tab3_icon": "none",
         "cat_title": "Browse by Category",
-        "cat_subtitle": "Anniversary sets, booster boxes, singles & more.",
+        "cat_subtitle": "CN-exclusive drops — not available in Australian retail.",
         "show_about": true,
         "about_image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-22_09-58-49.png",
         "about_title": "Australia's Home for Sealed TCG",
