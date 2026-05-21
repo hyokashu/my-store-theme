@@ -446,6 +446,24 @@
         <a href="/collections/all" class="cvh-btn cvh-btn--outline cvh-btn--sm" style="flex-shrink:0">Shop All</a>
       </div>
 
+      {%- if brand_links.size > 0 -%}
+      <div class="cvh-cat-brand-grid">
+        {%- for block in brand_links -%}
+          <a href="{{ block.settings.url | default: '/collections/all' }}" class="cvh-cat-card cvh-cat-card--brand" style="flex-direction:row;justify-content:flex-start;padding:0.5rem 1.25rem;border-radius:var(--cv-radius);gap:0.75rem;" aria-label="Shop {{ block.settings.label }}" {{ block.shopify_attributes }}>
+          <div class="cvh-cat-card__icon" style="width:3.25rem;height:3.25rem;flex-shrink:0">
+              {%- if block.settings.custom_icon != blank -%}
+                <img src="{{ block.settings.custom_icon | image_url: width: 100 }}" alt="{{ block.settings.label }} icon" loading="lazy" style="width:100%; height:100%; object-fit:contain;">
+              {%- else -%}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              {%- endif -%}
+            </div>
+            <span class="cvh-cat-card__label" style="font-size:0.9375rem">{{ block.settings.label }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1rem;height:1rem;margin-left:auto;color:var(--cv-muted-fg)"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+
       {%- if cat_cards.size > 0 -%}
       <div class="cvh-cat-grid">
         {%- for block in cat_cards -%}
@@ -468,25 +486,8 @@
                 </svg>
               {%- endif -%}
             </div>
+            {%- if block.settings.show_new_badge -%}<span class="cvh-cat-card__badge">NEW</span>{%- endif -%}
             <span class="cvh-cat-card__label">{{ block.settings.label }}</span>
-          </a>
-        {%- endfor -%}
-      </div>
-      {%- endif -%}
-
-      {%- if brand_links.size > 0 -%}
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;margin-top:0.75rem;">
-        {%- for block in brand_links -%}
-          <a href="{{ block.settings.url | default: '/collections/all' }}" class="cvh-cat-card cvh-cat-card--brand" style="flex-direction:row;justify-content:flex-start;padding:0.5rem 1.25rem;border-radius:var(--cv-radius);gap:0.75rem;" aria-label="Shop {{ block.settings.label }}" {{ block.shopify_attributes }}>
-          <div class="cvh-cat-card__icon" style="width:3.25rem;height:3.25rem;flex-shrink:0">
-              {%- if block.settings.custom_icon != blank -%}
-                <img src="{{ block.settings.custom_icon | image_url: width: 100 }}" alt="{{ block.settings.label }} icon" loading="lazy" style="width:100%; height:100%; object-fit:contain;">
-              {%- else -%}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-              {%- endif -%}
-            </div>
-            <span class="cvh-cat-card__label" style="font-size:0.9375rem">{{ block.settings.label }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1rem;height:1rem;margin-left:auto;color:var(--cv-muted-fg)"><polyline points="9 18 15 12 9 6"/></svg>
           </a>
         {%- endfor -%}
       </div>
@@ -1003,7 +1004,8 @@
             { "value": "tag",          "label": "Tag / Deals" },
             { "value": "shopping-bag", "label": "Shopping Bag" }
           ], "default": "package" },
-        { "type": "checkbox", "id": "is_sale", "label": "Use sale (red) style", "default": false }
+        { "type": "checkbox", "id": "is_sale", "label": "Use sale (red) style", "default": false },
+        { "type": "checkbox", "id": "show_new_badge", "label": "Show NEW badge", "default": false }
       ]
     },
     {
@@ -1099,7 +1101,7 @@
 
     { "type": "header", "content": "Browse by Category" },
     { "type": "text", "id": "cat_title",    "label": "Section title",    "default": "Browse by Category" },
-    { "type": "text", "id": "cat_subtitle", "label": "Section subtitle" },
+    { "type": "text", "id": "cat_subtitle", "label": "Section subtitle", "default": "CN-exclusive drops — not available in Australian retail." },
 
     { "type": "header", "content": "CN Explainer Section" },
     { "type": "checkbox", "id": "show_cn_explainer", "label": "Show CN explainer section", "default": true },
@@ -1151,9 +1153,10 @@
         { "type": "trust_item", "settings": { "icon": "shield", "title": "Trusted by Players", "description": "500k+ happy customers" } },
         { "type": "trust_item", "settings": { "icon": "truck", "title": "Free Insured Shipping", "description": "On all orders over $300" } },
         { "type": "marquee_item", "settings": { "text": "Free insured shipping on orders over $300" } },
-        { "type": "category_card", "settings": { "label": "Booster Boxes", "icon": "package", "is_sale": false } },
-        { "type": "category_card", "settings": { "label": "Elite Trainer Boxes", "icon": "briefcase", "is_sale": false } },
-        { "type": "category_card", "settings": { "label": "Cases", "icon": "layers", "is_sale": false } },
+        { "type": "category_card", "settings": { "label": "New Arrivals", "icon": "star", "is_sale": false, "show_new_badge": true } },
+        { "type": "category_card", "settings": { "label": "Restock", "icon": "package", "is_sale": false, "show_new_badge": false } },
+        { "type": "category_card", "settings": { "label": "Booster Boxes", "icon": "package", "is_sale": false, "show_new_badge": false } },
+        { "type": "category_card", "settings": { "label": "Sale", "icon": "tag", "is_sale": true, "show_new_badge": false } },
         { "type": "promo_banner", "settings": { "eyebrow": "Shop Now", "title": "Booster Boxes from $39.99", "cta_label": "Shop Collection" } }
       ]
     }
