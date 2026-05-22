@@ -147,7 +147,7 @@
           "type": "category_card",
           "settings": {
             "label": "New Arrivals",
-            "url": "shopify://collections/new-arrivals",
+            "url": "shopify://collections/new-releases",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-41-28_1.png",
             "icon": "star",
             "is_sale": false
