@@ -131,7 +131,7 @@
           "type": "brand_link",
           "settings": {
             "label": "Pokémon CN",
-            "url": "shopify://collections/pokemon-cn",
+            "url": "shopify://collections/pokemon-chinese-exclusives",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-56-05_1.png"
           }
         },
@@ -139,7 +139,7 @@
           "type": "brand_link",
           "settings": {
             "label": "One Piece CN",
-            "url": "shopify://collections/one-piece-cn",
+            "url": "shopify://collections/one-piece-chinese-exclusives",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-49-21_1.png"
           }
         },
@@ -185,6 +185,7 @@
         },
         "promo_banner_FqmJpP": {
           "type": "promo_banner",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_09-06-48.png",
             "eyebrow": "🇨🇳 Just Arrived",
@@ -195,6 +196,7 @@
         },
         "promo_banner_9RGRWE": {
           "type": "promo_banner",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-11_11-17-44.png",
             "eyebrow": "📅 Coming Soon",
