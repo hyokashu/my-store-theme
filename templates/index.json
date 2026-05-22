@@ -127,66 +127,6 @@
             "text": "Factory sealed — always"
           }
         },
-        "category_card_mcdDyt": {
-          "type": "category_card",
-          "settings": {
-            "label": "Sale",
-            "url": "shopify://collections/on-sale",
-            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-34_1.png",
-            "icon": "shopping-bag",
-            "is_sale": true
-          }
-        },
-        "category_card_FxxDLJ": {
-          "type": "category_card",
-          "settings": {
-            "label": "Booster Boxes",
-            "url": "shopify://collections/booster-boxes",
-            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-23-23_1.png",
-            "icon": "package",
-            "is_sale": false
-          }
-        },
-        "category_card_TmLA9c": {
-          "type": "category_card",
-          "settings": {
-            "label": "Anniversary Sets",
-            "url": "shopify://collections/anniversary-sets",
-            "custom_icon": "shopify://shop_images/Gemini_Generated_Image_v8xzegv8xzegv8xz-Photoroom.png",
-            "icon": "star",
-            "is_sale": false
-          }
-        },
-        "category_card_6473yk": {
-          "type": "category_card",
-          "settings": {
-            "label": "Restock",
-            "url": "shopify://collections/pre-orders",
-            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-13_1.png",
-            "icon": "package",
-            "is_sale": false
-          }
-        },
-        "category_card_rNVHMV": {
-          "type": "category_card",
-          "settings": {
-            "label": "Singles",
-            "url": "",
-            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-18.png",
-            "icon": "tag",
-            "is_sale": false
-          }
-        },
-        "category_card_Rchcgy": {
-          "type": "category_card",
-          "settings": {
-            "label": "New Arrivals",
-            "url": "shopify://collections/new-arrivals",
-            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-41-28_1.png",
-            "icon": "star",
-            "is_sale": false
-          }
-        },
         "brand_link_C8KPGz": {
           "type": "brand_link",
           "settings": {
@@ -201,6 +141,46 @@
             "label": "One Piece CN",
             "url": "shopify://collections/one-piece-cn",
             "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_11-49-21_1.png"
+          }
+        },
+        "category_card_Rchcgy": {
+          "type": "category_card",
+          "settings": {
+            "label": "New Arrivals",
+            "url": "shopify://collections/new-arrivals",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-41-28_1.png",
+            "icon": "star",
+            "is_sale": false
+          }
+        },
+        "category_card_6473yk": {
+          "type": "category_card",
+          "settings": {
+            "label": "Restock",
+            "url": "shopify://collections/pre-orders",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-13_1.png",
+            "icon": "package",
+            "is_sale": false
+          }
+        },
+        "category_card_FxxDLJ": {
+          "type": "category_card",
+          "settings": {
+            "label": "Booster Boxes",
+            "url": "shopify://collections/booster-boxes",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-23-23_1.png",
+            "icon": "package",
+            "is_sale": false
+          }
+        },
+        "category_card_mcdDyt": {
+          "type": "category_card",
+          "settings": {
+            "label": "Sale",
+            "url": "shopify://collections/on-sale",
+            "custom_icon": "shopify://shop_images/untitled_Gemini_3_Nano_Banana_Pro__2026-03-18_06-25-34_1.png",
+            "icon": "shopping-bag",
+            "is_sale": true
           }
         },
         "promo_banner_FqmJpP": {
@@ -289,10 +269,30 @@
         "tab3_icon": "none",
         "cat_title": "Browse by Category",
         "cat_subtitle": "CN-exclusive drops — not available in Australian retail.",
+        "show_cn_explainer": true,
+        "cn_title": "Why Chinese-Market Cards Are Different",
+        "cn_subtitle": "Not a translation. A completely different product.",
+        "cn_img_artwork": "shopify://shop_images/Screenshot_2026-05-11_at_10.28.53_PM.png",
+        "cn_badge_artwork": "Unique to CN",
+        "cn_title_artwork": "CN-Exclusive Artwork",
+        "cn_desc_artwork": "Chinese regional sets feature unique illustration rare treatments and card art not printed in any English or Japanese set.",
+        "cn_img_sets": "shopify://shop_images/71znz2myweL._AC_UF894_1000_QL80__1.jpg",
+        "cn_badge_sets": "Regional & Locked",
+        "cn_title_sets": "Anniversary & Regional Sets",
+        "cn_desc_sets": "China-only anniversary boxes, New Year specials, and regional promotional sets — released exclusively for the Chinese market.",
+        "cn_img_value": "shopify://shop_images/Screenshot_2026-05-11_at_10.34.59_PM.png",
+        "cn_badge_value": "Holds Value",
+        "cn_title_value": "Higher Collector Value",
+        "cn_desc_value": "Scarcity drives demand. CN-exclusive cards consistently hold strong collector value precisely because supply outside China is limited.",
         "show_newsletter": true,
         "nl_title": "Be First When CN Drops Land",
         "nl_subtitle": "New Chinese-exclusive imports sell out fast. Get on the list and we'll tell you the moment new stock arrives — before it's gone.",
         "nl_disclaimer": "No spam. Only CN drop alerts.",
+        "show_just_landed": true,
+        "just_landed_collection": "",
+        "just_landed_title": "Just Landed",
+        "just_landed_subtitle": "Fresh from our CN distributors.",
+        "just_landed_view_all_label": "View all new arrivals →",
         "show_trust_bar": true,
         "show_marquee": true
       }
