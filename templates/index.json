@@ -12,6 +12,47 @@
     "main_home_faAae4": {
       "type": "main-home",
       "blocks": {
+        "hero_slide_qJtCnY": {
+          "type": "hero_slide",
+          "settings": {
+            "eyebrow_icon": "tag",
+            "eyebrow": "🇨🇳 CN EXCLUSIVE",
+            "title_line1": "The Pokémon Sets",
+            "title_em": "Australia Never Gets",
+            "description": "Chinese-market exclusive booster boxes — anniversary editions, CN-only artwork, and regional sets that never reach Australian shelves. Directly imported, 100% authentic, shipped collector-grade.",
+            "cta1_label": "Shop CN Exclusives",
+            "cta1_url": "shopify://collections/pokemon-chinese-exclusives",
+            "cta2_label": "Shop All",
+            "cta2_url": "shopify://collections/chinese-exclusives",
+            "bg_image": "shopify://shop_images/charizard-evolution-line-triple-art-extension-16-9-using-v0-tusizb7qpmwb1.webp",
+            "image": "shopify://shop_images/StoreCovers_1.png",
+            "badge_value": "⚡ Import Exclusive",
+            "badge_label": "Not sold in Australian retail",
+            "badge_icon": "shield",
+            "color_scheme": "2"
+          }
+        },
+        "hero_slide_pj8jtq": {
+          "type": "hero_slide",
+          "settings": {
+            "eyebrow_icon": "star",
+            "eyebrow_icon_custom": "shopify://shop_images/Gemini_Generated_Image_39fmot39fmot39fm-Photoroom.png",
+            "eyebrow": "🇨🇳 CN EXCLUSIVE",
+            "title_line1": "One Piece Sets",
+            "title_em": "The West Never Sees",
+            "description": "Chinese anniversary editions, regional promo sets, and CN-only One Piece TCG products — imported directly and delivered to Australian collectors.",
+            "cta1_label": "Shop One Piece CN",
+            "cta1_url": "shopify://collections/one-piece-chinese-exclusives",
+            "cta2_label": "Shop All",
+            "cta2_url": "shopify://collections/chinese-exclusives",
+            "bg_image": "shopify://shop_images/thumb-1920-996396.png",
+            "image": "shopify://shop_images/OP1JP.webp",
+            "badge_value": "100% Authentic",
+            "badge_label": "Direct CN Distributor",
+            "badge_icon": "shield",
+            "color_scheme": "1"
+          }
+        },
         "trust_item_VgmMdE": {
           "type": "trust_item",
           "settings": {
@@ -190,6 +231,8 @@
         }
       },
       "block_order": [
+        "hero_slide_qJtCnY",
+        "hero_slide_pj8jtq",
         "trust_item_VgmMdE",
         "trust_item_nw3tnX",
         "trust_item_BET6FL",
@@ -214,6 +257,7 @@
       ],
       "name": "Home",
       "settings": {
+        "hero_autoplay_ms": 5000,
         "featured_title": "Fan Favourites",
         "featured_subtitle": "Whether you're hunting CN exclusives or chasing rare pulls — these are going fast.",
         "tab1_label": "Best Sellers",
