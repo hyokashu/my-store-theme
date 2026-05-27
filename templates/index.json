@@ -214,11 +214,6 @@
       ],
       "name": "Home",
       "settings": {
-        "show_hero_strip": true,
-        "strip_eyebrow": "🇨🇳 CN EXCLUSIVE · Sydney Based",
-        "strip_title": "The Pokémon & One Piece sets Australia never gets.",
-        "strip_cta_label": "Shop CN Exclusives",
-        "strip_cta_url": "shopify://collections/chinese-exclusives",
         "featured_title": "Fan Favourites",
         "featured_subtitle": "Whether you're hunting CN exclusives or chasing rare pulls — these are going fast.",
         "tab1_label": "Best Sellers",
